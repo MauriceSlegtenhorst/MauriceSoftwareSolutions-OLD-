@@ -14,6 +14,9 @@ namespace CoreServerAPI.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            Console.WriteLine($"{nameof(ApplicationDbContext)} initiated. \nConnection string: {Database.GetDbConnection().ConnectionString}");
         }
+
+
     }
 }
