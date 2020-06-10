@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SharedLibrary.Models;
 using SharedLibrary.Models.User;
 
 namespace CoreServerAPI.Data
