@@ -10,6 +10,8 @@ namespace SharedLibrary.Models.User
         public string Affix { get; set; }
 
         public string LastName { get; set; }
+
+        public string RoleName { get; set; }
         #endregion
     }
 }
