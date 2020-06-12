@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using SharedDependencyInterfaces.Interfaces;
 using SharedLibrary.Models.Email;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,8 @@ namespace SharedLibrary.Services
                 From = sender,
                 Subject = subject,
                 Body = message,
-                IsBodyHtml = useHtml
+                IsBodyHtml = useHtml,
+                BodyEncoding = Encoding.UTF8
             };
             mail.To.Add(toEmail);
             return mail;

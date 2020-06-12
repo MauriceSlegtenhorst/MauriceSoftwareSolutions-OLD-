@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedLibrary.Models.Email
+namespace SharedDependencyInterfaces.Interfaces
 {
     public interface IEmailSender
     {

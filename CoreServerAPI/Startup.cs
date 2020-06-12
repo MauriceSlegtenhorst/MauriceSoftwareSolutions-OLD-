@@ -9,6 +9,7 @@ using SharedLibrary.Models.User;
 using SharedLibrary.Models.Email;
 using SharedLibrary.Services;
 using System;
+using SharedDependencyInterfaces.Interfaces;
 
 namespace CoreServerAPI
 {
@@ -38,7 +39,6 @@ namespace CoreServerAPI
 
             services.Configure<AuthMessageSenderOptions>(Configuration.GetSection("AuthMessageSenderOptions"));
             services.AddSingleton<IEmailSender, EmailSender>();
-            Console.WriteLine(Configuration.GetSection("AuthMessageSenderOptions"));
 
             services.AddRazorPages();
         }

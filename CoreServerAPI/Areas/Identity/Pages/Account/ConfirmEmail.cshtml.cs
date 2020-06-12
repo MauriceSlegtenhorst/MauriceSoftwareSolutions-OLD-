@@ -29,7 +29,7 @@ namespace CoreServerAPI.Areas.Identity.Pages.Account
         {
             if (userId == null || code == null)
             {
-                return RedirectToPage("/Index");
+                StatusMessage = "Error confirming your email.";
             }
 
             var user = await _userManager.FindByIdAsync(userId);

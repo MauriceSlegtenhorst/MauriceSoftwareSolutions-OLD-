@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using SharedDependencyInterfaces.Interfaces;
+using SharedLibrary.Models.Email;
 using SharedLibrary.Models.User;
 
 namespace CoreServerAPI.Areas.Identity.Pages.Account
@@ -24,6 +25,8 @@ namespace CoreServerAPI.Areas.Identity.Pages.Account
         private readonly UserManager<UserAccount> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+
+        // Alleen nog ff uit db verwijderen en opnieuw proberen...
 
         public RegisterModel(
             UserManager<UserAccount> userManager,
