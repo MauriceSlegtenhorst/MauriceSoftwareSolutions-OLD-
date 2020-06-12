@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using SharedLibrary.Models.User;
 
-namespace CoreServerAPI.Areas.Identity.Pages.Account
+namespace WebServer.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginWithRecoveryCodeModel : PageModel

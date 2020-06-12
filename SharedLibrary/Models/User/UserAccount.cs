@@ -2,7 +2,7 @@
 
 namespace SharedLibrary.Models.User
 {
-    public sealed class UserAccount : IdentityUser
+    public class UserAccount : IdentityUser
     {
         #region Name
         public string FirstName { get; set; }
@@ -10,8 +10,6 @@ namespace SharedLibrary.Models.User
         public string Affix { get; set; }
 
         public string LastName { get; set; }
-
-        public string RoleName { get; set; }
         #endregion
     }
 }

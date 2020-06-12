@@ -16,7 +16,7 @@ using SharedDependencyInterfaces.Interfaces;
 using SharedLibrary.Models.Email;
 using SharedLibrary.Models.User;
 
-namespace CoreServerAPI.Areas.Identity.Pages.Account
+namespace WebServer.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterModel : PageModel

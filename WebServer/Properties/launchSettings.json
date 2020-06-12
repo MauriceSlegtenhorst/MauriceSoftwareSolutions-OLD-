@@ -20,7 +20,7 @@
       },
       "use64Bit": true
     },
-    "CoreServerAPI": {
+    "WebServer": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {

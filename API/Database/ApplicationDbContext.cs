@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SharedLibrary.Models;
 using SharedLibrary.Models.User;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace CoreServerAPI.Data
+namespace API.Database
 {
     public class ApplicationDbContext : IdentityDbContext<UserAccount>
     {
@@ -16,7 +16,5 @@ namespace CoreServerAPI.Data
             : base(options)
         {
         }
-
-
     }
 }

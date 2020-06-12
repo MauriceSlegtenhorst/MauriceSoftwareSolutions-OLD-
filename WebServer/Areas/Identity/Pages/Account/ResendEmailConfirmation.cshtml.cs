@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using SharedLibrary.Models.User;
 
-namespace CoreServerAPI.Areas.Identity.Pages.Account
+namespace WebServer.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public abstract class ResendEmailConfirmationModel : PageModel

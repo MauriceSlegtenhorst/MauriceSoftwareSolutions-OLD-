@@ -1,9 +1,7 @@
 ﻿@using SharedLibrary.Models.User
-@inject SignInManager<UserAccount> SignInManager
-@inject UserManager<UserAccount> UserManager
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
+@if (false)
 {
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>

@@ -1,17 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using CoreServerAPI.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SharedLibrary.Models.User;
 using SharedLibrary.Models.Email;
 using SharedLibrary.Services;
-using System;
 using SharedDependencyInterfaces.Interfaces;
 
-namespace CoreServerAPI
+namespace WebServer
 {
     public class Startup
     {
@@ -25,17 +21,6 @@ namespace CoreServerAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("localdatabaseconnection")));
-
-            services.AddDefaultIdentity<UserAccount>(options => 
-            {
-                options.SignIn.RequireConfirmedAccount = true;
-                options.User.RequireUniqueEmail = true;
-                options.SignIn.RequireConfirmedEmail = true;   
-            })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<AuthMessageSenderOptions>(Configuration.GetSection("AuthMessageSenderOptions"));
             services.AddSingleton<IEmailSender, EmailSender>();
@@ -49,7 +34,6 @@ namespace CoreServerAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
