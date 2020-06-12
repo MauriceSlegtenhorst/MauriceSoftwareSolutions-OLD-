@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="APIControllers\**" />
+    <Content Remove="APIControllers\**" />
+    <EmbeddedResource Remove="APIControllers\**" />
+    <None Remove="APIControllers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.5" />
@@ -22,10 +29,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SharedDependencyInterfaces\SharedDependencyInterfaces.csproj" />
     <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="APIControllers\" />
   </ItemGroup>
 
 </Project>

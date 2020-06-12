@@ -23,6 +23,7 @@ namespace SharedLibrary.Services
         {
             MailMessage mail = GetMailMessage(toEmail, subject, message,
                 Options.DefaultSenderEmail, Options.DefaultSenderDisplayName, Options.UseHtml);
+
             SmtpClient client = GetSmtpClient(Options.Domain, Options.Port, Options.RequiresAuthentication,
                 Options.UserName, Options.Key, Options.UseSsl);
 
@@ -57,7 +58,7 @@ namespace SharedLibrary.Services
         }
 
         private static SmtpClient GetSmtpClient(string host, int port, bool requiresAuthentication = true,
-            string userName = null, string userKey = null, bool useSsl = false)
+            string userName = null, string userKey = null, bool useSsl = true)
         {
             SmtpClient client = new SmtpClient();
 
