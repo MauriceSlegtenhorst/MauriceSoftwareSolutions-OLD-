@@ -12,7 +12,7 @@ namespace API.Controllers
     [ApiController]
     public class IdentityController : ControllerBase
     {
-        [HttpGet]
+        [HttpGet] 
         public IActionResult Get()
         {
             return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
