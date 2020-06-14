@@ -20,11 +20,9 @@ namespace WebServer.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly ILogger<LoginModel> _logger;
-
-        public LoginModel(ILogger<LoginModel> logger)
+        public LoginModel()
         {
-            _logger = logger;
+
         }
 
         [BindProperty]
@@ -76,7 +74,7 @@ namespace WebServer.Areas.Identity.Pages.Account
             {
                 try
                 {
-                    using (var client = new HttpHandler())
+                    using (var client = new HttpAPIHandler())
                     {
                         var dicovery = await client.GetDiscoveryDocumentAsync();
                         if (dicovery.IsError)

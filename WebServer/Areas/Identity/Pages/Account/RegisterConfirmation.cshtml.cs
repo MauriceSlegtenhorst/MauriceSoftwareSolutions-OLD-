@@ -2,24 +2,26 @@
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
+//using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using SharedLibrary.Models.User;
+using SharedDependencyInterfaces.Interfaces;
+using SharedLibrary.Helpers;
+using SharedLibrary.Data;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System;
 
 namespace WebServer.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel
     {
-        private readonly UserManager<UserAccount> _userManager;
-        private readonly IEmailSender _sender;
-
-        public RegisterConfirmationModel(UserManager<UserAccount> userManager, IEmailSender sender)
+        public RegisterConfirmationModel()
         {
-            _userManager = userManager;
-            _sender = sender;
+
         }
 
         public string Email { get; set; }
@@ -35,8 +37,33 @@ namespace WebServer.Areas.Identity.Pages.Account
                 return RedirectToPage("/Index");
             }
 
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user == null)
+            UserAccount userAccount = new UserAccount();
+
+            try
+            {
+                using (var client = new HttpAPIHandler())
+                {
+                    var request = new HttpRequestMessage
+                    {
+                        Method = HttpMethod.Get,
+                        RequestUri = new Uri($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerMethods.GET_BY_EMAIL}", UriKind.Relative),
+                        Content = new StringContent(JsonConvert.SerializeObject(email), Encoding.UTF8, "application/json")
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        userAccount = JsonConvert.DeserializeObject<UserAccount>(await response.Content.ReadAsStringAsync());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            if (userAccount == null)
             {
                 return NotFound($"Unable to load user with email '{email}'.");
             }

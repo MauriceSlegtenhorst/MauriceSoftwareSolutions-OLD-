@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace TestingClient
 {
@@ -51,7 +52,7 @@ namespace TestingClient
         {
             try
             {
-                using (var client = new HttpHandler())
+                using (var client = new HttpAPIHandler())
                 {
                     Console.WriteLine("Retreiving the discovery document...");
                     _discoveryDocumentResponse = await client.GetDiscoveryDocumentAsync();
@@ -68,29 +69,57 @@ namespace TestingClient
             {
                 Console.WriteLine(ex.Message);
             }
-            
         }
 
         private static void PrintMethods()
         {
-            foreach (var method in _methodNames)
+            foreach (MethodInfo method in _methodNames)
             {
-                Console.WriteLine(method.Name);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+
+                // - Discover(
+                Console.Write($"- {method.Name}(");
+
+                var parameterInfoCollection = method.GetParameters();
+
+                int i = 0;
+                foreach (ParameterInfo parameterInfo in parameterInfoCollection)
+                {
+                    if (i > 0)
+                        Console.Write(", ");
+
+                    i++;
+
+                    // - Discover(System.String
+                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    Console.Write(parameterInfo.ParameterType);
+
+                    Console.Write(" ");
+
+                    // - Discover(System.String command
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write(parameterInfo.Name);
+                }
+
+                // - Discover(System.String command)
+                Console.WriteLine(")");
             }
+
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         private async static void RequestToken()
         {
             try
             {
-                using (var client = new HttpHandler())
+                using (var client = new HttpAPIHandler())
                 {
                     _tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
                     {
                         Address = _discoveryDocumentResponse.TokenEndpoint,
 
-                        ClientId = "client",
-                        ClientSecret = "secret",
+                        ClientId = "mvc",
+                        ClientSecret = "49C1A7E1-0C79-4A89-A3D6-A37998FB86B0",
                         Scope = "api1"
                     });
 
@@ -113,7 +142,7 @@ namespace TestingClient
         {
             try
             {
-                using (HttpHandler client = new HttpHandler(_tokenResponse.AccessToken))
+                using (HttpAPIHandler client = new HttpAPIHandler(_tokenResponse.AccessToken))
                 {
                     var response = await client.GetAsync("identity");
                     if (!response.IsSuccessStatusCode)

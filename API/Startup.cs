@@ -1,13 +1,28 @@
-using API.Identity;
+using API.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SharedDependencyInterfaces.Interfaces;
 using SharedLibrary.Data;
+using SharedLibrary.Helpers;
+using SharedLibrary.Models.Email;
+using SharedLibrary.Models.User;
+using SharedLibrary.Services;
+using System;
+using System.Reflection;
 
 namespace API
 {
+    /// <summary>
+    /// Transient objects are always different; a new instance is provided to every controller and every service.
+    /// Scoped objects are the same within a request, but different across different requests.
+    /// Singleton objects are the same for every object and every request.
+    /// </summary>
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -20,48 +35,40 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("localdatabaseconnection")));
+            services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("localdatabaseconnection")));
 
-            //services.AddIdentity<UserAccount, IdentityRole>(option =>
-            //{
-            //    IConfigurationSection sighnInOptions = Configuration.GetSection(nameof(IdentityOptions))
-            //    .GetSection(nameof(SignInOptions));
-           
-            //    IConfigurationSection userOptions = Configuration.GetSection(nameof(IdentityOptions))
-            //    .GetSection(nameof(UserOptions));
-            
-            //    option.SignIn.RequireConfirmedAccount = sighnInOptions.GetValue<bool>(nameof(SignInOptions.RequireConfirmedAccount));
-                
-            //    option.SignIn.RequireConfirmedEmail = sighnInOptions.GetValue<bool>(nameof(SignInOptions.RequireConfirmedAccount));
+            services.AddIdentity<UserAccount, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
-            //    option.User.RequireUniqueEmail = userOptions.GetValue<bool>(nameof(UserOptions.RequireUniqueEmail));
-            //})
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
 
-            // Set the default authentication policy to require users to be authenticated
-            services.AddControllers(
-            //    config => 
-            //{
-            //    var policy = new AuthorizationPolicyBuilder()
-            //             .RequireAuthenticatedUser()
-            //             .Build();
-            //    config.Filters.Add(new AuthorizeFilter(policy));
-            //}
-            );
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
 
-            var builder = services.AddIdentityServer()
-                .AddInMemoryApiResources(Config.Apis)
-                .AddInMemoryClients(Config.Clients)
-                .AddDeveloperSigningCredential();
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
+            });
 
-            services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
-                {
-                    options.Authority = Constants.BASE_ADDRESS;
-                    options.RequireHttpsMetadata = false;
+            services.AddAuthorization();
 
-                    options.Audience = "api1";
-                });
+            services.Configure<AuthMessageSenderOptions>(Configuration.GetSection("AuthMessageSenderOptions"));
+            services.AddSingleton<IEmailSender, EmailSender>();
+
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,11 +79,12 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseIdentityServer();
-
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

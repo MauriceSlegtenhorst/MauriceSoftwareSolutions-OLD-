@@ -1,0 +1,171 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
+using API.Database;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using SharedDependencyInterfaces.Interfaces;
+using SharedLibrary.Data;
+using SharedLibrary.Helpers;
+using SharedLibrary.Models.Email;
+using SharedLibrary.Models.User;
+
+namespace API.Controllers
+{
+    [AllowAnonymous]
+    [ApiController]
+    [Route("[controller]")]
+    public class AccountController : ControllerBase
+    {
+        private readonly IConfiguration _configuration;
+        private readonly UserManager<UserAccount> _userManager;
+        private readonly SignInManager<UserAccount> _signInManager;
+        private readonly IEmailSender _emailSender;
+
+        public AccountController(
+            IConfiguration configuration,
+            UserManager<UserAccount> userManager,
+            SignInManager<UserAccount> signInManager,
+            IEmailSender emailSender)
+        {
+            _configuration = configuration;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _emailSender = emailSender;
+        }
+
+        #region Scaffolding
+        //// GET: account
+        //[Authorize]
+        //[HttpGet]
+        //public async Task<ActionResult<UserAccount[]>> Get()
+        //{
+        //    var accounts = await _applicationDbContext.UserAccounts.ToArrayAsync();
+
+        //    if (accounts.Any())
+        //        return Ok(accounts);
+        //    else
+        //        return NotFound("No account were found");
+        //}
+
+        //// GET: account/5
+        //[HttpGet("{id}", Name = "Get")]
+        //public string Get(int id)
+        //{
+        //    return "value";
+        //}
+
+        //// POST: account
+        //[HttpPost]
+        //public void Post([FromBody] string value)
+        //{
+        //}
+        #endregion
+
+        // Get
+        [Route(Constants.AccountControllerMethods.GET_BY_ID)]
+        [HttpGet]
+        public async Task<ActionResult<UserAccount>> GetById([FromBody] string id)
+        {
+            return await _userManager.FindByIdAsync(id);
+        }
+
+        [Route(Constants.AccountControllerMethods.GET_BY_EMAIL)]
+        [HttpGet]
+        public async Task<ActionResult<UserAccount>> GetByEmail([FromBody] string email)
+        {
+            return await _userManager.FindByEmailAsync(email);
+        }
+
+        // Create
+        [Route(Constants.AccountControllerMethods.CREATE_BY_ACCOUNT)]
+        [HttpPut]
+        public async Task<ActionResult> CreateByAccount([FromBody] UserAccount userAccount)
+        {
+            IdentityResult result;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    result = await _userManager.CreateAsync(userAccount, userAccount.PasswordHash);
+                    if (result != null && result.Succeeded)
+                    {
+                        //_logger.LogInformation("User created a new account with password.");
+
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(userAccount);
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                        var callbackUrl = $"{Constants.WEBSERVER_BASE_ADDRESS}/Identity/Account/ConfirmEmail?area=Identity&userId={userAccount.Id}&code={code}&page=/Account/ConfirmEmail";
+
+                        await _emailSender.SendEmailAsync(
+                            userAccount.Email,
+                            "Confirm your email",
+                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    }
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return await HandleException(ex);
+                }
+            }
+            else
+            {
+                return BadRequest("ModelState invalid");
+            }
+
+            return new JsonResult(result);
+        }
+
+        // Confirm email
+        [Route(Constants.AccountControllerMethods.CONFIRM_EMAIL)]
+        [HttpPut]
+        public async Task<ActionResult> ConfirmEmail([FromBody] ConfirmEmailHolder confirmEmailHolder)
+        {
+            if (ModelState.IsValid)
+            {
+                var userAccount = await _userManager.FindByIdAsync(confirmEmailHolder.UserId);
+
+                confirmEmailHolder.code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(confirmEmailHolder.code));
+                var result = await _userManager.ConfirmEmailAsync(userAccount, confirmEmailHolder.code);
+
+                return Ok(result.Succeeded ? "Succes! Thank you for confirming your email." : "Error confirming your email.");
+            }
+            else
+            {
+                return BadRequest("ModelState invalid");
+            }
+        }
+
+        // Delete
+        [Authorize]
+        [Route(Constants.AccountControllerMethods.DELETE_BY_ID)]
+        [HttpDelete]
+        public void DeleteById([FromBody]int id)
+        {
+        }
+
+        private async Task<JsonResult> HandleException(Exception ex)
+        {
+            LogWriter logWriter = new LogWriter(_configuration.GetValue<string>(WebHostDefaults.ContentRootKey));
+            await logWriter.WriteLineAsync(Assembly.GetCallingAssembly().GetName().Name, ex);
+#if DEBUG
+            return new JsonResult(ex);
+#else
+            return new JsonResult("Something went wrong on the server.");
+#endif
+        }
+    }
+}

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
+//using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using SharedDependencyInterfaces.Interfaces;
 using SharedLibrary.Models.User;
 
 namespace WebServer.Areas.Identity.Pages.Account

@@ -5,3 +5,12 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+@{
+    if (!String.IsNullOrEmpty(Model.StatusMessage))
+    {
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">Email confirmation result</h4>
+            <p>@Model.StatusMessage</p>
+        </div>
+    }
+}

@@ -15,18 +15,14 @@ namespace SharedLibrary.Helpers
             _logPath = logPath;
         }
 
-        public async Task<bool> WriteLine(string project, string message)
+        public async Task<bool> WriteLineAsync(string project, string message)
         {
             if (!File.Exists(_logPath))
                 File.CreateText(_logPath);
 
             try
             {
-                using (StreamWriter streamWriter = new StreamWriter(_logPath))
-                {
-                    await streamWriter.WriteLineAsync($"[{DateTime.Now}] {project}: {message}");
-                    streamWriter.Close();
-                }
+                await WriteLineToFileAsync($"[{DateTime.Now}] {project}: {message}");
             }
             catch (Exception ex)
             {
@@ -37,9 +33,38 @@ namespace SharedLibrary.Helpers
             return true;
         }
 
-        //public async Task<bool> wWriteLine(string project, Exception ex)
-        //{
+        public async Task<bool> WriteLineAsync(string project, Exception ex)
+        {
+            if (!File.Exists(_logPath))
+                File.CreateText(_logPath);
 
-        //}
+            try
+            {
+                await WriteLineToFileAsync($"[{DateTime.Now}] {project}: {ex.GetType().Name}\n{ex.Message}\n{ex.InnerException.Message}");
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine($"{STANDARD_MESSAGE_LOG_WRITE_EXCEPTION} {e.Message}\n{e.InnerException.Message}");
+                return false;
+            }
+
+            return true;
+        }
+
+        private async Task WriteLineToFileAsync(string line)
+        {
+            try
+            {
+                using (StreamWriter streamWriter = new StreamWriter(_logPath))
+                {
+                    await streamWriter.WriteLineAsync(line);
+                    streamWriter.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

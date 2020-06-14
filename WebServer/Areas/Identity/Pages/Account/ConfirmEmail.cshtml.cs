@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
+using SharedLibrary.Data;
+using SharedLibrary.Helpers;
+using SharedLibrary.Models.Email;
 using SharedLibrary.Models.User;
 
 namespace WebServer.Areas.Identity.Pages.Account
@@ -15,11 +20,8 @@ namespace WebServer.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<UserAccount> _userManager;
-
-        public ConfirmEmailModel(UserManager<UserAccount> userManager)
+        public ConfirmEmailModel()
         {
-            _userManager = userManager;
         }
 
         [TempData]
@@ -27,20 +29,32 @@ namespace WebServer.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
-            if (userId == null || code == null)
+            if (String.IsNullOrEmpty(userId) || String.IsNullOrEmpty(code))
             {
                 StatusMessage = "Error confirming your email.";
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            var confirmEmailHolder = new ConfirmEmailHolder { UserId = userId, code = code };
+
+            try
             {
-                return NotFound($"Unable to load user with ID '{userId}'.");
+                using (var client = new HttpAPIHandler())
+                {
+                    var stringContent = new StringContent(JsonConvert.SerializeObject(confirmEmailHolder), Encoding.UTF8, "application/json");
+
+                    var response = await client.PutAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerMethods.CONFIRM_EMAIL}", stringContent);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        StatusMessage = await response.Content.ReadAsStringAsync();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
 
-            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
             return Page();
         }
     }
