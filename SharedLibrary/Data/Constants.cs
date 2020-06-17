@@ -12,13 +12,19 @@ namespace SharedLibrary.Data
             public const string IDENTITY = "identity";
         }
 
-        public static class AccountControllerMethods
+        public static class AccountControllerEndpoints
         {
             public const string GET_BY_ID = "getbyid";
             public const string GET_BY_EMAIL = "getbyemail";
             public const string CREATE_BY_ACCOUNT = "createbyaccount";
             public const string DELETE_BY_ID = "deletebyid";
             public const string CONFIRM_EMAIL = "confirmemail";
+        }
+
+        public static class IdentityControllerEndpoints
+        {
+            public const string LOG_IN = "login";
+            public const string LOG_OUT = "logout";
         }
 
 #if DEBUG

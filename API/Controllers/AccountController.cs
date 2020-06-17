@@ -25,23 +25,20 @@ namespace API.Controllers
 {
     [AllowAnonymous]
     [ApiController]
-    [Route("[controller]")]
+    [Route(Constants.APIControllers.ACCOUNT)]
     public class AccountController : ControllerBase
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<UserAccount> _userManager;
-        private readonly SignInManager<UserAccount> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public AccountController(
             IConfiguration configuration,
             UserManager<UserAccount> userManager,
-            SignInManager<UserAccount> signInManager,
             IEmailSender emailSender)
         {
             _configuration = configuration;
             _userManager = userManager;
-            _signInManager = signInManager;
             _emailSender = emailSender;
         }
 
@@ -73,23 +70,24 @@ namespace API.Controllers
         //}
         #endregion
 
-        // Get
-        [Route(Constants.AccountControllerMethods.GET_BY_ID)]
+        // Account/getbyid
+        [Route(Constants.AccountControllerEndpoints.GET_BY_ID)]
         [HttpGet]
         public async Task<ActionResult<UserAccount>> GetById([FromBody] string id)
         {
             return await _userManager.FindByIdAsync(id);
         }
 
-        [Route(Constants.AccountControllerMethods.GET_BY_EMAIL)]
+        // Account/getbyemail
+        [Route(Constants.AccountControllerEndpoints.GET_BY_EMAIL)]
         [HttpGet]
         public async Task<ActionResult<UserAccount>> GetByEmail([FromBody] string email)
         {
             return await _userManager.FindByEmailAsync(email);
         }
 
-        // Create
-        [Route(Constants.AccountControllerMethods.CREATE_BY_ACCOUNT)]
+        // Account/createbyaccount
+        [Route(Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT)]
         [HttpPut]
         public async Task<ActionResult> CreateByAccount([FromBody] UserAccount userAccount)
         {
@@ -115,7 +113,7 @@ namespace API.Controllers
                             $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                         return new CreatedAtActionResult(
-                            Constants.AccountControllerMethods.CREATE_BY_ACCOUNT,
+                            Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT,
                             Constants.APIControllers.ACCOUNT,
                             RouteData.Values,
                             userAccount.Id);
@@ -143,7 +141,7 @@ namespace API.Controllers
         }
 
         // Confirm email
-        [Route(Constants.AccountControllerMethods.CONFIRM_EMAIL)]
+        [Route(Constants.AccountControllerEndpoints.CONFIRM_EMAIL)]
         [HttpPut]
         public async Task<ActionResult> ConfirmEmail([FromBody] ConfirmEmailHolder confirmEmailHolder)
         {
@@ -164,7 +162,7 @@ namespace API.Controllers
 
         // Delete
         [Authorize]
-        [Route(Constants.AccountControllerMethods.DELETE_BY_ID)]
+        [Route(Constants.AccountControllerEndpoints.DELETE_BY_ID)]
         [HttpDelete]
         public void DeleteById([FromBody]int id)
         {

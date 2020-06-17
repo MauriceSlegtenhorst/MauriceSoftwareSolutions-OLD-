@@ -125,22 +125,22 @@ namespace WebServer.Areas.Identity.Pages.Account
                             Encoding.UTF8, 
                             HttpAPIHandler.MediaTypes.JSON);
 
-                        var response = await client.PutAsync(
-                            $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerMethods.CREATE_BY_ACCOUNT}",
-                            stringContent);
-
-                        if (response.IsSuccessStatusCode)
+                        using (HttpResponseMessage response = await client.PutAsync(
+                            $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT}",
+                            stringContent))
                         {
-                            return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                        }
-                        else
-                        {
-                            var apiErrors = JsonConvert.DeserializeObject<string[]>(await response.Content.ReadAsStringAsync());
-                            for (int i = 0; i < apiErrors.Length; i++)
+                            if (response.IsSuccessStatusCode)
                             {
-                                ModelState.AddModelError(i.ToString(), apiErrors[i]);
+                                return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                             }
-                            
+                            else
+                            {
+                                var apiErrors = JsonConvert.DeserializeObject<string[]>(await response.Content.ReadAsStringAsync());
+                                for (int i = 0; i < apiErrors.Length; i++)
+                                {
+                                    ModelState.AddModelError(i.ToString(), apiErrors[i]);
+                                }
+                            }
                         }
                     }
                 }

@@ -43,18 +43,22 @@ namespace WebServer.Areas.Identity.Pages.Account
             {
                 using (var client = new HttpAPIHandler())
                 {
-                    var request = new HttpRequestMessage
+                    using (var request = new HttpRequestMessage
                     {
                         Method = HttpMethod.Get,
-                        RequestUri = new Uri($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerMethods.GET_BY_EMAIL}", UriKind.Relative),
+                        RequestUri = new Uri(
+                            $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_BY_EMAIL}", 
+                            UriKind.Relative),
                         Content = new StringContent(JsonConvert.SerializeObject(email), Encoding.UTF8, "application/json")
-                    };
-
-                    var response = await client.SendAsync(request);
-
-                    if (response.IsSuccessStatusCode)
+                    })
                     {
-                        userAccount = JsonConvert.DeserializeObject<UserAccount>(await response.Content.ReadAsStringAsync());
+                        using (HttpResponseMessage response = await client.SendAsync(request))
+                        {
+                            if (response.IsSuccessStatusCode)
+                            {
+                                userAccount = JsonConvert.DeserializeObject<UserAccount>(await response.Content.ReadAsStringAsync());
+                            }
+                        }
                     }
                 }
             }

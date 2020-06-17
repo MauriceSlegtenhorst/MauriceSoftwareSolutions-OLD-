@@ -45,17 +45,21 @@ namespace WebServer.Areas.Identity.Pages.Account
                 {
                     var stringContent = new StringContent(JsonConvert.SerializeObject(confirmEmailHolder), Encoding.UTF8, HttpAPIHandler.MediaTypes.JSON);
 
-                    var response = await client.PutAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerMethods.CONFIRM_EMAIL}", stringContent);
-
-                    if (response.IsSuccessStatusCode)
+                    using (HttpResponseMessage response = await client.PutAsync(
+                        $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CONFIRM_EMAIL}", 
+                        stringContent))
                     {
-                        redirectUrl = Url.Page("Login");
-                        StatusMessage = $"{await response.Content.ReadAsStringAsync()}";
-                    }
+                        if (response.IsSuccessStatusCode)
+                        {
+                            redirectUrl = Url.Page("Login");
+                            StatusMessage = $"{await response.Content.ReadAsStringAsync()}";
+                        }
+                    }   
                 }
             }
             catch (Exception ex)
             {
+                //TODO Do something better here with exception
                 throw ex;
             }
 
