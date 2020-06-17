@@ -39,8 +39,8 @@ namespace WebServer
                 .AddCookie(Constants.CookieConfigurations.DEFAULT_SCHEME,
            (options) =>
            {
-               options.AccessDeniedPath = "/Areas/Identity/Pages/Account/AccessDenied";
-               options.LoginPath = "/Areas/Identity/Pages/Account/Login";
+               options.AccessDeniedPath = "/Account/AccessDenied";
+               options.LoginPath = "/Account/Login";
                //options.SlidingExpiration = true;
            });
                 //.AddOpenIdConnect("oidc", options =>

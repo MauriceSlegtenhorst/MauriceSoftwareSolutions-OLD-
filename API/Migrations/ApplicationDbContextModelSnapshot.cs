@@ -155,10 +155,10 @@ namespace API.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AccesLevel")
+                    b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("AccessFailedCount")
+                    b.Property<int>("AccessLevel")
                         .HasColumnType("int");
 
                     b.Property<string>("Affix")

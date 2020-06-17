@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using SharedLibrary.Security;
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SharedLibrary.Models.User
 {
@@ -11,17 +14,8 @@ namespace SharedLibrary.Models.User
 
         public string LastName { get; set; }
 
-        public AccesLevel AccesLevel { get; set; }
+        [Column(TypeName = "int")]
+        public AccessLevel AccessLevel { get; set; }
         #endregion
-    }
-
-    public enum AccesLevel
-    {
-        StandardUser,
-        PrivilegedUser,
-        Volenteer,
-        Employee,
-        PrivilegedEmployee,
-        Administrator
     }
 }

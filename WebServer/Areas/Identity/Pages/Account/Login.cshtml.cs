@@ -83,11 +83,6 @@ namespace WebServer.Areas.Identity.Pages.Account
                                 new Claim(ClaimTypes.Role, claimsString[2]),
                             };
 
-                            //HttpContext.User = new ClaimsPrincipal(
-                            //        new ClaimsIdentity(
-                            //            claims: claims,
-                            //            authenticationType: ""));
-
                             var claimsIdentity = new ClaimsIdentity(claims, Constants.CookieConfigurations.DEFAULT_SCHEME);
                             
                             var authProperties = new AuthenticationProperties
@@ -95,7 +90,6 @@ namespace WebServer.Areas.Identity.Pages.Account
                                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10)
                             };
 
-                            // TODO use AuthenticationProperties
                             await HttpContext.SignInAsync(
                                 scheme: Constants.CookieConfigurations.DEFAULT_SCHEME,
                                 principal: new ClaimsPrincipal(claimsIdentity),

@@ -72,19 +72,19 @@ namespace API.Controllers
             {
                  userAccount.Email,
                  $"{userAccount.FirstName}{(String.IsNullOrEmpty(userAccount.Affix) ? String.Empty : $" {userAccount.Affix}") } {userAccount.LastName}",
-                 userAccount.AccesLevel.ToString()
+                 Enum.GetName(typeof(AccessLevel), userAccount.AccessLevel)
             };
         
             return Accepted("Login succesfull. Cookie created", claims);
         }
 
         [Route(Constants.IdentityControllerEndpoints.LOG_OUT)]
-        [HttpPut]
-        public async Task<ActionResult> LogOut([FromBody] CredentialHolder credentials)
+        [HttpGet]
+        public async Task<ActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
 
-            return Ok("Logout succefull");
+            return Ok("Logout succesfull");
         }
     }
 }

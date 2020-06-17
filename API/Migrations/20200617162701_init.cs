@@ -43,7 +43,7 @@ namespace API.Migrations
                     FirstName = table.Column<string>(nullable: true),
                     Affix = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
-                    AccesLevel = table.Column<int>(nullable: false)
+                    AccessLevel = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

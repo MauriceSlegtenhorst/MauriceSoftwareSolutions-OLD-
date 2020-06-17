@@ -31,15 +31,18 @@ namespace API.Controllers
         private readonly IConfiguration _configuration;
         private readonly UserManager<UserAccount> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _applicationDbContext;
 
         public AccountController(
             IConfiguration configuration,
             UserManager<UserAccount> userManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext applicationDbContext)
         {
             _configuration = configuration;
             _userManager = userManager;
             _emailSender = emailSender;
+            _applicationDbContext = applicationDbContext;
         }
 
         #region Scaffolding
@@ -71,6 +74,7 @@ namespace API.Controllers
         #endregion
 
         // Account/getbyid
+        [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
         [Route(Constants.AccountControllerEndpoints.GET_BY_ID)]
         [HttpGet]
         public async Task<ActionResult<UserAccount>> GetById([FromBody] string id)
@@ -79,11 +83,20 @@ namespace API.Controllers
         }
 
         // Account/getbyemail
+        [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
         [Route(Constants.AccountControllerEndpoints.GET_BY_EMAIL)]
         [HttpGet]
         public async Task<ActionResult<UserAccount>> GetByEmail([FromBody] string email)
         {
             return await _userManager.FindByEmailAsync(email);
+        }
+
+        [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
+        [Route(Constants.AccountControllerEndpoints.GET_ALL)]
+        [HttpGet]
+        public async Task<ActionResult<List<UserAccount>>> GetUsers()
+        {
+            return await _applicationDbContext.UserAccounts.ToListAsync();
         }
 
         // Account/createbyaccount

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SharedLibrary.Models.User;
+using SharedLibrary.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
