@@ -14,6 +14,12 @@ using SharedLibrary.Helpers;
 using IdentityModel.Client;
 using System;
 using System.Diagnostics;
+using SharedLibrary.Security;
+using Newtonsoft.Json;
+using System.Text;
+using SharedLibrary.Data;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WebServer.Areas.Identity.Pages.Account
 {
@@ -26,7 +32,7 @@ namespace WebServer.Areas.Identity.Pages.Account
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public CredentialHolder CredentialHolder { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
@@ -35,21 +41,7 @@ namespace WebServer.Areas.Identity.Pages.Account
         [TempData]
         public string ErrorMessage { get; set; }
 
-        public class InputModel
-        {
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
-
-            [Required]
-            [DataType(DataType.Password)]
-            public string Password { get; set; }
-
-            [Display(Name = "Remember me?")]
-            public bool RememberMe { get; set; }
-        }
-
-        public async Task OnGetAsync(string returnUrl = null)
+        public void OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
@@ -57,11 +49,6 @@ namespace WebServer.Areas.Identity.Pages.Account
             }
 
             returnUrl = returnUrl ?? Url.Content("~/");
-
-            // Clear the existing external cookie to ensure a clean login process
-            //await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-            //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
         }
@@ -72,64 +59,56 @@ namespace WebServer.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                try
+                //TODO hash password first
+
+                using (var client = new HttpAPIHandler())
                 {
-                    using (var client = new HttpAPIHandler())
+                    var stringContent = new StringContent(
+                           JsonConvert.SerializeObject(CredentialHolder),
+                           Encoding.UTF8,
+                           HttpAPIHandler.MediaTypes.JSON);
+
+                    using (HttpResponseMessage response = await client.PutAsync(
+                        $"{Constants.APIControllers.IDENTITY}/{Constants.IdentityControllerEndpoints.LOG_IN}",
+                        stringContent))
                     {
-                        var dicovery = await client.GetDiscoveryDocumentAsync();
-                        if (dicovery.IsError)
+                        if (response.IsSuccessStatusCode)
                         {
-                            Console.WriteLine(dicovery.Error);
-                            return Page();
+                            var claimsString = JsonConvert.DeserializeObject<string[]>(await response.Content.ReadAsStringAsync());
+
+                            Claim[] claims = new Claim[]
+                            {
+                                new Claim(ClaimTypes.Name, claimsString[0]),
+                                new Claim("FullName", claimsString[1]),
+                                new Claim(ClaimTypes.Role, claimsString[2]),
+                            };
+
+                            //HttpContext.User = new ClaimsPrincipal(
+                            //        new ClaimsIdentity(
+                            //            claims: claims,
+                            //            authenticationType: ""));
+
+                            var claimsIdentity = new ClaimsIdentity(claims, Constants.CookieConfigurations.DEFAULT_SCHEME);
+                            
+                            var authProperties = new AuthenticationProperties
+                            {
+                                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10)
+                            };
+
+                            // TODO use AuthenticationProperties
+                            await HttpContext.SignInAsync(
+                                scheme: Constants.CookieConfigurations.DEFAULT_SCHEME,
+                                principal: new ClaimsPrincipal(claimsIdentity),
+                                properties: authProperties);
+
+                            return LocalRedirect(returnUrl);
                         }
-
-                        var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+                        else
                         {
-                            Address = dicovery.TokenEndpoint,
-
-                            ClientId = "client",
-                            ClientSecret = "secret",
-                            Scope = "api1"
-                        });
-
-                        if (tokenResponse.IsError)
-                        {
-                            Debug.WriteLine(tokenResponse.Error);
-                            return Page();
+                            ModelState.AddModelError(String.Empty, await response.Content.ReadAsStringAsync());
                         }
-
-                        Debug.WriteLine(tokenResponse.Json);
                     }
                 }
-                catch (Exception ex)
-                {
-
-                    throw;
-                }
-                #region oldCode
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                //var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                //if (result.Succeeded)
-                //{
-                //    _logger.LogInformation("User logged in.");
-                //    return LocalRedirect(returnUrl);
-                //}
-                //if (result.RequiresTwoFactor)
-                //{
-                //    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                //}
-                //if (result.IsLockedOut)
-                //{
-                //    _logger.LogWarning("User account locked out.");
-                //    return RedirectToPage("./Lockout");
-                //}
-                //else
-                //{
-                //    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                //    return Page();
-                //}
-                #endregion
             }
 
             // If we got this far, something failed, redisplay form

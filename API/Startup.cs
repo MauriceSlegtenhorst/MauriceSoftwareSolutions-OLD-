@@ -35,8 +35,10 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddCors();
+
             services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("localdatabaseconnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("localdatabaseconnection")));
 
             services.AddIdentity<UserAccount, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -61,6 +63,9 @@ namespace API
                 options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
+
+                // Sign in settings
+                options.SignIn.RequireConfirmedEmail = true;
             });
 
             services.AddAuthorization();
@@ -78,6 +83,12 @@ namespace API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            //app.UseCors(b => b.WithOrigins("http://dev.localhost.com:4000")
+            //.AllowAnyOrigin()
+            //.AllowCredentials()
+            //.AllowAnyMethod()
+            //.AllowAnyHeader());
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

@@ -42,7 +42,8 @@ namespace API.Migrations
                     AccessFailedCount = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     Affix = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
+                    LastName = table.Column<string>(nullable: true),
+                    AccesLevel = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

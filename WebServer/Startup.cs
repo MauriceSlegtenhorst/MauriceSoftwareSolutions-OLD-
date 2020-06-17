@@ -8,6 +8,9 @@ using SharedLibrary.Services;
 using SharedDependencyInterfaces.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Http;
+using SharedLibrary.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.CodeAnalysis.Options;
 
 namespace WebServer
 {
@@ -32,14 +35,13 @@ namespace WebServer
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = "msc_cookies"; //scheme-names must be different for each app hosted on the same server.
-                options.DefaultChallengeScheme = "oidc";
-            }).AddCookie("msc_cookies",
+            services.AddAuthentication(Constants.CookieConfigurations.DEFAULT_SCHEME)
+                .AddCookie(Constants.CookieConfigurations.DEFAULT_SCHEME,
            (options) =>
            {
                options.AccessDeniedPath = "/Areas/Identity/Pages/Account/AccessDenied";
+               options.LoginPath = "/Areas/Identity/Pages/Account/Login";
+               //options.SlidingExpiration = true;
            });
                 //.AddOpenIdConnect("oidc", options =>
                 //{

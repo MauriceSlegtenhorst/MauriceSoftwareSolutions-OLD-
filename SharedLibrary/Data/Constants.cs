@@ -27,6 +27,12 @@ namespace SharedLibrary.Data
             public const string LOG_OUT = "logout";
         }
 
+        public static class CookieConfigurations
+        {
+            public const string DEFAULT_SCHEME = "mts_cookies";
+            public const string DEFAULT_CHALLENGE_SHEME = "oidc";
+        }
+
 #if DEBUG
         public const string API_BASE_ADDRESS = "https://localhost:5001";
         public const string WEBSERVER_BASE_ADDRESS = "https://localhost:44347";
