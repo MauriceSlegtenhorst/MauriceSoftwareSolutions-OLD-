@@ -20,6 +20,9 @@ namespace WebServer.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class ConfirmEmailModel : PageModel
     {
+        public string redirectUrl = String.Empty;
+
+
         public ConfirmEmailModel()
         {
         }
@@ -40,13 +43,14 @@ namespace WebServer.Areas.Identity.Pages.Account
             {
                 using (var client = new HttpAPIHandler())
                 {
-                    var stringContent = new StringContent(JsonConvert.SerializeObject(confirmEmailHolder), Encoding.UTF8, "application/json");
+                    var stringContent = new StringContent(JsonConvert.SerializeObject(confirmEmailHolder), Encoding.UTF8, HttpAPIHandler.MediaTypes.JSON);
 
                     var response = await client.PutAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerMethods.CONFIRM_EMAIL}", stringContent);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        StatusMessage = await response.Content.ReadAsStringAsync();
+                        redirectUrl = Url.Page("Login");
+                        StatusMessage = $"{await response.Content.ReadAsStringAsync()}";
                     }
                 }
             }

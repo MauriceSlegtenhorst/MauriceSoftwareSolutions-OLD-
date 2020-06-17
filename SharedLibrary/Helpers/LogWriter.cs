@@ -53,17 +53,20 @@ namespace SharedLibrary.Helpers
 
         private async Task WriteLineToFileAsync(string line)
         {
-            try
+            using (StreamWriter streamWriter = new StreamWriter(_logPath))
             {
-                using (StreamWriter streamWriter = new StreamWriter(_logPath))
+                try
                 {
                     await streamWriter.WriteLineAsync(line);
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+                finally
+                {
                     streamWriter.Close();
                 }
-            }
-            catch (Exception e)
-            {
-                throw e;
             }
         }
     }

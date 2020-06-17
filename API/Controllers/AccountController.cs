@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SharedDependencyInterfaces.Interfaces;
+using SharedLibrary.CustomExceptions;
 using SharedLibrary.Data;
 using SharedLibrary.Helpers;
 using SharedLibrary.Models.Email;
@@ -93,6 +94,7 @@ namespace API.Controllers
         public async Task<ActionResult> CreateByAccount([FromBody] UserAccount userAccount)
         {
             IdentityResult result;
+
             if (ModelState.IsValid)
             {
                 try
@@ -109,11 +111,24 @@ namespace API.Controllers
                         await _emailSender.SendEmailAsync(
                             userAccount.Email,
                             "Confirm your email",
+                            $"Welcome to the Maurice Tech Community!\n" +
                             $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                        return new CreatedAtActionResult(
+                            Constants.AccountControllerMethods.CREATE_BY_ACCOUNT,
+                            Constants.APIControllers.ACCOUNT,
+                            RouteData.Values,
+                            userAccount.Id);
                     }
-                    foreach (var error in result.Errors)
+                    else
                     {
-                        ModelState.AddModelError(string.Empty, error.Description);
+                        var errors = new string[result.Errors.Count()];
+                        for (int i = 0; i < errors.Length; i++)
+                        {
+                            errors[i] = result.Errors.ElementAt(i).Description;
+                        }
+
+                        return StatusCode(500, errors);   
                     }
                 }
                 catch (Exception ex)
@@ -125,8 +140,6 @@ namespace API.Controllers
             {
                 return BadRequest("ModelState invalid");
             }
-
-            return new JsonResult(result);
         }
 
         // Confirm email
@@ -157,15 +170,25 @@ namespace API.Controllers
         {
         }
 
-        private async Task<JsonResult> HandleException(Exception ex)
+        private async Task<ActionResult> HandleException(Exception ex)
         {
             LogWriter logWriter = new LogWriter(_configuration.GetValue<string>(WebHostDefaults.ContentRootKey));
-            await logWriter.WriteLineAsync(Assembly.GetCallingAssembly().GetName().Name, ex);
+            if (await logWriter.WriteLineAsync(Assembly.GetCallingAssembly().GetName().Name, ex))
+            {
 #if DEBUG
-            return new JsonResult(ex);
+                return StatusCode(500, new APIException("Exception caught and logged.", ex));
 #else
-            return new JsonResult("Something went wrong on the server.");
+                return StatusCode(500, new APIException());
 #endif
+            }
+            else
+            {
+#if DEBUG
+                return StatusCode(500 , new APIException("Exception caught but writing to the log failed. See API trace for more details.", ex));
+#else
+                return StatusCode(500, new APIException());
+#endif
+            }
         }
     }
 }

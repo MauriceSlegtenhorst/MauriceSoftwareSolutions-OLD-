@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SharedDependencyInterfaces.Interfaces;
+using SharedLibrary.CustomExceptions;
 using SharedLibrary.Data;
 using SharedLibrary.Helpers;
 using SharedLibrary.Models.User;
@@ -111,14 +113,34 @@ namespace WebServer.Areas.Identity.Pages.Account
                 {
                     using (var client = new HttpAPIHandler())
                     {
-                        var user = new UserAccount { UserName = Input.Email, Email = Input.Email, PasswordHash = Input.Password };
+                        var user = new UserAccount 
+                        {
+                            UserName = Input.Email,
+                            Email = Input.Email, 
+                            PasswordHash = Input.Password
+                        };
 
-                        var stringContent = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
-                        var response = await client.PutAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerMethods.CREATE_BY_ACCOUNT}", stringContent);
+                        var stringContent = new StringContent(
+                            JsonConvert.SerializeObject(user), 
+                            Encoding.UTF8, 
+                            HttpAPIHandler.MediaTypes.JSON);
+
+                        var response = await client.PutAsync(
+                            $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerMethods.CREATE_BY_ACCOUNT}",
+                            stringContent);
 
                         if (response.IsSuccessStatusCode)
                         {
                             return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        }
+                        else
+                        {
+                            var apiErrors = JsonConvert.DeserializeObject<string[]>(await response.Content.ReadAsStringAsync());
+                            for (int i = 0; i < apiErrors.Length; i++)
+                            {
+                                ModelState.AddModelError(i.ToString(), apiErrors[i]);
+                            }
+                            
                         }
                     }
                 }
