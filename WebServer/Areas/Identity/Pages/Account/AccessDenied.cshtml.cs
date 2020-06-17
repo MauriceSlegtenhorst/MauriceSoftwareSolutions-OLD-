@@ -8,6 +8,11 @@ namespace WebServer.Areas.Identity.Pages.Account
 {
     public class AccessDeniedModel : PageModel
     {
+        public AccessDeniedModel(string returnUrl = null)
+        {
+
+        }
+
         public void OnGet()
         {
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -12,6 +13,7 @@ using SharedLibrary.Models.User;
 
 namespace WebServer.Areas.Identity.Pages.Administrator
 {
+    [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
     public class AdministratorPanelModel : PageModel
     {
         [BindProperty]
