@@ -1,0 +1,170 @@
+﻿@page "/account/crudusers"
+@attribute [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
+@inject HttpClient _httpClient
+
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+
+<h1>CRUD users</h1>
+
+<span class="error">@ErrorDetails</span>
+
+<SfGrid TValue="UserAccount" AllowPaging="true" Toolbar="@ToolBarItems">
+
+    <GridEditSettings AllowAdding="true"
+                      AllowEditing="true"
+                      AllowDeleting="true"
+                      Mode="EditMode.Normal"/>
+    <GridEvents TValue="UserAccount"
+                OnToolbarClick="ToolBarItemClicked"
+                OnActionFailure="@ActionFailure"
+                RowSelected="@RowSelectedEvent" />
+    @{
+        string url = $"{Constants.API_BASE_ADDRESS}/{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_ALL}";
+
+        if (IsInitialRender)
+        {
+            @*<SfDataManager Url="@url" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>*@
+            <SfDataManager AdaptorInstance="@typeof(APIAccountsAdapter)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+        }
+    }
+
+    <GridColumns>
+        @{
+            List<Exception> exceptions = null;
+            try
+            {
+                PropertyInfo[] propertyInfos = typeof(UserAccount).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                if (propertyInfos.Any())
+                {
+
+                    foreach (PropertyInfo properyInfo in propertyInfos)
+                    {
+                        try
+                        {
+                            string field = properyInfo.Name;
+                            bool isPrimKey = properyInfo.Name == "Id";
+                            bool canWrite = properyInfo.CanWrite;
+                            EditType editType = EditType.DefaultEdit;
+                            editTypeDictionairy.TryGetValue(properyInfo.PropertyType, out editType);
+
+                            // TODO logic for width and edittype
+
+                            <GridColumn Field="@field"
+                                        HeaderText="@field"
+                                        IsPrimaryKey="@isPrimKey"
+                                        IsIdentity="@isPrimKey"
+                                        EditType="@editType"
+                                        AllowEditing="@canWrite" />
+                        }
+                        catch (Exception ex)
+                        {
+                            if (exceptions == null)
+                                exceptions = new List<Exception>();
+
+                            exceptions.Add(ex);
+                        }
+                    }
+                }
+                else
+                {
+                    exceptions.Add(new ArgumentException("fromObject empty"));
+                }
+
+                if (exceptions != null)
+                {
+                    if (exceptions.Count > 1)
+                        throw new AggregateException(exceptions);
+                    else
+                        throw exceptions[0];
+                }
+
+            }
+            catch (AggregateException ex)
+            {
+                // TODO Deal with exceptions
+                throw ex;
+            }
+        }
+    </GridColumns>
+</SfGrid>
+
+@code{
+    public List<UserAccount> UserAccounts { get; set; }
+    private UserAccount SelectedRow = null;
+    public string ErrorDetails = String.Empty;
+    public bool IsInitialRender = false;
+    public List<string> ToolBarItems { get; set; } = new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" };
+
+    private Dictionary<Type, EditType> editTypeDictionairy = new Dictionary<Type, EditType>
+{
+        { typeof(string), EditType.DefaultEdit },
+        { typeof(bool), EditType.BooleanEdit },
+        { typeof(Constants.AccessLevel), EditType.NumericEdit },
+        { typeof(int), EditType.NumericEdit },
+        { typeof(DateTimeOffset), EditType.DateTimePickerEdit },
+    };
+
+    protected async override void OnInitialized()
+    {
+        IsInitialRender = true;
+
+        string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_ALL}";
+
+        try
+        {
+            var result = await _httpClient.GetAsync(url);
+
+            UserAccounts = JsonConvert.DeserializeObject<UserAccount[]>(await result.Content.ReadAsStringAsync()).ToList();
+        }
+        catch (Exception)
+        {
+            // TODO handle exceptions
+            throw;
+        }
+    }
+
+    public void RowSelectedEvent(Syncfusion.Blazor.Grids.RowSelectEventArgs<UserAccount> eventArgs)
+    {
+        SelectedRow = eventArgs.Data;
+    }
+
+    public void ActionFailure(Syncfusion.Blazor.Grids.FailureEventArgs args)
+    {
+        this.ErrorDetails = args.Error.ToString();//"Server exception: 404 Not found";
+        StateHasChanged();
+    }
+
+    public async void ToolBarItemClicked(Syncfusion.Blazor.Navigations.ClickEventArgs eventArgs)
+    {
+        string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT}";
+
+        switch (eventArgs.Item.Text)
+        {
+            default:
+                break;
+            case "Add":
+
+                break;
+            case "Edit":
+
+                break;
+            case "Delete":
+
+                break;
+            case "Cancel":
+
+                break;
+            case "Update":
+                //var stringContent = new StringContent(JsonConvert.SerializeObject(SelectedRow));
+                //await _httpClient.PutAsync(url, stringContent);
+                //var result = await _httpClient.PutAsJsonAsync(url, SelectedRow);
+                break;
+        }
+    }
+
+    
+}

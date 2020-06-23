@@ -47,7 +47,7 @@ namespace MTS.DataAcces.AccountAPI.Controllers
 
             if (userAccount == null)
             {
-                responses.Add("Invalid login attempt");
+                responses.Add("No user exists with this email and password");
             }
 
             if (!userAccount.EmailConfirmed)
@@ -68,16 +68,21 @@ namespace MTS.DataAcces.AccountAPI.Controllers
             {
                 if (result.IsLockedOut)
                 {
-                    return Unauthorized($"Invalid login attempt. You are locked out for some time");
-                }
-                else if (result.IsNotAllowed)
-                {
-                    return Unauthorized($"Invalid login attempt. You are not allowed to login for some time");
+                    Unauthorized($"You are locked out for some time");
                 }
 
-                responses.Add("Invalid login attempt. Wrong email password combination");
+                if (result.IsNotAllowed)
+                {
+                    responses.Add($"You are not allowed to login for some time");
+                }
+
+                if (responses.Count == 0)
+                {
+                    responses.Add("Wrong password");
+                }
+
                 responses.Add($"Login attempts remaining: {_signInManager.Options.Lockout.MaxFailedAccessAttempts - userAccount.AccessFailedCount}");
-                return Unauthorized();
+                return Unauthorized(responses.ToArray());
             }
 
             return Accepted("Login succesfull", BuildToken(userAccount).Value);

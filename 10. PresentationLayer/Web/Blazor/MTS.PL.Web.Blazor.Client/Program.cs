@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MTS.Core.GlobalLibrary;
 using MTS.PL.Infra.InjectionLibrary;
 using MTS.PL.Web.Blazor.Client.Authentification;
+using MTS.PL.Web.Blazor.Client.Pages.Account.CRUD;
 using Syncfusion.Blazor;
 
 namespace MTS.PL.Web.Blazor.Client
@@ -21,6 +22,8 @@ namespace MTS.PL.Web.Blazor.Client
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(Constants.API_BASE_ADDRESS) });
+            builder.Services.AddScoped<APIAccountsAdapter>();
+
 
             #region Security
             builder.Services.AddAuthorizationCore();

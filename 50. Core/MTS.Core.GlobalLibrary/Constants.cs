@@ -2,6 +2,11 @@
 {
     public static class Constants
     {
+        public static class MTS
+        {
+            public const string WHAT_IS_MTS = "Maurice Tech Solutions was developed to showcase the programming skills of Maurice.";
+        }
+
         public static class APIControllers
         {
             public const string ACCOUNT = "account";
@@ -14,9 +19,11 @@
             public const string GET_BY_ID = "getbyid";
             public const string GET_BY_EMAIL = "getbyemail";
             public const string GET_ALL = "getall";
+            public const string CREATE_BY_CREDENTIALS = "createbycredentials";
             public const string CREATE_BY_ACCOUNT = "createbyaccount";
             public const string DELETE_BY_ID = "deletebyid";
             public const string CONFIRM_EMAIL = "confirmemail";
+            public const string CONFIRM_EMAIL_ADMIN = "confirmemailadmin";
         }
 
         public static class IdentityControllerEndpoints
@@ -34,7 +41,6 @@
 
         public static class Security
         {
-            public const string UNAUTHORIZED_USER = "UnauthorizedUser";
             public const string STANDARD_USER = "StandardUser";
             public const string PRIVILEGED_USER = "PrivilegedUser";
             public const string VOLENTEER = "Volenteer";
@@ -46,7 +52,7 @@
             {
                 switch (accessLevel)
                 {
-                    case AccessLevel.StandardUser:
+                    default:
                         return STANDARD_USER;
 
                     case AccessLevel.PrivilegedUser:
@@ -63,9 +69,6 @@
 
                     case AccessLevel.Administrator:
                         return ADMINISTRATOR;
-
-                    default:
-                        return UNAUTHORIZED_USER;
                 }
             }
         }

@@ -14,11 +14,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using MTS.BL.Infra.APILibrary;
 using MTS.Core.GlobalLibrary;
 using MTS.DAL.API.Database;
 using MTS.DAL.API.Models;
+using MTS.DataAcces.AccountAPI.Utils;
 
 namespace API.Controllers
 {
@@ -45,7 +47,9 @@ namespace API.Controllers
         }
 
         // Account/getbyid
-        [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
+        [Authorize(Roles = 
+            Constants.Security.ADMINISTRATOR + "," +
+            Constants.Security.PRIVILEGED_EMPLOYEE)]
         [Route(Constants.AccountControllerEndpoints.GET_BY_ID)]
         [HttpGet]
         public async Task<ActionResult<UserAccount>> GetById([FromBody] string id)
@@ -54,7 +58,9 @@ namespace API.Controllers
         }
 
         // Account/getbyemail
-        [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
+        [Authorize(Roles = 
+            Constants.Security.ADMINISTRATOR + "," +
+            Constants.Security.PRIVILEGED_EMPLOYEE)]
         [Route(Constants.AccountControllerEndpoints.GET_BY_EMAIL)]
         [HttpGet]
         public async Task<ActionResult<UserAccount>> GetByEmail([FromBody] string email)
@@ -65,24 +71,39 @@ namespace API.Controllers
         [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
         [Route(Constants.AccountControllerEndpoints.GET_ALL)]
         [HttpGet]
-        public async Task<ActionResult<List<UserAccount>>> GetUsers()
+        public async Task<ActionResult<string[]>> GetAll()
         {
-            var efAccountList = await _applicationDbContext.UserAccounts.ToListAsync();
+            int count = await _applicationDbContext.UserAccounts.CountAsync();
 
-            var accountsList = new List<UserAccount>(efAccountList.Count);
-
-            foreach (var account in efAccountList)
+            UserAccount[] userAccounts = new UserAccount[count];
+            
+            if (count < 10000)
             {
-                accountsList.Add((UserAccount)account);
+                int index = 0;
+                foreach (var efAccount in _applicationDbContext.UserAccounts) 
+                {
+                    userAccounts[index] = new UserAccount();
+                    PropertyCopier<EFUserAccount, UserAccount>.Copy(efAccount, userAccounts[index]);
+                    index++;
+                } 
+            }
+            else
+            {
+                // TODO rethink this
+                //var result = _applicationDbContext.UserAccounts.AsParallel().WithDegreeOfParallelism(10).ToArray();
+                //Parallel.For(0, count, async (i) => 
+                //{
+                //    userAccounts[i] = await EFUserAccount.ConvertFromAsync(result[i]);
+                //});
             }
 
-            return Ok(accountsList);
+            return Ok(userAccounts);
         }
 
-        // Account/createbyaccount
-        [Route(Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT)]
+        // Account/createbycredentials
+        [Route(Constants.AccountControllerEndpoints.CREATE_BY_CREDENTIALS)]
         [HttpPut]
-        public async Task<ActionResult> CreateByAccount([FromBody] CredentialHolder credentialHolder)
+        public async Task<ActionResult> CreateByCredentials([FromBody] CredentialHolder credentialHolder)
         {
             IdentityResult result;
 
@@ -99,11 +120,9 @@ namespace API.Controllers
                     result = await _userManager.CreateAsync(efUserAccount, credentialHolder.Password);
                     if (result != null && result.Succeeded)
                     {
-                        //_logger.LogInformation("User created a new account with password.");
-
-                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(efUserAccount);
-                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                        var callbackUrl = $"{Constants.BLAZOR_WEB_BASE_ADDRESS}/account/confirmemail/{efUserAccount.Id}/{code}";
+                        var callbackCode = await _userManager.GenerateEmailConfirmationTokenAsync(efUserAccount);
+                        callbackCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(callbackCode));
+                        var callbackUrl = $"{Constants.BLAZOR_WEB_BASE_ADDRESS}/account/confirmemail/{efUserAccount.Id}/{callbackCode}";
 
                         await _emailSender.SendEmailAsync(
                             efUserAccount.Email,
@@ -112,7 +131,65 @@ namespace API.Controllers
                             $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                         return new CreatedAtActionResult(
-                            actionName: Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT,
+                            actionName: Constants.AccountControllerEndpoints.CREATE_BY_CREDENTIALS,
+                            controllerName: Constants.APIControllers.ACCOUNT,
+                            routeValues: RouteData.Values,
+                            value: efUserAccount.Id);
+                    }
+                    else
+                    {
+                        var errors = new string[result.Errors.Count()];
+                        for (int i = 0; i < errors.Length; i++)
+                        {
+                            errors[i] = result.Errors.ElementAt(i).Description;
+                        }
+
+                        return StatusCode(500, errors);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return await HandleException(ex);
+                }
+            }
+            else
+            {
+                return BadRequest("ModelState invalid");
+            }
+        }
+
+        [Authorize(Roles =
+            Constants.Security.ADMINISTRATOR + "," +
+            Constants.Security.PRIVILEGED_EMPLOYEE + "," +
+            Constants.Security.EMPLOYEE)]
+        [Route(Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT)]
+        [HttpPut]
+        public async Task<ActionResult> CreateByAccount([FromBody] UserAccount userAccount)
+        {
+            IdentityResult result;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var efUserAccount = new EFUserAccount();
+                    PropertyCopier<UserAccount, EFUserAccount>.Copy(userAccount, efUserAccount);
+
+                    result = await _userManager.CreateAsync(efUserAccount, userAccount.PasswordHash);
+                    if (result != null && result.Succeeded)
+                    {
+                        var callbackCode = await _userManager.GenerateEmailConfirmationTokenAsync(efUserAccount);
+                        callbackCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(callbackCode));
+                        var callbackUrl = $"{Constants.BLAZOR_WEB_BASE_ADDRESS}/account/confirmemail/{efUserAccount.Id}/{callbackCode}";
+
+                        await _emailSender.SendEmailAsync(
+                            efUserAccount.Email,
+                            "Confirm your email",
+                            $"Welcome to the Maurice Tech Community!\n" +
+                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                        return new CreatedAtActionResult(
+                            actionName: Constants.AccountControllerEndpoints.CREATE_BY_CREDENTIALS,
                             controllerName: Constants.APIControllers.ACCOUNT,
                             routeValues: RouteData.Values,
                             value: efUserAccount.Id);
@@ -177,23 +254,6 @@ namespace API.Controllers
             {
                 return BadRequest("ModelState invalid");
             }
-        }
-
-        public EFUserAccount UserAccountConverter(UserAccount userAccount)
-        {
-            var efUserAccount = new EFUserAccount();
-
-            foreach (PropertyInfo property in typeof(UserAccount).GetProperties())
-            {
-                // Ignore exceptions
-                try
-                {
-                    property.SetValue(efUserAccount, typeof(UserAccount).GetProperty(property.Name).GetValue(userAccount));
-                }
-                catch { }
-            }
-
-            return efUserAccount;
         }
 
         private async Task<ActionResult> HandleException(Exception ex)

@@ -61,11 +61,11 @@
                 <div class="col-md-4 mb-3">
                     <label>Password:</label>
                     <InputText class="form-control" type="password" @bind-Value="@UserAccount.PasswordHash" />
-                    <ValidationMessage For="@(() => UserAccount.Affix)" />
+                    <ValidationMessage For="@(() => UserAccount.PasswordHash)" />
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <label>Last name:</label>
+                    <label>Confirm:</label>
                     <InputText class="form-control" @bind-Value="@UserAccount.LastName" />
                     <ValidationMessage For="@(() => UserAccount.Affix)" />
                 </div>
