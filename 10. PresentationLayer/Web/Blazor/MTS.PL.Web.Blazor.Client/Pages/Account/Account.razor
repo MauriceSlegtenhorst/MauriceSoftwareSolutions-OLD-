@@ -1,0 +1,115 @@
+﻿@page "/account"
+@inject HttpClient httpClient
+@inject ILoginService  loginService
+@inject NavigationManager navigationManager
+
+<h1>Account</h1>
+
+<div id="spinnerContainer"></div>
+<SfSpinner @ref="_spinner" Target="#spinnerContainer" Label="Authenticating" />
+
+<SfCard>
+    <CardHeader Title="Please enter your details"></CardHeader>
+    <CardContent>
+        <EditForm Model="UserAccount" OnValidSubmit="UpdateUserAccount">
+            <DataAnnotationsValidator />
+
+            @if (_updateResultErrors.Length > 0)
+            {
+                <ErrorAlertComponent Title="@_updateResultToast.Title" Errors="@_updateResultErrors" />
+            }
+            @*Row 1*@
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label>First name:</label>
+                    <InputText class="form-control" @bind-Value="@UserAccount.FirstName" />
+                    <ValidationMessage For="@(() => UserAccount.FirstName)" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Affix:</label>
+                    <InputText class="form-control" @bind-Value="@UserAccount.Affix" />
+                    <ValidationMessage For="@(() => UserAccount.Affix)" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Last name:</label>
+                    <InputText class="form-control" @bind-Value="@UserAccount.LastName" />
+                    <ValidationMessage For="@(() => UserAccount.Affix)" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Email:</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">@@</span>
+                        </div>
+                        <InputText class="form-control" @bind-Value="@UserAccount.Email" />
+                        <ValidationMessage For="@(() => UserAccount.Email)" />
+                    </div>
+                </div>
+            </div>
+
+            @*Row 2*@
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label>Phone number:</label>
+                    <InputText class="form-control" @bind-Value="@UserAccount.PhoneNumber" />
+                    <ValidationMessage For="@(() => UserAccount.PhoneNumber)" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Password:</label>
+                    <InputText class="form-control" type="password" @bind-Value="@UserAccount.PasswordHash" />
+                    <ValidationMessage For="@(() => UserAccount.Affix)" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Last name:</label>
+                    <InputText class="form-control" @bind-Value="@UserAccount.LastName" />
+                    <ValidationMessage For="@(() => UserAccount.Affix)" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Email:</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">@@</span>
+                        </div>
+                        <InputText class="form-control" @bind-Value="@UserAccount.Email" />
+                        <ValidationMessage For="@(() => UserAccount.Email)" />
+                    </div>
+                </div>
+            </div>
+
+
+
+            <SfButton Type="submit" CssClass="btn btn-primary" Content="Log in" />
+        </EditForm>
+    </CardContent>
+</SfCard>
+
+<div class="col-lg-4 control-section">
+    <SfToast @ref="_updateResultToast" TimeOut="0" ShowCloseButton="true" ID="toast_type">
+        <ToastPosition X="Center" Y="Top"></ToastPosition>
+    </SfToast>
+</div>
+
+
+@code {
+    [Parameter]
+    public IUserAccount UserAccount { get; set; }
+
+    private SfSpinner _spinner;
+    private string _spinnerTarget = "#spinnerContainer";
+
+    private SfToast _updateResultToast;
+    private string[] _updateResultErrors = new string[0];
+
+    ToastModel toastModel;
+
+    private async Task UpdateUserAccount()
+    {
+
+    }
+}

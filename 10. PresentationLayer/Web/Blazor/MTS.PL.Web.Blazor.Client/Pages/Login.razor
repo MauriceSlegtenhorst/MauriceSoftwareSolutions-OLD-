@@ -1,0 +1,121 @@
+﻿@page "/login"
+@inject HttpClient httpClient
+@inject ILoginService  loginService
+@inject NavigationManager navigationManager
+
+<h1>Portal</h1>
+
+<div id="spinnerContainer"></div>
+<SfSpinner @ref="_spinner" Target="#spinnerContainer" Label="Authenticating" />
+
+<SfCard>
+    <CardHeader Title="Please enter your details"></CardHeader>
+    <CardContent>
+        <EditForm Model="inputModel" OnValidSubmit="LoginUser">
+            <DataAnnotationsValidator />
+
+            @if (_loginResultErrors.Length > 0)
+	        {
+                <ErrorAlertComponent Title="@_loginResultToast.Title" Errors="@_loginResultErrors" />
+	        }
+
+            <div class="form-group">
+                <label>Email:</label>
+                <div>
+                    <InputText class="form-control" @bind-Value="@inputModel.Email" />
+                    <ValidationMessage For="@(() => inputModel.Email)" />
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Password:</label>
+                <div>
+                    <InputText class="form-control" type="password" @bind-Value="@inputModel.Password" />
+                    <ValidationMessage For="@(() => inputModel.Password)" />
+                </div>
+            </div>
+
+            <div class="form-group form-check">
+                <label>Remember me?</label>
+                <div>
+                    <InputCheckbox @bind-Value="@inputModel.RememberMe" />
+                </div>
+            </div>
+
+            <SfButton Type="submit" CssClass="btn btn-primary" Content="Log in" />
+        </EditForm>
+    </CardContent>
+</SfCard>
+
+<div class="col-lg-4 control-section">
+    <SfToast @ref="_loginResultToast" TimeOut="0" ShowCloseButton="true" ID="toast_type">
+        <ToastPosition X="Center" Y="Top"></ToastPosition>
+    </SfToast>
+</div>
+
+@code {
+    private SfSpinner _spinner;
+    private string _spinnerTarget = "#spinnerContainer";
+
+    private SfToast _loginResultToast;
+    private string[] _loginResultErrors = new string[0];
+
+    private InputModel inputModel = new InputModel();
+
+    ToastModel toastModel;
+
+    private class InputModel
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [Display(Name = "Remember me?")]
+        public bool RememberMe { get; set; }
+    }
+
+    private async Task LoginUser()
+    {
+        _spinner.ShowSpinner(_spinnerTarget);
+
+        var requestUrl = $"{Constants.APIControllers.IDENTITY}/{Constants.IdentityControllerEndpoints.LOG_IN}";
+        var result = await httpClient.PutAsJsonAsync(requestUrl, inputModel);
+        var resultContentAsString = await result.Content.ReadAsStringAsync();
+
+        if (result.IsSuccessStatusCode)
+        {
+            await loginService.Login(resultContentAsString);
+
+            navigationManager.NavigateTo("/");
+        }
+        else
+        {
+            _loginResultErrors = JsonConvert.DeserializeObject<string[]>(resultContentAsString);
+
+            var stringbuilder = new StringBuilder();
+            foreach (var item in _loginResultErrors)
+            {
+                stringbuilder.AppendLine(item);
+            }
+
+            toastModel = new ToastModel
+            {
+                Title = $"{result.ReasonPhrase} :(",
+                Content = stringbuilder.ToString(),
+                CssClass = "e-toast-danger",
+                Icon = "e-error toast-icons",
+                ShowCloseButton = true,
+                TimeOut = 0
+            };
+        }
+
+        _spinner.HideSpinner(_spinnerTarget);
+
+        await _loginResultToast.Show(toastModel);
+    }
+}

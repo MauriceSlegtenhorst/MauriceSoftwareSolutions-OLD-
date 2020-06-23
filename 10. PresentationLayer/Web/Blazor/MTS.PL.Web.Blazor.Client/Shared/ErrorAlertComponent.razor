@@ -1,0 +1,15 @@
+﻿<div class="alert alert-danger">
+    <strong>@Title</strong>
+    @foreach (string item in Errors)
+    {
+        <p class="validation-message">@item</p>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public IEnumerable<string> Errors { get; set; }
+}
