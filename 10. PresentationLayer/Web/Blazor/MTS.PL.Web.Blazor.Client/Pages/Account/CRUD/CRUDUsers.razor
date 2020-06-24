@@ -178,38 +178,38 @@
 
     public class APIAccountsAdapter : DataAdaptor
     {
-        public override object Read(DataManagerRequest dm, string key = null)
+        public override object Read(DataManagerRequest dataManager, string key = null)
         {
             IEnumerable<UserAccount> DataSource = UserAccounts;
-            if (dm.Search != null && dm.Search.Count > 0)
+            if (dataManager.Search != null && dataManager.Search.Count > 0)
             {
                 // Searching
-                DataSource = DataOperations.PerformSearching(DataSource, dm.Search);
+                DataSource = DataOperations.PerformSearching(DataSource, dataManager.Search);
             }
-            if (dm.Sorted != null && dm.Sorted.Count > 0)
+            if (dataManager.Sorted != null && dataManager.Sorted.Count > 0)
             {
                 // Sorting
-                DataSource = DataOperations.PerformSorting(DataSource, dm.Sorted);
+                DataSource = DataOperations.PerformSorting(DataSource, dataManager.Sorted);
             }
-            if (dm.Where != null && dm.Where.Count > 0)
+            if (dataManager.Where != null && dataManager.Where.Count > 0)
             {
                 // Filtering
-                DataSource = DataOperations.PerformFiltering(DataSource, dm.Where, dm.Where[0].Operator);
+                DataSource = DataOperations.PerformFiltering(DataSource, dataManager.Where, dataManager.Where[0].Operator);
             }
 
             int count = DataSource.Cast<UserAccount>().Count();
 
-            if (dm.Skip != 0)
+            if (dataManager.Skip != 0)
             {
                 //Paging
-                DataSource = DataOperations.PerformSkip(DataSource, dm.Skip);
+                DataSource = DataOperations.PerformSkip(DataSource, dataManager.Skip);
             }
-            if (dm.Take != 0)
+            if (dataManager.Take != 0)
             {
-                DataSource = DataOperations.PerformTake(DataSource, dm.Take);
+                DataSource = DataOperations.PerformTake(DataSource, dataManager.Take);
             }
 
-            return dm.RequiresCounts ? new DataResult() { Result = DataSource, Count = count } : (object)DataSource;
+            return dataManager.RequiresCounts ? new DataResult() { Result = DataSource, Count = count } : (object)DataSource;
         }
 
         public async override Task<object> InsertAsync(DataManager dataManager, object data, string key)
@@ -323,6 +323,51 @@
                 StateHasChanged();
 
                 return data;
+            }
+        }
+
+        public async override Task<object> RemoveAsync(DataManager dataManager, object id, string keyField, string key)
+        {
+            var userAccount = UserAccounts.FirstOrDefault(account => account.Id == id.ToString());
+
+            if (userAccount == null)
+            {
+                HandleException(new Exception("Data could not be converted to an user account"));
+                StateHasChanged();
+                return id;
+            }
+
+            HttpResponseMessage result = null;
+
+            string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.DELETE_BY_ID}?id={userAccount.Id}";
+
+            try
+            {
+                result = await HttpClient.DeleteAsync(url);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                StateHasChanged();
+                return id;
+            }
+
+            if (result.IsSuccessStatusCode)
+            {
+                if(!UserAccounts.Remove(UserAccounts.Where(account => account.Id == userAccount.Id).FirstOrDefault()))
+                {
+                    HandleException(new Exception("Error removing locally. Server side account has been deleted"));
+                    StateHasChanged();
+                }
+
+                return id;
+            }
+            else
+            {
+                ErrorDetails = JsonConvert.DeserializeObject<string[]>(await result.Content.ReadAsStringAsync());
+                StateHasChanged();
+
+                return id;
             }
         }
     }

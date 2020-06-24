@@ -287,6 +287,33 @@ namespace API.Controllers
         }
         #endregion
 
+        // Delete
+        [Authorize]
+        [Route(Constants.AccountControllerEndpoints.DELETE_BY_ID)]
+        [HttpDelete]
+        public async Task<ActionResult> DeleteById([FromQuery] string id)
+        {
+            if (ModelState.IsValid)
+            {
+                var efUserAccount = await _userManager.FindByIdAsync(id);
+
+                var result = await _userManager.DeleteAsync(efUserAccount);
+
+                if (result.Succeeded)
+                {
+                    return Ok("Account is deleted");
+                }
+                else
+                {
+                    return HandleException(new Exception("Error deleting account"));
+                }
+            }
+            else
+            {
+                return HandleException(new Exception("ModelState invalid"));
+            }
+        }
+
         // Confirm email
         [Route(Constants.AccountControllerEndpoints.CONFIRM_EMAIL)]
         [HttpPut]
@@ -300,26 +327,6 @@ namespace API.Controllers
                 var result = await _userManager.ConfirmEmailAsync(userAccount, confirmEmailHolder.Code);
 
                 return Ok(result.Succeeded ? "Succes! Thank you for confirming your email." : "Error confirming your email.");
-            }
-            else
-            {
-                return BadRequest("ModelState invalid");
-            }
-        }
-
-        // Delete
-        [Authorize]
-        [Route(Constants.AccountControllerEndpoints.DELETE_BY_ID)]
-        [HttpDelete]
-        public async Task<ActionResult> DeleteById([FromBody] string id)
-        {
-            if (ModelState.IsValid)
-            {
-                var efUserAccount = await _userManager.FindByIdAsync(id);
-
-                var result = await _userManager.DeleteAsync(efUserAccount);
-
-                return Ok(result.Succeeded ? "Succes! Your account has been deleted" : "Error deleting your account");
             }
             else
             {
