@@ -2,100 +2,100 @@
 @attribute [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
 @inject HttpClient _httpClient
 
-    <style>
-        .error {
-            color: red;
-        }
-    </style>
-
 <h1>CRUD users</h1>
 
-<span class="error">@ErrorDetails</span>
+@if (ErrorDetails.Length > 0)
+{
+    <ErrorAlertComponent Title="@ErrorTitle" Errors="@ErrorDetails" />
+}
 
-<SfGrid TValue="UserAccount" AllowPaging="true" Toolbar="@ToolBarItems">
+<SfGrid TValue="UserAccount" AllowPaging="true" Toolbar="@ToolBarItems" ID="Grid" AllowSorting="true">
 
     <GridEditSettings AllowAdding="true"
                       AllowEditing="true"
                       AllowDeleting="true"
-                      Mode="EditMode.Normal"/>
+                      Mode="EditMode.Normal" />
+
     <GridEvents TValue="UserAccount"
                 OnToolbarClick="ToolBarItemClicked"
-                OnActionFailure="@ActionFailure"
-                RowSelected="@RowSelectedEvent" />
-    @{
-        string url = $"{Constants.API_BASE_ADDRESS}/{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_ALL}";
+                OnActionFailure="@ActionFailure" />
 
+    @{
         if (IsInitialRender)
         {
-            @*<SfDataManager Url="@url" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>*@
             <SfDataManager AdaptorInstance="@typeof(APIAccountsAdapter)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
         }
     }
 
     <GridColumns>
-        @{
-            List<Exception> exceptions = null;
-            try
-            {
-                PropertyInfo[] propertyInfos = typeof(UserAccount).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                if (propertyInfos.Any())
+            @{
+                List<Exception> exceptions = null;
+                try
                 {
-
-                    foreach (PropertyInfo properyInfo in propertyInfos)
+                    PropertyInfo[] propertyInfos = typeof(UserAccount).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                    if (propertyInfos.Any())
                     {
-                        try
+
+                        foreach (PropertyInfo properyInfo in propertyInfos)
                         {
-                            string field = properyInfo.Name;
-                            bool isPrimKey = properyInfo.Name == "Id";
-                            bool canWrite = properyInfo.CanWrite;
-                            EditType editType = EditType.DefaultEdit;
-                            editTypeDictionairy.TryGetValue(properyInfo.PropertyType, out editType);
+                            try
+                            {
+                                string field = properyInfo.Name;
+                                string header = PropertyNameConverter.ConvertFromProperty(properyInfo.Name);
+                                bool isPrimKey = properyInfo.Name == "Id";
+                                bool canWrite = properyInfo.CanWrite;
+                                EditType editType = EditType.DefaultEdit;
+                                editTypeDictionairy.TryGetValue(properyInfo.PropertyType, out editType);
 
-                            // TODO logic for width and edittype
+                                <GridColumn Field="@field"
+                                            HeaderText="@header"
+                                            IsPrimaryKey="@isPrimKey"
+                                            IsIdentity="@isPrimKey"
+                                            EditType="@editType"
+                                            AllowEditing="@canWrite"
+                                            AutoFit="true"/>
 
-                            <GridColumn Field="@field"
-                                        HeaderText="@field"
-                                        IsPrimaryKey="@isPrimKey"
-                                        IsIdentity="@isPrimKey"
-                                        EditType="@editType"
-                                        AllowEditing="@canWrite" />
-                        }
-                        catch (Exception ex)
-                        {
-                            if (exceptions == null)
-                                exceptions = new List<Exception>();
+                            }
+                            catch (Exception ex)
+                            {
+                                if (exceptions == null)
+                                    exceptions = new List<Exception>();
 
-                            exceptions.Add(ex);
+                                exceptions.Add(ex);
+                            }
                         }
                     }
-                }
-                else
-                {
-                    exceptions.Add(new ArgumentException("fromObject empty"));
-                }
-
-                if (exceptions != null)
-                {
-                    if (exceptions.Count > 1)
-                        throw new AggregateException(exceptions);
                     else
-                        throw exceptions[0];
-                }
+                    {
+                        exceptions.Add(new ArgumentException("fromObject empty"));
+                    }
 
+                    if (exceptions != null)
+                    {
+                        if (exceptions.Count > 1)
+                            throw new AggregateException(exceptions);
+                        else
+                            throw exceptions[0];
+                    }
+
+                }
+                catch (AggregateException ex)
+                {
+                    // TODO Deal with exceptions
+                    throw ex;
+                }
             }
-            catch (AggregateException ex)
-            {
-                // TODO Deal with exceptions
-                throw ex;
-            }
-        }
-    </GridColumns>
+        </GridColumns>
 </SfGrid>
 
 @code{
-    public List<UserAccount> UserAccounts { get; set; }
-    private UserAccount SelectedRow = null;
-    public string ErrorDetails = String.Empty;
+    public static List<UserAccount> UserAccounts { get; set; } = new List<UserAccount>();
+
+    // Dependency injection didn't work in Adapter so thats why this is here
+    public static HttpClient HttpClient { get; set; }
+
+    public static string ErrorTitle { get; set; }
+    public static string[] ErrorDetails { get; set; } = new string[0];
     public bool IsInitialRender = false;
     public List<string> ToolBarItems { get; set; } = new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" };
 
@@ -112,13 +112,15 @@
     {
         IsInitialRender = true;
 
+        HttpClient = _httpClient;
+
         string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_ALL}";
 
         try
         {
-            var result = await _httpClient.GetAsync(url);
+            var result = await _httpClient.GetFromJsonAsync<UserAccount[]>(url);
 
-            UserAccounts = JsonConvert.DeserializeObject<UserAccount[]>(await result.Content.ReadAsStringAsync()).ToList();
+            UserAccounts = result.ToList();
         }
         catch (Exception)
         {
@@ -127,21 +129,20 @@
         }
     }
 
-    public void RowSelectedEvent(Syncfusion.Blazor.Grids.RowSelectEventArgs<UserAccount> eventArgs)
-    {
-        SelectedRow = eventArgs.Data;
-    }
+    //public void RowSelectedEvent(Syncfusion.Blazor.Grids.RowSelectEventArgs<UserAccount> eventArgs)
+    //{
+    //    SelectedRow = eventArgs.Data;
+    //}
 
     public void ActionFailure(Syncfusion.Blazor.Grids.FailureEventArgs args)
     {
-        this.ErrorDetails = args.Error.ToString();//"Server exception: 404 Not found";
+        ErrorDetails = new string[1] { args.Error.ToString() }; //"Server exception: 404 Not found";
+
         StateHasChanged();
     }
 
     public async void ToolBarItemClicked(Syncfusion.Blazor.Navigations.ClickEventArgs eventArgs)
     {
-        string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT}";
-
         switch (eventArgs.Item.Text)
         {
             default:
@@ -166,5 +167,163 @@
         }
     }
 
-    
+    public static void HandleException(Exception ex)
+    {
+#if DEBUG
+        ErrorDetails = new string[] { ex.Message, ex.InnerException?.Message };
+#else
+        ErrorDetails = new string[] { "Something went wrong... Details are secret" };
+#endif
+    }
+
+    public class APIAccountsAdapter : DataAdaptor
+    {
+        public override object Read(DataManagerRequest dm, string key = null)
+        {
+            IEnumerable<UserAccount> DataSource = UserAccounts;
+            if (dm.Search != null && dm.Search.Count > 0)
+            {
+                // Searching
+                DataSource = DataOperations.PerformSearching(DataSource, dm.Search);
+            }
+            if (dm.Sorted != null && dm.Sorted.Count > 0)
+            {
+                // Sorting
+                DataSource = DataOperations.PerformSorting(DataSource, dm.Sorted);
+            }
+            if (dm.Where != null && dm.Where.Count > 0)
+            {
+                // Filtering
+                DataSource = DataOperations.PerformFiltering(DataSource, dm.Where, dm.Where[0].Operator);
+            }
+
+            int count = DataSource.Cast<UserAccount>().Count();
+
+            if (dm.Skip != 0)
+            {
+                //Paging
+                DataSource = DataOperations.PerformSkip(DataSource, dm.Skip);
+            }
+            if (dm.Take != 0)
+            {
+                DataSource = DataOperations.PerformTake(DataSource, dm.Take);
+            }
+
+            return dm.RequiresCounts ? new DataResult() { Result = DataSource, Count = count } : (object)DataSource;
+        }
+
+        public async override Task<object> InsertAsync(DataManager dataManager, object data, string key)
+        {
+            string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT}";
+
+            var userAccount = new UserAccount();
+
+            PropertyCopier<object, UserAccount>.Copy(data, userAccount);
+
+            HttpResponseMessage result = null;
+
+            try
+            {
+                result = await HttpClient.PutAsJsonAsync(url, userAccount);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                StateHasChanged();
+            }
+
+            if (result.IsSuccessStatusCode)
+            {
+                try
+                {
+                    data = JsonConvert.DeserializeObject<UserAccount>(await result.Content.ReadAsStringAsync());
+                }
+                catch (Exception ex)
+                {
+                    HandleException(ex);
+                    StateHasChanged();
+                }
+
+                if (data == null)
+                {
+                    HandleException(new Exception("Deserialized data was null"));
+                }
+                else
+                {
+                    UserAccounts.Insert(0, data as UserAccount);
+                }
+
+                return data;
+            }
+            else
+            {
+                ErrorDetails = JsonConvert.DeserializeObject<string[]>(await result.Content.ReadAsStringAsync());
+                StateHasChanged();
+                return data;
+            }
+        }
+
+        public async override Task<object> UpdateAsync(DataManager dataManager, object data, string keyField, string key)
+        {
+            string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT}";
+
+            var newUserAccount = data as UserAccount;
+
+            if (newUserAccount == null)
+            {
+                HandleException(new Exception("Data could not be converted to an useraccount"));
+                return data;
+            }
+
+            HttpResponseMessage result = null;
+
+            try
+            {
+                var stringContent = new StringContent(JsonConvert.SerializeObject(newUserAccount), Encoding.UTF8, Constants.MediaTypes.JSON);
+                result = await HttpClient.PatchAsync(url, stringContent);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                StateHasChanged();
+                return data;
+            }
+
+            if (result.IsSuccessStatusCode)
+            {
+                try
+                {
+                    newUserAccount = JsonConvert.DeserializeObject<UserAccount>(await result.Content.ReadAsStringAsync());
+                }
+                catch (Exception ex)
+                {
+                    HandleException(ex);
+                    StateHasChanged();
+                    return data;
+                }
+
+                if (newUserAccount == null)
+                {
+                    HandleException(new Exception("Deserialized data was null"));
+                    StateHasChanged();
+                    return data;
+                }
+
+                var oldAccount = UserAccounts.Where(account => account.Id == newUserAccount.Id).FirstOrDefault();
+                if (oldAccount != null)
+                {
+                    PropertyCopier<UserAccount, UserAccount>.Copy(newUserAccount, oldAccount);
+                }
+
+                return data;
+            }
+            else
+            {
+                ErrorDetails = JsonConvert.DeserializeObject<string[]>(await result.Content.ReadAsStringAsync());
+                StateHasChanged();
+
+                return data;
+            }
+        }
+    }
 }

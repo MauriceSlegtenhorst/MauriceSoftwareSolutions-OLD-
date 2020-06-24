@@ -17,7 +17,7 @@ namespace MTS.PL.Infra.InjectionLibrary
 
         bool LockoutEnabled { get; set; }
 
-        string PasswordHash { get; set; }
+        string Password { get; set; }
 
         string Email { get; set; }
 

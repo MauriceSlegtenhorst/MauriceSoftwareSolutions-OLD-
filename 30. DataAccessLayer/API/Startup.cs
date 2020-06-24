@@ -12,7 +12,6 @@ using MTS.DAL.API.Database;
 using MTS.DAL.API.Models;
 using System;
 using System.Text;
-using MTS.DataAcces.AccountAPI.Data;
 
 namespace API
 {
@@ -90,9 +89,6 @@ namespace API
             services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddControllers();
-
-            services.AddDbContext<MTSDataAccesAccountAPIContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("MTSDataAccesAccountAPIContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

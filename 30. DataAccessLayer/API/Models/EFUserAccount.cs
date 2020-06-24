@@ -13,6 +13,9 @@ namespace MTS.DAL.API.Models
     public class EFUserAccount : IdentityUser
     {
         #region Name
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public override string Id { get => base.Id; set => base.Id = value; }
+
         public string FirstName { get; set; }
 
         public string Affix { get; set; }
@@ -23,23 +26,6 @@ namespace MTS.DAL.API.Models
         public AccessLevel AccessLevel { get; set; }
 
         public bool IsAdmitted { get; set; }
-
-        public static explicit operator UserAccount(EFUserAccount efUserAccount)
-        {
-            var userAccount = new UserAccount();
-
-            foreach (PropertyInfo property in typeof(EFUserAccount).GetProperties())
-            {
-                // Ignore exceptions
-                try
-                {
-                    property.SetValue(userAccount, typeof(EFUserAccount).GetProperty(property.Name).GetValue(efUserAccount));
-                }
-                catch { }
-            }
-
-            return userAccount;
-        }
         #endregion
     }
 }

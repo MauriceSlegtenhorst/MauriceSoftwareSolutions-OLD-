@@ -21,6 +21,7 @@
             public const string GET_ALL = "getall";
             public const string CREATE_BY_CREDENTIALS = "createbycredentials";
             public const string CREATE_BY_ACCOUNT = "createbyaccount";
+            public const string UPDATE_BY_ACCOUNT = "updatebyaccount";
             public const string DELETE_BY_ID = "deletebyid";
             public const string CONFIRM_EMAIL = "confirmemail";
             public const string CONFIRM_EMAIL_ADMIN = "confirmemailadmin";

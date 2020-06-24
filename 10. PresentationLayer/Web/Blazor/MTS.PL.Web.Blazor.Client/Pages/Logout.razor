@@ -1,3 +1,20 @@
 ﻿@page "/logout"
+@inject HttpClient _httpClient
+@inject ILoginService  _loginService
 
 <h1>Logging out</h1>
+
+@code{ 
+    protected async override void OnInitialized()
+    {
+        var url = $"{Constants.APIControllers.IDENTITY}/{Constants.IdentityControllerEndpoints.LOG_OUT}";
+        var result = await _httpClient.GetAsync(url);
+
+        if (result.IsSuccessStatusCode)
+        {
+            await _loginService.Logout();
+        }
+
+        base.OnInitialized();
+    }
+}
