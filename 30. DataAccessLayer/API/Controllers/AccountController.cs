@@ -15,7 +15,6 @@ using MTS.BL.Infra.APILibrary;
 using MTS.Core.GlobalLibrary;
 using MTS.Core.GlobalLibrary.Utils;
 using MTS.DAL.API.Database;
-using MTS.DAL.API.Models;
 
 namespace API.Controllers
 {
@@ -115,40 +114,7 @@ namespace API.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var efUserAccount = new EFUserAccount
-                    {
-                        UserName = credentialHolder.Email,
-                        Email = credentialHolder.Email
-                    };
-
-                    result = await _userManager.CreateAsync(efUserAccount, credentialHolder.Password);
-                    if (result != null && result.Succeeded)
-                    {
-                        await SendConfirmationMail(efUserAccount);
-
-                        return new CreatedAtActionResult(
-                            actionName: Constants.AccountControllerEndpoints.CREATE_BY_CREDENTIALS,
-                            controllerName: Constants.APIControllers.ACCOUNT,
-                            routeValues: RouteData.Values,
-                            value: efUserAccount.Id);
-                    }
-                    else
-                    {
-                        var errors = new string[result.Errors.Count()];
-                        for (int i = 0; i < errors.Length; i++)
-                        {
-                            errors[i] = result.Errors.ElementAt(i).Description;
-                        }
-
-                        return HandleException(new Exception(errors.ToString()));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return HandleException(ex);
-                }
+               
             }
             else
             {

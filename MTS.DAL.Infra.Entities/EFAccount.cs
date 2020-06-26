@@ -1,14 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MTS.BL.Infra.APILibrary;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using static MTS.Core.GlobalLibrary.Constants;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
-namespace MTS.DAL.API.Models
+namespace MTS.DAL.Infra.Entities
 {
     public class EFUserAccount : IdentityUser
     {
@@ -21,9 +14,6 @@ namespace MTS.DAL.API.Models
         public string Affix { get; set; }
 
         public string LastName { get; set; }
-
-        [Column(TypeName = "int")]
-        public AccessLevel AccessLevel { get; set; }
 
         public bool IsAdmitted { get; set; }
         #endregion

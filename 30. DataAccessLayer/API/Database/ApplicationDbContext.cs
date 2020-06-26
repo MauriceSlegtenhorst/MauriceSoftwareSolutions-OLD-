@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MTS.BL.Infra.APILibrary;
-using MTS.DAL.API.Models;
+using MTS.DataAcces.AccountAPI.Entities;
 
 namespace MTS.DAL.API.Database
 {

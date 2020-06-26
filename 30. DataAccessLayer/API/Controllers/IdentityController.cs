@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MTS.BL.Infra.APILibrary;
-using MTS.DAL.API.Models;
+using MTS.DataAcces.AccountAPI.Entities;
 using static MTS.Core.GlobalLibrary.Constants;
 
 namespace MTS.DataAcces.AccountAPI.Controllers

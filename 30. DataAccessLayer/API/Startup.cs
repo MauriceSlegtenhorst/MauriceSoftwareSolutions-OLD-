@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using MTS.DAL.API.Database;
-using MTS.DAL.API.Models;
+using MTS.DataAcces.AccountAPI.Entities;
 using System;
 using System.Text;
 
