@@ -89,12 +89,12 @@ namespace MTS.DataAcces.AccountAPI.Controllers
         }
 
         [Route(IdentityControllerEndpoints.LOG_OUT)]
-        [HttpGet]
+        [HttpHead]
         public async Task<ActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
 
-            return Ok("Logout succesfull");
+            return Ok();
         }
 
         private UserToken BuildToken(EFUserAccount userAccount)
@@ -102,7 +102,7 @@ namespace MTS.DataAcces.AccountAPI.Controllers
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, $"{userAccount.Email.GetHashCode()}{DateTime.UtcNow}{userAccount.PasswordHash.GetHashCode()}"),
-                new Claim(ClaimTypes.Name, userAccount.FirstName ?? "NoName"),
+                new Claim(ClaimTypes.Name, userAccount.FirstName ?? "No Name"),
                 new Claim(ClaimTypes.Role, Enum.GetName(typeof(AccessLevel), userAccount.AccessLevel)),
                 new Claim(ClaimTypes.Email, userAccount.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())

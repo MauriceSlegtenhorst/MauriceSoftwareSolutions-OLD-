@@ -21,7 +21,6 @@ namespace MTS.BL.Infra.APILibrary
 
         [Display(Name = "Lockout enabled", ShortName = "Lock Enabled", Description = " True if the user could be locked out, otherwise false.")]
         public bool LockoutEnabled { get; set; }
-
         
         [Display(Name = "Two factor authentication enabled", ShortName = "2F.A. enabled", Description = "True if 2fa is enabled, otherwise false.")]
         public bool TwoFactorEnabled { get; set; }
