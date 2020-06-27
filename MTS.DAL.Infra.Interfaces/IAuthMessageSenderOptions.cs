@@ -1,6 +1,6 @@
-﻿namespace EmailLibrary
+﻿namespace MTS.DAL.Infra.Interfaces
 {
-    public interface IEmailConfig
+    public interface IAuthMessageSenderOptions
     {
         string DefaultSenderDisplayName { get; set; }
         string DefaultSenderEmail { get; set; }

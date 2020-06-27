@@ -4,4 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\20. BusinessLayer\Infra\MTS.BL.Infra.APILibrary\MTS.BL.Infra.APILibrary.csproj" />
+  </ItemGroup>
+
 </Project>

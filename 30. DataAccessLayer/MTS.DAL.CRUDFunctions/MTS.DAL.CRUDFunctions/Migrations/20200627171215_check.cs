@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace API.Migrations
+namespace MTS.DAL.DatabaseAccess.Migrations
 {
-    public partial class init : Migration
+    public partial class check : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,9 +26,13 @@ namespace API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    Affix = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    IsAdmitted = table.Column<bool>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: false),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     PasswordHash = table.Column<string>(nullable: true),
@@ -39,15 +43,27 @@ namespace API.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    Affix = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    AccessLevel = table.Column<int>(type: "int", nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Credits",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MadeBy = table.Column<string>(nullable: true),
+                    GotFrom = table.Column<string>(nullable: true),
+                    LinkToImage = table.Column<string>(nullable: true),
+                    AuthorWebsite = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Credits", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -212,6 +228,9 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Credits");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "MTS.DAL.DatabaseAccess": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "AuthMessageSenderOptions": "{\"Domain\": \"smtp.office365.com\",\"Port\": 587,\"UserName\": \"mauricetechsolution@outlook.com\",\"Key\": \"b35OT&A@rXcqQ*mz^2vyNw2oN\",\"UseSsl\": true,\"RequiresAuthentication\": true,\"DefaultSenderEmail\": \"mauricetechsolution@outlook.com\",\"DefaultSenderDisplayName\": \"Maurice\",\"UseHtml\": true}",
+        "ValidateIssuerSigningKey": "\"Key\": \"9RIW483D4T4L69AKU8DZUC2551140BB0JQVHLB77BUSCG9S2JN2W\"",
+        "ConnectionStrings": "{ \"localdatabaseconnection\": \"server=(LocalDB)\\\\MSSQLLocalDB;Integrated Security=True;database=MTS_API_Db;Trusted_Connection=True;\", \"realdatabaseconnection\": \"\"}"
+      }
+    }
+  }
+}

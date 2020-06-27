@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MTS.BL.Infra.APILibrary;
-using MTS.DataAcces.AccountAPI.Entities;
+using MTS.DAL.Infra.Interfaces;
 
-namespace MTS.DAL.API.Database
+namespace MTS.DAL.DatabaseAccess.DataContext
 {
-    public class ApplicationDbContext : IdentityDbContext<EFUserAccount>
+    internal sealed class ApplicationDbContext : IdentityDbContext<EFUserAccount>
     {
+
         public DbSet<EFUserAccount> UserAccounts { get; set; }
         public DbSet<Credit> Credits { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
     }
 }

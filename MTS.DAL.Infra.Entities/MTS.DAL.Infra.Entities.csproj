@@ -9,4 +9,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MTS.DAL.Infra.Interfaces\MTS.DAL.Infra.Interfaces.csproj" />
+  </ItemGroup>
+
 </Project>

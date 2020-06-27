@@ -1,6 +1,8 @@
-﻿namespace EmailLibrary
+﻿using MTS.DAL.Infra.Interfaces;
+
+namespace MTS.DAL.Infra.EmailLibrary
 {
-    public sealed class AuthMessageSenderOptions
+    public sealed class AuthMessageSenderOptions : IAuthMessageSenderOptions
     {
         public string Domain { get; set; }
         public int Port { get; set; }
