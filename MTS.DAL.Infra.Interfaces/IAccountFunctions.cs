@@ -5,7 +5,7 @@ namespace MTS.DAL.Infra.Interfaces
 {
     public interface IAccountFunctions
     {
-        Task<IEFUserAccount> Create(string email, string password);
-        Task<IEFUserAccount> Create(UserAccount userAccount);
+        Task<IEFUserAccount> CreateByEmailAndPassword(string email, string password);
+        Task<IEFUserAccount> CreateByAccount(UserAccount userAccount);
     }
 }

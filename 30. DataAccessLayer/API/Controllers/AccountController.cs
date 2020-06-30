@@ -104,7 +104,7 @@ namespace API.Controllers
 
             try
             {
-                IEFUserAccount efAccount = await _accountFunctions.Create(credentialHolder.Email, credentialHolder.Password);
+                IEFUserAccount efAccount = await _accountFunctions.CreateByEmailAndPassword(credentialHolder.Email, credentialHolder.Password);
 
                 if (efAccount != null && !String.IsNullOrEmpty(efAccount.Id))
                 {
@@ -138,7 +138,7 @@ namespace API.Controllers
 
             try
             {
-                IEFUserAccount efAccount = await _accountFunctions.Create(userAccount);
+                IEFUserAccount efAccount = await _accountFunctions.CreateByAccount(userAccount);
 
                 if (efAccount != null && !String.IsNullOrEmpty(efAccount.Id))
                 {

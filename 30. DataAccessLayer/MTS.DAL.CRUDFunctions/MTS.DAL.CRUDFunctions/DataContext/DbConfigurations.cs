@@ -26,8 +26,8 @@ namespace MTS.DAL.DatabaseAccess.DataContext
             AuthMessageSenderOptions = root.GetSection("AuthMessageSenderOptions");
         }
 
-        internal string SqlConnectionString { get; set; }
-        internal string IssuerSigningKey { get; set; }
-        internal IConfigurationSection AuthMessageSenderOptions { get; set; }
+        internal string SqlConnectionString { get; private set; }
+        internal string IssuerSigningKey { get; private set; }
+        internal IConfigurationSection AuthMessageSenderOptions { get; private set; }
     }
 }

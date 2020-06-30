@@ -4,6 +4,7 @@ using MTS.BL.Infra.APILibrary;
 using MTS.Core.GlobalLibrary;
 using MTS.Core.GlobalLibrary.Utils;
 using MTS.DAL.Infra.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Text;
@@ -26,7 +27,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
         }
 
         #region Create
-        public async Task<IEFUserAccount> Create(string email, string password)
+        public async Task<IEFUserAccount> CreateByEmailAndPassword(string email, string password)
         {
             var efUserAccount = new EFUserAccount
             {
@@ -50,11 +51,11 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
                     errors[i] = result.Errors.ElementAt(i).Description;
                 }
 
-                throw new Exception(errors.ToString());
+                throw new Exception(JsonConvert.SerializeObject(errors));
             }
         }
 
-        public async Task<IEFUserAccount> Create(UserAccount userAccount)
+        public async Task<IEFUserAccount> CreateByAccount(UserAccount userAccount)
         {
             var efUserAccount = new EFUserAccount();
             PropertyCopier<UserAccount, EFUserAccount>.Copy(userAccount, efUserAccount);
@@ -74,26 +75,26 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
                     errors[i] = result.Errors.ElementAt(i).Description;
                 }
 
-                throw new Exception(errors.ToString());
+                throw new Exception(JsonConvert.SerializeObject(errors));
             }
-        }
-
-        private async Task SendConfirmationEmail(EFUserAccount efUserAccount)
-        {
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(efUserAccount);
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = $"{Constants.BLAZOR_WEB_BASE_ADDRESS}/account/confirmemail/{efUserAccount.Id}/{code}";
-
-            await _emailSender.SendEmailAsync(
-                        efUserAccount.Email,
-                        "Confirm your email",
-                        $"Welcome to the Maurice Tech Community!\n" +
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
         }
         #endregion
 
         #region Read
+        public async Task<IEFUserAccount> ReadById(string id)
+        {
 
+        }
+
+        public async Task<IEFUserAccount> ReadByEmail(string email)
+        {
+
+        }
+
+        public async Task<IEFUserAccount> ReadAll()
+        {
+
+        }
         #endregion
 
         #region Write
