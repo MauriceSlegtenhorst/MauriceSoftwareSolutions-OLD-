@@ -179,7 +179,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
 
             var efUserAccount = await _userManager.FindByIdAsync(userAccount.Id);
 
-            if (efUserAccount === null)
+            if (efUserAccount == null)
                 throw new Exception("Ef useraccount was null");
 
             PropertyCopier<UserAccount, EFUserAccount>.Copy(userAccount, efUserAccount);
@@ -194,8 +194,36 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
         #endregion
 
         #region Delete
+        public async Task<bool> DeleteById(string id)
+        {
+            if (String.IsNullOrEmpty(id))
+                throw new ArgumentException("Parameters id cannot be null or empty");
 
+            var efUserAccount = await _userManager.FindByIdAsync(id);
+
+            if (efUserAccount != null)
+            {
+                var result = await _userManager.DeleteAsync(efUserAccount);
+
+                return result.Succeeded; 
+            }
+            else
+            {
+                throw new Exception("No UserAccount was found matching this id");
+            }
+        }
         #endregion
+
+        // Confirm email
+        public async Task<bool> ConfirmEmailAsync(ConfirmEmailHolder confirmEmailHolder)
+        {
+            var userAccount = await _userManager.FindByIdAsync(confirmEmailHolder.UserId);
+
+            confirmEmailHolder.Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(confirmEmailHolder.Code));
+            var result = await _userManager.ConfirmEmailAsync(userAccount, confirmEmailHolder.Code);
+
+            return result.Succeeded;
+        }
     }
 
 }

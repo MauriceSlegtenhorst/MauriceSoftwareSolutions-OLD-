@@ -17,5 +17,9 @@ namespace MTS.DAL.Infra.Interfaces
         Task<IEnumerable<UserAccount>> ReadAllAsync();
 
         Task<bool> WriteAsync(UserAccount userAccount);
+
+        Task<bool> DeleteById(string id);
+
+        Task<bool> ConfirmEmailAsync(ConfirmEmailHolder confirmEmailHolder);
     }
 }

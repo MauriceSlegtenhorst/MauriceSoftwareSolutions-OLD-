@@ -180,67 +180,61 @@ namespace API.Controllers
         }
         #endregion
 
-        //// Delete
+        #region Delete
         //[Authorize]
-        //[Route(Constants.AccountControllerEndpoints.DELETE_BY_ID)]
-        //[HttpDelete]
-        //public async Task<ActionResult> DeleteById([FromQuery] string id)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var efUserAccount = await _userManager.FindByIdAsync(id);
+        [Route(Constants.AccountControllerEndpoints.DELETE_BY_ID)]
+        [HttpDelete]
+        public async Task<ActionResult> DeleteById([FromQuery] string id)
+        {
+            if (ModelState.IsValid)
+            {
+                bool result = false;
+                try
+                {
+                    result = await _accountFunctions.DeleteById(id);
+                    
+                }
+                catch (Exception ex)
+                {
 
-        //        var result = await _userManager.DeleteAsync(efUserAccount);
+                    HandleException(ex);
+                }
 
-        //        if (result.Succeeded)
-        //        {
-        //            return Ok("Account is deleted");
-        //        }
-        //        else
-        //        {
-        //            return HandleException(new Exception("Error deleting account"));
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return HandleException(new Exception("ModelState invalid"));
-        //    }
-        //}
+                if (result)
+                {
+                    return Ok("Account deleted");
+                }
+                else
+                {
+                    throw new Exception("Something went wrong during deletion. The account might still exist");
+                }
+            }
+            else
+            {
+                return HandleException(new Exception("ModelState invalid"));
+            }
+        }
+        #endregion
 
-        //// Confirm email
-        //[Route(Constants.AccountControllerEndpoints.CONFIRM_EMAIL)]
-        //[HttpPut]
-        //public async Task<ActionResult> ConfirmEmail([FromBody] ConfirmEmailHolder confirmEmailHolder)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var userAccount = await _userManager.FindByIdAsync(confirmEmailHolder.UserId);
+        // Confirm email
+        [Route(Constants.AccountControllerEndpoints.CONFIRM_EMAIL)]
+        [HttpPut]
+        public async Task<ActionResult> ConfirmEmail([FromBody] ConfirmEmailHolder confirmEmailHolder)
+        {
+            if (ModelState.IsValid)
+            {
+                bool result = await _accountFunctions.ConfirmEmailAsync(confirmEmailHolder);
 
-        //        confirmEmailHolder.Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(confirmEmailHolder.Code));
-        //        var result = await _userManager.ConfirmEmailAsync(userAccount, confirmEmailHolder.Code);
-
-        //        return Ok(result.Succeeded ? "Succes! Thank you for confirming your email." : "Error confirming your email.");
-        //    }
-        //    else
-        //    {
-        //        return BadRequest("ModelState invalid");
-        //    }
-        //}
-
-        //private async Task<bool> SendConfirmationMail(EFUserAccount efUserAccount)
-        //{
-        //    var callbackCode = await _userManager.GenerateEmailConfirmationTokenAsync(efUserAccount);
-        //    callbackCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(callbackCode));
-        //    var callbackUrl = $"{Constants.BLAZOR_WEB_BASE_ADDRESS}/account/confirmemail/{efUserAccount.Id}/{callbackCode}";
-
-        //    await _emailSender.SendEmailAsync(
-        //        efUserAccount.Email,
-        //        "Confirm your email",
-        //        $"Welcome to the Maurice Tech Community!\n" +
-        //        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-        //    return true;
-        //}
+                if (result)
+                    return Ok("Succes! Thank you for confirming your email.");
+                else
+                    return HandleException(new Exception("Something went wrong confirming the email"));
+            }
+            else
+            {
+                return BadRequest("ModelState invalid");
+            }
+        }
 
         private ActionResult HandleException(Exception ex)
         {
