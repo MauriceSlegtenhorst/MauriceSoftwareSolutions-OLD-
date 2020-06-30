@@ -4,10 +4,10 @@ using System.Text;
 
 namespace MTS.Core.GlobalLibrary.Utils
 {
-    public class PropertyCopier<TParent, TChild> where TParent : class
-                                            where TChild : class
+    public class PropertyCopier<TFrom, TTo> where TFrom : class
+                                            where TTo : class, new()
     {
-        public static void Copy(TParent fromParent, TChild toChild)
+        public static void Copy(TFrom fromParent, TTo toChild)
         {
             var parentProperties = fromParent.GetType().GetProperties();
             var childProperties = toChild.GetType().GetProperties();

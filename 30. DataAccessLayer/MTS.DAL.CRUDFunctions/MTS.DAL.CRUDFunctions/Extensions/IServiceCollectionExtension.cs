@@ -65,7 +65,7 @@ namespace MTS.DAL.DatabaseAccess.Extensions
 
             services.AddSingleton<IEmailSender, EmailSender>();
 
-            services.AddTransient<IAccountFunctions, AccountFunctions>();
+            services.AddTransient<IAccountAdapter, AccountAdapter>();
 
             return services;
         }

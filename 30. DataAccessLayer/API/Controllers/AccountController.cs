@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -14,6 +15,7 @@ using MTS.Core.GlobalLibrary;
 using MTS.Core.GlobalLibrary.Utils;
 using MTS.DAL.DatabaseAccess;
 using MTS.DAL.Infra.Interfaces;
+using Newtonsoft.Json.Linq;
 
 namespace API.Controllers
 {
@@ -22,79 +24,81 @@ namespace API.Controllers
     [Route(Constants.APIControllers.ACCOUNT)]
     public class AccountController : ControllerBase
     {
-        private readonly IAccountFunctions _accountFunctions;
+        private readonly IAccountAdapter _accountFunctions;
 
-        public AccountController(IAccountFunctions accountFunctions)
+        public AccountController(IAccountAdapter accountFunctions)
         {
             _accountFunctions = accountFunctions;
         }
 
-        //#region Get
-        //// Account/getbyid
+        #region Get
         //[Authorize(Roles =
         //    Constants.Security.ADMINISTRATOR + "," +
         //    Constants.Security.PRIVILEGED_EMPLOYEE)]
-        //[Route(Constants.AccountControllerEndpoints.GET_BY_ID)]
-        //[HttpGet]
-        //public async Task<ActionResult<UserAccount>> GetById([FromBody] string id)
-        //{
-        //    UserAccount userAccount = new UserAccount();
-        //    EFUserAccount efUserAccount = await _userManager.FindByIdAsync(id);
-        //    PropertyCopier<EFUserAccount, UserAccount>.Copy(efUserAccount, userAccount);
+        [Route(Constants.AccountControllerEndpoints.GET_BY_ID)]
+        [HttpGet]
+        public async Task<ActionResult<UserAccount>> GetById([FromBody] string id)
+        {
+            UserAccount userAccount;
+            try
+            {
+                userAccount =  await _accountFunctions.ReadByIdAsync(id);
+            }
+            catch(Exception ex)
+            {
+                return HandleException(ex);
+            }
 
-        //    return Ok(userAccount);
-        //}
+            if (userAccount == null)
+                return HandleException(new Exception("Something weird happened when reading from the AccountAdapter. The UserAccount was null."));
 
-        //// Account/getbyemail
+            return Ok(userAccount);
+        }
+
         //[Authorize(Roles =
         //    Constants.Security.ADMINISTRATOR + "," +
         //    Constants.Security.PRIVILEGED_EMPLOYEE)]
-        //[Route(Constants.AccountControllerEndpoints.GET_BY_EMAIL)]
-        //[HttpGet]
-        //public async Task<ActionResult<UserAccount>> GetByEmail([FromBody] string email)
-        //{
-        //    UserAccount userAccount = new UserAccount();
-        //    EFUserAccount efUserAccount = await _userManager.FindByEmailAsync(email);
-        //    PropertyCopier<EFUserAccount, UserAccount>.Copy(efUserAccount, userAccount);
+        [Route(Constants.AccountControllerEndpoints.GET_BY_EMAIL)]
+        [HttpGet]
+        public async Task<ActionResult<UserAccount>> GetByEmail([FromBody] string email)
+        {
+            UserAccount userAccount;
+            try
+            {
+                userAccount = await _accountFunctions.ReadByEmailAsync(email);
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
 
-        //    return Ok(userAccount);
-        //}
+            if (userAccount == null)
+                return HandleException(new Exception("Something weird happened when reading from the AccountAdapter. The UserAccount was null."));
+
+            return Ok(userAccount);
+        }
 
         //[Authorize(Roles = Constants.Security.ADMINISTRATOR)]
-        //[Route(Constants.AccountControllerEndpoints.GET_ALL)]
-        //[HttpGet]
-        //public async Task<ActionResult<string[]>> GetAll()
-        //{
-        //    int count = await _applicationDbContext.UserAccounts.CountAsync();
+        [Route(Constants.AccountControllerEndpoints.GET_ALL)]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserAccount>>> GetAll()
+        {
+            IEnumerable<UserAccount> userAccounts;
 
-        //    UserAccount[] userAccounts = new UserAccount[count];
+            try
+            {
+                userAccounts = await _accountFunctions.ReadAllAsync();
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
 
-        //    if (count < 10000)
-        //    {
-        //        int index = 0;
-        //        foreach (var efAccount in _applicationDbContext.UserAccounts)
-        //        {
-        //            userAccounts[index] = new UserAccount();
-        //            PropertyCopier<EFUserAccount, UserAccount>.Copy(efAccount, userAccounts[index]);
-        //            index++;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        // TODO rethink this
-        //        //var result = _applicationDbContext.UserAccounts.AsParallel().WithDegreeOfParallelism(10).ToArray();
-        //        //Parallel.For(0, count, async (i) => 
-        //        //{
-        //        //    userAccounts[i] = await EFUserAccount.ConvertFromAsync(result[i]);
-        //        //});
-        //    }
-
-        //    return Ok(userAccounts);
-        //}
-        //#endregion
+            return Ok(userAccounts);
+        }
+#endregion
 
         #region Create
-        // Account/createbycredentials
         [Route(Constants.AccountControllerEndpoints.CREATE_BY_CREDENTIALS)]
         [HttpPut]
         public async Task<ActionResult> CreateByCredentials([FromBody] CredentialHolder credentialHolder)
@@ -104,19 +108,19 @@ namespace API.Controllers
 
             try
             {
-                IEFUserAccount efAccount = await _accountFunctions.CreateByEmailAndPassword(credentialHolder.Email, credentialHolder.Password);
+                UserAccount newUserAccount = await _accountFunctions.CreateByEmailAndPasswordAsync(credentialHolder.Email, credentialHolder.Password);
 
-                if (efAccount != null && !String.IsNullOrEmpty(efAccount.Id))
+                if (newUserAccount != null && !String.IsNullOrEmpty(newUserAccount.Id))
                 {
                     return new CreatedAtActionResult(
                             actionName: Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT,
                             controllerName: Constants.APIControllers.ACCOUNT,
                             routeValues: RouteData.Values,
-                            value: efAccount.Id);
+                            value: newUserAccount.Id);
                 }
                 else
                 {
-                    throw new Exception("Creating account failed at the last while adding to the database");
+                    throw new Exception("Creating account failed. The user account was null or had no id after an attempt to create it");
                 }
             }
             catch (Exception ex)
@@ -138,19 +142,19 @@ namespace API.Controllers
 
             try
             {
-                IEFUserAccount efAccount = await _accountFunctions.CreateByAccount(userAccount);
+                UserAccount newUserAccount = await _accountFunctions.CreateByAccountAsync(userAccount);
 
-                if (efAccount != null && !String.IsNullOrEmpty(efAccount.Id))
+                if (newUserAccount != null && !String.IsNullOrEmpty(newUserAccount.Id))
                 {
                     return new CreatedAtActionResult(
                             actionName: Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT,
                             controllerName: Constants.APIControllers.ACCOUNT,
                             routeValues: RouteData.Values,
-                            value: efAccount.Id);
+                            value: newUserAccount.Id);
                 }
                 else
                 {
-                    throw new Exception("Creating account failed at the last while adding to the database");
+                    throw new Exception("Creating account failed. The user account was null or had no id after an attempt to create it");
                 }
             }
             catch (Exception ex)
@@ -160,75 +164,21 @@ namespace API.Controllers
         }
         #endregion
 
-        //#region Update
-        //[Route(Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT)]
-        //[HttpPatch]
-        //public async Task<ActionResult<UserAccount>> UpdateByAccount([FromBody] UserAccount userAccount)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var efUserAccount = await _userManager.FindByIdAsync(userAccount.Id);
-
-        //        if (efUserAccount == null)
-        //            return HandleException(new Exception("No user was found with this id"));
-
-        //        IdentityResult result;
-
-        //        try
-        //        {
-        //            PropertyCopier<UserAccount, EFUserAccount>.Copy(userAccount, efUserAccount);
-
-        //            if (!String.IsNullOrEmpty(userAccount.Password))
-        //            {
-        //                string code = await _userManager.GeneratePasswordResetTokenAsync(efUserAccount);
-
-        //                result = await _userManager.ResetPasswordAsync(efUserAccount, code, userAccount.Password);
-
-        //                if (!result.Succeeded)
-        //                {
-        //                    var errors = new string[result.Errors.Count()];
-        //                    for (int i = 0; i < errors.Length; i++)
-        //                    {
-        //                        errors[i] = result.Errors.ElementAt(i).Description;
-        //                    }
-
-        //                    return HandleException(new Exception(errors.ToString()));
-        //                }
-
-        //                result = null;
-        //            }
-
-        //            result = await _userManager.UpdateAsync(efUserAccount);
-        //            if (result.Succeeded)
-        //            {
-        //                return new CreatedAtActionResult(
-        //                    actionName: Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT,
-        //                    controllerName: Constants.APIControllers.ACCOUNT,
-        //                    routeValues: RouteData.Values,
-        //                    value: userAccount);
-        //            }
-        //            else
-        //            {
-        //                var errors = new string[result.Errors.Count()];
-        //                for (int i = 0; i < errors.Length; i++)
-        //                {
-        //                    errors[i] = result.Errors.ElementAt(i).Description;
-        //                }
-
-        //                return HandleException(new Exception(errors.ToString()));
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return HandleException(ex);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return HandleException(new Exception("ModelState invalid"));
-        //    }
-        //}
-        //#endregion
+        #region Update
+        [Route(Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT)]
+        [HttpPatch]
+        public async Task<ActionResult<bool>> UpdateByAccount([FromBody] UserAccount userAccount)
+        {
+            if (ModelState.IsValid)
+            {
+                return await _accountFunctions.WriteAsync(userAccount);
+            }
+            else
+            {
+                return HandleException(new Exception("ModelState invalid"));
+            }
+        }
+        #endregion
 
         //// Delete
         //[Authorize]
@@ -294,25 +244,29 @@ namespace API.Controllers
 
         private ActionResult HandleException(Exception ex)
         {
-            //LogWriter logWriter = new LogWriter(_configuration.GetValue<string>(WebHostDefaults.ContentRootKey));
-            //            if (await logWriter.WriteLineAsync(Assembly.GetCallingAssembly().GetName().Name, ex))
-            //            {
-            //#if DEBUG
-            //                return StatusCode(500, new APIException("Exception caught and logged.", ex));
-            //#else
-            //                                    return StatusCode(500, new APIException());
-            //#endif
-            //            }
-            //            else
-            //            {
-            //#if DEBUG
-            //                return StatusCode(500, new APIException("Exception caught but writing to the log failed. See API trace for more details.", ex));
-            //#else
-            //                                    return StatusCode(500, new APIException());
-            //#endif
-            //            }
 #if DEBUG
-            return StatusCode(500, ex.Message);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine($"Exception:");
+            stringBuilder.AppendLine(ex.GetType().Name);
+            stringBuilder.AppendLine($"Source application or object:");
+            stringBuilder.AppendLine(ex.Source);
+            stringBuilder.AppendLine($"Message:");
+            stringBuilder.AppendLine(ex.Message);
+            stringBuilder.AppendLine($"Stack trace:");
+            stringBuilder.AppendLine(ex.StackTrace);
+
+            if (ex.InnerException != null)
+            {
+                stringBuilder.AppendLine($"Inner exception:");
+                stringBuilder.AppendLine(ex.InnerException.GetType().Name);
+                stringBuilder.AppendLine($"Message:");
+                stringBuilder.AppendLine(ex.InnerException.Message);
+                stringBuilder.AppendLine($"Stack trace:");
+                stringBuilder.AppendLine(ex.InnerException.StackTrace);
+            }
+
+            return StatusCode(500, stringBuilder.ToString());
 #else
             return StatusCode(500, "Something went wrong on the server. Details are held secret");
 #endif
