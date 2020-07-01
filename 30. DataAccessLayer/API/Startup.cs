@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MTS.DAL.DatabaseAccess.CRUD.Account;
-using MTS.DAL.DatabaseAccess.Extensions;
-using MTS.DAL.Infra.Interfaces;
+using MTS.BL.API.Utils.ExceptionHandler;
+using MTS.BL.DatabaseAccess.CRUD.Account;
+using MTS.BL.DatabaseAccess.Extensions;
+using MTS.BL.Infra.Interfaces;
 
-namespace MTS.DAL.API
+namespace MTS.BL.API
 {
     /// <summary>
     /// Transient objects are always different; a new instance is provided to every controller and every service.
@@ -24,7 +25,6 @@ namespace MTS.DAL.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options =>
@@ -40,9 +40,10 @@ namespace MTS.DAL.API
             services.AddAuthorization();
 
             services.AddControllers();
+
+            services.AddScoped<IExceptionHandler, ExceptionHandler>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

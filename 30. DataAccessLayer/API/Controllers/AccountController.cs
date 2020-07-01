@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
 using MTS.BL.Infra.APILibrary;
 using MTS.Core.GlobalLibrary;
 using MTS.Core.GlobalLibrary.Utils;
-using MTS.DAL.DatabaseAccess;
-using MTS.DAL.Infra.Interfaces;
-using Newtonsoft.Json.Linq;
+using MTS.BL.Infra.Interfaces;
+using MTS.PL.Infra.InjectionLibrary;
+using System.Linq;
+using MTS.BL.API.Utils.ExceptionHandler;
+using Microsoft.AspNetCore.Identity;
+using System.Text;
 
-namespace API.Controllers
+namespace MTS.BL.API.Controllers
 {
     [AllowAnonymous]
     [ApiController]
@@ -25,10 +22,14 @@ namespace API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountAdapter _accountFunctions;
+        private readonly IExceptionHandler _exceptionHandler;
 
-        public AccountController(IAccountAdapter accountFunctions)
+        public AccountController(
+            IAccountAdapter accountFunctions,
+            IExceptionHandler exceptionHandler)
         {
             _accountFunctions = accountFunctions;
+            _exceptionHandler = exceptionHandler;
         }
 
         #region Get
@@ -37,20 +38,28 @@ namespace API.Controllers
         //    Constants.Security.PRIVILEGED_EMPLOYEE)]
         [Route(Constants.AccountControllerEndpoints.GET_BY_ID)]
         [HttpGet]
-        public async Task<ActionResult<UserAccount>> GetById([FromBody] string id)
+        public async Task<IActionResult> GetByIdAsync([FromBody] string id)
         {
-            UserAccount userAccount;
+            if (String.IsNullOrEmpty(id))
+                return _exceptionHandler.HandleException(new NullReferenceException("Parameter id is required. Id  was null or empty."), isServerSideException: false);
+
+            IUserAccount userAccount;
+
             try
             {
-                userAccount =  await _accountFunctions.ReadByIdAsync(id);
-            }
-            catch(Exception ex)
-            {
-                return HandleException(ex);
-            }
+                var efUserAccount = await _accountFunctions.ReadByIdAsync(id);
 
-            if (userAccount == null)
-                return HandleException(new Exception("Something weird happened when reading from the AccountAdapter. The UserAccount was null."));
+                userAccount = new UserAccount();
+
+                PropertyCopier<IEFUserAccount, IUserAccount>.Copy(efUserAccount, userAccount);
+
+                if (String.IsNullOrEmpty(userAccount.Id) || String.IsNullOrEmpty(userAccount.Email))
+                    throw new NullReferenceException("UserAccount has either no Id or email. Probably something went wrong during copying or retreiving data.");
+            }
+            catch (Exception ex)
+            {
+                return _exceptionHandler.HandleException(ex, isServerSideException: true);
+            }
 
             return Ok(userAccount);
         }
@@ -60,20 +69,25 @@ namespace API.Controllers
         //    Constants.Security.PRIVILEGED_EMPLOYEE)]
         [Route(Constants.AccountControllerEndpoints.GET_BY_EMAIL)]
         [HttpGet]
-        public async Task<ActionResult<UserAccount>> GetByEmail([FromBody] string email)
+        public async Task<IActionResult> GetByEmailAsync([FromBody] string email)
         {
-            UserAccount userAccount;
+            IUserAccount userAccount;
+
             try
             {
-                userAccount = await _accountFunctions.ReadByEmailAsync(email);
+                var efUserAccount = await _accountFunctions.ReadByEmailAsync(email);
+
+                userAccount = new UserAccount();
+
+                PropertyCopier<IEFUserAccount, IUserAccount>.Copy(efUserAccount, userAccount);
+
+                if (String.IsNullOrEmpty(userAccount.Id) || String.IsNullOrEmpty(userAccount.Email))
+                    throw new NullReferenceException("UserAccount has either no Id or email. Probably something went wrong during copying or retreiving data.");
             }
             catch (Exception ex)
             {
-                return HandleException(ex);
+                return _exceptionHandler.HandleException(ex, isServerSideException: true);
             }
-
-            if (userAccount == null)
-                return HandleException(new Exception("Something weird happened when reading from the AccountAdapter. The UserAccount was null."));
 
             return Ok(userAccount);
         }
@@ -81,9 +95,9 @@ namespace API.Controllers
         //[Authorize(Roles = Constants.Security.ADMINISTRATOR)]
         [Route(Constants.AccountControllerEndpoints.GET_ALL)]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserAccount>>> GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
-            IEnumerable<UserAccount> userAccounts;
+            IEnumerable<IEFUserAccount> userAccounts;
 
             try
             {
@@ -91,26 +105,26 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return HandleException(ex);
+                return _exceptionHandler.HandleException(ex, isServerSideException: true);
             }
 
             return Ok(userAccounts);
         }
-#endregion
+        #endregion
 
         #region Create
         [Route(Constants.AccountControllerEndpoints.CREATE_BY_CREDENTIALS)]
         [HttpPut]
-        public async Task<ActionResult> CreateByCredentials([FromBody] CredentialHolder credentialHolder)
+        public async Task<IActionResult> CreateByCredentials([FromBody] CredentialHolder credentialHolder)
         {
             if (!ModelState.IsValid)
-                return HandleException(new Exception("ModelState was invalid"));
+                return _exceptionHandler.HandleException(new Exception("ModelState was invalid"), isServerSideException: false);
 
             try
             {
-                UserAccount newUserAccount = await _accountFunctions.CreateByEmailAndPasswordAsync(credentialHolder.Email, credentialHolder.Password);
+                var newUserAccount = await _accountFunctions.CreateByEmailAndPasswordAsync(credentialHolder.Email, credentialHolder.Password);
 
-                if (newUserAccount != null && !String.IsNullOrEmpty(newUserAccount.Id))
+                if (newUserAccount != null && !String.IsNullOrEmpty(newUserAccount.Id) && !String.IsNullOrEmpty(newUserAccount.Email))
                 {
                     return new CreatedAtActionResult(
                             actionName: Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT,
@@ -120,12 +134,12 @@ namespace API.Controllers
                 }
                 else
                 {
-                    throw new Exception("Creating account failed. The user account was null or had no id after an attempt to create it");
+                    throw new Exception("Creating account failed. The user account was null, Email was null or had no id after an attempt to create it");
                 }
             }
             catch (Exception ex)
             {
-                return HandleException(ex);
+                return _exceptionHandler.HandleException(ex, isServerSideException: true);
             }
         }
 
@@ -135,16 +149,16 @@ namespace API.Controllers
             Constants.Security.EMPLOYEE)]
         [Route(Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT)]
         [HttpPut]
-        public async Task<ActionResult> CreateByAccount([FromBody] UserAccount userAccount)
+        public async Task<IActionResult> CreateByAccount([FromBody] UserAccount userAccount)
         {
             if (!ModelState.IsValid)
-                return HandleException(new Exception("ModelState invalid"));
+                return _exceptionHandler.HandleException(new Exception("ModelState invalid"), isServerSideException: false);
 
             try
             {
-                UserAccount newUserAccount = await _accountFunctions.CreateByAccountAsync(userAccount);
+                var newUserAccount = await _accountFunctions.CreateByAccountAsync(userAccount);
 
-                if (newUserAccount != null && !String.IsNullOrEmpty(newUserAccount.Id))
+                if (newUserAccount != null && !String.IsNullOrEmpty(newUserAccount.Id) && !String.IsNullOrEmpty(newUserAccount.Email))
                 {
                     return new CreatedAtActionResult(
                             actionName: Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT,
@@ -159,7 +173,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return HandleException(ex);
+                return _exceptionHandler.HandleException(ex, isServerSideException: true);
             }
         }
         #endregion
@@ -167,15 +181,15 @@ namespace API.Controllers
         #region Update
         [Route(Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT)]
         [HttpPatch]
-        public async Task<ActionResult<bool>> UpdateByAccount([FromBody] UserAccount userAccount)
+        public async Task<IActionResult> UpdateByAccount([FromBody] UserAccount userAccount)
         {
             if (ModelState.IsValid)
             {
-                return await _accountFunctions.WriteAsync(userAccount);
+                return Ok(await _accountFunctions.WriteAsync(userAccount));
             }
             else
             {
-                return HandleException(new Exception("ModelState invalid"));
+                return _exceptionHandler.HandleException(new Exception("ModelState invalid"), isServerSideException: false);
             }
         }
         #endregion
@@ -184,20 +198,19 @@ namespace API.Controllers
         //[Authorize]
         [Route(Constants.AccountControllerEndpoints.DELETE_BY_ID)]
         [HttpDelete]
-        public async Task<ActionResult> DeleteById([FromQuery] string id)
+        public async Task<IActionResult> DeleteById([FromQuery] string id)
         {
             if (ModelState.IsValid)
             {
                 bool result = false;
                 try
                 {
-                    result = await _accountFunctions.DeleteById(id);
-                    
+                    result = await _accountFunctions.DeleteByIdAsync(id);
+
                 }
                 catch (Exception ex)
                 {
-
-                    HandleException(ex);
+                    _exceptionHandler.HandleException(ex, isServerSideException: true);
                 }
 
                 if (result)
@@ -206,12 +219,88 @@ namespace API.Controllers
                 }
                 else
                 {
-                    throw new Exception("Something went wrong during deletion. The account might still exist");
+                    return _exceptionHandler.HandleException(new Exception("Something went wrong during deletion. The account might still exist"), isServerSideException: true);
                 }
             }
             else
             {
-                return HandleException(new Exception("ModelState invalid"));
+                return _exceptionHandler.HandleException(new Exception("ModelState invalid"), isServerSideException: false);
+            }
+        }
+        #endregion
+
+        #region Roles
+        [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
+        [Route(Constants.AccountControllerEndpoints.ADD_ROLES_TO_ACCOUNT)]
+        [HttpPut]
+        public async Task<IActionResult> AddRolesToAccountAsync([FromBody] UserRolePairHolder userRolePairHolder)
+        {
+            if (!ModelState.IsValid)
+                return _exceptionHandler.HandleException(new Exception("ModelState was invalid"), isServerSideException: false);
+
+            if (userRolePairHolder.Roles.Count() == 0)
+                return _exceptionHandler.HandleException(new Exception("No role(s) to add were found"), isServerSideException: false);
+
+            var result = new IdentityResult();
+
+            try
+            {
+                result = await _accountFunctions.AddRolesToAccountAsync(userRolePairHolder);
+            }
+            catch (Exception ex)
+            {
+                return _exceptionHandler.HandleException(ex, isServerSideException: true);
+            }
+
+            if (result.Succeeded)
+                return Ok("Role(s) added to account");
+            else
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+
+                foreach (var error in result.Errors)
+                {
+                    stringBuilder.AppendLine(error.Description);
+                }
+
+                return _exceptionHandler.HandleException(new Exception($"Something went wrong during adding the role(s) to the account. {stringBuilder}"), isServerSideException: true);
+            }
+        }
+
+        [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
+        [Route(Constants.AccountControllerEndpoints.REMOVE_ROLES_FROM_ACCOUNT)]
+        [HttpPatch]
+        public async Task<IActionResult> RemoveRolesFromAccountAsync(UserRolePairHolder userRolePairHolder)
+        {
+            if (!ModelState.IsValid)
+                return _exceptionHandler.HandleException(new Exception("ModelState was invalid"), isServerSideException: false);
+
+            if (userRolePairHolder.Roles.Count() == 0)
+                return _exceptionHandler.HandleException(new Exception("No role(s) to add were found"), isServerSideException: false);
+
+            var result = new IdentityResult();
+
+            try
+            {
+                result = await _accountFunctions.RemoveRolesFromAccountAsync(userRolePairHolder);
+            }
+            catch(Exception ex)
+            {
+                return _exceptionHandler.HandleException(ex, isServerSideException: true);
+            }
+
+            if (result.Succeeded)
+                return Ok("Role(s) removed from account");
+            else
+            {
+                var stringBuilder = new StringBuilder();
+
+                foreach (var error in result.Errors)
+                {
+                    stringBuilder.AppendLine(error.Description);
+                }
+
+                return _exceptionHandler.HandleException(new Exception($"Something went wrong during removing the role(s) from the account. {stringBuilder}"), isServerSideException: true);
             }
         }
         #endregion
@@ -219,52 +308,30 @@ namespace API.Controllers
         // Confirm email
         [Route(Constants.AccountControllerEndpoints.CONFIRM_EMAIL)]
         [HttpPut]
-        public async Task<ActionResult> ConfirmEmail([FromBody] ConfirmEmailHolder confirmEmailHolder)
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailHolder confirmEmailHolder)
         {
             if (ModelState.IsValid)
             {
-                bool result = await _accountFunctions.ConfirmEmailAsync(confirmEmailHolder);
+                var result = await _accountFunctions.ConfirmEmailAsync(confirmEmailHolder);
 
-                if (result)
-                    return Ok("Succes! Thank you for confirming your email.");
+                if (result.Succeeded)
+                    return Ok("Email is confirmed");
                 else
-                    return HandleException(new Exception("Something went wrong confirming the email"));
+                {
+                    var stringBuilder = new StringBuilder();
+
+                    foreach (var error in result.Errors)
+                    {
+                        stringBuilder.AppendLine(error.Description);
+                    }
+
+                    return _exceptionHandler.HandleException(new Exception($"Something went wrong confirming the email. {stringBuilder}"), isServerSideException: true);
+                } 
             }
             else
             {
-                return BadRequest("ModelState invalid");
+                return _exceptionHandler.HandleException(new Exception("ModelState was invalid"), isServerSideException: false);
             }
-        }
-
-        private ActionResult HandleException(Exception ex)
-        {
-#if DEBUG
-            StringBuilder stringBuilder = new StringBuilder();
-
-            stringBuilder.AppendLine($"Exception:");
-            stringBuilder.AppendLine(ex.GetType().Name);
-            stringBuilder.AppendLine($"Source application or object:");
-            stringBuilder.AppendLine(ex.Source);
-            stringBuilder.AppendLine($"Message:");
-            stringBuilder.AppendLine(ex.Message);
-            stringBuilder.AppendLine($"Stack trace:");
-            stringBuilder.AppendLine(ex.StackTrace);
-
-            if (ex.InnerException != null)
-            {
-                stringBuilder.AppendLine($"Inner exception:");
-                stringBuilder.AppendLine(ex.InnerException.GetType().Name);
-                stringBuilder.AppendLine($"Message:");
-                stringBuilder.AppendLine(ex.InnerException.Message);
-                stringBuilder.AppendLine($"Stack trace:");
-                stringBuilder.AppendLine(ex.InnerException.StackTrace);
-            }
-
-            return StatusCode(500, stringBuilder.ToString());
-#else
-            return StatusCode(500, "Something went wrong on the server. Details are held secret");
-#endif
-
         }
     }
 }

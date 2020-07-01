@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\10. PresentationLayer\Infra\MTS.PL.Infra.InjectionLibrary\MTS.PL.Infra.InjectionLibrary.csproj" />
     <ProjectReference Include="..\..\20. BusinessLayer\Infra\MTS.BL.Infra.APILibrary\MTS.BL.Infra.APILibrary.csproj" />
     <ProjectReference Include="..\..\50. Core\MTS.Core.GlobalLibrary\MTS.Core.GlobalLibrary.csproj" />
     <ProjectReference Include="..\..\MTS.DAL.Infra.Entities\MTS.DAL.Infra.Entities.csproj" />

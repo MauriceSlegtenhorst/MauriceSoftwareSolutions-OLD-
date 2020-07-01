@@ -25,6 +25,8 @@
             public const string DELETE_BY_ID = "deletebyid";
             public const string CONFIRM_EMAIL = "confirmemail";
             public const string CONFIRM_EMAIL_ADMIN = "confirmemailadmin";
+            public const string ADD_ROLES_TO_ACCOUNT = "addrolestoaccount";
+            public const string REMOVE_ROLES_FROM_ACCOUNT = "removerolesfromaccount";
         }
 
         public static class IdentityControllerEndpoints

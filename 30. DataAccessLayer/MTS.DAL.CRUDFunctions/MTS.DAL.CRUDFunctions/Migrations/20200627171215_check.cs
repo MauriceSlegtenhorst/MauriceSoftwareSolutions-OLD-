@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace MTS.DAL.DatabaseAccess.Migrations
+namespace MTS.BL.DatabaseAccess.Migrations
 {
     public partial class check : Migration
     {

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MTS.DAL.Infra.Interfaces;
+using MTS.BL.Infra.Entities;
+using MTS.BL.Infra.Interfaces;
 
-namespace MTS.DAL.DatabaseAccess.DataContext
+namespace MTS.BL.DatabaseAccess.DataContext
 {
     internal sealed class ApplicationDbContext : IdentityDbContext<EFUserAccount>
     {

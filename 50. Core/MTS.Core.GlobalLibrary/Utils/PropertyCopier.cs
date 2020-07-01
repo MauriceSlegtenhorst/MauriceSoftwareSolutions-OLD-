@@ -5,7 +5,7 @@ using System.Text;
 namespace MTS.Core.GlobalLibrary.Utils
 {
     public class PropertyCopier<TFrom, TTo> where TFrom : class
-                                            where TTo : class, new()
+                                            where TTo : class//, new()
     {
         public static void Copy(TFrom fromParent, TTo toChild)
         {

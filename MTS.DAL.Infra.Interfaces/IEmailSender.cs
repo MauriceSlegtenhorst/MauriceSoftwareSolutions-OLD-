@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace MTS.DAL.Infra.Interfaces
+namespace MTS.BL.Infra.Interfaces
 {
     public interface IEmailSender
     {

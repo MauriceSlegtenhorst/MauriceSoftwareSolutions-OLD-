@@ -3,21 +3,15 @@
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
-namespace MTS.DAL.DatabaseAccess.DataContext
+namespace MTS.BL.DatabaseAccess.DataContext
 {
-    internal sealed class DbConfigurations
+    public sealed class DbConfigurations
     {
-        internal DbConfigurations()
+        public DbConfigurations()
         {
             var configBuilder = new ConfigurationBuilder();
 
             configBuilder.AddUserSecrets<DbConfigurations>();
-
-            //string path = Path.Combine(Directory.GetCurrentDirectory(), "secrets.json");
-
-            //configBuilder.AddJsonFile(path, false);
-
-            //configBuilder.AddEnvironmentVariables();
 
             IConfigurationRoot root = configBuilder.Build();
 

@@ -1,17 +1,21 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using MTS.DAL.DatabaseAccess.CRUD.Account;
-using MTS.DAL.DatabaseAccess.DataContext;
-using MTS.DAL.Infra.EmailLibrary;
-using MTS.DAL.Infra.Interfaces;
+using MTS.BL.DatabaseAccess.CRUD.Account;
+using MTS.BL.DatabaseAccess.DataContext;
+using MTS.BL.Infra.EmailLibrary;
+using MTS.BL.Infra.Entities;
+using MTS.BL.Infra.Interfaces;
+using MTS.BL.DatabaseAccess.DataContext;
 using Newtonsoft.Json;
 using System;
 using System.Text;
+using MTS.BL.DatabaseAccess.Identity;
 
-namespace MTS.DAL.DatabaseAccess.Extensions
+namespace MTS.BL.DatabaseAccess.Extensions
 {
     public static class IServiceCollectionExtension
     {
@@ -66,6 +70,10 @@ namespace MTS.DAL.DatabaseAccess.Extensions
             services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddTransient<IAccountAdapter, AccountAdapter>();
+
+            services.AddTransient<IIdentityAdapter, IdentityAdapter>();
+
+            services.AddSingleton<DbConfigurations>();
 
             return services;
         }

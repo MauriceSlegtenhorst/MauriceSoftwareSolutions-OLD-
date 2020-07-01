@@ -6,9 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using MTS.DAL.API;
 
-namespace API
+namespace MTS.BL.API
 {
     public class Program
     {

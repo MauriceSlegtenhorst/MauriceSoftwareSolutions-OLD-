@@ -5,8 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using MTS.BL.Infra.APILibrary;
 using MTS.Core.GlobalLibrary;
 using MTS.Core.GlobalLibrary.Utils;
-using MTS.DAL.DatabaseAccess.Utils;
-using MTS.DAL.Infra.Interfaces;
+using MTS.BL.DatabaseAccess.Utils;
+using MTS.BL.Infra.Entities;
+using MTS.BL.Infra.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,19 +15,23 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using MTS.BL.Infra.APILibrary;
 
-namespace MTS.DAL.DatabaseAccess.CRUD.Account
+namespace MTS.BL.DatabaseAccess.CRUD.Account
 {
     public sealed class AccountAdapter : IAccountAdapter
     {
         private readonly UserManager<EFUserAccount> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
 
         public AccountAdapter(
             UserManager<EFUserAccount> userManager,
+            RoleManager<IdentityRole> roleManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _emailSender = emailSender;
         }
 
@@ -34,7 +39,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
         /// <exception cref="System.Exception">Thrown when the UserManager was not able to create the useraccount</exception>
         /// <exception cref="System.ArgumentException">Thrown when one or both of the parameters was null or empty</exception>
         [AllowAnonymous]
-        public async Task<UserAccount> CreateByEmailAndPasswordAsync(string email, string password)
+        public async Task<IEFUserAccount> CreateByEmailAndPasswordAsync(string email, string password)
         {
             if (String.IsNullOrEmpty(email) || String.IsNullOrEmpty(password))
                 throw new ArgumentException("Parameters cannot be null or empty");
@@ -51,13 +56,9 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
             {
                 await EmailHelper.SendConfirmationEmailAsync(efUserAccount, _userManager, _emailSender);
 
-                var userAccount = new UserAccount();
-
                 efUserAccount = await _userManager.FindByEmailAsync(email);
 
-                PropertyCopier<EFUserAccount, UserAccount>.Copy(efUserAccount, userAccount);
-
-                return userAccount;
+                return efUserAccount;
             }
             else
             {
@@ -73,7 +74,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
 
         /// <exception cref="System.Exception">Thrown when the UserManager was not able to create the useraccount</exception>
         /// <exception cref="System.ArgumentException">Thrown when the UserAccount parameter was null or invalid</exception>
-        public async Task<UserAccount> CreateByAccountAsync(UserAccount userAccount)
+        public async Task<IEFUserAccount> CreateByAccountAsync(UserAccount userAccount)
         {
             if (userAccount == null || String.IsNullOrEmpty(userAccount.Email) || String.IsNullOrEmpty(userAccount.Password) || String.IsNullOrEmpty(userAccount.Id))
                 throw new ArgumentException("Parameter cannot be null or ivalid");
@@ -89,9 +90,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
 
                 efUserAccount = await _userManager.FindByEmailAsync(userAccount.Email);
 
-                PropertyCopier<EFUserAccount, UserAccount>.Copy(efUserAccount, userAccount);
-
-                return userAccount; 
+                return efUserAccount; 
             }
             else
             {
@@ -109,7 +108,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
         #region Read
         /// <exception cref="System.ArgumentException">Thrown when the id parameter was null or empty</exception>
         /// <exception cref="System.Exception">Thrown when UserManager could not find any UserAccount with a matching id</exception>
-        public async Task<UserAccount> ReadByIdAsync(string id)
+        public async Task<IEFUserAccount> ReadByIdAsync(string id)
         {
             if(String.IsNullOrEmpty(id))
                 throw new ArgumentException("Parameters id cannot be null or empty");
@@ -118,11 +117,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
 
             if (efUserAccount != null)
             {
-                var userAccount = new UserAccount();
-
-                PropertyCopier<EFUserAccount, UserAccount>.Copy(efUserAccount, userAccount);
-
-                return userAccount;
+                return efUserAccount;
             }
             else
             {
@@ -132,7 +127,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
 
         /// <exception cref="System.ArgumentException">Thrown when the email parameter was null or empty</exception>
         /// <exception cref="System.Exception">Thrown when UserManager could not find any UserAccount with a matching email</exception>
-        public async Task<UserAccount> ReadByEmailAsync(string email)
+        public async Task<IEFUserAccount> ReadByEmailAsync(string email)
         {
             if (String.IsNullOrEmpty(email))
                 throw new ArgumentException("Parameters email cannot be null or empty");
@@ -141,11 +136,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
 
             if (efUserAccount != null)
             {
-                var userAccount = new UserAccount();
-
-                PropertyCopier<EFUserAccount, UserAccount>.Copy(efUserAccount, userAccount);
-
-                return userAccount;
+                return efUserAccount;
             }
             else
             {
@@ -153,21 +144,11 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
             }
         }
 
-        public async Task<IEnumerable<UserAccount>> ReadAllAsync()
+        public Task<IEnumerable<IEFUserAccount>> ReadAllAsync()
         {
-            var efUserAccounts = await _userManager.Users.ToArrayAsync();
+            var efUserAccounts = _userManager.Users.AsEnumerable<IEFUserAccount>();
 
-            int count = efUserAccounts.Count();
-
-            var userAccounts = new UserAccount[count];
-
-            for (int i = 0; i < count; i++)
-            {
-                userAccounts[i] = new UserAccount();
-                PropertyCopier<EFUserAccount, UserAccount>.Copy(efUserAccounts[i], userAccounts[i]);
-            }
-
-            return userAccounts.AsEnumerable();
+            return Task.FromResult(efUserAccounts);
         }
         #endregion
 
@@ -194,7 +175,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
         #endregion
 
         #region Delete
-        public async Task<bool> DeleteById(string id)
+        public async Task<bool> DeleteByIdAsync(string id)
         {
             if (String.IsNullOrEmpty(id))
                 throw new ArgumentException("Parameters id cannot be null or empty");
@@ -214,15 +195,67 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
         }
         #endregion
 
+        #region Roles
+        public async Task<IdentityResult> AddRolesToAccountAsync(UserRolePairHolder userRolePairHolder)
+        {
+            if (String.IsNullOrEmpty(userRolePairHolder.Id) || !userRolePairHolder.Roles.Any())
+                throw new ArgumentException("Parameters are required. Id or roles were null or empty");
+
+            var efUserAccount = await _userManager.FindByIdAsync(userRolePairHolder.Id);
+
+            if (efUserAccount == null)
+                throw new Exception("Ef useraccount was null");
+
+            foreach (var role in userRolePairHolder.Roles)
+            {
+                if (!await _roleManager.RoleExistsAsync(role))
+                {
+                    var roleResult = await _roleManager.CreateAsync(new IdentityRole { Name = role });
+
+                    if (!roleResult.Succeeded)
+                    {
+                        StringBuilder stringBuilder = new StringBuilder();
+
+                        foreach (var error in roleResult.Errors)
+                        {
+                            stringBuilder.AppendLine(error.Description);
+                        }
+
+                        throw new Exception($"Something went wrong while creating the new role. {stringBuilder}");
+                    } 
+                }
+            }
+
+            var result = await _userManager.AddToRolesAsync(efUserAccount, userRolePairHolder.Roles);
+
+            return result;
+        }
+
+        public async Task<IdentityResult> RemoveRolesFromAccountAsync(UserRolePairHolder userRolePairHolder)
+        {
+            if (String.IsNullOrEmpty(userRolePairHolder.Id) || !userRolePairHolder.Roles.Any())
+                throw new ArgumentException("Parameters are required. Id or roles were null or empty");
+
+            var efUserAccount = await _userManager.FindByIdAsync(userRolePairHolder.Id);
+
+            if (efUserAccount == null)
+                throw new Exception("Ef useraccount was null");
+
+            var result = await _userManager.RemoveFromRolesAsync(efUserAccount, userRolePairHolder.Roles);
+
+            return result;
+        }
+        #endregion
+
         // Confirm email
-        public async Task<bool> ConfirmEmailAsync(ConfirmEmailHolder confirmEmailHolder)
+        public async Task<IdentityResult> ConfirmEmailAsync(ConfirmEmailHolder confirmEmailHolder)
         {
             var userAccount = await _userManager.FindByIdAsync(confirmEmailHolder.UserId);
 
             confirmEmailHolder.Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(confirmEmailHolder.Code));
             var result = await _userManager.ConfirmEmailAsync(userAccount, confirmEmailHolder.Code);
 
-            return result.Succeeded;
+            return result;
         }
     }
 

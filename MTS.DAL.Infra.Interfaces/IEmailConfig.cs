@@ -1,4 +1,4 @@
-﻿namespace MTS.DAL.Infra.Interfaces
+﻿namespace MTS.BL.Infra.Interfaces
 {
     public interface IEmailConfig
     {

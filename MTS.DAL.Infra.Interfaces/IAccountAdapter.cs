@@ -1,25 +1,30 @@
-﻿using MTS.BL.Infra.APILibrary;
+﻿using Microsoft.AspNetCore.Identity;
+using MTS.BL.Infra.APILibrary;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MTS.DAL.Infra.Interfaces
+namespace MTS.BL.Infra.Interfaces
 {
     public interface IAccountAdapter
     {
-        Task<UserAccount> CreateByEmailAndPasswordAsync(string email, string password);
+        Task<IEFUserAccount> CreateByEmailAndPasswordAsync(string email, string password);
 
-        Task<UserAccount> CreateByAccountAsync(UserAccount userAccount);
+        Task<IEFUserAccount> CreateByAccountAsync(UserAccount userAccount);
 
-        Task<UserAccount> ReadByIdAsync(string id);
+        Task<IEFUserAccount> ReadByIdAsync(string id);
 
-        Task<UserAccount> ReadByEmailAsync(string email);
+        Task<IEFUserAccount> ReadByEmailAsync(string email);
 
-        Task<IEnumerable<UserAccount>> ReadAllAsync();
+        Task<IEnumerable<IEFUserAccount>> ReadAllAsync();
 
         Task<bool> WriteAsync(UserAccount userAccount);
 
-        Task<bool> DeleteById(string id);
+        Task<bool> DeleteByIdAsync(string id);
 
-        Task<bool> ConfirmEmailAsync(ConfirmEmailHolder confirmEmailHolder);
+        Task<IdentityResult> AddRolesToAccountAsync(UserRolePairHolder userRolePairHolder);
+
+        Task<IdentityResult> RemoveRolesFromAccountAsync(UserRolePairHolder userRolePairHolder);
+
+        Task<IdentityResult> ConfirmEmailAsync(ConfirmEmailHolder confirmEmailHolder);
     }
 }

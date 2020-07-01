@@ -3,13 +3,12 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using MTS.BL.Infra.Interfaces;
 
-namespace MTS.DAL.Infra.Interfaces
+namespace MTS.BL.Infra.Entities
 {
-    public class EFUserAccount : IdentityUser , IEFUserAccount
+    public class EFUserAccount : IdentityUser, IEFUserAccount
     {
-
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override string Id { get => base.Id; set => base.Id = value; }
@@ -26,15 +25,15 @@ namespace MTS.DAL.Infra.Interfaces
         {
             get
             {
-                if (String.IsNullOrEmpty(FirstName) && String.IsNullOrEmpty(LastName))
+                if (string.IsNullOrEmpty(FirstName) && string.IsNullOrEmpty(LastName))
                     return null;
 
-                if (String.IsNullOrEmpty(LastName))
+                if (string.IsNullOrEmpty(LastName))
                     return FirstName;
 
                 StringBuilder stringBuilder = new StringBuilder(FirstName);
 
-                if (!String.IsNullOrEmpty(Affix))
+                if (!string.IsNullOrEmpty(Affix))
                     stringBuilder.Append($" {Affix}");
 
                 stringBuilder.Append($" {LastName}");
@@ -65,7 +64,7 @@ namespace MTS.DAL.Infra.Interfaces
 
         public override string ToString()
         {
-            if (FullName == null)
+            if (String.IsNullOrEmpty(FullName))
                 return Email;
             else
                 return FullName;

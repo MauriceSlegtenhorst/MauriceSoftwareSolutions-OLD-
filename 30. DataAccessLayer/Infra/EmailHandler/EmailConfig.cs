@@ -1,6 +1,6 @@
-﻿using MTS.DAL.Infra.Interfaces;
+﻿using MTS.BL.Infra.Interfaces;
 
-namespace MTS.DAL.Infra.EmailLibrary
+namespace MTS.BL.Infra.EmailLibrary
 {
     public sealed class EmailConfig : IEmailConfig
     {

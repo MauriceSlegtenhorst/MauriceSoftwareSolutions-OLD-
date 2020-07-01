@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using MTS.Core.GlobalLibrary;
-using MTS.DAL.Infra.Interfaces;
+using MTS.BL.Infra.Entities;
+using MTS.BL.Infra.Interfaces;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace MTS.DAL.DatabaseAccess.Utils
+namespace MTS.BL.DatabaseAccess.Utils
 {
     internal static class EmailHelper
     {        // TODO Make callback url redirect to either webpage or mobile depending on what platform was used creating the account
