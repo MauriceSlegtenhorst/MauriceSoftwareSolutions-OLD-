@@ -1,13 +1,9 @@
-﻿
-
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MTS.DAL.DatabaseAccess.Utils;
-using System.IO;
 
-namespace MTS.BL.DatabaseAccess.DataContext
+namespace MTS.DAL.DatabaseAccess.DataContext
 {
     public sealed class DbConfigurations
     {
@@ -16,7 +12,6 @@ namespace MTS.BL.DatabaseAccess.DataContext
         internal IConfigurationSection AuthMessageSenderOptions { get; private set; }
         internal TokenValidationParameters TokenValidationParameters { get; private set; }
         internal IdentityOptions IdentityOptions { get; private set; }
-        internal AuthenticationOptions AuthenticationOptions { get; private set; }
 
         public DbConfigurations()
         {
@@ -33,8 +28,6 @@ namespace MTS.BL.DatabaseAccess.DataContext
             TokenValidationParameters = TokenValidationOptionsBuilder.Build(IssuerSigningKey);
 
             IdentityOptions = IdentityOptionsBuilder.Build();
-
-            //AuthenticationOptions = AuthenticationOptionsBuilder.Build();
         }
     }
 }

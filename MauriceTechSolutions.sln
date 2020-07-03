@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MTS.BL.API", "30. DataAcces
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MTS.DAL.Infra.EmailLibrary", "30. DataAccessLayer\Infra\EmailHandler\MTS.DAL.Infra.EmailLibrary.csproj", "{45635095-C7E0-41CA-978B-1DAB84FBA05E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLI", "90. Testing\CLI\CLI.csproj", "{EBA5AE29-557A-4692-8CDC-F59594C63838}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MTS.T.CLI", "90. Testing\CLI\MTS.T.CLI.csproj", "{EBA5AE29-557A-4692-8CDC-F59594C63838}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra", "Infra", "{381414DE-83B5-49B7-8929-DF2B45BBAF38}"
 	ProjectSection(SolutionItems) = preProject

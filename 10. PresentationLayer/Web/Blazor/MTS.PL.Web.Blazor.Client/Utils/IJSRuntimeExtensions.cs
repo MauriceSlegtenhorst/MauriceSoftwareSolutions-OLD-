@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MTS.PL.Web.Blazor.Client.Helpers
+namespace MTS.PL.Web.Blazor.Client.Utils
 {
     public static class IJSRuntimeExtensions
     {

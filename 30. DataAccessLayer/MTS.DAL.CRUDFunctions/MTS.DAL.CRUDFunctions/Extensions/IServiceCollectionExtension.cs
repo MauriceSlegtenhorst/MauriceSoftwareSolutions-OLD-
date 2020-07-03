@@ -2,21 +2,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using MTS.BL.DatabaseAccess.CRUD.Account;
-using MTS.BL.DatabaseAccess.DataContext;
-using MTS.BL.Infra.EmailLibrary;
-using MTS.BL.Infra.Entities;
-using MTS.BL.Infra.Interfaces;
-using System;
-using System.Text;
-using MTS.BL.DatabaseAccess.Identity;
-using Microsoft.Extensions.Options;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using MTS.DAL.DatabaseAccess.Utils;
+using MTS.DAL.DatabaseAccess.CRUD.Account;
+using MTS.DAL.DatabaseAccess.DataContext;
+using MTS.DAL.Infra.EmailLibrary;
+using MTS.DAL.Infra.Entities;
+using MTS.DAL.Infra.Interfaces;
+using MTS.DAL.DatabaseAccess.Identity;
 
-namespace MTS.BL.DatabaseAccess.Extensions
+namespace MTS.DAL.DatabaseAccess.Extensions
 {
     public static class IServiceCollectionExtension
     {
@@ -25,7 +18,8 @@ namespace MTS.BL.DatabaseAccess.Extensions
             DbConfigurations configurations = new DbConfigurations();
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configurations.SqlConnectionString));
+                options.UseSqlServer(configurations.SqlConnectionString, 
+                options => options.MigrationsAssembly("MTS.BL.API")));
 
             services.Configure<IdentityOptions>(options => options = configurations.IdentityOptions);
 
@@ -36,8 +30,12 @@ namespace MTS.BL.DatabaseAccess.Extensions
                 .AddRoles<IdentityRole>();
 
             services
-                .AddAuthentication(options => options = new AuthenticationOptionsBuilder())
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => 
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
                     options.RequireHttpsMetadata = true;
                     options.SaveToken = true;

@@ -4,12 +4,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MTS.BL.API.Utils.ExceptionHandler;
-using MTS.BL.Infra.APILibrary;
-using MTS.BL.Infra.Interfaces;
+using MTS.DAL.API.Utils.ExceptionHandler;
+using MTS.DAL.Infra.APILibrary;
+using MTS.DAL.Infra.Interfaces;
 using static MTS.Core.GlobalLibrary.Constants;
 
-namespace MTS.BL.API.Controllers
+namespace MTS.DAL.API.Controllers
 {
     [Route(APIControllers.IDENTITY)]
     [ApiController]

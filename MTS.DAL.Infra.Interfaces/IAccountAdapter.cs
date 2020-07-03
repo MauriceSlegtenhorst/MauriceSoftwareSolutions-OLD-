@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MTS.BL.Infra.APILibrary;
+using MTS.DAL.Infra.APILibrary;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MTS.BL.Infra.Interfaces
+namespace MTS.DAL.Infra.Interfaces
 {
     public interface IAccountAdapter
     {
@@ -13,18 +13,18 @@ namespace MTS.BL.Infra.Interfaces
 
         Task<IEFUserAccount> ReadByIdAsync(string id);
 
-        Task<IEFUserAccount> ReadByEmailAsync(string email);
+        Task<IEFUserAccount> ReadByEmailAsync(CredentialHolder credentialHolder);
 
         Task<IEnumerable<IEFUserAccount>> ReadAllAsync();
 
-        Task<bool> WriteAsync(UserAccount userAccount);
+        Task<IdentityResult> WriteAsync(UserAccount userAccount);
 
-        Task<bool> DeleteByIdAsync(string id);
+        Task<IdentityResult> DeleteByIdAsync(string id, string callerEmail);
 
-        Task<IdentityResult> AddRolesToAccountAsync(UserRolePairHolder userRolePairHolder);
+        Task<IdentityResult> AddRolesToAccountAsync(string id, byte roles);
 
-        Task<IdentityResult> RemoveRolesFromAccountAsync(UserRolePairHolder userRolePairHolder);
+        Task<IdentityResult> RemoveRolesFromAccountAsync(string id, byte roles);
 
-        Task<IdentityResult> ConfirmEmailAsync(ConfirmEmailHolder confirmEmailHolder);
+        Task<IdentityResult> ConfirmEmailAsync(string id, string code);
     }
 }

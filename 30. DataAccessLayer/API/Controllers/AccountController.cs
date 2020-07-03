@@ -4,38 +4,41 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using MTS.BL.Infra.APILibrary;
+using MTS.DAL.Infra.APILibrary;
 using MTS.Core.GlobalLibrary;
 using MTS.Core.GlobalLibrary.Utils;
-using MTS.BL.Infra.Interfaces;
+using MTS.DAL.Infra.Interfaces;
 using MTS.PL.Infra.InjectionLibrary;
 using System.Linq;
-using MTS.BL.API.Utils.ExceptionHandler;
+using MTS.DAL.API.Utils.ExceptionHandler;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
 
-namespace MTS.BL.API.Controllers
+namespace MTS.DAL.API.Controllers
 {
     [ApiController]
     [Route(Constants.APIControllers.ACCOUNT)]
     public class AccountController : ControllerBase
     {
-        private readonly IAccountAdapter _accountFunctions;
+        private readonly IAccountAdapter _accountAdapter;
         private readonly IExceptionHandler _exceptionHandler;
 
         public AccountController(
             IAccountAdapter accountFunctions,
             IExceptionHandler exceptionHandler)
         {
-            _accountFunctions = accountFunctions;
+            _accountAdapter = accountFunctions;
             _exceptionHandler = exceptionHandler;
         }
 
         #region Get
-        //[Authorize(Roles =
-        //    Constants.Security.ADMINISTRATOR + "," +
-        //    Constants.Security.PRIVILEGED_EMPLOYEE)]
+        [Authorize(
+            Constants.Security.ADMINISTRATOR + "," +
+            Constants.Security.PRIVILEGED_EMPLOYEE + "," +
+            Constants.Security.EMPLOYEE
+            )]
         [Route(Constants.AccountControllerEndpoints.GET_BY_ID)]
         [HttpGet]
         public async Task<IActionResult> GetByIdAsync([FromBody] string id)
@@ -47,7 +50,7 @@ namespace MTS.BL.API.Controllers
 
             try
             {
-                var efUserAccount = await _accountFunctions.ReadByIdAsync(id);
+                var efUserAccount = await _accountAdapter.ReadByIdAsync(id);
 
                 userAccount = new UserAccount();
 
@@ -64,18 +67,19 @@ namespace MTS.BL.API.Controllers
             return Ok(userAccount);
         }
 
-        //[Authorize(Roles =
-        //    Constants.Security.ADMINISTRATOR + "," +
-        //    Constants.Security.PRIVILEGED_EMPLOYEE)]
+        [Authorize]
         [Route(Constants.AccountControllerEndpoints.GET_BY_EMAIL)]
         [HttpGet]
-        public async Task<IActionResult> GetByEmailAsync([FromBody] string email)
+        public async Task<IActionResult> GetByEmailAsync([FromBody] CredentialHolder credentialHolder)
         {
+            if(!ModelState.IsValid)
+                return _exceptionHandler.HandleException(new NullReferenceException("ModelState was invalid"), isServerSideException: false);
+
             IUserAccount userAccount;
 
             try
             {
-                var efUserAccount = await _accountFunctions.ReadByEmailAsync(email);
+                var efUserAccount = await _accountAdapter.ReadByEmailAsync(credentialHolder);
 
                 userAccount = new UserAccount();
 
@@ -92,7 +96,10 @@ namespace MTS.BL.API.Controllers
             return Ok(userAccount);
         }
 
-        //[Authorize(Roles = Constants.Security.ADMINISTRATOR)]
+        [Authorize(Roles = 
+            Constants.Security.ADMINISTRATOR + "," +
+            Constants.Security.PRIVILEGED_EMPLOYEE
+            )]
         [Route(Constants.AccountControllerEndpoints.GET_ALL)]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
@@ -101,7 +108,7 @@ namespace MTS.BL.API.Controllers
 
             try
             {
-                userAccounts = await _accountFunctions.ReadAllAsync();
+                userAccounts = await _accountAdapter.ReadAllAsync();
             }
             catch (Exception ex)
             {
@@ -122,7 +129,7 @@ namespace MTS.BL.API.Controllers
 
             try
             {
-                var newUserAccount = await _accountFunctions.CreateByEmailAndPasswordAsync(credentialHolder.Email, credentialHolder.Password);
+                var newUserAccount = await _accountAdapter.CreateByEmailAndPasswordAsync(credentialHolder.Email, credentialHolder.Password);
 
                 if (newUserAccount != null && !String.IsNullOrEmpty(newUserAccount.Id) && !String.IsNullOrEmpty(newUserAccount.Email))
                 {
@@ -156,7 +163,7 @@ namespace MTS.BL.API.Controllers
 
             try
             {
-                var newUserAccount = await _accountFunctions.CreateByAccountAsync(userAccount);
+                var newUserAccount = await _accountAdapter.CreateByAccountAsync(userAccount);
 
                 if (newUserAccount != null && !String.IsNullOrEmpty(newUserAccount.Id) && !String.IsNullOrEmpty(newUserAccount.Email))
                 {
@@ -185,7 +192,7 @@ namespace MTS.BL.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                return Ok(await _accountFunctions.WriteAsync(userAccount));
+                return Ok(await _accountAdapter.WriteAsync(userAccount));
             }
             else
             {
@@ -195,57 +202,50 @@ namespace MTS.BL.API.Controllers
         #endregion
 
         #region Delete
-        //[Authorize]
+        [Authorize]
         [Route(Constants.AccountControllerEndpoints.DELETE_BY_ID)]
         [HttpDelete]
         public async Task<IActionResult> DeleteById([FromQuery] string id)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return _exceptionHandler.HandleException(new Exception("ModelState invalid"), isServerSideException: false);
+
+            IdentityResult result = new IdentityResult();
+
+            try
             {
-                bool result = false;
-                try
-                {
-                    result = await _accountFunctions.DeleteByIdAsync(id);
+                result = await _accountAdapter.DeleteByIdAsync(id, User.FindFirst(ClaimTypes.Email).Value);
+            }
+            catch (Exception ex)
+            {
+                _exceptionHandler.HandleException(ex, isServerSideException: true);
+            }
 
-                }
-                catch (Exception ex)
-                {
-                    _exceptionHandler.HandleException(ex, isServerSideException: true);
-                }
-
-                if (result)
-                {
-                    return Ok("Account deleted");
-                }
-                else
-                {
-                    return _exceptionHandler.HandleException(new Exception("Something went wrong during deletion. The account might still exist"), isServerSideException: true);
-                }
+            if (result.Succeeded)
+            {
+                return Ok("Account deleted");
             }
             else
             {
-                return _exceptionHandler.HandleException(new Exception("ModelState invalid"), isServerSideException: false);
-            }
+                return _exceptionHandler.HandleException(new Exception("Something went wrong during deletion. The account might still exist."), isServerSideException: true);
+            } 
         }
         #endregion
 
         #region Roles
         [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
         [Route(Constants.AccountControllerEndpoints.ADD_ROLES_TO_ACCOUNT)]
-        [HttpPut]
+        [HttpPatch]
         public async Task<IActionResult> AddRolesToAccountAsync([FromBody] UserRolePairHolder userRolePairHolder)
         {
             if (!ModelState.IsValid)
                 return _exceptionHandler.HandleException(new Exception("ModelState was invalid"), isServerSideException: false);
 
-            if (userRolePairHolder.Roles.Count() == 0)
-                return _exceptionHandler.HandleException(new Exception("No role(s) to add were found"), isServerSideException: false);
-
             var result = new IdentityResult();
 
             try
             {
-                result = await _accountFunctions.AddRolesToAccountAsync(userRolePairHolder);
+                result = await _accountAdapter.AddRolesToAccountAsync(userRolePairHolder.Id, userRolePairHolder.Roles);
             }
             catch (Exception ex)
             {
@@ -253,7 +253,7 @@ namespace MTS.BL.API.Controllers
             }
 
             if (result.Succeeded)
-                return Ok("Role(s) added to account");
+                return Ok("Role(s) added to account.");
             else
             {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -267,22 +267,19 @@ namespace MTS.BL.API.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
         [Route(Constants.AccountControllerEndpoints.REMOVE_ROLES_FROM_ACCOUNT)]
-        [HttpPut]
+        [HttpPatch]
         public async Task<IActionResult> RemoveRolesFromAccountAsync(UserRolePairHolder userRolePairHolder)
         {
             if (!ModelState.IsValid)
                 return _exceptionHandler.HandleException(new Exception("ModelState was invalid"), isServerSideException: false);
 
-            if (userRolePairHolder.Roles.Count() == 0)
-                return _exceptionHandler.HandleException(new Exception("No role(s) to add were found"), isServerSideException: false);
-
             var result = new IdentityResult();
 
             try
             {
-                result = await _accountFunctions.RemoveRolesFromAccountAsync(userRolePairHolder);
+                result = await _accountAdapter.RemoveRolesFromAccountAsync(userRolePairHolder.Id, userRolePairHolder.Roles);
             }
             catch(Exception ex)
             {
@@ -312,7 +309,7 @@ namespace MTS.BL.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _accountFunctions.ConfirmEmailAsync(confirmEmailHolder);
+                var result = await _accountAdapter.ConfirmEmailAsync(confirmEmailHolder.UserId, confirmEmailHolder.Code);
 
                 if (result.Succeeded)
                     return Ok("Email is confirmed");

@@ -2,4 +2,15 @@
 
 <h1>Welcome</h1>
 
-<UnderConstructionComponent Width="500" Height="400" BuildDescription="Explenation of why this site exists and what the purpose is."/>
+<AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@messages"/>
+
+@code{
+    private IEnumerable<string> messages;
+
+    protected override Task OnInitializedAsync()
+    {
+        messages = new[] { BlazorConstants.UNDER_CONSTRUCTION_MESSAGE };
+
+        return base.OnInitializedAsync();
+    }
+}

@@ -1,7 +1,7 @@
-﻿using MTS.BL.Infra.APILibrary;
+﻿using MTS.DAL.Infra.APILibrary;
 using System.Threading.Tasks;
 
-namespace MTS.BL.Infra.Interfaces
+namespace MTS.DAL.Infra.Interfaces
 {
     public interface IIdentityAdapter
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 
-namespace MTS.BL.Infra.APILibrary
+namespace MTS.DAL.Infra.APILibrary
 {
     public class UserToken : IdentityUserToken<string>
     {

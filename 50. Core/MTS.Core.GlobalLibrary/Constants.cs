@@ -1,4 +1,6 @@
-﻿namespace MTS.Core.GlobalLibrary
+﻿using System;
+
+namespace MTS.Core.GlobalLibrary
 {
     public static class Constants
     {
@@ -28,7 +30,7 @@
             public const string ADD_ROLES_TO_ACCOUNT = "addrolestoaccount";
             public const string REMOVE_ROLES_FROM_ACCOUNT = "removerolesfromaccount";
         }
-
+        
         public static class IdentityControllerEndpoints
         {
             public const string LOG_IN = "login";
@@ -84,14 +86,18 @@
         public const string BLAZOR_WEB_BASE_ADDRESS = "N/A";
 #endif
 
-        public enum AccessLevel
+        [Flags]
+        public enum AccessLevel : byte
         {
-            StandardUser,
-            PrivilegedUser,
-            Volenteer,
-            Employee,
-            PrivilegedEmployee,
-            Administrator
+            Nonexistent         = 0,
+            StandardUser        = 1,
+            PrivilegedUser      = 2,
+            Volenteer           = 4,
+            Employee            = 8,
+            PrivilegedEmployee  = 16,
+            Administrator       = 32
         }
+
+        public static string[] VALID_EMAIL_DOMAINS = new string[] { "gmail", "yahoo", "hotmail", "outlook", "icloud", "me", "mac",  "aol", "msn", "wanadoo", "comcast", "live", "rediffmail", "outlook", "googlemail", "tiscali", "t-online", "telenet" };
     }
 }

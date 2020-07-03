@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MTS.BL.Infra.APILibrary;
-using MTS.BL.Infra.Entities;
-using MTS.BL.Infra.Interfaces;
-using MTS.BL.DatabaseAccess.DataContext;
+using MTS.DAL.Infra.APILibrary;
+using MTS.DAL.Infra.Entities;
+using MTS.DAL.Infra.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MTS.BL.DatabaseAccess.Utils;
+using MTS.DAL.DatabaseAccess.Utils;
+using MTS.DAL.DatabaseAccess.DataContext;
 
-namespace MTS.BL.DatabaseAccess.Identity
+namespace MTS.DAL.DatabaseAccess.Identity
 {
     public sealed class IdentityAdapter : IIdentityAdapter
     {
@@ -27,12 +27,14 @@ namespace MTS.BL.DatabaseAccess.Identity
 
         public async Task<AuthentificationResult> LogIn(CredentialHolder credentials)
         {
-            List<string> responses = new List<string>();
-
             EFUserAccount efUserAccount = await _userManager.FindByEmailAsync(credentials.Email);
 
             if (efUserAccount == null)
-            responses.Add("No user exists with this email and password");
+            {
+                return new AuthentificationResult { IsSucceeded = false, Errors = new[] { "No user exists with this email and password" } };
+            }
+
+            List<string> responses = new List<string>();
 
             if (!efUserAccount.EmailConfirmed)
                 responses.Add("Email not yet confirmed by user");

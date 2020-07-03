@@ -1,6 +1,5 @@
 ﻿@page "/account/confirmemailadmin/"
 @inject HttpClient _httpClient
-@using Syncfusion.Blazor.Spinner
 
 <h1>Email confirmation</h1>
 
@@ -22,23 +21,15 @@
     private SfSpinner spinnerComponent;
     private string targetSpinner = "#container";
 
-    private ConfirmEmailHolder confirmEmailHolder;
+    private IConfirmEmailHolder confirmEmailHolder;
 
     public ConfirmEmailAdmin()
     {
         spinnerComponent.ShowSpinner(targetSpinner);
 
-        if (confirmEmailHolder == null)
-            confirmEmailHolder = new ConfirmEmailHolder
-            {
-                UserId = UserId,
-                Code = Code
-            };
-        else
-        {
-            confirmEmailHolder.UserId = UserId;
-            confirmEmailHolder.Code = Code;
-        }
+        confirmEmailHolder.UserId = UserId;
+        confirmEmailHolder.Code = Code;
+
 
         string uri = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CONFIRM_EMAIL}";
 
@@ -48,5 +39,7 @@
         {
 
         }
+
+        spinnerComponent.ShowSpinner(targetSpinner);
     }
 }

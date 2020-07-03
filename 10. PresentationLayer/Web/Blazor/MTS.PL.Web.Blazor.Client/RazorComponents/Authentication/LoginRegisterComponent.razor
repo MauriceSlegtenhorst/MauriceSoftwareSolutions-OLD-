@@ -1,0 +1,128 @@
+﻿@inject HttpClient _httpClient
+@inject ILoginService  _loginService
+@inject NavigationManager _navigationManager
+
+<SfCard>
+    <CardHeader Title="Please enter your details"></CardHeader>
+    <CardContent>
+        <EditForm Model="inputModel" OnValidSubmit="SubmitForm">
+            <DataAnnotationsValidator />
+
+            @if (_resultErrors.Count() > 0)
+            {
+                <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Danger" Title="@_resultTitle" ContentMessages="@_resultErrors" />
+            }
+
+            <div class="form-group">
+                <label>Email:</label>
+                <div>
+                    <InputText class="form-control" @bind-Value="@inputModel.Email" />
+                    <ValidationMessage For="@(() => inputModel.Email)" />
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Password:</label>
+                <div>
+                    <InputText class="form-control" type="password" @bind-Value="@inputModel.Password" />
+                    <ValidationMessage For="@(() => inputModel.Password)" />
+                </div>
+            </div>
+
+            <div class="form-group form-check">
+                <label>Remember me?</label>
+                <div>
+                    <InputCheckbox @bind-Value="@inputModel.RememberMe" />
+                </div>
+            </div>
+
+            <SfButton Type="submit" CssClass="btn btn-primary" Content="@_btnContent" />
+        </EditForm>
+    </CardContent>
+</SfCard>
+
+@code
+{
+    private string _btnContent;
+
+    private string _resultTitle;
+    private IEnumerable<string> _resultErrors;
+
+    [Parameter]
+    public bool IsLogin { get; set; }
+
+    private InputModel inputModel = new InputModel();
+    private class InputModel
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [Display(Name = "Remember me?")]
+        public bool RememberMe { get; set; }
+    }
+
+    private async Task SubmitForm()
+    {
+        bool isValidEmail = await ValidateEmail(inputModel.Email);
+
+        if (isValidEmail == false)
+        {
+            // TODO Use validationMessage instead of alert
+            _resultTitle = "Invalid email";
+            _resultErrors = new[] { "Only common email domains are allowed. Use another email address please." };
+            return;
+        }
+
+        string requestUrl;
+        if (IsLogin)
+            requestUrl = $"{Constants.APIControllers.IDENTITY}/{Constants.IdentityControllerEndpoints.LOG_IN}";
+        else
+            requestUrl = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CREATE_BY_CREDENTIALS}";
+
+
+        var result = await _httpClient.PutAsJsonAsync(requestUrl, inputModel);
+        var resultContentAsString = await result.Content.ReadAsStringAsync();
+
+        if (result.IsSuccessStatusCode)
+        {
+            if (IsLogin)
+            {
+                await _loginService.Login(resultContentAsString);
+
+                _navigationManager.NavigateTo("/");
+            }
+            else
+            {
+                _navigationManager.NavigateTo("/account/accountsubmitted");
+            }
+        }
+        else
+        {
+            _resultErrors = JsonConvert.DeserializeObject<IEnumerable<string>>(resultContentAsString);
+        }
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        _btnContent = IsLogin ? "Log in" : "Register";
+
+        _resultErrors = new string[0];
+
+        return base.OnInitializedAsync();
+    }
+
+    private Task<bool> ValidateEmail(string email)
+    {
+        var domainAndTopLvlDomain = email.Split('@')[1];
+
+        var domain = domainAndTopLvlDomain.Split('.')[0];
+
+        return Task.FromResult<bool>(Constants.VALID_EMAIL_DOMAINS.Contains(domain));
+    }
+}

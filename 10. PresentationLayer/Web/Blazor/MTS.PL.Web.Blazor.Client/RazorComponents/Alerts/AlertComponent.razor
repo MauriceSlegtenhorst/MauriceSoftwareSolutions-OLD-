@@ -1,0 +1,88 @@
+﻿<style>
+    .content {
+        padding: 10px;
+    }
+</style>
+
+<div class="@_topCSSClass" role="alert">
+    @if (!String.IsNullOrEmpty(Title)) 
+    {
+    <div class="row">
+        <span class="@_iconCSSClass" aria-hidden="true" />
+        <div class="content">
+            <p><h4> @Title</h4></p>
+        </div>
+    </div>    
+    }
+    
+    @if (!String.IsNullOrEmpty(Subtitle))
+    {
+        <div class="row">
+            <p class="content">
+                @Subtitle
+            </p>
+        </div>
+    }
+
+    @if (ContentMessages != null)
+    {
+        <div class="row">
+            <p class="content">
+                @foreach (string message in ContentMessages)
+                {
+                    <span>@message</span>
+                }
+            </p>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public AlertTypeEnum AlertType { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Subtitle { get; set; }
+
+    [Parameter]
+    public IEnumerable<string> ContentMessages { get; set; }
+
+    private string _topCSSClass;
+    private string _iconCSSClass;
+
+    public enum AlertTypeEnum
+    {
+        Info,
+        Success,
+        Warning,
+        Danger
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        switch (AlertType)
+        {
+            default:
+                _topCSSClass = "alert alert-info";
+                _iconCSSClass = "oi oi-info content";
+                break;
+            case AlertTypeEnum.Success:
+                _topCSSClass = "alert alert-success";
+                _iconCSSClass = "oi oi-check content";
+                break;
+            case AlertTypeEnum.Warning:
+                _topCSSClass = "alert alert-warning";
+                _iconCSSClass = "oi oi-warning content";
+                break;
+            case AlertTypeEnum.Danger:
+                _topCSSClass = "alert alert-danger";
+                _iconCSSClass = "oi oi-warning content";
+                break;
+        }
+
+        return base.OnInitializedAsync();
+    }
+}

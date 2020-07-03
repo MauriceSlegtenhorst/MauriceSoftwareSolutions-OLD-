@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Options;
-using MTS.BL.Infra.Interfaces;
+using MTS.DAL.Infra.Interfaces;
 using System;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MTS.BL.Infra.EmailLibrary
+namespace MTS.DAL.Infra.EmailLibrary
 {
     public class EmailSender : IEmailSender
     {
@@ -88,5 +88,7 @@ namespace MTS.BL.Infra.EmailLibrary
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             return client;
         }
+
+
     }
 }

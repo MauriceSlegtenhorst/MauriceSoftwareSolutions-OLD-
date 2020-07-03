@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="sidebar">
-    <NavMenu />
+    <NavMenuComponent />
 </div>
 
 <div class="main">
@@ -17,6 +17,23 @@
     </div>
 
     <div class="content px-4">
+        <div id="spinnerContainer"></div>
+        <SfSpinner @ref="_spinner" Target="#spinnerContainer" Label="Loading" />
         @Body
     </div>
+
+    <div class="col-lg-4 control-section">
+        <SfToast @ref="_loginResultToast" TimeOut="0" ShowCloseButton="true" ID="toast_type">
+            <ToastPosition X="Center" Y="Top"></ToastPosition>
+        </SfToast>
+    </div>
 </div>
+
+@code
+{
+    public SfSpinner _spinner { get; set; }
+    private string _spinnerTarget = "#spinnerContainer";
+
+    public SfToast _loginResultToast { get; set; }
+    private ToastModel toastModel;
+}

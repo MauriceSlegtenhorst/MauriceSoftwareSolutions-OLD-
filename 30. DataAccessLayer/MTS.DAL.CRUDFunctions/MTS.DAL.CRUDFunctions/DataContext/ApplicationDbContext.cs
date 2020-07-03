@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MTS.BL.Infra.Entities;
-using MTS.BL.Infra.Interfaces;
+using MTS.DAL.Infra.Entities;
+using MTS.DAL.Infra.Interfaces;
 
-namespace MTS.BL.DatabaseAccess.DataContext
+namespace MTS.DAL.DatabaseAccess.DataContext
 {
-    internal sealed class ApplicationDbContext : IdentityDbContext<EFUserAccount>
+    public sealed class ApplicationDbContext : IdentityDbContext<EFUserAccount>
     {
 
         public DbSet<EFUserAccount> UserAccounts { get; set; }

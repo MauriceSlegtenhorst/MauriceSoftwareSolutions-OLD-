@@ -1,14 +1,21 @@
 ﻿@page "/account/confirmemail/{UserId}/{Code}"
 @inject HttpClient _httpClient
-@using Syncfusion.Blazor.Spinner
 
 <h1>Email confirmation</h1>
 
-<h3>@message</h3>
+<h3>@messages</h3>
+
+@if (emailIsConfirmed)
+{
+    <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Success" Title="Email confirmed" ContentMessages="@messages" />
+}
+else
+{
+    <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Danger" Title="Email confirmation failed" ContentMessages="@messages" />
+}
 
 <div id="container"></div>
-<SfSpinner @ref="spinnerComponent" Target="#container" Label="Confirming email">
-</SfSpinner>
+<SfSpinner @ref="spinnerComponent" Target="#container" Label="Confirming email" />
 
 @code {
     [Parameter]
@@ -17,36 +24,44 @@
     [Parameter]
     public string Code { get; set; }
 
-    private string message;
+    private bool emailIsConfirmed;
+    private bool isRendering;
+
+    private IEnumerable<string> messages;
 
     private SfSpinner spinnerComponent;
     private string targetSpinner = "#container";
 
-    private ConfirmEmailHolder confirmEmailHolder;
+    private IConfirmEmailHolder confirmEmailHolder;
 
-    public ConfirmEmail()
+    protected override async Task OnInitializedAsync()
     {
         spinnerComponent.ShowSpinner(targetSpinner);
 
-        if (confirmEmailHolder == null)
-            confirmEmailHolder = new ConfirmEmailHolder
-            {
-                UserId = UserId,
-                Code = Code
-            };
-        else
-        {
-            confirmEmailHolder.UserId = UserId;
-            confirmEmailHolder.Code = Code;
-        }
+        confirmEmailHolder.UserId = UserId;
+        confirmEmailHolder.Code = Code;
+
 
         string uri = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CONFIRM_EMAIL}";
 
-        var result = _httpClient.PutAsJsonAsync(uri, confirmEmailHolder);
+        var result = await _httpClient.PutAsJsonAsync(uri, confirmEmailHolder);
 
-        if (result.IsCompletedSuccessfully)
+        string message = null;
+
+        if (result.IsSuccessStatusCode)
         {
-             
+            message = $"Your email address has been succesfully confirmed. It might take some time before Maurice confirms your account.";
+            emailIsConfirmed = true;
         }
+        else
+        {
+            message = await result.Content.ReadAsStringAsync();
+        }
+
+        messages = new[] { message };
+
+        spinnerComponent.HideSpinner(targetSpinner);
+
+        await base.OnInitializedAsync();
     }
 }

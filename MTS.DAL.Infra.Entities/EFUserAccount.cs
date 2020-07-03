@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
-using MTS.BL.Infra.Interfaces;
+using MTS.DAL.Infra.Interfaces;
 
-namespace MTS.BL.Infra.Entities
+namespace MTS.DAL.Infra.Entities
 {
     public class EFUserAccount : IdentityUser, IEFUserAccount
     {

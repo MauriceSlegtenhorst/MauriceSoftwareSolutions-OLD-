@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MTS.BL.Infra.Interfaces
+namespace MTS.DAL.Infra.Interfaces
 {
     public sealed class Credit
     {

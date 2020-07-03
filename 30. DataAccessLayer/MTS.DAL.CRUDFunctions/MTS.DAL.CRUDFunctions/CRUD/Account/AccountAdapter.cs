@@ -1,19 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
-using MTS.BL.Infra.APILibrary;
+using MTS.DAL.Infra.APILibrary;
 using MTS.Core.GlobalLibrary.Utils;
-using MTS.BL.DatabaseAccess.Utils;
-using MTS.BL.Infra.Entities;
-using MTS.BL.Infra.Interfaces;
+using MTS.DAL.DatabaseAccess.Utils;
+using MTS.DAL.Infra.Entities;
+using MTS.DAL.Infra.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static MTS.Core.GlobalLibrary.Constants;
 
-namespace MTS.BL.DatabaseAccess.CRUD.Account
+namespace MTS.DAL.DatabaseAccess.CRUD.Account
 {
     public sealed class AccountAdapter : IAccountAdapter
     {
@@ -123,21 +124,23 @@ namespace MTS.BL.DatabaseAccess.CRUD.Account
 
         /// <exception cref="System.ArgumentException">Thrown when the email parameter was null or empty</exception>
         /// <exception cref="System.Exception">Thrown when UserManager could not find any UserAccount with a matching email</exception>
-        public async Task<IEFUserAccount> ReadByEmailAsync(string email)
+        public async Task<IEFUserAccount> ReadByEmailAsync(CredentialHolder credentialHolder)
         {
-            if (String.IsNullOrEmpty(email))
+            if (String.IsNullOrEmpty(credentialHolder.Email))
                 throw new ArgumentException("Parameters email cannot be null or empty");
 
-            var efUserAccount = await _userManager.FindByIdAsync(email);
+            if (String.IsNullOrEmpty(credentialHolder.Password))
+                throw new ArgumentException("Parameters password cannot be null or empty");
+
+            var efUserAccount = await _userManager.FindByIdAsync(credentialHolder.Email);
 
             if (efUserAccount != null)
-            {
-                return efUserAccount;
-            }
-            else
-            {
                 throw new Exception("No UserAccount was found matching this email");
-            }
+
+            if (!await _userManager.CheckPasswordAsync(efUserAccount, credentialHolder.Password))
+                throw new Exception("Wrong password");
+
+            return efUserAccount;
         }
 
         public Task<IEnumerable<IEFUserAccount>> ReadAllAsync()
@@ -149,7 +152,7 @@ namespace MTS.BL.DatabaseAccess.CRUD.Account
         #endregion
 
         #region Write
-        public async Task<bool> WriteAsync(UserAccount userAccount)
+        public async Task<IdentityResult> WriteAsync(UserAccount userAccount)
         {
             if (userAccount == null || String.IsNullOrEmpty(userAccount.Email) || String.IsNullOrEmpty(userAccount.Password) || String.IsNullOrEmpty(userAccount.Id))
                 throw new ArgumentException("Parameter cannot be null or ivalid");
@@ -161,48 +164,49 @@ namespace MTS.BL.DatabaseAccess.CRUD.Account
 
             PropertyCopier<UserAccount, EFUserAccount>.Copy(userAccount, efUserAccount);
 
-            var result = await _userManager.UpdateAsync(efUserAccount);
-
-            if (result == null)
-                return false;
-
-            return result.Succeeded;
+            return await _userManager.UpdateAsync(efUserAccount);
         }
         #endregion
 
         #region Delete
-        public async Task<bool> DeleteByIdAsync(string id)
+        public async Task<IdentityResult> DeleteByIdAsync(string id, string callerEmail)
         {
             if (String.IsNullOrEmpty(id))
                 throw new ArgumentException("Parameters id cannot be null or empty");
 
-            var efUserAccount = await _userManager.FindByIdAsync(id);
+            var callerAccount = await _userManager.FindByEmailAsync(callerEmail);
 
-            if (efUserAccount != null)
-            {
-                var result = await _userManager.DeleteAsync(efUserAccount);
+            if(callerAccount == null)
+                throw new Exception("No UserAccount was found matching this email");
 
-                return result.Succeeded; 
-            }
-            else
-            {
+            if(callerAccount.Id != id)
+                throw new UnauthorizedAccessException("Caller is not allowed to delete this account");
+
+            var accountToBeDeleted = await _userManager.FindByIdAsync(id);
+
+            if (accountToBeDeleted == null)
                 throw new Exception("No UserAccount was found matching this id");
-            }
+
+            return await _userManager.DeleteAsync(accountToBeDeleted);
         }
         #endregion
 
         #region Roles
-        public async Task<IdentityResult> AddRolesToAccountAsync(UserRolePairHolder userRolePairHolder)
+        public async Task<IdentityResult> AddRolesToAccountAsync(string id, byte roles)
         {
-            if (String.IsNullOrEmpty(userRolePairHolder.Id) || !userRolePairHolder.Roles.Any())
+            var accessLevels = (AccessLevel)roles;
+
+            if (String.IsNullOrEmpty(id) || (AccessLevel)roles == AccessLevel.Nonexistent)
                 throw new ArgumentException("Parameters are required. Id or roles were null or empty");
 
-            var efUserAccount = await _userManager.FindByIdAsync(userRolePairHolder.Id);
+            var efUserAccount = await _userManager.FindByIdAsync(id);
 
             if (efUserAccount == null)
                 throw new Exception("Ef useraccount was null");
 
-            foreach (var role in userRolePairHolder.Roles)
+            IEnumerable<string> rolesEnumerated = accessLevels.ToString().Split(',');
+
+            foreach (var role in rolesEnumerated)
             {
                 if (!await _roleManager.RoleExistsAsync(role))
                 {
@@ -217,39 +221,44 @@ namespace MTS.BL.DatabaseAccess.CRUD.Account
                             stringBuilder.AppendLine(error.Description);
                         }
 
-                        throw new Exception($"Something went wrong while creating the new role. {stringBuilder}");
+                        throw new Exception($"Something went wrong while creating the new role(s). {stringBuilder}");
                     } 
                 }
             }
 
-            var result = await _userManager.AddToRolesAsync(efUserAccount, userRolePairHolder.Roles);
+            var result = await _userManager.AddToRolesAsync(efUserAccount, rolesEnumerated);
 
             return result;
         }
 
-        public async Task<IdentityResult> RemoveRolesFromAccountAsync(UserRolePairHolder userRolePairHolder)
+        public async Task<IdentityResult> RemoveRolesFromAccountAsync(string id, byte roles)
         {
-            if (String.IsNullOrEmpty(userRolePairHolder.Id) || !userRolePairHolder.Roles.Any())
+            var accessLevels = (AccessLevel)roles;
+
+            if (String.IsNullOrEmpty(id) || (AccessLevel)roles == AccessLevel.Nonexistent)
                 throw new ArgumentException("Parameters are required. Id or roles were null or empty");
 
-            var efUserAccount = await _userManager.FindByIdAsync(userRolePairHolder.Id);
+            var efUserAccount = await _userManager.FindByIdAsync(id);
 
             if (efUserAccount == null)
                 throw new Exception("Ef useraccount was null");
 
-            var result = await _userManager.RemoveFromRolesAsync(efUserAccount, userRolePairHolder.Roles);
+            IEnumerable<string> rolesEnumerated = accessLevels.ToString().Split(',');
+
+            IdentityResult result = await _userManager.RemoveFromRolesAsync(efUserAccount, rolesEnumerated);
 
             return result;
         }
         #endregion
 
         // Confirm email
-        public async Task<IdentityResult> ConfirmEmailAsync(ConfirmEmailHolder confirmEmailHolder)
+        public async Task<IdentityResult> ConfirmEmailAsync(string id, string code)
         {
-            var userAccount = await _userManager.FindByIdAsync(confirmEmailHolder.UserId);
+            var userAccount = await _userManager.FindByIdAsync(id);
 
-            confirmEmailHolder.Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(confirmEmailHolder.Code));
-            var result = await _userManager.ConfirmEmailAsync(userAccount, confirmEmailHolder.Code);
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+
+            var result = await _userManager.ConfirmEmailAsync(userAccount, code);
 
             return result;
         }

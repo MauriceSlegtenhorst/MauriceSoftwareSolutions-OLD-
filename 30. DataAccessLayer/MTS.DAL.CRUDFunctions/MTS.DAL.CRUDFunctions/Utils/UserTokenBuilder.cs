@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using MTS.BL.Infra.APILibrary;
-using MTS.BL.Infra.Entities;
-using MTS.BL.Infra.Interfaces;
+using MTS.DAL.Infra.APILibrary;
+using MTS.DAL.Infra.Entities;
+using MTS.DAL.Infra.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MTS.BL.DatabaseAccess.Utils
+namespace MTS.DAL.DatabaseAccess.Utils
 {
     internal sealed class UserTokenBuilder
     {

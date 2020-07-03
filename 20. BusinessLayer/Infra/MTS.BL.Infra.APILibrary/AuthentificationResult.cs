@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MTS.BL.Infra.APILibrary
+namespace MTS.DAL.Infra.APILibrary
 {
     public sealed class AuthentificationResult
     {

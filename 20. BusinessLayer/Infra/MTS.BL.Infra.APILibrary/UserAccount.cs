@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using static MTS.Core.GlobalLibrary.Constants;
 
-namespace MTS.BL.Infra.APILibrary
+namespace MTS.DAL.Infra.APILibrary
 {
     public class UserAccount : IUserAccount
     {

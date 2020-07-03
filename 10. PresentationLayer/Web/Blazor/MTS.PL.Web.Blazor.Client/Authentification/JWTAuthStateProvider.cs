@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using MTS.PL.Infra.InjectionLibrary;
-using MTS.PL.Web.Blazor.Client.Helpers;
+using MTS.PL.Web.Blazor.Client.Utils;
 
 namespace MTS.PL.Web.Blazor.Client.Authentification
 {
