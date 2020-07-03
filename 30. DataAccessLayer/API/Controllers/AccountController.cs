@@ -13,10 +13,10 @@ using System.Linq;
 using MTS.BL.API.Utils.ExceptionHandler;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace MTS.BL.API.Controllers
 {
-    [AllowAnonymous]
     [ApiController]
     [Route(Constants.APIControllers.ACCOUNT)]
     public class AccountController : ControllerBase
@@ -267,9 +267,9 @@ namespace MTS.BL.API.Controllers
             }
         }
 
-        [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
+        [Authorize]
         [Route(Constants.AccountControllerEndpoints.REMOVE_ROLES_FROM_ACCOUNT)]
-        [HttpPatch]
+        [HttpPut]
         public async Task<IActionResult> RemoveRolesFromAccountAsync(UserRolePairHolder userRolePairHolder)
         {
             if (!ModelState.IsValid)

@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
 using MTS.BL.Infra.APILibrary;
-using MTS.Core.GlobalLibrary;
 using MTS.Core.GlobalLibrary.Utils;
 using MTS.BL.DatabaseAccess.Utils;
 using MTS.BL.Infra.Entities;
@@ -13,9 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using MTS.BL.Infra.APILibrary;
 
 namespace MTS.BL.DatabaseAccess.CRUD.Account
 {

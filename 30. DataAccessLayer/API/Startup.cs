@@ -54,6 +54,7 @@ namespace MTS.BL.API
             app.UseCors("APICorsPolicy");
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();

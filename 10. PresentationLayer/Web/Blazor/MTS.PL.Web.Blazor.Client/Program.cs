@@ -8,7 +8,6 @@ using MTS.Core.GlobalLibrary;
 using MTS.PL.Infra.InjectionLibrary;
 using MTS.PL.Web.Blazor.Client.Authentification;
 using Syncfusion.Blazor;
-using static MTS.PL.Web.Blazor.Client.Pages.Account.CRUD.CRUDUsers;
 
 namespace MTS.PL.Web.Blazor.Client
 {

@@ -1,12 +1,23 @@
 ﻿
 
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using MTS.DAL.DatabaseAccess.Utils;
 using System.IO;
 
 namespace MTS.BL.DatabaseAccess.DataContext
 {
     public sealed class DbConfigurations
     {
+        internal string SqlConnectionString { get; private set; }
+        internal string IssuerSigningKey { get; private set; }
+        internal IConfigurationSection AuthMessageSenderOptions { get; private set; }
+        internal TokenValidationParameters TokenValidationParameters { get; private set; }
+        internal IdentityOptions IdentityOptions { get; private set; }
+        internal AuthenticationOptions AuthenticationOptions { get; private set; }
+
         public DbConfigurations()
         {
             var configBuilder = new ConfigurationBuilder();
@@ -18,10 +29,12 @@ namespace MTS.BL.DatabaseAccess.DataContext
             SqlConnectionString = root.GetConnectionString("localdatabaseconnection");
             IssuerSigningKey = root["ValidateIssuerSigningKey:Key"];
             AuthMessageSenderOptions = root.GetSection("AuthMessageSenderOptions");
-        }
 
-        internal string SqlConnectionString { get; private set; }
-        internal string IssuerSigningKey { get; private set; }
-        internal IConfigurationSection AuthMessageSenderOptions { get; private set; }
+            TokenValidationParameters = TokenValidationOptionsBuilder.Build(IssuerSigningKey);
+
+            IdentityOptions = IdentityOptionsBuilder.Build();
+
+            //AuthenticationOptions = AuthenticationOptionsBuilder.Build();
+        }
     }
 }
