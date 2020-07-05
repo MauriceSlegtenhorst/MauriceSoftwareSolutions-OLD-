@@ -1,49 +1,146 @@
 ﻿@inject HttpClient _httpClient
 @inject ILoginService  _loginService
 @inject NavigationManager _navigationManager
+@using System.Net.Mail
 
 <SfCard>
-    <CardHeader Title="Please enter your details"></CardHeader>
+    <CardHeader>
+        <h3>Please enter your details</h3>
+    </CardHeader>
     <CardContent>
-        <EditForm Model="inputModel" OnValidSubmit="SubmitForm">
-            <DataAnnotationsValidator />
+        <EditForm EditContext="@_formContext" OnValidSubmit="SubmitForm">
+            <div class="content-wrapper">
 
-            @if (_resultErrors.Count() > 0)
-            {
-                <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Danger" Title="@_resultTitle" ContentMessages="@_resultErrors" />
-            }
+                <DataAnnotationsValidator />
 
-            <div class="form-group">
-                <label>Email:</label>
-                <div>
-                    <InputText class="form-control" @bind-Value="@inputModel.Email" />
-                    <ValidationMessage For="@(() => inputModel.Email)" />
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
+                @if (_resultErrors.Count() > 0)
+                {
+                    <div class="form-group row">
+                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                            <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Danger" Title="@_resultTitle" ContentMessages="@_resultErrors" />
+                        </div>
+                    </div>
+                }
+
+                <div class="form-group row">
+                    <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                        <SfTextBox @ref="_tbEmail" Type="email" Placeholder="Enter Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                   ShowClearButton="true" @bind-Value="@_inputModel.Email" Blur="OnEmailBlur" />
+
+                        <ValidationMessage For="@(() => _inputModel.Email)" />
+
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label>Password:</label>
-                <div>
-                    <InputText class="form-control" type="password" @bind-Value="@inputModel.Password" />
-                    <ValidationMessage For="@(() => inputModel.Password)" />
+                <div class="form-group row">
+                    <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                        <SfTextBox @ref="_tbPassword" Type="password" Placeholder="Enter Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                   ShowClearButton="true" @bind-Value="@_inputModel.Password" Blur="OnPasswordBlur" />
+
+                        <ValidationMessage For="@(() => _inputModel.Password)" />
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group form-check">
-                <label>Remember me?</label>
-                <div>
-                    <InputCheckbox @bind-Value="@inputModel.RememberMe" />
+                @if (IsLogin == false)
+                {
+                    <div class="form-group row">
+                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                            <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Password must atleast" ContentMessages="Constants.VALID_PASSWORD_REQUIREMENTS" ShowContentAsList="true" />
+                        </div>
+                    </div>
+                }
+
+                <div class="form-group form-check row">
+                    <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                        <SfCheckBox Label="Remember me?" @bind-Checked="@_inputModel.RememberMe" />
+                    </div>
                 </div>
-            </div>
 
-            <SfButton Type="submit" CssClass="btn btn-primary" Content="@_btnContent" />
+                <div class="form-group row">
+                    <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                        <SfButton Type="submit" CssClass="btn btn-primary" Content="@_btnContent" />
+                    </div>
+                </div>
+
+            </div>
         </EditForm>
     </CardContent>
 </SfCard>
 
+<style>
+    .e-input-picture::before {
+        content: '\e335';
+        font-family: e-icons;
+    }
+
+    .e-input-calendar::before {
+        content: '\e901';
+        font-family: e-icons;
+        font-size: 13px;
+    }
+
+    .content-wrapper {
+        width: 90%;
+        margin: 0 auto;
+        min-width: 85px;
+    }
+
+        .content-wrapper div.row {
+            padding: 15px 0px;
+        }
+
+    .custom-padding-05 {
+        padding-top: 5px;
+    }
+
+    @@media only screen and (max-width: 480px) {
+        .content-wrapper {
+            width: 92%;
+        }
+
+        .col-xs-6,
+        .col-xs-4,
+        .col-xs-12 {
+            padding: 10px 5px;
+            width: 100%;
+        }
+
+        .content-wrapper div.row {
+            padding: 0px;
+        }
+    }
+
+    #description td {
+        vertical-align: top;
+    }
+
+    .e-outline.e-float-input,
+    .e-outline.e-float-input.e-control-wrapper {
+        margin-top: 0;
+    }
+
+    .fabric .row.material2,
+    .bootstrap .row.material2,
+    .bootstrap4 .row.material2,
+    .highcontrast .row.material2 {
+        display: none;
+    }
+</style>
+
 @code
 {
+    private EditContext _formContext;
+
+    private SfTextBox _tbEmail;
+    private string _emailCssClass;
+
+    private SfTextBox _tbPassword;
+    private Regex _passwordRegex;
+    private string _passwordCssClass;
+
+    //public event EventHandler<ValidationStateChangedEventArgs> _validationStateChanged;
+
     private string _btnContent;
 
     private string _resultTitle;
@@ -52,7 +149,9 @@
     [Parameter]
     public bool IsLogin { get; set; }
 
-    private InputModel inputModel = new InputModel();
+
+    private InputModel _inputModel;
+
     private class InputModel
     {
         [Required]
@@ -61,6 +160,9 @@
 
         [Required]
         [DataType(DataType.Password)]
+        [RegularExpression(
+            pattern: Constants.VALID_PASSWORD_PATTERN,
+            ErrorMessage = Constants.PASSWORD_ERROR_MESSAGE)]
         public string Password { get; set; }
 
         [Display(Name = "Remember me?")]
@@ -69,15 +171,15 @@
 
     private async Task SubmitForm()
     {
-        bool isValidEmail = await ValidateEmail(inputModel.Email);
+        //bool isValidEmail = ValidateEmail(_inputModel.Email);
 
-        if (isValidEmail == false)
-        {
-            // TODO Use validationMessage instead of alert
-            _resultTitle = "Invalid email";
-            _resultErrors = new[] { "Only common email domains are allowed. Use another email address please." };
-            return;
-        }
+        //if (isValidEmail == false)
+        //{
+        //    // TODO Use validationMessage instead of alert
+        //    _resultTitle = "Invalid email";
+        //    _resultErrors = new[] { "Only common email domains are allowed. Use another email address please." };
+        //    return;
+        //}
 
         string requestUrl;
         if (IsLogin)
@@ -86,7 +188,7 @@
             requestUrl = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CREATE_BY_CREDENTIALS}";
 
 
-        var result = await _httpClient.PutAsJsonAsync(requestUrl, inputModel);
+        var result = await _httpClient.PutAsJsonAsync(requestUrl, _inputModel);
         var resultContentAsString = await result.Content.ReadAsStringAsync();
 
         if (result.IsSuccessStatusCode)
@@ -114,15 +216,87 @@
 
         _resultErrors = new string[0];
 
+        _inputModel = new InputModel();
+
+        _formContext = new EditContext(_inputModel);
+
+        _passwordRegex = new Regex(Constants.VALID_PASSWORD_PATTERN);
+
         return base.OnInitializedAsync();
     }
 
-    private Task<bool> ValidateEmail(string email)
+    private void OnEmailBlur(FocusOutEventArgs args)
     {
-        var domainAndTopLvlDomain = email.Split('@')[1];
+        CheckForm();
+    }
 
-        var domain = domainAndTopLvlDomain.Split('.')[0];
+    private void OnPasswordBlur(FocusOutEventArgs args)
+    {
+        CheckForm();
+    }
 
-        return Task.FromResult<bool>(Constants.VALID_EMAIL_DOMAINS.Contains(domain));
+    private void CheckForm()
+    {
+        if (_formContext.Validate() == false)
+        {
+            if(ValidateEmail(_inputModel.Email) == false)
+                _emailCssClass = "e-error";
+            else
+                _emailCssClass = "e-success";
+
+            if (ValidatePassword(_inputModel.Password) == false)
+                _passwordCssClass = "e-error";
+            else
+                _passwordCssClass = "e-success";
+        }
+        else
+        {
+            _emailCssClass = "e-success";
+            _passwordCssClass = "e-success";
+        }
+
+        StateHasChanged();
+    }
+
+    private bool ValidateEmail(string email)
+    {
+        if (String.IsNullOrEmpty(email))
+            return false;
+
+        if (email.Length < 6)
+            return false;
+
+        string domainAndTopLvlDomain;
+        string domain;
+
+        try
+        {
+            domainAndTopLvlDomain = email.Split('@')[1];
+
+            domain = domainAndTopLvlDomain.Split('.')[0];
+        }
+        catch
+        {
+            return false;
+        }
+
+        if (Constants.VALID_EMAIL_DOMAINS.Contains(domain) == false)
+            return false;
+
+        try
+        {
+            var _email = new MailAddress(email.Normalize());
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool ValidatePassword(string password)
+    {
+        return _passwordRegex.IsMatch(password);
     }
 }

@@ -1,4 +1,5 @@
-﻿using MTS.PL.Infra.InjectionLibrary;
+﻿using MTS.Core.GlobalLibrary;
+using MTS.PL.Infra.InjectionLibrary;
 using System;
 using System.ComponentModel.DataAnnotations;
 using static MTS.Core.GlobalLibrary.Constants;
@@ -31,6 +32,7 @@ namespace MTS.DAL.Infra.APILibrary
 
         [Display(Name = "Password", ShortName = "Password", Description = "Super duper secret password for the user's account")]
         [DataType(DataType.Password)]
+        [RegularExpression(VALID_PASSWORD_PATTERN)]
         public string Password { get; set; }
 
         [Display(Name = "Email", ShortName = "Email", Description = "Email address of the user")]

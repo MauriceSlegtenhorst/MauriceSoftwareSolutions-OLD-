@@ -2,38 +2,61 @@
     .content {
         padding: 10px;
     }
+    
+    .icon-size {
+        font-size: 25px;
+    }
 </style>
 
 <div class="@_topCSSClass" role="alert">
     @if (!String.IsNullOrEmpty(Title)) 
     {
-    <div class="row">
-        <span class="@_iconCSSClass" aria-hidden="true" />
-        <div class="content">
-            <p><h4> @Title</h4></p>
-        </div>
-    </div>    
+        <div class="row">
+            <span class="icon-size @_iconCSSClass" aria-hidden="true" />
+            <div class="content">
+                <p>
+                    <h4> @Title</h4>
+                </p>
+            </div>
+        </div>    
     }
     
     @if (!String.IsNullOrEmpty(Subtitle))
     {
         <div class="row">
-            <p class="content">
-                @Subtitle
-            </p>
+            <div class="content">
+                <p>
+                    <h5>@Subtitle</h5>
+                </p>
+            </div>
         </div>
     }
 
     @if (ContentMessages != null)
     {
         <div class="row">
-            <p class="content">
-                @foreach (string message in ContentMessages)
-                {
-                    <span>@message</span>
-                }
-            </p>
+            @{
+            if (ShowContentAsList == true)
+            {
+                <div class="content list-group">
+                    @foreach (string message in ContentMessages)
+                    {
+                    <span>- @message</span>
+                    }
+                </div>
+            }
+
+            if(ShowContentAsList == false)
+            {
+        <div>
+            @foreach (string message in ContentMessages)
+            {
+                <span>@message</span>
+            }
         </div>
+        }
+    }
+    </div>
     }
 </div>
 
@@ -49,6 +72,9 @@
 
     [Parameter]
     public IEnumerable<string> ContentMessages { get; set; }
+
+    [Parameter]
+    public bool ShowContentAsList { get; set; }
 
     private string _topCSSClass;
     private string _iconCSSClass;

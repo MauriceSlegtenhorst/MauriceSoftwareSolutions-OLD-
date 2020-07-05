@@ -99,5 +99,23 @@ namespace MTS.Core.GlobalLibrary
         }
 
         public static string[] VALID_EMAIL_DOMAINS = new string[] { "gmail", "yahoo", "hotmail", "outlook", "icloud", "me", "mac",  "aol", "msn", "wanadoo", "comcast", "live", "rediffmail", "outlook", "googlemail", "tiscali", "t-online", "telenet" };
+
+        /// <summary>
+        /// At least one upper case English letter,     (?=.*?[A-Z])
+        /// At least one lower case English letter,     (?=.*?[a - z])
+        /// At least one digit,                         (?=.*?[0 - 9])
+        /// At least one special character,             (?=.*?[#?!@$%^&*-])
+        /// Minimum eight in length.{8,}                (with the anchors) 
+        /// </summary>
+        public const string VALID_PASSWORD_PATTERN = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
+        public static string[] VALID_PASSWORD_REQUIREMENTS = new[]
+        {
+            "Contain one upper case letter",
+            "Contain one lower case letter",
+            "Contain one diget",
+            "Contain one special character",
+            "Have a length of 8"
+        };
+        public const string PASSWORD_ERROR_MESSAGE = "This password does not meet the requirements";
     }
 }

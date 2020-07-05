@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using MTS.DAL.DatabaseAccess.Utils;
 using MTS.DAL.DatabaseAccess.DataContext;
 
-namespace MTS.DAL.DatabaseAccess.Identity
+namespace MTS.DAL.DatabaseAccess.CRUD.Identity
 {
     public sealed class IdentityAdapter : IIdentityAdapter
     {
@@ -47,8 +47,8 @@ namespace MTS.DAL.DatabaseAccess.Identity
 
             var result = await _signInManager.PasswordSignInAsync(
                 credentials.Email,
-                credentials.Password, 
-                isPersistent: credentials.RememberMe, 
+                credentials.Password,
+                isPersistent: credentials.RememberMe,
                 lockoutOnFailure: true);
 
             if (!result.Succeeded)
@@ -58,19 +58,19 @@ namespace MTS.DAL.DatabaseAccess.Identity
 
                 if (result.IsNotAllowed)
                     responses.Add($"You are not allowed to login for some time");
-                
+
                 if (responses.Count == 0)
                     responses.Add("Wrong password");
 
                 responses.Add($"Login attempts remaining: { _signInManager.Options.Lockout.MaxFailedAccessAttempts - efUserAccount.AccessFailedCount }");
-                
+
                 return new AuthentificationResult { IsSucceeded = false, Errors = responses };
             }
 
-            return new AuthentificationResult 
+            return new AuthentificationResult
             {
                 IsSucceeded = true,
-                UserToken = await UserTokenBuilder.BuildToken(efUserAccount, _userManager, _dbConfigurations.IssuerSigningKey) 
+                UserToken = await UserTokenBuilder.BuildToken(efUserAccount, _userManager, _dbConfigurations.IssuerSigningKey)
             };
         }
 

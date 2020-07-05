@@ -13,6 +13,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static MTS.Core.GlobalLibrary.Constants;
+using MTS.DAL.DatabaseAccess.DataContext;
+using Microsoft.EntityFrameworkCore;
+using MTS.Core.GlobalLibrary;
 
 namespace MTS.DAL.DatabaseAccess.CRUD.Account
 {
@@ -21,15 +24,18 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
         private readonly UserManager<EFUserAccount> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
+        private readonly ISeedData _seedData;
 
         public AccountAdapter(
             UserManager<EFUserAccount> userManager,
             RoleManager<IdentityRole> roleManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ISeedData seedData)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _emailSender = emailSender;
+            _seedData = seedData;
         }
 
         #region Create
@@ -38,6 +44,8 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
         [AllowAnonymous]
         public async Task<IEFUserAccount> CreateByEmailAndPasswordAsync(string email, string password)
         {
+            await EnsureDefaultAccountsExists();
+
             if (String.IsNullOrEmpty(email) || String.IsNullOrEmpty(password))
                 throw new ArgumentException("Parameters cannot be null or empty");
 
@@ -261,6 +269,36 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
             var result = await _userManager.ConfirmEmailAsync(userAccount, code);
 
             return result;
+        }
+
+        private async Task EnsureDefaultAccountsExists()
+        {
+            if (await _userManager.Users.AnyAsync() == false)
+            {
+                var accountsToAdd = await _seedData.GetDefaultAccountsSeedDataAsync();
+
+                foreach (var account in accountsToAdd)
+                {
+                    IdentityResult result = await _userManager.CreateAsync(account, "MTS1991password!");
+
+                    if (result.Succeeded == false)
+                        throw new Exception($"Something went wrong while creating {account.Email} account.");
+
+                    if (account.Email == "mauricetechsolution@outlook.com")
+                    {
+                        var accountWithId = await _userManager.FindByEmailAsync(account.Email);
+
+                        if (accountWithId == null)
+                            throw new NullReferenceException("AccountWithId was null");
+
+                        var roleResult = await _userManager.AddToRoleAsync(accountWithId, Security.ADMINISTRATOR);
+
+                        if(roleResult.Succeeded == false)
+                            throw new Exception($"Something went wrong while aading a role to the {account.Email} account.");
+
+                    }
+                }
+            }
         }
     }
 

@@ -7,7 +7,7 @@ using MTS.DAL.DatabaseAccess.DataContext;
 using MTS.DAL.Infra.EmailLibrary;
 using MTS.DAL.Infra.Entities;
 using MTS.DAL.Infra.Interfaces;
-using MTS.DAL.DatabaseAccess.Identity;
+using MTS.DAL.DatabaseAccess.CRUD.Identity;
 
 namespace MTS.DAL.DatabaseAccess.Extensions
 {
@@ -46,6 +46,8 @@ namespace MTS.DAL.DatabaseAccess.Extensions
             services.Configure<AuthMessageSenderOptions>(configurations.AuthMessageSenderOptions);
 
             services.AddSingleton<IEmailSender, EmailSender>();
+
+            services.AddSingleton<ISeedData, SeedData>();
 
             services.AddTransient<IAccountAdapter, AccountAdapter>();
 

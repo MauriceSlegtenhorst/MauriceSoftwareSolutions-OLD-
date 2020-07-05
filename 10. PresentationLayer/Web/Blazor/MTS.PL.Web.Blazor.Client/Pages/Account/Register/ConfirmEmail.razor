@@ -41,7 +41,6 @@ else
         confirmEmailHolder.UserId = UserId;
         confirmEmailHolder.Code = Code;
 
-
         string uri = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CONFIRM_EMAIL}";
 
         var result = await _httpClient.PutAsJsonAsync(uri, confirmEmailHolder);
