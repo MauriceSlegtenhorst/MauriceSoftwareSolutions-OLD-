@@ -17,13 +17,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\20. BusinessLayer\Infra\MTS.BL.Infra.APILibrary\MTS.BL.Infra.APILibrary.csproj" />
-    <ProjectReference Include="..\..\..\..\50. Core\MTS.Core.GlobalLibrary\MTS.Core.GlobalLibrary.csproj" />
-    <ProjectReference Include="..\..\..\Infra\MTS.PL.Infra.BlazorLibrary\MTS.PL.Infra.BlazorLibrary.csproj" />
+    <Folder Include="Pages\Administrator\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Administrator\" />
+    <ProjectReference Include="..\..\..\Infra\MTS.PL.Infra.BlazorLibrary\MTS.PL.Entities.Standard.csproj" />
+    <ProjectReference Include="..\..\..\Infra\MTS.PL.Infra.InjectionLibrary\MTS.PL.Infra.Interfaces.Standard.csproj" />
   </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="cd &quot;$(ProjectDir)&quot; &#xD;&#xA;SyncfusionLicenseRegister.bat PreBuild Program.cs" />
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="cd &quot;$(ProjectDir)&quot; &#xD;&#xA;SyncfusionLicenseRegister.bat PostBuild Program.cs" />
+  </Target>
 
 </Project>

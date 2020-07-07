@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace MTS.DAL.DatabaseAccess.Utils
+namespace MTS.PL.DatabaseAccess.Utils
 {
     internal sealed class AuthenticationOptionsBuilder
     {

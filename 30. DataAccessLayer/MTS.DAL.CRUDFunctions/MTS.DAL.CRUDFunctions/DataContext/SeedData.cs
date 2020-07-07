@@ -1,20 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using MTS.DAL.Infra.Entities;
-using System;
+﻿using MTS.PL.Infra.Interfaces.Standard;
+using MTS.PL.Entities.Core;
+using MTS.PL.Interfaces.Standard;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace MTS.DAL.DatabaseAccess.DataContext
+namespace MTS.PL.DatabaseAccess.DataContext
 {
     internal sealed class SeedData : ISeedData
     {
-        public async Task<IEnumerable<EFUserAccount>> GetDefaultAccountsSeedDataAsync()
+        public async Task<IEnumerable<IBLUserAccount>> GetDefaultAccountsSeedDataAsync()
         {
-            var accountHolder = new List<EFUserAccount>();
+            var accountHolder = new List<IBLUserAccount>();
 
             accountHolder.AddRange(await CreateAdminAccounts());
             accountHolder.AddRange(await CreatePrivilegedEmployeeAccounts());
@@ -22,11 +19,11 @@ namespace MTS.DAL.DatabaseAccess.DataContext
             return accountHolder;
         }
 
-        private Task<IEnumerable<EFUserAccount>> CreateAdminAccounts()
+        private Task<IEnumerable<IBLUserAccount>> CreateAdminAccounts()
         {
-            var accountHolder = new EFUserAccount[]
+            var accountHolder = new IBLUserAccount[]
             {
-                new EFUserAccount
+                new DALUserAccount
                 {
                     IsAdmitted = true,
                     EmailConfirmed = true,
@@ -37,7 +34,7 @@ namespace MTS.DAL.DatabaseAccess.DataContext
                     PhoneNumber = "0645377536",
                 },
 
-                new EFUserAccount
+                new DALUserAccount
                 {
                     IsAdmitted = true,
                     EmailConfirmed = true,
@@ -52,11 +49,11 @@ namespace MTS.DAL.DatabaseAccess.DataContext
             return Task.FromResult(accountHolder.AsEnumerable());
         }
 
-        private Task<IEnumerable<EFUserAccount>> CreatePrivilegedEmployeeAccounts()
+        private Task<IEnumerable<IBLUserAccount>> CreatePrivilegedEmployeeAccounts()
         {
-            var accountHolder = new EFUserAccount[]
+            var accountHolder = new IBLUserAccount[]
             {
-                new EFUserAccount
+                new DALUserAccount
                 {
                     IsAdmitted = true,
                     EmailConfirmed = true,
@@ -67,7 +64,7 @@ namespace MTS.DAL.DatabaseAccess.DataContext
                     PhoneNumber = "0612345678",
                 },
 
-                new EFUserAccount
+                new DALUserAccount
                 {
                     IsAdmitted = true,
                     EmailConfirmed = true,

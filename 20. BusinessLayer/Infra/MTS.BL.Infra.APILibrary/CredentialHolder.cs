@@ -1,11 +1,8 @@
-﻿using MTS.PL.Infra.InjectionLibrary;
-using System;
-using System.Collections.Generic;
+﻿using MTS.PL.Infra.Interfaces.Standard;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
-namespace MTS.DAL.Infra.APILibrary
+namespace MTS.PL.Entities.Standard
 {
     public sealed class CredentialHolder : ICredentialHolder
     {

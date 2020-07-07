@@ -1,49 +1,48 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MTS.DAL.Infra.APILibrary;
-using MTS.DAL.Infra.Entities;
-using MTS.DAL.Infra.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MTS.DAL.DatabaseAccess.Utils;
-using MTS.DAL.DatabaseAccess.DataContext;
+using MTS.PL.DatabaseAccess.Utils;
+using MTS.PL.DatabaseAccess.DataContext;
+using MTS.PL.Entities.Core;
+using MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter;
+using MTS.PL.Infra.Interfaces.Standard;
+using MTS.PL.Entities.Standard;
 
-namespace MTS.DAL.DatabaseAccess.CRUD.Identity
+namespace MTS.PL.DatabaseAccess.CRUD.Identity
 {
-    public sealed class IdentityAdapter : IIdentityAdapter
+    public sealed class IdentityAdapter : IdentityAdapterHelper, IIdentityAdapter
     {
-        private readonly SignInManager<EFUserAccount> _signInManager;
-        private readonly UserManager<EFUserAccount> _userManager;
+        private readonly SignInManager<DALUserAccount> _signInManager;
+        private readonly UserManager<DALUserAccount> _userManager;
         private readonly DbConfigurations _dbConfigurations;
 
         public IdentityAdapter(
-            SignInManager<EFUserAccount> signInManager,
-            UserManager<EFUserAccount> userManager,
-            DbConfigurations dbConfigurations)
+            SignInManager<DALUserAccount> signInManager,
+            UserManager<DALUserAccount> userManager,
+            DbConfigurations dbConfigurations) : base(signInManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _dbConfigurations = dbConfigurations;
         }
 
-        public async Task<AuthentificationResult> LogIn(CredentialHolder credentials)
+        public async Task<IAuthentificationResult> LogIn(ICredentialHolder credentials)
         {
-            EFUserAccount efUserAccount = await _userManager.FindByEmailAsync(credentials.Email);
+            DALUserAccount efUserAccount = await _userManager.FindByEmailAsync(credentials.Email);
 
             if (efUserAccount == null)
             {
-                return new AuthentificationResult { IsSucceeded = false, Errors = new[] { "No user exists with this email and password" } };
+                return new BLAuthentificationResult { IsSucceeded = false, Errors = new[] { "No user exists with this email and password" } };
             }
 
             List<string> responses = new List<string>();
 
-            if (!efUserAccount.EmailConfirmed)
-                responses.Add("Email not yet confirmed by user");
+            GetEmailConfirmedMessages(efUserAccount, responses);
 
-            if (!efUserAccount.IsAdmitted)
-                responses.Add("Email not yet confirmed by admin");
+            GetIsAdmittedMessages(efUserAccount, responses);
 
             if (responses.Count > 0)
-                return new AuthentificationResult { IsSucceeded = false, Errors = responses };
+                return new BLAuthentificationResult { IsSucceeded = false, Errors = responses };
 
             var result = await _signInManager.PasswordSignInAsync(
                 credentials.Email,
@@ -51,25 +50,16 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Identity
                 isPersistent: credentials.RememberMe,
                 lockoutOnFailure: true);
 
-            if (!result.Succeeded)
+            if (result.Succeeded == false)
             {
-                if (result.IsLockedOut)
-                    responses.Add($"User is now locked out for some time");
+                HandleNegativeResult(result, efUserAccount, responses);
 
-                if (result.IsNotAllowed)
-                    responses.Add($"You are not allowed to login for some time");
-
-                if (responses.Count == 0)
-                    responses.Add("Wrong password");
-
-                responses.Add($"Login attempts remaining: { _signInManager.Options.Lockout.MaxFailedAccessAttempts - efUserAccount.AccessFailedCount }");
-
-                return new AuthentificationResult { IsSucceeded = false, Errors = responses };
+                return new BLAuthentificationResult { IsSucceeded = false, Errors = responses };
             }
 
             try
             {
-                var authResult = new AuthentificationResult
+                var authResult = new BLAuthentificationResult
                 {
                     IsSucceeded = true,
                     UserToken = await UserTokenBuilder.BuildToken(efUserAccount, _userManager, _dbConfigurations.IssuerSigningKey)

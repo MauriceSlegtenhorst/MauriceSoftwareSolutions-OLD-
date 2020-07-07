@@ -4,19 +4,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using MTS.DAL.Infra.APILibrary;
 using MTS.Core.GlobalLibrary;
 using MTS.Core.GlobalLibrary.Utils;
-using MTS.DAL.Infra.Interfaces;
-using MTS.PL.Infra.InjectionLibrary;
 using System.Linq;
-using MTS.DAL.API.Utils.ExceptionHandler;
+using MTS.PL.API.Utils.ExceptionHandler;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
+using MTS.PL.Infra.Interfaces.Standard;
+using MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter;
+using MTS.PL.Infra.Entities.Standard;
+using MTS.PL.Entities.Core;
+using MTS.PL.Entities.Standard;
 
-namespace MTS.DAL.API.Controllers
+namespace MTS.PL.API.Controllers
 {
     [ApiController]
     [Route(Constants.APIControllers.ACCOUNT)]
@@ -43,20 +44,20 @@ namespace MTS.DAL.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetByIdAsync([FromBody] string id)
         {
-            if (String.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(id))
                 return _exceptionHandler.HandleException(new NullReferenceException("Parameter id is required. Id  was null or empty."), isServerSideException: false);
 
-            IUserAccount userAccount;
+            IPLUserAccount userAccount;
 
             try
             {
                 var efUserAccount = await _accountAdapter.ReadByIdAsync(id);
 
-                userAccount = new UserAccount();
+                userAccount = new PLUserAccount();
 
-                PropertyCopier<IEFUserAccount, IUserAccount>.Copy(efUserAccount, userAccount);
+                PropertyCopier<DALUserAccount, PLUserAccount>.Copy((DALUserAccount)efUserAccount, (PLUserAccount)userAccount);
 
-                if (String.IsNullOrEmpty(userAccount.Id) || String.IsNullOrEmpty(userAccount.Email))
+                if (string.IsNullOrEmpty(userAccount.Id) || string.IsNullOrEmpty(userAccount.Email))
                     throw new NullReferenceException("UserAccount has either no Id or email. Probably something went wrong during copying or retreiving data.");
             }
             catch (Exception ex)
@@ -70,47 +71,50 @@ namespace MTS.DAL.API.Controllers
         [Authorize]
         [Route(Constants.AccountControllerEndpoints.GET_BY_EMAIL)]
         [HttpGet]
-        public async Task<IActionResult> GetByEmailAsync([FromBody] CredentialHolder credentialHolder)
+        public async Task<IActionResult> GetByEmailAsync([FromBody] ICredentialHolder credentialHolder)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return _exceptionHandler.HandleException(new NullReferenceException("ModelState was invalid"), isServerSideException: false);
 
-            IUserAccount userAccount;
+            IPLUserAccount plUserAccount;
 
             try
             {
-                var efUserAccount = await _accountAdapter.ReadByEmailAsync(credentialHolder);
+                var dalUserAccount = await _accountAdapter.ReadByEmailAsync(credentialHolder);
 
-                userAccount = new UserAccount();
+                plUserAccount = new PLUserAccount();
 
-                PropertyCopier<IEFUserAccount, IUserAccount>.Copy(efUserAccount, userAccount);
+                PropertyCopier<DALUserAccount, PLUserAccount>.Copy((DALUserAccount)dalUserAccount, (PLUserAccount)plUserAccount);
 
-                if (String.IsNullOrEmpty(userAccount.Id) || String.IsNullOrEmpty(userAccount.Email))
-                    throw new NullReferenceException("UserAccount has either no Id or email. Probably something went wrong during copying or retreiving data.");
+                if (string.IsNullOrEmpty(plUserAccount.Id))
+                    throw new NullReferenceException("UserAccount has either no Id . Probably something went wrong during copying or retreiving data.");
+
+                if(string.IsNullOrEmpty(plUserAccount.Email))
+                    throw new NullReferenceException("UserAccount has either no email. Probably something went wrong during copying or retreiving data.");
             }
             catch (Exception ex)
             {
                 return _exceptionHandler.HandleException(ex, isServerSideException: true);
             }
 
-            return Ok(userAccount);
+            return Ok(plUserAccount);
         }
 
         [Authorize(
-            Roles = 
+            Roles =
             Constants.Security.ADMINISTRATOR + "," +
             Constants.Security.PRIVILEGED_EMPLOYEE)]
         [Route(Constants.AccountControllerEndpoints.GET_ALL)]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            IEnumerable<IEFUserAccount> userAccounts;
+            IEnumerable<IBLUserAccount> dalUserAccounts;
 
             try
             {
-                userAccounts = await _accountAdapter.ReadAllAsync();
+                dalUserAccounts = await _accountAdapter.ReadAllAsync();
 
-                if (userAccounts.Any() == false)
+                if (dalUserAccounts.Any() == false)
                     throw new Exception("No accounts found");
             }
             catch (Exception ex)
@@ -118,7 +122,7 @@ namespace MTS.DAL.API.Controllers
                 return _exceptionHandler.HandleException(ex, isServerSideException: true);
             }
 
-            return Ok(userAccounts);
+            return Ok(dalUserAccounts);
         }
         #endregion
 
@@ -134,7 +138,7 @@ namespace MTS.DAL.API.Controllers
             {
                 var newUserAccount = await _accountAdapter.CreateByEmailAndPasswordAsync(credentialHolder.Email, credentialHolder.Password);
 
-                if (newUserAccount != null && !String.IsNullOrEmpty(newUserAccount.Id) && !String.IsNullOrEmpty(newUserAccount.Email))
+                if (newUserAccount != null && !string.IsNullOrEmpty(newUserAccount.Id) && !string.IsNullOrEmpty(newUserAccount.Email))
                 {
                     return new CreatedAtActionResult(
                             actionName: Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT,
@@ -159,7 +163,7 @@ namespace MTS.DAL.API.Controllers
             Constants.Security.EMPLOYEE)]
         [Route(Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT)]
         [HttpPut]
-        public async Task<IActionResult> CreateByAccount([FromBody] UserAccount userAccount)
+        public async Task<IActionResult> CreateByAccount([FromBody] PLUserAccount userAccount)
         {
             if (!ModelState.IsValid)
                 return _exceptionHandler.HandleException(new Exception("ModelState invalid"), isServerSideException: false);
@@ -168,7 +172,7 @@ namespace MTS.DAL.API.Controllers
             {
                 var newUserAccount = await _accountAdapter.CreateByAccountAsync(userAccount);
 
-                if (newUserAccount != null && !String.IsNullOrEmpty(newUserAccount.Id) && !String.IsNullOrEmpty(newUserAccount.Email))
+                if (newUserAccount != null && !string.IsNullOrEmpty(newUserAccount.Id) && !string.IsNullOrEmpty(newUserAccount.Email))
                 {
                     return new CreatedAtActionResult(
                             actionName: Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT,
@@ -191,7 +195,7 @@ namespace MTS.DAL.API.Controllers
         #region Update
         [Route(Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT)]
         [HttpPatch]
-        public async Task<IActionResult> UpdateByAccount([FromBody] UserAccount userAccount)
+        public async Task<IActionResult> UpdateByAccount([FromBody] PLUserAccount userAccount)
         {
             if (ModelState.IsValid)
             {
@@ -231,7 +235,7 @@ namespace MTS.DAL.API.Controllers
             else
             {
                 return _exceptionHandler.HandleException(new Exception("Something went wrong during deletion. The account might still exist."), isServerSideException: true);
-            } 
+            }
         }
         #endregion
 
@@ -244,8 +248,7 @@ namespace MTS.DAL.API.Controllers
             if (!ModelState.IsValid)
                 return _exceptionHandler.HandleException(new Exception("ModelState was invalid"), isServerSideException: false);
 
-            var result = new IdentityResult();
-
+            IdentityResult result;
             try
             {
                 result = await _accountAdapter.AddRolesToAccountAsync(userRolePairHolder.Id, userRolePairHolder.Roles);
@@ -273,18 +276,18 @@ namespace MTS.DAL.API.Controllers
         [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
         [Route(Constants.AccountControllerEndpoints.REMOVE_ROLES_FROM_ACCOUNT)]
         [HttpPatch]
-        public async Task<IActionResult> RemoveRolesFromAccountAsync(UserRolePairHolder userRolePairHolder)
+        public async Task<IActionResult> RemoveRolesFromAccountAsync([FromBody] UserRolePairHolder userRolePairHolder)
         {
             if (!ModelState.IsValid)
                 return _exceptionHandler.HandleException(new Exception("ModelState was invalid"), isServerSideException: false);
 
-            var result = new IdentityResult();
+            IdentityResult result;
 
             try
             {
                 result = await _accountAdapter.RemoveRolesFromAccountAsync(userRolePairHolder.Id, userRolePairHolder.Roles);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return _exceptionHandler.HandleException(ex, isServerSideException: true);
             }
@@ -326,7 +329,7 @@ namespace MTS.DAL.API.Controllers
                     }
 
                     return _exceptionHandler.HandleException(new Exception($"Something went wrong confirming the email. {stringBuilder}"), isServerSideException: true);
-                } 
+                }
             }
             else
             {

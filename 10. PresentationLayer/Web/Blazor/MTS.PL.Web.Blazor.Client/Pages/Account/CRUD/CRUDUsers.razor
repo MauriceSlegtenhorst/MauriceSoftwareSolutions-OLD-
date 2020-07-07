@@ -9,20 +9,20 @@
     <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Danger" Title="@ErrorTitle" ContentMessages="@ErrorDetails" />
 }
 
-<SfGrid TValue="IUserAccount" AllowPaging="true" Toolbar="@ToolBarItems" ID="Grid" AllowSorting="true" Width="100%">
+<SfGrid TValue="IPLUserAccount" AllowPaging="true" Toolbar="@ToolBarItems" ID="Grid" AllowSorting="true" Width="100%">
 
     <GridEditSettings AllowAdding="true"
                       AllowEditing="true"
                       AllowDeleting="true"
                       Mode="EditMode.Normal" />
 
-    <GridEvents TValue="IUserAccount"
+    <GridEvents TValue="IPLUserAccount"
                 OnActionFailure="@ActionFailure" />
 
     @{
         if (IsInitialRender)
         {
-            <SfDataManager AdaptorInstance="_APIAccountsAdapter" Adaptor="Adaptors.CustomAdaptor"/>
+            <SfDataManager AdaptorInstance="@typeof(APIAccountsAdapter)" Adaptor="Adaptors.CustomAdaptor"/>
         }
     }
 
@@ -31,7 +31,7 @@
                 List<Exception> exceptions = null;
                 try
                 {
-                    PropertyInfo[] propertyInfos = typeof(IUserAccount).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                    PropertyInfo[] propertyInfos = typeof(IPLUserAccount).GetProperties(BindingFlags.Public | BindingFlags.Instance);
                     if (propertyInfos.Any())
                     {
 
@@ -87,8 +87,6 @@
 </SfGrid>
 
 @code{
-    private APIAccountsAdapter _APIAccountsAdapter;
-
     public static string ErrorTitle { get; set; }
     public static string[] ErrorDetails { get; set; } = new string[0];
     public bool IsInitialRender = false;
@@ -126,7 +124,7 @@
 
         try
         {
-            _APIAccountsAdapter = new APIAccountsAdapter(_httpClient, JsonConvert.DeserializeObject<List<UserAccount>>(await result.Content.ReadAsStringAsync()));
+            APIAccountsAdapter.PLUserAccounts = JsonConvert.DeserializeObject<List<IPLUserAccount>>(await result.Content.ReadAsStringAsync());
         }
         catch (Exception ex)
         {

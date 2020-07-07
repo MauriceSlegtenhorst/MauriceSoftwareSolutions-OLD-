@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MTS.DAL.Infra.Entities;
-using MTS.DAL.Infra.Interfaces;
-using System;
-using System.Threading.Tasks;
+using MTS.PL.Entities;
+using MTS.PL.Entities.Core;
 
-namespace MTS.DAL.DatabaseAccess.DataContext
+namespace MTS.PL.DatabaseAccess.DataContext
 {
-    public sealed class ApplicationDbContext : IdentityDbContext<EFUserAccount>
+    public sealed class ApplicationDbContext : IdentityDbContext<DALUserAccount>
     {
-        public DbSet<EFUserAccount> UserAccounts { get; set; }
+        public DbSet<DALUserAccount> UserAccounts { get; set; }
         public DbSet<Credit> Credits { get; set; }
 
         public ApplicationDbContext(

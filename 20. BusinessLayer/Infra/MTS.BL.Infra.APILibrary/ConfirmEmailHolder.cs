@@ -1,9 +1,6 @@
-﻿using MTS.PL.Infra.InjectionLibrary;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MTS.PL.Infra.Interfaces.Standard;
 
-namespace MTS.DAL.Infra.APILibrary
+namespace MTS.PL.Entities.Standard
 {
     public sealed class ConfirmEmailHolder : IConfirmEmailHolder
     {

@@ -6,13 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\20. BusinessLayer\Infra\MTS.BL.Infra.APILibrary\MTS.BL.Infra.APILibrary.csproj" />
-    <ProjectReference Include="..\..\..\MTS.DAL.Infra.Entities\MTS.DAL.Infra.Entities.csproj" />
-    <ProjectReference Include="..\..\Infra\EmailHandler\MTS.DAL.Infra.EmailLibrary.csproj" />
+    <ProjectReference Include="..\..\..\10. PresentationLayer\Infra\MTS.PL.Infra.BlazorLibrary\MTS.PL.Entities.Standard.csproj" />
+    <ProjectReference Include="..\..\..\20. BusinessLayer\Infra\MTS.BL.Infra.APILibrary\MTS.BL.Entities.Standard.csproj" />
+    <ProjectReference Include="..\..\..\MTS.DAL.Infra.Entities\MTS.DAL.Entities.Core.csproj" />
+    <ProjectReference Include="..\..\..\MTS.DAL.Infra.Interfaces\MTS.DAL.Interfaces.Standard.csproj" />
+    <ProjectReference Include="..\..\Infra\EmailHandler\MTS.BL.Email.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

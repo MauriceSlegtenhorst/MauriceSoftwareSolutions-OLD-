@@ -4,14 +4,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MTS.DAL.API.Utils.ExceptionHandler;
-using MTS.DAL.Infra.APILibrary;
-using MTS.DAL.Infra.Interfaces;
-using static MTS.Core.GlobalLibrary.Constants;
+using MTS.PL.Entities.Standard;
+using MTS.PL.API.Utils.ExceptionHandler;
+using MTS.Core.GlobalLibrary;
+using MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter;
 
-namespace MTS.DAL.API.Controllers
+namespace MTS.PL.API.Controllers
 {
-    [Route(APIControllers.IDENTITY)]
+    [Route(Constants.APIControllers.IDENTITY)]
     [ApiController]
     public class IdentityController : ControllerBase
     {
@@ -27,7 +27,7 @@ namespace MTS.DAL.API.Controllers
         }
 
         [AllowAnonymous]
-        [Route(IdentityControllerEndpoints.LOG_IN)]
+        [Route(Constants.IdentityControllerEndpoints.LOG_IN)]
         [HttpPut]
         public async Task<IActionResult> LogInAsync([FromBody] CredentialHolder credentials)
         {
@@ -36,11 +36,7 @@ namespace MTS.DAL.API.Controllers
 
             var result = await _identityAdapter.LogIn(credentials);
 
-            if (result.IsSucceeded)
-            {
-                return Ok(result.UserToken);
-            }
-            else
+            if(result.IsSucceeded == false)
             {
                 StringBuilder stringBuilder = new StringBuilder();
 
@@ -51,9 +47,11 @@ namespace MTS.DAL.API.Controllers
 
                 return _exceptionHandler.HandleException(new Exception(stringBuilder.ToString()), isServerSideException: true);
             }
+
+            return Ok(result.UserToken);
         }
 
-        [Route(IdentityControllerEndpoints.LOG_OUT)]
+        [Route(Constants.IdentityControllerEndpoints.LOG_OUT)]
         [HttpHead]
         public async Task<IActionResult> LogOutAsync()
         {
@@ -67,7 +65,7 @@ namespace MTS.DAL.API.Controllers
             {
                 return _exceptionHandler.HandleException(new Exception("Something went wrong while logging out. The account might not be logged out."), isServerSideException: true);
             }
-            
+
         }
     }
 }

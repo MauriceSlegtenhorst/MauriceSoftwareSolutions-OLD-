@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MTS.DAL.API.Exceptions
+namespace MTS.PL.API.Exceptions
 {
     public sealed class APIException : Exception
     {

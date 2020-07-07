@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>MTS.BL.Infra.Interfaces.Core</AssemblyName>
+    <RootNamespace>MTS.BL.Infra.Interfaces.Core</RootNamespace>
+  </PropertyGroup>
+
+</Project>

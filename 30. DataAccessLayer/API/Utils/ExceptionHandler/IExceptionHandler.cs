@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 
-namespace MTS.DAL.API.Utils.ExceptionHandler
+namespace MTS.PL.API.Utils.ExceptionHandler
 {
     public interface IExceptionHandler
     {

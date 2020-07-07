@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using MTS.PL.Infra.InjectionLibrary;
 using MTS.PL.Web.Blazor.Client.Utils;
 using Newtonsoft.Json;
-using MTS.PL.Infra.BlazorLibrary;
+using MTS.PL.Infra.Interfaces.Standard;
+using MTS.PL.Infra.Entities.Standard;
 
 namespace MTS.PL.Web.Blazor.Client.Authentification
 {
@@ -39,8 +39,6 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
             return BuildAuthenticationState(token);
         }
 
-        //TODO make API calls here for login and logout
-
         public async Task Login(string token)
         {
             await js.SetInLocalStorage(TOKENKEY, token);
@@ -59,7 +57,7 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
         {
             var authState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt")));
 
-            var tokenObject = JsonConvert.DeserializeObject<UserToken>(token);
+            var tokenObject = JsonConvert.DeserializeObject<PLUserToken>(token);
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenObject.Value);
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MTS.PL.Infra.InjectionLibrary
+namespace MTS.PL.Infra.Interfaces.Standard
 {
     public interface ILoginService
     {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MTS.PL.Web.Blazor.Client.Utils
+﻿namespace MTS.PL.Web.Blazor.Client.Utils
 {
     public class BlazorConstants
     {

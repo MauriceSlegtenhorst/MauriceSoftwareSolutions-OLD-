@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MTS.Core.GlobalLibrary;
-using MTS.PL.Infra.InjectionLibrary;
+using MTS.PL.Infra.Interfaces.Standard;
 using MTS.PL.Web.Blazor.Client.Authentification;
 using Syncfusion.Blazor;
+using Syncfusion.Licensing;
 
 namespace MTS.PL.Web.Blazor.Client
 {
@@ -15,11 +16,10 @@ namespace MTS.PL.Web.Blazor.Client
     {
         public static async Task Main(string[] args)
         {
-            // TODO Store somewhere better and secure
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mjc0NTg2QDMxMzgyZTMxMmUzMFlqcVFDaEFIRGlpVW13aU1jeWhzUlFod0YwM09QKzhyQ3ljOW92V3padDA9");
+            SyncfusionLicenseProvider.RegisterLicense("##SyncfusionLicense##");
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            
+
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri(Constants.API_BASE_ADDRESS) });

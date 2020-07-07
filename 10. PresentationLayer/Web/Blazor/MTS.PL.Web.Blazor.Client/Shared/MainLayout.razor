@@ -9,10 +9,11 @@
         <span>
             <AuthorizeView>
                 <Authorized>
-                    Name: @context.User.Identity.Name | Access level: @context.User.FindFirst(c => c.Type == ClaimTypes.Role).Value |
+                    Name: @context.User.Identity.Name |
+                    Access level: @context.User.FindFirst(c => c.Type == ClaimTypes.Role).Value |
                 </Authorized>
             </AuthorizeView>
-            This site is build by <strong><a href="https://www.linkedin.com/in/mauriceslegtenhorst/" target="_blank">Maurice</a></strong> with <strong><a href="http://blazor.net" target="_blank">Blazor WebAssembly</a></strong>
+            This site is build by <strong><a href="https://www.linkedin.com/in/mauriceslegtenhorst/" target="_blank">Maurice Slegtenhorst</a></strong> with <strong><a href="http://blazor.net" target="_blank">Blazor WebAssembly</a></strong>
         </span>
     </div>
 

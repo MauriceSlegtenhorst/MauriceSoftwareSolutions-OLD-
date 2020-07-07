@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MTS.PL.Entities.Standard;
 using MTS.Core.GlobalLibrary;
-using MTS.DAL.Infra.APILibrary;
-using MTS.DAL.Infra.Entities;
-using MTS.DAL.Infra.Interfaces;
+using MTS.PL.Entities.Core;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,11 +10,11 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MTS.DAL.DatabaseAccess.Utils
+namespace MTS.PL.DatabaseAccess.Utils
 {
     internal sealed class UserTokenBuilder
     {
-        internal static async Task<UserToken> BuildToken(EFUserAccount efUserAccount, UserManager<EFUserAccount> userManager, string issuerSigningKey)
+        internal static async Task<DLUserToken> BuildToken(DALUserAccount efUserAccount, UserManager<DALUserAccount> userManager, string issuerSigningKey)
         {
             IList<Claim> claims = new List<Claim>
             {
@@ -43,10 +41,10 @@ namespace MTS.DAL.DatabaseAccess.Utils
                expires: expiration,
                signingCredentials: creds);
 
-            return new UserToken(
+            return new DLUserToken(
                 userId: efUserAccount.Id,
                 loginProvider: "MTS-Security",
-                userName: efUserAccount.FullName ?? efUserAccount.Email.Split('@')[0],
+                userName: efUserAccount.FirstName ?? efUserAccount.Email.Split('@')[0],
                 expiration: expiration,
                 jwtSecurityToken: new JwtSecurityTokenHandler().WriteToken(token));
         }

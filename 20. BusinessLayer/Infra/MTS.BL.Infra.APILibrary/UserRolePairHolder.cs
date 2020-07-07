@@ -1,13 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MTS.PL.Infra.Interfaces.Standard;
+using MTS.Core.GlobalLibrary;
+using System.ComponentModel.DataAnnotations;
 
-namespace MTS.DAL.Infra.APILibrary
+namespace MTS.PL.Entities.Standard
 {
-    public sealed class UserRolePairHolder
+    public sealed class UserRolePairHolder : IUserRolePairHolder
     {
         [Required]
         public string Id { get; set; }
-        
+
         [Required]
-        public byte Roles { get; set; }
+        public Constants.Roles Roles { get; set; }
     }
 }

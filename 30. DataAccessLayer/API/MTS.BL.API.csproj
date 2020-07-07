@@ -23,10 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\20. BusinessLayer\Infra\MTS.BL.Infra.APILibrary\MTS.BL.Infra.APILibrary.csproj" />
+    <ProjectReference Include="..\..\10. PresentationLayer\Infra\MTS.PL.Infra.BlazorLibrary\MTS.PL.Entities.Standard.csproj" />
+    <ProjectReference Include="..\..\20. BusinessLayer\Infra\MTS.BL.Infra.APILibrary\MTS.BL.Entities.Standard.csproj" />
     <ProjectReference Include="..\..\50. Core\MTS.Core.GlobalLibrary\MTS.Core.GlobalLibrary.csproj" />
-    <ProjectReference Include="..\..\MTS.DAL.Infra.Entities\MTS.DAL.Infra.Entities.csproj" />
-    <ProjectReference Include="..\Infra\EmailHandler\MTS.DAL.Infra.EmailLibrary.csproj" />
+    <ProjectReference Include="..\..\MTS.DAL.Infra.Interfaces\MTS.DAL.Interfaces.Standard.csproj" />
     <ProjectReference Include="..\MTS.DAL.CRUDFunctions\MTS.DAL.CRUDFunctions\MTS.DAL.DatabaseAccess.csproj" />
   </ItemGroup>
 

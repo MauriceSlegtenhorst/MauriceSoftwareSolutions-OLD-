@@ -53,26 +53,26 @@ namespace MTS.Core.GlobalLibrary
             public const string PRIVILEGED_EMPLOYEE = "privilegedemployee";
             public const string ADMINISTRATOR = "administrator";
 
-            public static string GetAccessLevelString(AccessLevel accessLevel)
+            public static string GetAccessLevelString(Roles accessLevel)
             {
                 switch (accessLevel)
                 {
                     default:
                         return STANDARD_USER;
 
-                    case AccessLevel.PrivilegedUser:
+                    case Roles.PrivilegedUser:
                         return PRIVILEGED_USER;
 
-                    case AccessLevel.Volenteer:
+                    case Roles.Volenteer:
                         return VOLENTEER;
 
-                    case AccessLevel.Employee:
+                    case Roles.Employee:
                         return EMPLOYEE;
 
-                    case AccessLevel.PrivilegedEmployee:
+                    case Roles.PrivilegedEmployee:
                         return PRIVILEGED_EMPLOYEE;
 
-                    case AccessLevel.Administrator:
+                    case Roles.Administrator:
                         return ADMINISTRATOR;
                 }
             }
@@ -87,7 +87,7 @@ namespace MTS.Core.GlobalLibrary
 #endif
 
         [Flags]
-        public enum AccessLevel : byte
+        public enum Roles : byte
         {
             Nonexistent         = 0,
             StandardUser        = 1,

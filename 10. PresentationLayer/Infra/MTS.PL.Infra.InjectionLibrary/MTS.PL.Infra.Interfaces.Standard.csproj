@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>MTS.PL.Infra.Interfaces.Standard</AssemblyName>
+    <RootNamespace>MTS.PL.Infra.Interfaces.Standard</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\50. Core\MTS.Core.GlobalLibrary\MTS.Core.GlobalLibrary.csproj" />
+  </ItemGroup>
+
+</Project>

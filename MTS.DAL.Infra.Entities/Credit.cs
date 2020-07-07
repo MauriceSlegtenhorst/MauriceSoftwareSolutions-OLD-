@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MTS.DAL.Entities
+﻿namespace MTS.PL.Entities
 {
     public sealed class Credit
     {

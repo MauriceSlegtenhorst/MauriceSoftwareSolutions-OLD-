@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using MTS.DAL.DatabaseAccess.CRUD.Account;
-using MTS.DAL.DatabaseAccess.DataContext;
-using MTS.DAL.Infra.EmailLibrary;
-using MTS.DAL.Infra.Entities;
-using MTS.DAL.Infra.Interfaces;
-using MTS.DAL.DatabaseAccess.CRUD.Identity;
+using MTS.PL.DatabaseAccess.CRUD.Account;
+using MTS.PL.DatabaseAccess.DataContext;
+using MTS.PL.DatabaseAccess.CRUD.Identity;
+using MTS.PL.Entities.Core;
+using MTS.PL.Infra.Interfaces;
+using MTS.PL.Interfaces.Standard;
+using MTS.PL.Infra.Entities;
+using MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter;
 
 namespace MTS.DAL.DatabaseAccess.Extensions
 {
@@ -18,13 +20,13 @@ namespace MTS.DAL.DatabaseAccess.Extensions
             DbConfigurations configurations = new DbConfigurations();
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configurations.SqlConnectionString, 
+                options.UseSqlServer(configurations.SqlConnectionString,
                 options => options.MigrationsAssembly("MTS.BL.API")));
 
             services.Configure<IdentityOptions>(options => options = configurations.IdentityOptions);
 
             services
-                .AddIdentity<EFUserAccount, IdentityRole>()
+                .AddIdentity<DALUserAccount, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders()
                 .AddRoles<IdentityRole>();

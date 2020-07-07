@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MTS.DAL.API.Utils.ExceptionHandler;
+using MTS.PL.API.Utils.ExceptionHandler;
 using MTS.DAL.DatabaseAccess.Extensions;
 
-namespace MTS.DAL.API
+namespace MTS.PL.API
 {
     /// <summary>
     /// Transient objects are always different; a new instance is provided to every controller and every service.

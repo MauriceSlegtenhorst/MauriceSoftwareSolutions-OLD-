@@ -16,7 +16,7 @@
 
             @if (_updateResultErrors.Length > 0)
             {
-                <ErrorAlertComponent Title="@_updateResultToast.Title" Errors="@_updateResultErrors" />
+                <AlertComponent Title="@_updateResultToast.Title" Errors="@_updateResultErrors" />
             }
             @*Row 1*@
             <div class="form-row">
@@ -98,7 +98,7 @@
 
 @code {
     [Parameter]
-    public IUserAccount UserAccount { get; set; }
+    public IPLUserAccount UserAccount { get; set; }
 
     private SfSpinner _spinner;
     private string _spinnerTarget = "#spinnerContainer";

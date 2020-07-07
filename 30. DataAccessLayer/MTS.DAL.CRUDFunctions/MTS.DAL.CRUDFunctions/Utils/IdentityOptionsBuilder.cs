@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MTS.DAL.DatabaseAccess.Utils
+namespace MTS.PL.DatabaseAccess.Utils
 {
     internal sealed class IdentityOptionsBuilder
     {

@@ -1,33 +1,35 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
-using MTS.DAL.Infra.APILibrary;
-using MTS.Core.GlobalLibrary.Utils;
-using MTS.DAL.DatabaseAccess.Utils;
-using MTS.DAL.Infra.Entities;
-using MTS.DAL.Infra.Interfaces;
+using MTS.PL.DatabaseAccess.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static MTS.Core.GlobalLibrary.Constants;
-using MTS.DAL.DatabaseAccess.DataContext;
 using Microsoft.EntityFrameworkCore;
+using MTS.PL.Entities.Core;
+using MTS.PL.Interfaces.Standard;
+using MTS.Core.GlobalLibrary.Utils;
 using MTS.Core.GlobalLibrary;
+using MTS.PL.Infra.Interfaces;
+using MTS.PL.Infra.Interfaces.Standard;
+using MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter;
+using MTS.PL.Entities.Standard;
+using MTS.PL.Infra.Interfaces.Standard;
+using MTS.PL.Infra.Entities.Standard;
 
-namespace MTS.DAL.DatabaseAccess.CRUD.Account
+namespace MTS.PL.DatabaseAccess.CRUD.Account
 {
     public sealed class AccountAdapter : IAccountAdapter
     {
-        private readonly UserManager<EFUserAccount> _userManager;
+        private readonly UserManager<DALUserAccount> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
         private readonly ISeedData _seedData;
 
         public AccountAdapter(
-            UserManager<EFUserAccount> userManager,
+            UserManager<DALUserAccount> userManager,
             RoleManager<IdentityRole> roleManager,
             IEmailSender emailSender,
             ISeedData seedData)
@@ -41,29 +43,28 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
         #region Create
         /// <exception cref="System.Exception">Thrown when the UserManager was not able to create the useraccount</exception>
         /// <exception cref="System.ArgumentException">Thrown when one or both of the parameters was null or empty</exception>
-        [AllowAnonymous]
-        public async Task<IEFUserAccount> CreateByEmailAndPasswordAsync(string email, string password)
+        public async Task<IBLUserAccount> CreateByEmailAndPasswordAsync(string email, string password)
         {
             await EnsureDefaultAccountsExists();
 
             if (String.IsNullOrEmpty(email) || String.IsNullOrEmpty(password))
                 throw new ArgumentException("Parameters cannot be null or empty");
 
-            var efUserAccount = new EFUserAccount
+            var dlUserAccount = new DALUserAccount
             {
                 UserName = email,
                 Email = email
             };
 
-            IdentityResult result = await _userManager.CreateAsync(efUserAccount, password);
+            IdentityResult result = await _userManager.CreateAsync(dlUserAccount, password);
 
             if (result != null && result.Succeeded)
             {
-                await EmailHelper.SendConfirmationEmailAsync(efUserAccount, _userManager, _emailSender);
+                await EmailHelper.SendConfirmationEmailAsync(dlUserAccount, _userManager, _emailSender);
 
-                efUserAccount = await _userManager.FindByEmailAsync(email);
+                dlUserAccount = await _userManager.FindByEmailAsync(email);
 
-                return efUserAccount;
+                return dlUserAccount;
             }
             else
             {
@@ -79,23 +80,24 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
 
         /// <exception cref="System.Exception">Thrown when the UserManager was not able to create the useraccount</exception>
         /// <exception cref="System.ArgumentException">Thrown when the UserAccount parameter was null or invalid</exception>
-        public async Task<IEFUserAccount> CreateByAccountAsync(UserAccount userAccount)
+        public async Task<IBLUserAccount> CreateByAccountAsync(IPLUserAccount userAccount)
         {
             if (userAccount == null || String.IsNullOrEmpty(userAccount.Email) || String.IsNullOrEmpty(userAccount.Password) || String.IsNullOrEmpty(userAccount.Id))
                 throw new ArgumentException("Parameter cannot be null or ivalid");
 
-            var efUserAccount = new EFUserAccount();
-            PropertyCopier<UserAccount, EFUserAccount>.Copy(userAccount, efUserAccount);
+            var dalUserAccount = new DALUserAccount();
 
-            IdentityResult result = await _userManager.CreateAsync(efUserAccount, userAccount.Password);
+            PropertyCopier<PLUserAccount, DALUserAccount>.Copy((PLUserAccount)userAccount, dalUserAccount);
+
+            IdentityResult result = await _userManager.CreateAsync(dalUserAccount, userAccount.Password);
 
             if (result != null && result.Succeeded)
             {
-                await EmailHelper.SendConfirmationEmailAsync(efUserAccount, _userManager, _emailSender);
+                await EmailHelper.SendConfirmationEmailAsync(dalUserAccount, _userManager, _emailSender);
 
-                efUserAccount = await _userManager.FindByEmailAsync(userAccount.Email);
+                dalUserAccount = await _userManager.FindByEmailAsync(userAccount.Email);
 
-                return efUserAccount; 
+                return dalUserAccount; 
             }
             else
             {
@@ -113,7 +115,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
         #region Read
         /// <exception cref="System.ArgumentException">Thrown when the id parameter was null or empty</exception>
         /// <exception cref="System.Exception">Thrown when UserManager could not find any UserAccount with a matching id</exception>
-        public async Task<IEFUserAccount> ReadByIdAsync(string id)
+        public async Task<IBLUserAccount> ReadByIdAsync(string id)
         {
             if(String.IsNullOrEmpty(id))
                 throw new ArgumentException("Parameters id cannot be null or empty");
@@ -132,7 +134,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
 
         /// <exception cref="System.ArgumentException">Thrown when the email parameter was null or empty</exception>
         /// <exception cref="System.Exception">Thrown when UserManager could not find any UserAccount with a matching email</exception>
-        public async Task<IEFUserAccount> ReadByEmailAsync(CredentialHolder credentialHolder)
+        public async Task<IBLUserAccount> ReadByEmailAsync(ICredentialHolder credentialHolder)
         {
             if (String.IsNullOrEmpty(credentialHolder.Email))
                 throw new ArgumentException("Parameters email cannot be null or empty");
@@ -151,28 +153,28 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
             return efUserAccount;
         }
 
-        public Task<IEnumerable<IEFUserAccount>> ReadAllAsync()
+        public Task<IEnumerable<IBLUserAccount>> ReadAllAsync()
         {
-            var efUserAccounts = _userManager.Users.AsEnumerable<IEFUserAccount>();
+            var efUserAccounts = _userManager.Users.AsEnumerable<IBLUserAccount>();
 
             return Task.FromResult(efUserAccounts);
         }
         #endregion
 
         #region Write
-        public async Task<IdentityResult> WriteAsync(UserAccount userAccount)
+        public async Task<IdentityResult> WriteAsync(IPLUserAccount blUserAccount)
         {
-            if (userAccount == null || String.IsNullOrEmpty(userAccount.Email) || String.IsNullOrEmpty(userAccount.Password) || String.IsNullOrEmpty(userAccount.Id))
+            if (blUserAccount == null || String.IsNullOrEmpty(blUserAccount.Email) || String.IsNullOrEmpty(blUserAccount.Password) || String.IsNullOrEmpty(blUserAccount.Id))
                 throw new ArgumentException("Parameter cannot be null or ivalid");
 
-            var efUserAccount = await _userManager.FindByIdAsync(userAccount.Id);
+            var dalUserAccount = await _userManager.FindByIdAsync(blUserAccount.Id);
 
-            if (efUserAccount == null)
+            if (dalUserAccount == null)
                 throw new Exception("Ef useraccount was null");
 
-            PropertyCopier<UserAccount, EFUserAccount>.Copy(userAccount, efUserAccount);
+            PropertyCopier<PLUserAccount, DALUserAccount>.Copy((PLUserAccount)blUserAccount, dalUserAccount);
 
-            return await _userManager.UpdateAsync(efUserAccount);
+            return await _userManager.UpdateAsync(dalUserAccount);
         }
         #endregion
 
@@ -200,16 +202,16 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
         #endregion
 
         #region Roles
-        public async Task<IdentityResult> AddRolesToAccountAsync(string id, byte roles)
+        public async Task<IdentityResult> AddRolesToAccountAsync(string id, Constants.Roles roles)
         {
-            var accessLevels = (AccessLevel)roles;
+            var accessLevels = (Constants.Roles)roles;
 
-            if (String.IsNullOrEmpty(id) || (AccessLevel)roles == AccessLevel.Nonexistent)
+            if (String.IsNullOrEmpty(id) || (Constants.Roles)roles == Constants.Roles.Nonexistent)
                 throw new ArgumentException("Parameters are required. Id or roles were null or empty");
 
-            var efUserAccount = await _userManager.FindByIdAsync(id);
+            var dalUserAccount = await _userManager.FindByIdAsync(id);
 
-            if (efUserAccount == null)
+            if (dalUserAccount == null)
                 throw new Exception("Ef useraccount was null");
 
             IEnumerable<string> rolesEnumerated = accessLevels.ToString().Split(',');
@@ -220,9 +222,9 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
                 {
                     var roleResult = await _roleManager.CreateAsync(new IdentityRole { Name = role });
 
-                    if (!roleResult.Succeeded)
+                    if (roleResult.Succeeded == false)
                     {
-                        StringBuilder stringBuilder = new StringBuilder();
+                        var stringBuilder = new StringBuilder();
 
                         foreach (var error in roleResult.Errors)
                         {
@@ -234,22 +236,22 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
                 }
             }
 
-            var result = await _userManager.AddToRolesAsync(efUserAccount, rolesEnumerated);
+            var result = await _userManager.AddToRolesAsync(dalUserAccount, rolesEnumerated);
 
             return result;
         }
 
-        public async Task<IdentityResult> RemoveRolesFromAccountAsync(string id, byte roles)
+        public async Task<IdentityResult> RemoveRolesFromAccountAsync(string id, Constants.Roles roles)
         {
-            var accessLevels = (AccessLevel)roles;
+            var accessLevels = (Constants.Roles)roles;
 
-            if (String.IsNullOrEmpty(id) || (AccessLevel)roles == AccessLevel.Nonexistent)
+            if (String.IsNullOrEmpty(id) || (Constants.Roles)roles == Constants.Roles.Nonexistent)
                 throw new ArgumentException("Parameters are required. Id or roles were null or empty");
 
             var efUserAccount = await _userManager.FindByIdAsync(id);
 
             if (efUserAccount == null)
-                throw new Exception("Ef useraccount was null");
+                throw new Exception("DALUserAccount was null");
 
             IEnumerable<string> rolesEnumerated = accessLevels.ToString().Split(',');
 
@@ -259,14 +261,13 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
         }
         #endregion
 
-        // Confirm email
         public async Task<IdentityResult> ConfirmEmailAsync(string id, string code)
         {
-            var userAccount = await _userManager.FindByIdAsync(id);
+            var dalUserAccount = await _userManager.FindByIdAsync(id);
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
 
-            var result = await _userManager.ConfirmEmailAsync(userAccount, code);
+            var result = await _userManager.ConfirmEmailAsync(dalUserAccount, code);
 
             return result;
         }
@@ -284,7 +285,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
 
                 try
                 {
-                    createAccountResult = await _userManager.CreateAsync(account, "MTS1991password!");
+                    createAccountResult = await _userManager.CreateAsync((DALUserAccount)account, "MTS1991password!");
                 }
                 catch (Exception ex)
                 {
@@ -305,18 +306,18 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
 
                     try
                     {
-                        bool adminRoleExists = await _roleManager.RoleExistsAsync(Security.ADMINISTRATOR);
+                        bool adminRoleExists = await _roleManager.RoleExistsAsync(Constants.Security.ADMINISTRATOR);
 
                         if (adminRoleExists == false)
                         {
-                            var createRoleResult = await _roleManager.CreateAsync(new IdentityRole(Security.ADMINISTRATOR));
+                            var createRoleResult = await _roleManager.CreateAsync(new IdentityRole(Constants.Security.ADMINISTRATOR));
 
                             adminRoleExists = createRoleResult.Succeeded;
                         }
 
                         if (adminRoleExists)
                         {
-                            var addRoleResult = await _userManager.AddToRoleAsync(accountWithId, Security.ADMINISTRATOR);
+                            var addRoleResult = await _userManager.AddToRoleAsync(accountWithId, Constants.Security.ADMINISTRATOR);
 
                             roleResult = addRoleResult.Succeeded;
                         }

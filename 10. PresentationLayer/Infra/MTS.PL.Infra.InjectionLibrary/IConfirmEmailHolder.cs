@@ -1,4 +1,4 @@
-﻿namespace MTS.PL.Infra.InjectionLibrary
+﻿namespace MTS.PL.Infra.Interfaces.Standard
 {
     public interface IConfirmEmailHolder
     {

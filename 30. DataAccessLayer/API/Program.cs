@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using MTS.PL.API;
 
-namespace MTS.DAL.API
+namespace MTS.PL.API
 {
     public class Program
     {

@@ -1,6 +1,4 @@
-﻿using MTS.Core.GlobalLibrary;
-using MTS.PL.Infra.BlazorLibrary;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Syncfusion.Blazor;
 using Syncfusion.Blazor.Data;
 using System;
@@ -10,6 +8,9 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using MTS.PL.Infra.Interfaces.Standard;
+using MTS.Core.GlobalLibrary;
+using MTS.PL.Infra.Entities.Standard;
 
 namespace MTS.PL.Web.Blazor.Client.Utils
 {
@@ -17,55 +18,54 @@ namespace MTS.PL.Web.Blazor.Client.Utils
     {
         private readonly HttpClient _httpClient;
 
-        private IEnumerable<UserAccount> _userAccounts;
+        public static IEnumerable<IPLUserAccount> PLUserAccounts { get; set; }
 
-        public APIAccountsAdapter(HttpClient httpClient, IEnumerable<UserAccount> userAccounts)
+        public APIAccountsAdapter(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _userAccounts = userAccounts;
         }
 
         public override object Read(DataManagerRequest dataManager, string key = null)
         {
-            if (_userAccounts == null)
+            if (PLUserAccounts == null)
                 return null;
 
             if (dataManager.Search != null && dataManager.Search.Count > 0)
             {
                 // Searching
-                _userAccounts = DataOperations.PerformSearching(_userAccounts, dataManager.Search);
+                PLUserAccounts = DataOperations.PerformSearching(PLUserAccounts, dataManager.Search);
             }
             if (dataManager.Sorted != null && dataManager.Sorted.Count > 0)
             {
                 // Sorting
-                _userAccounts = DataOperations.PerformSorting(_userAccounts, dataManager.Sorted);
+                PLUserAccounts = DataOperations.PerformSorting(PLUserAccounts, dataManager.Sorted);
             }
             if (dataManager.Where != null && dataManager.Where.Count > 0)
             {
                 // Filtering
-                _userAccounts = DataOperations.PerformFiltering(_userAccounts, dataManager.Where, dataManager.Where[0].Operator);
+                PLUserAccounts = DataOperations.PerformFiltering(PLUserAccounts, dataManager.Where, dataManager.Where[0].Operator);
             }
 
-            int count = _userAccounts.Count();
+            int count = PLUserAccounts.Count();
 
             if (dataManager.Skip != 0)
             {
                 //Paging
-                _userAccounts = DataOperations.PerformSkip(_userAccounts, dataManager.Skip);
+                PLUserAccounts = DataOperations.PerformSkip(PLUserAccounts, dataManager.Skip);
             }
             if (dataManager.Take != 0)
             {
-                _userAccounts = DataOperations.PerformTake(_userAccounts, dataManager.Take);
+                PLUserAccounts = DataOperations.PerformTake(PLUserAccounts, dataManager.Take);
             }
 
-            return dataManager.RequiresCounts ? new DataResult() { Result = _userAccounts, Count = count } : (object)_userAccounts;
+            return dataManager.RequiresCounts ? new DataResult() { Result = PLUserAccounts, Count = count } : (object)PLUserAccounts;
         }
 
         public async override Task<object> InsertAsync(DataManager dataManager, object data, string key)
         {
             string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT}";
 
-            var userAccount = (UserAccount)data;
+            var userAccount = (IPLUserAccount)data;
 
             HttpResponseMessage result = null;
 
@@ -82,7 +82,7 @@ namespace MTS.PL.Web.Blazor.Client.Utils
             {
                 try
                 {
-                    data = JsonConvert.DeserializeObject<UserAccount>(await result.Content.ReadAsStringAsync());
+                    data = JsonConvert.DeserializeObject<PLUserAccount>(await result.Content.ReadAsStringAsync());
                 }
                 catch
                 {
@@ -95,8 +95,8 @@ namespace MTS.PL.Web.Blazor.Client.Utils
                 }
 
 
-                _userAccounts.ToList().Insert(0, data as UserAccount);
-                
+                PLUserAccounts.ToList().Insert(0, data as IPLUserAccount);
+
 
                 return data;
             }
@@ -110,7 +110,7 @@ namespace MTS.PL.Web.Blazor.Client.Utils
         {
             string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT}";
 
-            var newUserAccount = data as UserAccount;
+            var newUserAccount = data as IPLUserAccount;
 
             if (newUserAccount == null)
             {
@@ -142,7 +142,7 @@ namespace MTS.PL.Web.Blazor.Client.Utils
 
         public async override Task<object> RemoveAsync(DataManager dataManager, object id, string keyField, string key)
         {
-            var userAccount = _userAccounts.FirstOrDefault(account => account.Id == id.ToString());
+            var userAccount = PLUserAccounts.FirstOrDefault(account => account.Id == id.ToString());
 
             if (userAccount == null)
             {
@@ -164,7 +164,7 @@ namespace MTS.PL.Web.Blazor.Client.Utils
 
             if (result.IsSuccessStatusCode)
             {
-                if (!_userAccounts.ToList().Remove(_userAccounts.Where(account => account.Id == userAccount.Id).FirstOrDefault()))
+                if (!PLUserAccounts.ToList().Remove(PLUserAccounts.Where(account => account.Id == userAccount.Id).FirstOrDefault()))
                 {
                     throw new Exception("Error removing locally. Server side account has been deleted");
                 }
