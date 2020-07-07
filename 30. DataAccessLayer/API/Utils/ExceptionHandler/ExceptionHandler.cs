@@ -10,39 +10,42 @@ namespace MTS.DAL.API.Utils.ExceptionHandler
         public IActionResult HandleException(Exception ex, bool isServerSideException)
         {
 #if DEBUG
-            StringBuilder stringBuilder = new StringBuilder();
+            int size = ex.InnerException == null ? 8 : 16;
 
-            stringBuilder.AppendLine($"Exception:");
-            stringBuilder.AppendLine(ex.GetType().Name);
-            stringBuilder.AppendLine($"Source application or object:");
-            stringBuilder.AppendLine(ex.Source);
-            stringBuilder.AppendLine($"Message:");
-            stringBuilder.AppendLine(ex.Message);
-            stringBuilder.AppendLine($"Stack trace:");
-            stringBuilder.AppendLine(ex.StackTrace);
+            var messagesHolder = new string[size];
+
+            messagesHolder[0] = "Exception:";
+            messagesHolder[1] = ex.GetType().Name;
+            messagesHolder[2] = "Source application or object:";
+            messagesHolder[3] = ex.Source;
+            messagesHolder[4] = "Message:";
+            messagesHolder[5] = ex.Message;
+            messagesHolder[6] = "Stack trace:";
+            messagesHolder[7] = ex.StackTrace;
 
             if (ex.InnerException != null)
             {
-                stringBuilder.AppendLine($"Inner exception:");
-                stringBuilder.AppendLine(ex.InnerException.GetType().Name);
-                stringBuilder.AppendLine($"Source application or object:");
-                stringBuilder.AppendLine(ex.InnerException.Source);
-                stringBuilder.AppendLine($"Message:");
-                stringBuilder.AppendLine(ex.InnerException.Message);
-                stringBuilder.AppendLine($"Stack trace:");
-                stringBuilder.AppendLine(ex.InnerException.StackTrace);
+                messagesHolder[8] = "Inner exception:";
+                messagesHolder[9] = ex.InnerException.GetType().Name;
+                messagesHolder[10] = "Source application or object:";
+                messagesHolder[11] = ex.InnerException.Source;
+                messagesHolder[12] = "Message:";
+                messagesHolder[13] = ex.InnerException.Message;
+                messagesHolder[14] = "Stack trace:";
+                messagesHolder[15] = ex.InnerException.StackTrace;
             }
 
             if (isServerSideException)
-                return StatusCode(StatusCodes.Status500InternalServerError, stringBuilder.ToString());
+                return StatusCode(StatusCodes.Status500InternalServerError, messagesHolder);
             else
-                return StatusCode(StatusCodes.Status400BadRequest, stringBuilder.ToString());
+                return StatusCode(StatusCodes.Status400BadRequest, messagesHolder);
+
 #else
-            return StatusCode(500, "Something went wrong on the server. Details are held secret");
+
             if(isServerSideException)
-                return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong on the server. Details are held secret");
+                return StatusCode(StatusCodes.Status500InternalServerError, new[] { "Something went wrong on the server. Details are held secret" });
             else
-                return StatusCode(StatusCodes.Status400BadRequest, "Something went wrong client side resulting in error(s) on the server. Details are held secret");
+                return StatusCode(StatusCodes.Status400BadRequest, new[] { "Something went wrong client side resulting in error(s) on the server. Details are held secret" });
 #endif
 
         }

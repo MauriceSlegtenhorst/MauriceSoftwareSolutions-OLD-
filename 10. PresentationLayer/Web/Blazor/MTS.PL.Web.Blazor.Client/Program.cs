@@ -17,10 +17,12 @@ namespace MTS.PL.Web.Blazor.Client
         {
             // TODO Store somewhere better and secure
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mjc0NTg2QDMxMzgyZTMxMmUzMFlqcVFDaEFIRGlpVW13aU1jeWhzUlFod0YwM09QKzhyQ3ljOW92V3padDA9");
+
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            
             builder.RootComponents.Add<App>("app");
 
-            builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(Constants.API_BASE_ADDRESS) });
+            builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri(Constants.API_BASE_ADDRESS) });
 
             #region Security
             builder.Services.AddAuthorizationCore();

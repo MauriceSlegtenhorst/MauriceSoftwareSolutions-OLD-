@@ -4,45 +4,32 @@
 
 <h1>Logging out</h1>
 
-<div id="spinnerContainer"></div>
-<SfSpinner @ref="_spinner" Target="#spinnerContainer" Label="Logging out" />
-
-<div class="col-lg-4 control-section">
-    <SfToast @ref="_logoutResultToast" TimeOut="0" ShowCloseButton="true" ID="toast_type">
-        <ToastPosition X="Center" Y="Top"></ToastPosition>
-    </SfToast>
-</div>
-
 @code{
-    private SfSpinner _spinner;
-    private string _spinnerTarget = "#spinnerContainer";
-
-    private SfToast _logoutResultToast;
-    private string[] _logoutResultErrors = new string[0];
-
-    ToastModel toastModel;
-
     protected async override void OnInitialized()
     {
-        _spinner.ShowSpinner(_spinnerTarget);
-
         var url = $"{Constants.API_BASE_ADDRESS}/{Constants.APIControllers.IDENTITY}/{Constants.IdentityControllerEndpoints.LOG_OUT}";
-        
-        //var result = await _httpClient.GetAsync(url);
+
         var request = new HttpRequestMessage
         {
             RequestUri = new Uri(url),
             Method = HttpMethod.Head
         };
 
-        var result = await _httpClient.SendAsync(request);
+        HttpResponseMessage result = new HttpResponseMessage();
+
+        try
+        {
+            result = await _httpClient.SendAsync(request);
+        }
+        catch (Exception ex)
+        {
+            _exceptionHandler.
+        }
 
         if (result.IsSuccessStatusCode)
         {
             await _loginService.Logout();
         }
-
-        _spinner.HideSpinner(_spinnerTarget);
 
         base.OnInitialized();
     }

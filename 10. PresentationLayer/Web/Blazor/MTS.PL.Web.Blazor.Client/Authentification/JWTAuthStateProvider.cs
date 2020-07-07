@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
-using System.Text.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using MTS.PL.Infra.InjectionLibrary;
 using MTS.PL.Web.Blazor.Client.Utils;
+using Newtonsoft.Json;
+using MTS.PL.Infra.BlazorLibrary;
 
 namespace MTS.PL.Web.Blazor.Client.Authentification
 {
@@ -38,6 +39,8 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
             return BuildAuthenticationState(token);
         }
 
+        //TODO make API calls here for login and logout
+
         public async Task Login(string token)
         {
             await js.SetInLocalStorage(TOKENKEY, token);
@@ -54,16 +57,23 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
 
         private AuthenticationState BuildAuthenticationState(string token)
         {
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt")));
+            var authState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt")));
+
+            var tokenObject = JsonConvert.DeserializeObject<UserToken>(token);
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenObject.Value);
+
+            return authState;
         }
 
         private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
             var claims = new List<Claim>();
-            var payload = jwt.Split('.')[1];
-            var jsonBytes = ParseBase64WithoutPadding(payload);
-            var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
+
+            var payload = jwt.Split('.');
+
+            var jsonBytes = ParseBase64WithoutPadding(payload[2]);
+            var keyValuePairs = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
 
             keyValuePairs.TryGetValue(ClaimTypes.Role, out object roles);
 
@@ -71,7 +81,7 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
             {
                 if (roles.ToString().Trim().StartsWith("["))
                 {
-                    var parsedRoles = JsonSerializer.Deserialize<string[]>(roles.ToString());
+                    var parsedRoles = JsonConvert.DeserializeObject<string[]>(roles.ToString());
 
                     foreach (var parsedRole in parsedRoles)
                     {
@@ -98,6 +108,7 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
                 case 2: base64 += "=="; break;
                 case 3: base64 += "="; break;
             }
+
             return Convert.FromBase64String(base64);
         }
 

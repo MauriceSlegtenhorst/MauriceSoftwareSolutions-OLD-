@@ -96,10 +96,10 @@ namespace MTS.DAL.API.Controllers
             return Ok(userAccount);
         }
 
-        [Authorize(Roles = 
+        [Authorize(
+            Roles = 
             Constants.Security.ADMINISTRATOR + "," +
-            Constants.Security.PRIVILEGED_EMPLOYEE
-            )]
+            Constants.Security.PRIVILEGED_EMPLOYEE)]
         [Route(Constants.AccountControllerEndpoints.GET_ALL)]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
@@ -109,6 +109,9 @@ namespace MTS.DAL.API.Controllers
             try
             {
                 userAccounts = await _accountAdapter.ReadAllAsync();
+
+                if (userAccounts.Any() == false)
+                    throw new Exception("No accounts found");
             }
             catch (Exception ex)
             {

@@ -139,8 +139,6 @@
     private Regex _passwordRegex;
     private string _passwordCssClass;
 
-    //public event EventHandler<ValidationStateChangedEventArgs> _validationStateChanged;
-
     private string _btnContent;
 
     private string _resultTitle;
@@ -171,25 +169,26 @@
 
     private async Task SubmitForm()
     {
-        //bool isValidEmail = ValidateEmail(_inputModel.Email);
-
-        //if (isValidEmail == false)
-        //{
-        //    // TODO Use validationMessage instead of alert
-        //    _resultTitle = "Invalid email";
-        //    _resultErrors = new[] { "Only common email domains are allowed. Use another email address please." };
-        //    return;
-        //}
-
         string requestUrl;
+
         if (IsLogin)
             requestUrl = $"{Constants.APIControllers.IDENTITY}/{Constants.IdentityControllerEndpoints.LOG_IN}";
         else
             requestUrl = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CREATE_BY_CREDENTIALS}";
 
+        HttpResponseMessage result;
 
-        var result = await _httpClient.PutAsJsonAsync(requestUrl, _inputModel);
-        var resultContentAsString = await result.Content.ReadAsStringAsync();
+        try
+        {
+            result = await _httpClient.PutAsJsonAsync(requestUrl, _inputModel);
+        }
+        catch (Exception ex)
+        {
+            _resultErrors = new[] {  "Something went wrong while requesting a login.", ex.Message };
+            return;
+        }
+
+        var resultContentAsString = await result?.Content.ReadAsStringAsync();
 
         if (result.IsSuccessStatusCode)
         {

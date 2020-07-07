@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MTS.BL.API.Migrations
 {
-    public partial class init : Migration
+    public partial class remove_accesslvl_in_favor_of_roles : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

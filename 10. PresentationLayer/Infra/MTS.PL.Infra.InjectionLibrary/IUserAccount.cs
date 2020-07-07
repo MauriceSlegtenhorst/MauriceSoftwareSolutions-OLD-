@@ -27,8 +27,6 @@ namespace MTS.PL.Infra.InjectionLibrary
 
         string LastName { get; set; }
 
-        AccessLevel AccessLevel { get; set; }
-
         int AccessFailedCount { get; set; }
 
         DateTimeOffset? LockoutEnd { get; set; }

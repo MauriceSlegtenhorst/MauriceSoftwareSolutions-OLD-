@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MTS.Core.GlobalLibrary;
 using MTS.DAL.Infra.APILibrary;
 using MTS.DAL.Infra.Entities;
 using MTS.DAL.Infra.Interfaces;
@@ -35,8 +37,8 @@ namespace MTS.DAL.DatabaseAccess.Utils
             var expiration = DateTime.UtcNow.AddMinutes(10);
 
             JwtSecurityToken token = new JwtSecurityToken(
-               issuer: null,
-               audience: null,
+               issuer: Constants.API_BASE_ADDRESS,
+               audience: Constants.API_BASE_ADDRESS,
                claims: claims,
                expires: expiration,
                signingCredentials: creds);
@@ -44,7 +46,7 @@ namespace MTS.DAL.DatabaseAccess.Utils
             return new UserToken(
                 userId: efUserAccount.Id,
                 loginProvider: "MTS-Security",
-                userName: efUserAccount.UserName,
+                userName: efUserAccount.FullName ?? efUserAccount.Email.Split('@')[0],
                 expiration: expiration,
                 jwtSecurityToken: new JwtSecurityTokenHandler().WriteToken(token));
         }

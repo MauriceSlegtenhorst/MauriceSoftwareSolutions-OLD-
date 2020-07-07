@@ -273,30 +273,62 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
 
         private async Task EnsureDefaultAccountsExists()
         {
-            if (await _userManager.Users.AnyAsync() == false)
+            if (await _userManager.Users.AnyAsync() == true)
+                return;
+            
+            var accountsToAdd = await _seedData.GetDefaultAccountsSeedDataAsync();
+
+            foreach (var account in accountsToAdd)
             {
-                var accountsToAdd = await _seedData.GetDefaultAccountsSeedDataAsync();
+                IdentityResult createAccountResult;
 
-                foreach (var account in accountsToAdd)
+                try
                 {
-                    IdentityResult result = await _userManager.CreateAsync(account, "MTS1991password!");
+                    createAccountResult = await _userManager.CreateAsync(account, "MTS1991password!");
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Something went wrong while creating the account for {account.Email}.", ex);
+                }
 
-                    if (result.Succeeded == false)
-                        throw new Exception($"Something went wrong while creating {account.Email} account.");
+                if (createAccountResult.Succeeded == false)
+                    throw new Exception($"Something went wrong while creating {account.Email} account.");
 
-                    if (account.Email == "mauricetechsolution@outlook.com")
+                if (account.Email == "mauricetechsolution@outlook.com")
+                {
+                    var accountWithId = await _userManager.FindByEmailAsync(account.Email);
+
+                    if (accountWithId == null)
+                        throw new NullReferenceException("AccountWithId was null");
+
+                    bool roleResult = false;
+
+                    try
                     {
-                        var accountWithId = await _userManager.FindByEmailAsync(account.Email);
+                        bool adminRoleExists = await _roleManager.RoleExistsAsync(Security.ADMINISTRATOR);
 
-                        if (accountWithId == null)
-                            throw new NullReferenceException("AccountWithId was null");
+                        if (adminRoleExists == false)
+                        {
+                            var createRoleResult = await _roleManager.CreateAsync(new IdentityRole(Security.ADMINISTRATOR));
 
-                        var roleResult = await _userManager.AddToRoleAsync(accountWithId, Security.ADMINISTRATOR);
+                            adminRoleExists = createRoleResult.Succeeded;
+                        }
 
-                        if(roleResult.Succeeded == false)
-                            throw new Exception($"Something went wrong while aading a role to the {account.Email} account.");
+                        if (adminRoleExists)
+                        {
+                            var addRoleResult = await _userManager.AddToRoleAsync(accountWithId, Security.ADMINISTRATOR);
 
+                            roleResult = addRoleResult.Succeeded;
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"Something went wrong while adding a role to the {account.Email} account.", ex);
+                    }
+
+                    if(roleResult == false)
+                        throw new Exception($"Something went wrong while adding a role to the {account.Email} account.");
+
                 }
             }
         }

@@ -6,10 +6,10 @@
 
 @if (ErrorDetails.Length > 0)
 {
-    <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Danger" Title="@ErrorTitle" Errors="@ErrorDetails" />
+    <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Danger" Title="@ErrorTitle" ContentMessages="@ErrorDetails" />
 }
 
-<SfGrid TValue="IUserAccount" AllowPaging="true" Toolbar="@ToolBarItems" ID="Grid" AllowSorting="true">
+<SfGrid TValue="IUserAccount" AllowPaging="true" Toolbar="@ToolBarItems" ID="Grid" AllowSorting="true" Width="100%">
 
     <GridEditSettings AllowAdding="true"
                       AllowEditing="true"
@@ -22,7 +22,7 @@
     @{
         if (IsInitialRender)
         {
-            <SfDataManager AdaptorInstance="@typeof(APIAccountsAdapter)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+            <SfDataManager AdaptorInstance="_APIAccountsAdapter" Adaptor="Adaptors.CustomAdaptor"/>
         }
     }
 
@@ -53,7 +53,6 @@
                                             EditType="@editType"
                                             AllowEditing="@canWrite"
                                             AutoFit="true"/>
-
                             }
                             catch (Exception ex)
                             {
@@ -88,11 +87,7 @@
 </SfGrid>
 
 @code{
-
-    public static List<IUserAccount> UserAccounts { get; set; } = new List<IUserAccount>();
-
-    // Dependency injection didn't work in Adapter so thats why this is here
-    public static HttpClient HttpClient { get; set; }
+    private APIAccountsAdapter _APIAccountsAdapter;
 
     public static string ErrorTitle { get; set; }
     public static string[] ErrorDetails { get; set; } = new string[0];
@@ -103,7 +98,6 @@
     {
         { typeof(string), EditType.DefaultEdit },
         { typeof(bool), EditType.BooleanEdit },
-        { typeof(Constants.AccessLevel), EditType.NumericEdit },
         { typeof(int), EditType.NumericEdit },
         { typeof(DateTimeOffset), EditType.DateTimePickerEdit },
     };
@@ -112,196 +106,48 @@
     {
         IsInitialRender = true;
 
-        var result = await _httpClient.GetAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_ALL}");
+        HttpResponseMessage result = null;
 
-        UserAccounts = JsonConvert.DeserializeObject<List<IUserAccount>>(await result.Content.ReadAsStringAsync());
+        try
+        {
+            result = await _httpClient.GetAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_ALL}");
+        }
+        catch (Exception ex)
+        {
+            HandleException(new Exception("Something went wrong while calling the server.", ex));
+            return;
+        }
+
+        if (result.IsSuccessStatusCode == false)
+        {
+            HandleException(new Exception($"Call was unsuccessfull: {result.ReasonPhrase}"));
+            return;
+        }
+
+        try
+        {
+            _APIAccountsAdapter = new APIAccountsAdapter(_httpClient, JsonConvert.DeserializeObject<List<UserAccount>>(await result.Content.ReadAsStringAsync()));
+        }
+        catch (Exception ex)
+        {
+            HandleException(new Exception("Something went wrong while deserializing the server response.", ex));
+        }
     }
 
     public void ActionFailure(Syncfusion.Blazor.Grids.FailureEventArgs args)
     {
-        ErrorDetails = new string[1] { args.Error.ToString() }; //"Server exception: 404 Not found";
+        ErrorDetails = new string[] { args.Error.ToString() };
 
         StateHasChanged();
     }
 
-    public static void HandleException(Exception ex)
+    public void HandleException(Exception ex)
     {
 #if DEBUG
         ErrorDetails = new string[] { ex.Message, ex.InnerException?.Message };
 #else
         ErrorDetails = new string[] { "Something went wrong... Details are secret" };
 #endif
-    }
-
-    public class APIAccountsAdapter : DataAdaptor
-    {
-        public override object Read(DataManagerRequest dataManager, string key = null)
-        {
-            IEnumerable<IUserAccount> DataSource = UserAccounts;
-            if (dataManager.Search != null && dataManager.Search.Count > 0)
-            {
-                // Searching
-                DataSource = DataOperations.PerformSearching(DataSource, dataManager.Search);
-            }
-            if (dataManager.Sorted != null && dataManager.Sorted.Count > 0)
-            {
-                // Sorting
-                DataSource = DataOperations.PerformSorting(DataSource, dataManager.Sorted);
-            }
-            if (dataManager.Where != null && dataManager.Where.Count > 0)
-            {
-                // Filtering
-                DataSource = DataOperations.PerformFiltering(DataSource, dataManager.Where, dataManager.Where[0].Operator);
-            }
-
-            int count = DataSource.Cast<IUserAccount>().Count();
-
-            if (dataManager.Skip != 0)
-            {
-                //Paging
-                DataSource = DataOperations.PerformSkip(DataSource, dataManager.Skip);
-            }
-            if (dataManager.Take != 0)
-            {
-                DataSource = DataOperations.PerformTake(DataSource, dataManager.Take);
-            }
-
-            return dataManager.RequiresCounts ? new DataResult() { Result = DataSource, Count = count } : (object)DataSource;
-        }
-
-        public async override Task<object> InsertAsync(DataManager dataManager, object data, string key)
-        {
-            string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT}";
-
-            var userAccount = (IUserAccount)data;
-
-            //PropertyCopier<object, IUserAccount>.Copy(data, userAccount);
-
-            HttpResponseMessage result = null;
-
-            try
-            {
-                result = await HttpClient.PutAsJsonAsync(url, userAccount);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                StateHasChanged();
-            }
-
-            if (result.IsSuccessStatusCode)
-            {
-                try
-                {
-                    data = JsonConvert.DeserializeObject<IUserAccount>(await result.Content.ReadAsStringAsync());
-                }
-                catch (Exception ex)
-                {
-                    HandleException(ex);
-                    StateHasChanged();
-                }
-
-                if (data == null)
-                {
-                    HandleException(new Exception("Deserialized data was null"));
-                }
-                else
-                {
-                    UserAccounts.Insert(0, data as IUserAccount);
-                }
-
-                return data;
-            }
-            else
-            {
-                ErrorDetails = JsonConvert.DeserializeObject<string[]>(await result.Content.ReadAsStringAsync());
-                StateHasChanged();
-                return data;
-            }
-        }
-
-        public async override Task<object> UpdateAsync(DataManager dataManager, object data, string keyField, string key)
-        {
-            string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT}";
-
-            var newUserAccount = data as IUserAccount;
-
-            if (newUserAccount == null)
-            {
-                HandleException(new Exception("Data could not be converted to an useraccount"));
-                return data;
-            }
-
-            HttpResponseMessage result = null;
-
-            try
-            {
-                var stringContent = new StringContent(JsonConvert.SerializeObject(newUserAccount), Encoding.UTF8, Constants.MediaTypes.JSON);
-                result = await HttpClient.PatchAsync(url, stringContent);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                StateHasChanged();
-                return data;
-            }
-
-            if (result.IsSuccessStatusCode)
-            {
-                return data;
-            }
-            else
-            {
-                ErrorDetails = JsonConvert.DeserializeObject<string[]>(await result.Content.ReadAsStringAsync());
-                StateHasChanged();
-
-                return data;
-            }
-        }
-
-        public async override Task<object> RemoveAsync(DataManager dataManager, object id, string keyField, string key)
-        {
-            var userAccount = UserAccounts.FirstOrDefault(account => account.Id == id.ToString());
-
-            if (userAccount == null)
-            {
-                HandleException(new Exception("Data could not be converted to an user account"));
-                StateHasChanged();
-                return id;
-            }
-
-            HttpResponseMessage result = null;
-
-            string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.DELETE_BY_ID}?id={userAccount.Id}";
-
-            try
-            {
-                result = await HttpClient.DeleteAsync(url);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                StateHasChanged();
-                return id;
-            }
-
-            if (result.IsSuccessStatusCode)
-            {
-                if(!UserAccounts.Remove(UserAccounts.Where(account => account.Id == userAccount.Id).FirstOrDefault()))
-                {
-                    HandleException(new Exception("Error removing locally. Server side account has been deleted"));
-                    StateHasChanged();
-                }
-
-                return id;
-            }
-            else
-            {
-                ErrorDetails = JsonConvert.DeserializeObject<string[]>(await result.Content.ReadAsStringAsync());
-                StateHasChanged();
-
-                return id;
-            }
-        }
+        StateHasChanged();
     }
 }

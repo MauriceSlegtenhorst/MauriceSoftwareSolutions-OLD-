@@ -1,5 +1,4 @@
-﻿using MTS.Core.GlobalLibrary;
-using MTS.PL.Infra.InjectionLibrary;
+﻿using MTS.PL.Infra.InjectionLibrary;
 using System;
 using System.ComponentModel.DataAnnotations;
 using static MTS.Core.GlobalLibrary.Constants;
@@ -47,9 +46,6 @@ namespace MTS.DAL.Infra.APILibrary
 
         [Display(Name = "Last name", ShortName = "L. name", Description = "Last name of the user")]
         public string LastName { get; set; }
-
-        [Display(Name = "Access lvl", ShortName = "A. lvl.", Description = "The last name of the user")]
-        public AccessLevel AccessLevel { get; set; }
 
         [Display(Name = "Access fail count", ShortName = "Access fails", Description = "Times someone tried to login into this account and failed")]
         public int AccessFailedCount { get; set; }

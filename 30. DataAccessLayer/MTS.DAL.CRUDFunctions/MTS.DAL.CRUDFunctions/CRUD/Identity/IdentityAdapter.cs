@@ -67,11 +67,20 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Identity
                 return new AuthentificationResult { IsSucceeded = false, Errors = responses };
             }
 
-            return new AuthentificationResult
+            try
             {
-                IsSucceeded = true,
-                UserToken = await UserTokenBuilder.BuildToken(efUserAccount, _userManager, _dbConfigurations.IssuerSigningKey)
-            };
+                var authResult = new AuthentificationResult
+                {
+                    IsSucceeded = true,
+                    UserToken = await UserTokenBuilder.BuildToken(efUserAccount, _userManager, _dbConfigurations.IssuerSigningKey)
+                };
+
+                return authResult;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<bool> LogOut()

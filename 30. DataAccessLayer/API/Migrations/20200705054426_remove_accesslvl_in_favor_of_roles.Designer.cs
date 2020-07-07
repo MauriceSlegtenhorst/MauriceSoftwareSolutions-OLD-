@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MTS.BL.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200703162308_init")]
-    partial class init
+    [Migration("20200705054426_remove_accesslvl_in_favor_of_roles")]
+    partial class remove_accesslvl_in_favor_of_roles
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

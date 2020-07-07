@@ -46,12 +46,12 @@ namespace MTS.Core.GlobalLibrary
 
         public static class Security
         {
-            public const string STANDARD_USER = "StandardUser";
-            public const string PRIVILEGED_USER = "PrivilegedUser";
-            public const string VOLENTEER = "Volenteer";
-            public const string EMPLOYEE = "Employee";
-            public const string PRIVILEGED_EMPLOYEE = "PrivilegedEmployee";
-            public const string ADMINISTRATOR = "Administrator";
+            public const string STANDARD_USER = "standarduser";
+            public const string PRIVILEGED_USER = "privilegeduser";
+            public const string VOLENTEER = "volenteer";
+            public const string EMPLOYEE = "employee";
+            public const string PRIVILEGED_EMPLOYEE = "privilegedemployee";
+            public const string ADMINISTRATOR = "administrator";
 
             public static string GetAccessLevelString(AccessLevel accessLevel)
             {

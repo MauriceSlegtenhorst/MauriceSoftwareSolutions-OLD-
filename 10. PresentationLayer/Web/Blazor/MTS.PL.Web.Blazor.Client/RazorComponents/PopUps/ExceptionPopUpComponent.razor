@@ -1,0 +1,77 @@
+﻿<SfDialog ShowCloseIcon="true" @bind-Visible="@IsVisible">
+    <DialogAnimationSettings Effect="@DialogEffect.FadeZoom" />
+    <DialogTemplates>
+        <Header> <h2>@_dialogHeader</h2> </Header>
+        <Content>
+            <h3>@_header</h3>
+            <p>
+                @_content
+            </p>
+            <h3> @_innerExceptionHeader </h3>
+            <p>
+                @_innerExceptionContent
+            </p>
+        </Content>
+    </DialogTemplates>
+    <DialogButtons>
+        <DialogButton OnClick="@OnClick">
+            <DialogButtonModel Content="Ok :(" IsPrimary="true" />
+        </DialogButton>
+    </DialogButtons>
+</SfDialog>
+
+@code {
+    private string _dialogHeader;
+
+    private string _header;
+    private string _content;
+
+    private string _innerExceptionHeader;
+    private string _innerExceptionContent;
+
+
+    [Parameter]
+    public string DialogHeader { get; set; }
+
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public Exception Exception { get; set; }
+
+    private void OnClick()
+    {
+        IsVisible = false;
+    }
+
+    protected override Task OnParametersSetAsync()
+    {
+        if (DialogHeader != null)
+            _dialogHeader = DialogHeader;
+        else
+            _dialogHeader = "An error has occurred";
+
+#if DEBUG
+        _header = Exception.GetType().Name;
+        _content = Exception.Message;
+
+        if (Exception.InnerException == null)
+            return base.OnParametersSetAsync();
+
+        _innerExceptionHeader = Exception.InnerException.GetType().Name;
+        _innerExceptionContent = Exception.InnerException.Message;
+#else
+        _dialogHeader = "An error has occurred";
+        _header = String.Empty;
+        _content = "Error details are kept from you.";
+#endif
+        return base.OnParametersSetAsync();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+
+
+        return base.OnInitializedAsync();
+    }
+}

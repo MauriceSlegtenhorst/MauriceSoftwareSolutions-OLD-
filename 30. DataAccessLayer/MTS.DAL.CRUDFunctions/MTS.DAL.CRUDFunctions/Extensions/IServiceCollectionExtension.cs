@@ -37,9 +37,9 @@ namespace MTS.DAL.DatabaseAccess.Extensions
                 })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
-                    options.RequireHttpsMetadata = true;
+                    options.RequireHttpsMetadata = false;
                     options.SaveToken = true;
-                    options.Audience = "https://localhost:5001/";
+                    options.Audience = "MTS-Audience";
                     options.TokenValidationParameters = configurations.TokenValidationParameters;
                 });
 
