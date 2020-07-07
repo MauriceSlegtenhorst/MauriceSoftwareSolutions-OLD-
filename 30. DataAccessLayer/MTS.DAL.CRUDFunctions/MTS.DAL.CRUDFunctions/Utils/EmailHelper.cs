@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.WebUtilities;
 using MTS.PL.Infra.Interfaces;
 using MTS.Core.GlobalLibrary;
-using MTS.PL.Entities.Core;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using MTS.PL.Entities.Core;
 
 namespace MTS.PL.DatabaseAccess.Utils
 {

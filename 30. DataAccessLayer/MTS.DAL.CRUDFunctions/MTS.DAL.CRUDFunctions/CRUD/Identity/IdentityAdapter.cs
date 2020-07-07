@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MTS.PL.DatabaseAccess.Utils;
 using MTS.PL.DatabaseAccess.DataContext;
-using MTS.PL.Entities.Core;
 using MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter;
 using MTS.PL.Infra.Interfaces.Standard;
 using MTS.PL.Entities.Standard;
+using MTS.PL.Entities.Core;
 
 namespace MTS.PL.DatabaseAccess.CRUD.Identity
 {
@@ -28,23 +28,24 @@ namespace MTS.PL.DatabaseAccess.CRUD.Identity
 
         public async Task<IAuthentificationResult> LogIn(ICredentialHolder credentials)
         {
-            DALUserAccount efUserAccount = await _userManager.FindByEmailAsync(credentials.Email);
+            if(credentials == null)
+                return new BLAuthentificationResult { IsSucceeded = false, Errors = new[] { "The credentials parameter was null" } };
 
-            if (efUserAccount == null)
-            {
+            DALUserAccount dalUserAccount = await _userManager.FindByEmailAsync(credentials.Email);
+
+            if (dalUserAccount == null)
                 return new BLAuthentificationResult { IsSucceeded = false, Errors = new[] { "No user exists with this email and password" } };
-            }
+            
+            List<string> errorMessages = new List<string>();
 
-            List<string> responses = new List<string>();
+            GetEmailConfirmedMessages(dalUserAccount, errorMessages);
 
-            GetEmailConfirmedMessages(efUserAccount, responses);
+            GetIsAdmittedMessages(dalUserAccount, errorMessages);
 
-            GetIsAdmittedMessages(efUserAccount, responses);
+            if (errorMessages.Count > 0)
+                return new BLAuthentificationResult { IsSucceeded = false, Errors = errorMessages };
 
-            if (responses.Count > 0)
-                return new BLAuthentificationResult { IsSucceeded = false, Errors = responses };
-
-            var result = await _signInManager.PasswordSignInAsync(
+            SignInResult result = await _signInManager.PasswordSignInAsync(
                 credentials.Email,
                 credentials.Password,
                 isPersistent: credentials.RememberMe,
@@ -52,9 +53,9 @@ namespace MTS.PL.DatabaseAccess.CRUD.Identity
 
             if (result.Succeeded == false)
             {
-                HandleNegativeResult(result, efUserAccount, responses);
+                HandleNegativeSignInResult(result, dalUserAccount, errorMessages);
 
-                return new BLAuthentificationResult { IsSucceeded = false, Errors = responses };
+                return new BLAuthentificationResult { IsSucceeded = false, Errors = errorMessages };
             }
 
             try
@@ -62,7 +63,7 @@ namespace MTS.PL.DatabaseAccess.CRUD.Identity
                 var authResult = new BLAuthentificationResult
                 {
                     IsSucceeded = true,
-                    UserToken = await UserTokenBuilder.BuildToken(efUserAccount, _userManager, _dbConfigurations.IssuerSigningKey)
+                    UserToken = await UserTokenBuilder.BuildToken(dalUserAccount, _userManager, _dbConfigurations.IssuerSigningKey)
                 };
 
                 return authResult;

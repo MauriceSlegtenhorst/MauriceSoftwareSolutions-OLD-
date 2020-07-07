@@ -14,8 +14,8 @@ using System.Security.Claims;
 using MTS.PL.Infra.Interfaces.Standard;
 using MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter;
 using MTS.PL.Infra.Entities.Standard;
-using MTS.PL.Entities.Core;
 using MTS.PL.Entities.Standard;
+using MTS.PL.Entities.Core;
 
 namespace MTS.PL.API.Controllers
 {

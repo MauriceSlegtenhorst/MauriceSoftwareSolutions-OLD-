@@ -1,9 +1,9 @@
 ﻿using MTS.PL.Infra.Interfaces.Standard;
-using MTS.PL.Entities.Core;
 using MTS.PL.Interfaces.Standard;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MTS.PL.Entities.Core;
 
 namespace MTS.PL.DatabaseAccess.DataContext
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MTS.PL.Entities;
 using MTS.PL.Entities.Core;
+using MTS.PL.Entities;
 
 namespace MTS.PL.DatabaseAccess.DataContext
 {

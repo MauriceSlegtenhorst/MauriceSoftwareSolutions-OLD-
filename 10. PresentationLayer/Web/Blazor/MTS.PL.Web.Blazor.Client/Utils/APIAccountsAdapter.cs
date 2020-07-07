@@ -16,14 +16,9 @@ namespace MTS.PL.Web.Blazor.Client.Utils
 {
     public class APIAccountsAdapter : DataAdaptor
     {
-        private readonly HttpClient _httpClient;
+        public static HttpClient httpClient;
 
         public static IEnumerable<IPLUserAccount> PLUserAccounts { get; set; }
-
-        public APIAccountsAdapter(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
 
         public override object Read(DataManagerRequest dataManager, string key = null)
         {
@@ -71,7 +66,7 @@ namespace MTS.PL.Web.Blazor.Client.Utils
 
             try
             {
-                result = await _httpClient.PutAsJsonAsync(url, userAccount);
+                result = await httpClient.PutAsJsonAsync(url, userAccount);
             }
             catch
             {
@@ -123,7 +118,7 @@ namespace MTS.PL.Web.Blazor.Client.Utils
             try
             {
                 var stringContent = new StringContent(JsonConvert.SerializeObject(newUserAccount), Encoding.UTF8, Constants.MediaTypes.JSON);
-                result = await _httpClient.PatchAsync(url, stringContent);
+                result = await httpClient.PatchAsync(url, stringContent);
             }
             catch (Exception ex)
             {
@@ -155,7 +150,7 @@ namespace MTS.PL.Web.Blazor.Client.Utils
 
             try
             {
-                result = await _httpClient.DeleteAsync(url);
+                result = await httpClient.DeleteAsync(url);
             }
             catch (Exception ex)
             {

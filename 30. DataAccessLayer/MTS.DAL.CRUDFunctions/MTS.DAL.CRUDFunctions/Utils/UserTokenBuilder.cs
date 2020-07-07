@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using MTS.PL.Entities.Standard;
 using MTS.Core.GlobalLibrary;
 using MTS.PL.Entities.Core;
 using System;

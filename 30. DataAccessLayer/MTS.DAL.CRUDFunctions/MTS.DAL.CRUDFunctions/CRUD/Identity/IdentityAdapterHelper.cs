@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MTS.PL.DatabaseAccess.CRUD.Identity
 {
-    public class IdentityAdapterHelper
+    public abstract class IdentityAdapterHelper
     {
         private readonly SignInManager<DALUserAccount> _signInManager;
 
@@ -13,13 +13,13 @@ namespace MTS.PL.DatabaseAccess.CRUD.Identity
             _signInManager = signInManager;
         }
 
-        protected void HandleNegativeResult(SignInResult result, DALUserAccount efUserAccount, List<string> responses)
+        protected void HandleNegativeSignInResult(SignInResult result, DALUserAccount efUserAccount, List<string> responses)
         {
             if (result.IsLockedOut == true)
-                responses.Add($"User is now locked out for some time");
+                responses.Add("You are locked out for some time.");
 
             if (result.IsNotAllowed == true)
-                responses.Add($"You are not allowed to login for some time");
+                responses.Add($"You are not allowed to login");
 
             if (responses.Count == 0)
                 responses.Add("Wrong password");

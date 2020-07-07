@@ -5,13 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using MTS.PL.DatabaseAccess.CRUD.Account;
 using MTS.PL.DatabaseAccess.DataContext;
 using MTS.PL.DatabaseAccess.CRUD.Identity;
-using MTS.PL.Entities.Core;
 using MTS.PL.Infra.Interfaces;
 using MTS.PL.Interfaces.Standard;
 using MTS.PL.Infra.Entities;
 using MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter;
+using MTS.PL.Entities.Core;
 
-namespace MTS.DAL.DatabaseAccess.Extensions
+namespace MTS.PL.DatabaseAccess.Extensions
 {
     public static class IServiceCollectionExtension
     {
