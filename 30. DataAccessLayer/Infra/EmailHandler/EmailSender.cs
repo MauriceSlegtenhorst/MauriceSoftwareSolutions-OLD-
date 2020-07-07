@@ -6,7 +6,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MTS.DAL.Infra.EmailLibrary
+namespace MTS.CC.Email
 {
     public class EmailSender : IEmailSender
     {

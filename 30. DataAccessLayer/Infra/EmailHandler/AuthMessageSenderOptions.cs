@@ -1,6 +1,6 @@
 ﻿using MTS.DAL.Infra.Interfaces;
 
-namespace MTS.DAL.Infra.EmailLibrary
+namespace MTS.CC.Email
 {
     public sealed class AuthMessageSenderOptions : IAuthMessageSenderOptions
     {

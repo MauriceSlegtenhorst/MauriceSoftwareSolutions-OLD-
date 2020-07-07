@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>MTS.CC.Email</AssemblyName>
+    <RootNamespace>MTS.CC.Email</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
