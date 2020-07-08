@@ -18,7 +18,7 @@ namespace MTS.PL.Web.Blazor.Client.Utils
     {
         public static HttpClient httpClient;
 
-        public static IEnumerable<IPLUserAccount> PLUserAccounts { get; set; }
+        public static List<PLUserAccount> PLUserAccounts { get; set; }
 
         public override object Read(DataManagerRequest dataManager, string key = null)
         {
@@ -28,17 +28,17 @@ namespace MTS.PL.Web.Blazor.Client.Utils
             if (dataManager.Search != null && dataManager.Search.Count > 0)
             {
                 // Searching
-                PLUserAccounts = DataOperations.PerformSearching(PLUserAccounts, dataManager.Search);
+                PLUserAccounts = DataOperations.PerformSearching(PLUserAccounts, dataManager.Search).ToList();
             }
             if (dataManager.Sorted != null && dataManager.Sorted.Count > 0)
             {
                 // Sorting
-                PLUserAccounts = DataOperations.PerformSorting(PLUserAccounts, dataManager.Sorted);
+                PLUserAccounts = DataOperations.PerformSorting(PLUserAccounts, dataManager.Sorted).ToList();
             }
             if (dataManager.Where != null && dataManager.Where.Count > 0)
             {
                 // Filtering
-                PLUserAccounts = DataOperations.PerformFiltering(PLUserAccounts, dataManager.Where, dataManager.Where[0].Operator);
+                PLUserAccounts = DataOperations.PerformFiltering(PLUserAccounts, dataManager.Where, dataManager.Where[0].Operator).ToList();
             }
 
             int count = PLUserAccounts.Count();
@@ -46,11 +46,11 @@ namespace MTS.PL.Web.Blazor.Client.Utils
             if (dataManager.Skip != 0)
             {
                 //Paging
-                PLUserAccounts = DataOperations.PerformSkip(PLUserAccounts, dataManager.Skip);
+                PLUserAccounts = DataOperations.PerformSkip(PLUserAccounts, dataManager.Skip).ToList();
             }
             if (dataManager.Take != 0)
             {
-                PLUserAccounts = DataOperations.PerformTake(PLUserAccounts, dataManager.Take);
+                PLUserAccounts = DataOperations.PerformTake(PLUserAccounts, dataManager.Take).ToList();
             }
 
             return dataManager.RequiresCounts ? new DataResult() { Result = PLUserAccounts, Count = count } : (object)PLUserAccounts;
@@ -60,9 +60,14 @@ namespace MTS.PL.Web.Blazor.Client.Utils
         {
             string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT}";
 
-            var userAccount = (IPLUserAccount)data;
+            var userAccount = data as PLUserAccount;
 
-            HttpResponseMessage result = null;
+            if (userAccount == null)
+            {
+                throw new Exception("Data could not be converted to an useraccount");
+            }
+
+            HttpResponseMessage result;
 
             try
             {
@@ -90,7 +95,7 @@ namespace MTS.PL.Web.Blazor.Client.Utils
                 }
 
 
-                PLUserAccounts.ToList().Insert(0, data as IPLUserAccount);
+                PLUserAccounts.Insert(0, data as PLUserAccount);
 
 
                 return data;
@@ -105,7 +110,7 @@ namespace MTS.PL.Web.Blazor.Client.Utils
         {
             string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT}";
 
-            var newUserAccount = data as IPLUserAccount;
+            var newUserAccount = data as PLUserAccount;
 
             if (newUserAccount == null)
             {
@@ -113,25 +118,25 @@ namespace MTS.PL.Web.Blazor.Client.Utils
 
             }
 
-            HttpResponseMessage result = null;
+            HttpResponseMessage result;
 
             try
             {
                 var stringContent = new StringContent(JsonConvert.SerializeObject(newUserAccount), Encoding.UTF8, Constants.MediaTypes.JSON);
                 result = await httpClient.PatchAsync(url, stringContent);
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
 
             if (result.IsSuccessStatusCode)
             {
-                return data;
+                return newUserAccount;
             }
             else
             {
-                throw new Exception("Call to server was unsuccessfull");
+                throw new Exception($"Call to server was unsuccessfull. {result.ReasonPhrase}");
             }
         }
 
@@ -152,16 +157,16 @@ namespace MTS.PL.Web.Blazor.Client.Utils
             {
                 result = await httpClient.DeleteAsync(url);
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
 
             if (result.IsSuccessStatusCode)
             {
-                if (!PLUserAccounts.ToList().Remove(PLUserAccounts.Where(account => account.Id == userAccount.Id).FirstOrDefault()))
+                if (!PLUserAccounts.Remove(PLUserAccounts.Where(account => account.Id == userAccount.Id).FirstOrDefault()))
                 {
-                    throw new Exception("Error removing locally. Server side account has been deleted");
+                    throw new Exception("Error removing account locally. Server side account has been deleted");
                 }
 
                 return id;

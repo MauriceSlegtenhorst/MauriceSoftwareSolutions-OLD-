@@ -161,7 +161,7 @@ namespace MTS.PL.DatabaseAccess.CRUD.Account
         #region Write
         public async Task<IdentityResult> WriteAsync(IPLUserAccount blUserAccount)
         {
-            if (blUserAccount == null || String.IsNullOrEmpty(blUserAccount.Email) || String.IsNullOrEmpty(blUserAccount.Password) || String.IsNullOrEmpty(blUserAccount.Id))
+            if (blUserAccount == null || String.IsNullOrEmpty(blUserAccount.Email) || String.IsNullOrEmpty(blUserAccount.Id))
                 throw new ArgumentException("Parameter cannot be null or ivalid");
 
             var dalUserAccount = await _userManager.FindByIdAsync(blUserAccount.Id);

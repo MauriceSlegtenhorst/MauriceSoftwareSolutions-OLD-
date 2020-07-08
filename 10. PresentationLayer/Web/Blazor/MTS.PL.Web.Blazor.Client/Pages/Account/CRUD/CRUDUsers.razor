@@ -1,15 +1,19 @@
 ﻿@page "/account/crudusers"
-@attribute [Authorize(Roles = Constants.Security.ADMINISTRATOR)]
+@attribute [Authorize(
+    Roles = 
+    Constants.Security.ADMINISTRATOR + "," + 
+    Constants.Security.PRIVILEGED_EMPLOYEE)]
 @inject HttpClient _httpClient
 
-<h1>CRUD users</h1>
+<h1>CRUD accounts</h1>
+<h4>Create, read, update and delete accounts</h4>
 
 @if (ErrorDetails != null && ErrorDetails.Count > 0)
 {
     <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Danger" Title="@ErrorTitle" ContentMessages="@ErrorDetails" ShowContentAsList="@ShowContentAsList" />
 }
 
-<SfGrid TValue="IPLUserAccount" AllowPaging="true" Toolbar="@ToolBarItems" ID="Grid" AllowSorting="true" Width="100%">
+<SfGrid TValue="PLUserAccount" AllowPaging="true" Toolbar="@ToolBarItems" ID="Grid" AllowSorting="true">
 
     <GridEditSettings AllowAdding="true"
                       AllowEditing="true"
@@ -31,7 +35,7 @@
                 List<Exception> exceptions = null;
                 try
                 {
-                    PropertyInfo[] propertyInfos = typeof(IPLUserAccount).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                    PropertyInfo[] propertyInfos = typeof(PLUserAccount).GetProperties(BindingFlags.Public | BindingFlags.Instance);
                     if (propertyInfos.Any())
                     {
 
@@ -89,15 +93,15 @@
 @code{
     public static string ErrorTitle { get; set; }
     public static List<string> ErrorDetails { get; set; }
-    public bool ShowContentAsList {
-        get
-        {
-            if (ErrorDetails == null)
-                return false;
+    public bool ShowContentAsList { get => ErrorDetails?.Count > 1; }
+    //    get
+    //    {
+    //        if (ErrorDetails == null)
+    //            return false;
 
-            return ErrorDetails.Count > 1;
-        }
-    }
+    //        return ErrorDetails.Count > 1;
+    //    }
+    //}
 
     public bool IsInitialRender = false;
     public List<string> ToolBarItems { get; set; } = new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" };
@@ -112,6 +116,12 @@
 
     protected async override void OnInitialized()
     {
+        ErrorTitle = null;
+        ErrorDetails = null;
+
+        if (IsInitialRender == true)
+            return;
+
         IsInitialRender = true;
 
         HttpResponseMessage result = null;
@@ -135,7 +145,9 @@
         try
         {
             APIAccountsAdapter.httpClient = _httpClient;
-            APIAccountsAdapter.PLUserAccounts = JsonConvert.DeserializeObject<List<PLUserAccount>>(await result.Content.ReadAsStringAsync());
+            var accounts = JsonConvert.DeserializeObject<List<PLUserAccount>>(await result.Content.ReadAsStringAsync());
+
+            APIAccountsAdapter.PLUserAccounts = accounts;
         }
         catch (Exception ex)
         {
@@ -143,6 +155,7 @@
         }
     }
 
+    //TODO place methods in seperate class
     public void ActionFailure(Syncfusion.Blazor.Grids.FailureEventArgs args)
     {
 
