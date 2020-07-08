@@ -91,17 +91,13 @@
 </SfGrid>
 
 @code{
+    [CascadingParameter(Name = nameof(MainLayout))]
+    public MainLayout MainLayoutInstance { get; set; }
+
     public static string ErrorTitle { get; set; }
     public static List<string> ErrorDetails { get; set; }
     public bool ShowContentAsList { get => ErrorDetails?.Count > 1; }
-    //    get
-    //    {
-    //        if (ErrorDetails == null)
-    //            return false;
 
-    //        return ErrorDetails.Count > 1;
-    //    }
-    //}
 
     public bool IsInitialRender = false;
     public List<string> ToolBarItems { get; set; } = new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" };
@@ -132,13 +128,13 @@
         }
         catch (Exception ex)
         {
-            HandleException(new Exception("Something went wrong while calling the server.", ex));
+            MainLayoutInstance.ShowExceptionToast(new Exception("Something went wrong while calling the server.", ex));
             return;
         }
 
         if (result.IsSuccessStatusCode == false)
         {
-            HandleException(new Exception($"Call was unsuccessfull:\n{result.StatusCode}\n{result.ReasonPhrase}"));
+            MainLayoutInstance.ShowExceptionToast(new Exception($"Call was unsuccessfull:\n{result.StatusCode}\n{result.ReasonPhrase}"));
             return;
         }
 
@@ -151,7 +147,7 @@
         }
         catch (Exception ex)
         {
-            HandleException(new Exception("Something went wrong while deserializing the server response.", ex));
+            MainLayoutInstance.ShowExceptionToast(new Exception("Something went wrong while deserializing the server response.", ex));
         }
     }
 
@@ -159,34 +155,6 @@
     public void ActionFailure(Syncfusion.Blazor.Grids.FailureEventArgs args)
     {
 
-        if (ErrorDetails == null)
-            ErrorDetails = new List<string>();
-
-        ErrorDetails.Add(args.Error.ToString());
-
-        StateHasChanged();
-    }
-
-    public void HandleException(Exception ex)
-    {
-        if (ex == null || ex.Message == null)
-            return;
-
-#if DEBUG
-        if(ErrorDetails == null)
-            ErrorDetails = new List<string>();
-
-        ErrorDetails.Add(ex.GetType().Name);
-        ErrorDetails.Add(ex.Message);
-
-        if (ex.InnerException != null)
-        {
-            ErrorDetails.Add(ex.InnerException.GetType().Name);
-            ErrorDetails.Add(ex.InnerException.Message);
-        }
-#else
-        ErrorDetails = new List<string> { "Something went wrong... Details are secret" };
-#endif
-        StateHasChanged();
+        MainLayoutInstance.ShowExceptionToast(new Exception($"An action failure occurred: {args.Error.ToString()}"));
     }
 }

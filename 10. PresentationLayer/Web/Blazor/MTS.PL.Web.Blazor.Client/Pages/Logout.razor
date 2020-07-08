@@ -5,6 +5,9 @@
 <h1>Logging out</h1>
 
 @code{
+    [CascadingParameter(Name = nameof(MainLayout))]
+    public MainLayout MainLayoutInstance { get; set; }
+
     protected async override void OnInitialized()
     {
         var url = $"{Constants.API_BASE_ADDRESS}/{Constants.APIControllers.IDENTITY}/{Constants.IdentityControllerEndpoints.LOG_OUT}";
@@ -19,7 +22,11 @@
 
         try
         {
+            MainLayoutInstance.ShowSpinner();
+
             result = await _httpClient.SendAsync(request);
+
+            MainLayoutInstance.HideSpinner();
         }
         catch (Exception ex)
         {
@@ -28,6 +35,15 @@
 
         if (result.IsSuccessStatusCode)
         {
+            MainLayoutInstance.ShowToast(new ToastModel
+            {
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons",
+                Title = "Logout was succesfull",
+                Content = $"You are now logged out.",
+                ShowProgressBar = true
+            });
+
             await _loginService.Logout();
         }
 

@@ -130,6 +130,9 @@
 
 @code
 {
+        [CascadingParameter(Name = nameof(MainLayout))]
+        public MainLayout MainLayoutInstance { get; set; }
+
     private EditContext _formContext;
 
     private SfTextBox _tbEmail;
@@ -180,7 +183,9 @@
 
         try
         {
+            MainLayoutInstance.ShowSpinner();
             result = await _httpClient.PutAsJsonAsync(requestUrl, _inputModel);
+            MainLayoutInstance.HideSpinner();
         }
         catch (Exception ex)
         {
@@ -195,6 +200,15 @@
             if (IsLogin)
             {
                 await _loginService.Login(resultContentAsString);
+
+                MainLayoutInstance.ShowToast(new ToastModel
+                {
+                    CssClass= "e-toast-success",
+                    Icon = "e-success toast-icons",
+                    Title = "Login was succesfull",
+                    Content = $"Account for {_inputModel.Email} is now logged in.",
+                    ShowProgressBar = true
+                });
 
                 _navigationManager.NavigateTo("/");
             }
