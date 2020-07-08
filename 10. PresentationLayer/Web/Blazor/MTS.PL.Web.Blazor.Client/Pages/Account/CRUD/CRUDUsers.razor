@@ -8,11 +8,6 @@
 <h1>CRUD accounts</h1>
 <h4>Create, read, update and delete accounts</h4>
 
-@if (ErrorDetails != null && ErrorDetails.Count > 0)
-{
-    <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Danger" Title="@ErrorTitle" ContentMessages="@ErrorDetails" ShowContentAsList="@ShowContentAsList" />
-}
-
 <SfGrid TValue="PLUserAccount" AllowPaging="true" Toolbar="@ToolBarItems" ID="Grid" AllowSorting="true">
 
     <GridEditSettings AllowAdding="true"
@@ -93,12 +88,7 @@
 @code{
     [CascadingParameter(Name = nameof(MainLayout))]
     public MainLayout MainLayoutInstance { get; set; }
-
-    public static string ErrorTitle { get; set; }
-    public static List<string> ErrorDetails { get; set; }
-    public bool ShowContentAsList { get => ErrorDetails?.Count > 1; }
-
-
+    
     public bool IsInitialRender = false;
     public List<string> ToolBarItems { get; set; } = new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" };
 
@@ -112,9 +102,6 @@
 
     protected async override void OnInitialized()
     {
-        ErrorTitle = null;
-        ErrorDetails = null;
-
         if (IsInitialRender == true)
             return;
 
