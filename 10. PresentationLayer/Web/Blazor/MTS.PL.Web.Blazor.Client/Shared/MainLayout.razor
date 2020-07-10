@@ -19,12 +19,12 @@
 
     <div class="content px-4">
         <div id="spinnerContainer"></div>
-        <SfSpinner @ref="Spinner" Target="#spinnerContainer" Label="Loading..." CssClass="e-spin-overlay"/>
-        
+        <SfSpinner @ref="Spinner" Target="#spinnerContainer" Label="Loading..." CssClass="e-spin-overlay" />
+
         <CascadingValue Value="this" Name="@nameof(MainLayout)">
             @Body
         </CascadingValue>
-</div>
+    </div>
 
     <div class="col-lg-4 control-section">
         <SfToast @ref="Toast" ID="toast_type">
@@ -138,7 +138,7 @@
         contentBuilder.AppendLine("Stack trace:");
         contentBuilder.Append(exception.StackTrace);
 
-        if(exception.InnerException != null)
+        if (exception.InnerException != null)
         {
             contentBuilder.AppendLine($"{exception.InnerException.GetType().Name}:");
             contentBuilder.Append(exception.InnerException.Message);
@@ -157,15 +157,15 @@
             Width = "40%"
         };
 #else
-        toastModel = new ToastModel
-        {
-            CssClass = "e-toast-danger",
-            Title = "An error has occured ;(",
-            Content = "Detail are held secret",
-            ShowCloseButton = true,
-            TimeOut = 0,
-            Width = "40%"
-        };
+    toastModel = new ToastModel
+    {
+        CssClass = "e-toast-danger",
+        Title = "An error has occured ;(",
+        Content = "Detail are held secret",
+        ShowCloseButton = true,
+        TimeOut = 0,
+        Width = "40%"
+    };
 #endif
 
         ShowToast(toastModel);
