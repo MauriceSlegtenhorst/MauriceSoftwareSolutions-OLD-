@@ -52,7 +52,7 @@
                     <!--#region Email and password-->
                     <div class="form-group row">
                         <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                            <SfTextBox Type="email" Placeholder="Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
+                            <SfTextBox Type="InputType.Email" Placeholder="Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
                                        ShowClearButton="true" @bind-Value="@_plUserAccount.Email" Blur="OnBlur" />
 
                             <ValidationMessage For="@(() => _plUserAccount.Email)" />
@@ -61,7 +61,7 @@
                         </div>
 
                         <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                            <SfTextBox Type="password" Placeholder="Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
+                            <SfTextBox Type="InputType.Password" Placeholder="Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
                                        ShowClearButton="true" @bind-Value="@_plUserAccount.Password" Blur="OnBlur" />
 
                             <ValidationMessage For="@(() => _plUserAccount.Password)" />
@@ -87,7 +87,7 @@ else
 
 
 <style>
-    .e-input-picture::before {
+   /* .e-input-picture::before {
         content: '\e335';
         font-family: e-icons;
     }
@@ -142,7 +142,7 @@ else
     .bootstrap .row.material2,
     .bootstrap4 .row.material2,
     .highcontrast .row.material2 {
-        display: none;
+        display: none;*/
     }
 </style>
 

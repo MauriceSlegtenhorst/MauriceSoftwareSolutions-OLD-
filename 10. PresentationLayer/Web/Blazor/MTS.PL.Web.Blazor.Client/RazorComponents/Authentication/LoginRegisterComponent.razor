@@ -3,70 +3,72 @@
 @inject NavigationManager _navigationManager
 @using System.Net.Mail
 
-<SfCard>
-    <CardHeader>
-        <h3>Please enter your details</h3>
-    </CardHeader>
-    <CardContent>
-        <EditForm EditContext="@_formContext" OnValidSubmit="SubmitForm">
-            <div class="content-wrapper">
+    <div class="card-form">
+        <SfCard>
+            <CardHeader>
+                <h3>Please enter your details</h3>
+            </CardHeader>
+            <CardContent>
+                <EditForm EditContext="@_formContext" OnValidSubmit="SubmitForm">
+                    <div class="content-wrapper">
 
-                <DataAnnotationsValidator />
+                        <DataAnnotationsValidator />
 
-                @if (_resultErrors.Count() > 0)
-                {
-                    <div class="form-group row">
-                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                            <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Danger" Title="@_resultTitle" ContentMessages="@_resultErrors" />
+                        @if (_resultErrors.Count() > 0)
+                        {
+                            <div class="form-group row">
+                                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                    <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Danger" Title="@_resultTitle" ContentMessages="@_resultErrors" />
+                                </div>
+                            </div>
+                        }
+
+                        <div class="form-group row">
+                            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                <SfTextBox @ref="_tbEmail" Type="InputType.Email" Placeholder="Enter Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                           ShowClearButton="true" @bind-Value="@_inputModel.Email" Blur="OnEmailBlur" />
+
+                                <ValidationMessage For="@(() => _inputModel.Email)" />
+
+                                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
+                            </div>
                         </div>
-                    </div>
-                }
 
-                <div class="form-group row">
-                    <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                        <SfTextBox @ref="_tbEmail" Type="email" Placeholder="Enter Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                   ShowClearButton="true" @bind-Value="@_inputModel.Email" Blur="OnEmailBlur" />
+                        <div class="form-group row">
+                            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                <SfTextBox @ref="_tbPassword" Type="InputType.Password" Placeholder="Enter Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                           ShowClearButton="true" @bind-Value="@_inputModel.Password" Blur="OnPasswordBlur" />
 
-                        <ValidationMessage For="@(() => _inputModel.Email)" />
-
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                        <SfTextBox @ref="_tbPassword" Type="password" Placeholder="Enter Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                   ShowClearButton="true" @bind-Value="@_inputModel.Password" Blur="OnPasswordBlur" />
-
-                        <ValidationMessage For="@(() => _inputModel.Password)" />
-                    </div>
-                </div>
-
-                @if (IsLogin == false)
-                {
-                    <div class="form-group row">
-                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                            <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Password must atleast" ContentMessages="Constants.VALID_PASSWORD_REQUIREMENTS" ShowContentAsList="true" />
+                                <ValidationMessage For="@(() => _inputModel.Password)" />
+                            </div>
                         </div>
-                    </div>
-                }
 
-                <div class="form-group form-check row">
-                    <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                        <SfCheckBox Label="Remember me?" @bind-Checked="@_inputModel.RememberMe" />
-                    </div>
-                </div>
+                        @if (IsLogin == false)
+                        {
+                            <div class="form-group row">
+                                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                    <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Password must atleast" ContentMessages="Constants.VALID_PASSWORD_REQUIREMENTS" ShowContentAsList="true" />
+                                </div>
+                            </div>
+                        }
 
-                <div class="form-group row">
-                    <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                        <SfButton Type="submit" CssClass="btn btn-primary" Content="@_btnContent" />
-                    </div>
-                </div>
+                        <div class="form-group form-check row">
+                            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                <SfCheckBox Label="Remember me?" @bind-Checked="@_inputModel.RememberMe" />
+                            </div>
+                        </div>
 
-            </div>
-        </EditForm>
-    </CardContent>
-</SfCard>
+                        <div class="form-group row">
+                            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                <SfButton Type="submit" CssClass="btn btn-primary" Content="@_btnContent" />
+                            </div>
+                        </div>
+
+                    </div>
+                </EditForm>
+            </CardContent>
+        </SfCard>
+    </div>
 
 <style>
     .e-input-picture::before {
