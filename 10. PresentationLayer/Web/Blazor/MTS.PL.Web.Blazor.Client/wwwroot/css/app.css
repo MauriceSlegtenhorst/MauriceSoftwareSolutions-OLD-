@@ -1,5 +1,10 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+.fullscreen{
+    width:100%;
+    height:100%;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     height: 100%;
@@ -140,8 +145,9 @@ app {
 }
 
 .card-form{
-    height: 50%;
-    width: 50%;
+   height: 100%;
+   width: 100%;
+   padding: 2rem;
 }
 
 .card-container {

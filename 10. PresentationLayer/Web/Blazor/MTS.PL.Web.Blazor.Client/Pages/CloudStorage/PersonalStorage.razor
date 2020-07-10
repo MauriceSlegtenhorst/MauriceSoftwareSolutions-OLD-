@@ -1,0 +1,24 @@
+﻿@page "/cloudstorage/personalstorage"
+@attribute [Authorize]
+@using Syncfusion.Blazor.FileManager;
+
+<h1>Cloud storage</h1>
+
+<div class="fullscreen">
+    <SfFileManager>
+        <FileManagerAjaxSettings Url="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/FileOperations"
+                                 UploadUrl="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/Upload"
+                                 DownloadUrl="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/Download"
+                                 GetImageUrl="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/GetImage">
+        </FileManagerAjaxSettings>
+    </SfFileManager>
+</div>
+
+@code {
+    protected override Task OnInitializedAsync()
+    {
+
+
+        return base.OnInitializedAsync();
+    }
+}

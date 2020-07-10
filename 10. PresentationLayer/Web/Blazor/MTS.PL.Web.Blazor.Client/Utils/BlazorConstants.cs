@@ -6,7 +6,7 @@
         public const string UNDER_CONSTRUCTION_MESSAGE = "This part or page is under construction and is therefore unavailible to you.\nThank you for your patience.";
 
         public class Pages
-        {
+        { 
             public class Account
             {
                 public const string CRUD_ACCOUNT = "/account/crud/crudusers";
@@ -21,6 +21,11 @@
                 public const string TOKEN_EXPIRED = "/authentication/tokenexpired";
                 public const string LOGIN = "/authentication/login";
                 public const string LOGOUT = "/authentication/logout";
+            }
+
+            public class CloudStorage
+            {
+                public const string PERSONAL_CLOUD_STORAGE = "/cloudstorage/personalstorage";
             }
 
             public const string CREDITS = "/credits";

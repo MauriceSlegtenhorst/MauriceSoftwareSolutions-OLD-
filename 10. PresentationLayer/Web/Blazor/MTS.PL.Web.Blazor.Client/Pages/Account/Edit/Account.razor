@@ -16,7 +16,7 @@
                     <DataAnnotationsValidator />
 
                     <!--#region Firstname, affix and last name-->
-                    <div class="form-group row">
+                    <div class="row">
                         <div class="col-xs-5 col-sm-5 col-lg-5 col-md-5">
                             <SfTextBox Placeholder="First name" CssClass="@_firstNameCssClass" FloatLabelType="@FloatLabelType.Auto"
                                        ShowClearButton="true" @bind-Value="@_plUserAccount.FirstName" Blur="OnBlur" />
@@ -40,7 +40,7 @@
                     </div>
                     <!--#endregion-->
 
-                    <div class="form-group row">
+                    <div class="row">
                         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
                             <SfTextBox Placeholder="Phone number" CssClass="@_phoneNumberCssClass" FloatLabelType="@FloatLabelType.Auto"
                                        ShowClearButton="true" @bind-Value="@_plUserAccount.PhoneNumber" Blur="OnBlur" />
@@ -50,7 +50,7 @@
                     </div>
 
                     <!--#region Email and password-->
-                    <div class="form-group row">
+                    <div class="row">
                         <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
                             <SfTextBox Type="InputType.Email" Placeholder="Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
                                        ShowClearButton="true" @bind-Value="@_plUserAccount.Email" Blur="OnBlur" />
@@ -69,7 +69,7 @@
                     </div>
                     <!--#endregion-->
 
-                    <div class="form-group row">
+                    <div class="row">
                         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
                             <SfButton Type="submit" CssClass="btn btn-primary" Content="Update" />
                         </div>

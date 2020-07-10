@@ -1,5 +1,4 @@
 ﻿using MTS.PL.Infra.Interfaces.Standard;
-using MTS.PL.Infra.Interfaces.Standard;
 using System.Collections.Generic;
 
 namespace MTS.PL.Entities.Standard

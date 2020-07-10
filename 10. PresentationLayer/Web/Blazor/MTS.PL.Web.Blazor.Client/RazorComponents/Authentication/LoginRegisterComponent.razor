@@ -40,17 +40,22 @@
                                            ShowClearButton="true" @bind-Value="@_inputModel.Password" Blur="OnPasswordBlur" />
 
                                 <ValidationMessage For="@(() => _inputModel.Password)" />
+                                @if (IsLogin == false)
+                                {
+                                    <div class="small">
+                                        Password must atleast:
+                                        <div class="list-group">
+                                            @foreach (var item in Constants.VALID_PASSWORD_REQUIREMENTS)
+                                            {
+                                                <small>- @item</small>
+                                            }
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
 
-                        @if (IsLogin == false)
-                        {
-                            <div class="form-group row">
-                                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                                    <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Password must atleast" ContentMessages="Constants.VALID_PASSWORD_REQUIREMENTS" ShowContentAsList="true" />
-                                </div>
-                            </div>
-                        }
+                        
 
                         <div class="form-group form-check row">
                             <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
