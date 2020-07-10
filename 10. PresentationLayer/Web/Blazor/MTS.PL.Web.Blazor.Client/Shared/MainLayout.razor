@@ -108,6 +108,23 @@
         Toast.Show(toastModel);
     }
 
+    public void ShowSuccessToast(string message, string title = "Success!")
+    {
+        ToastModel toastModel;
+
+        toastModel = new ToastModel
+        {
+            CssClass = "e-toast-success",
+            Icon = "e-success toast-icons",
+            Title = title,
+            Content = message,
+            ShowProgressBar = true,
+            Width = "40%"
+        };
+
+        ShowToast(toastModel);
+    }
+
     public void ShowExceptionToast(Exception exception)
     {
         ToastModel toastModel;

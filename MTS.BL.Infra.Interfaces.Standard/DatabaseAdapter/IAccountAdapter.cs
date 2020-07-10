@@ -14,7 +14,7 @@ namespace MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter
 
         Task<IBLUserAccount> ReadByIdAsync(string id);
 
-        Task<IBLUserAccount> ReadByEmailAsync(ICredentialHolder credentialHolder);
+        Task<IBLUserAccount> ReadByEmailAsync(string email);
 
         Task<IEnumerable<IBLUserAccount>> ReadAllAsync();
 

@@ -1,4 +1,4 @@
-﻿@page "/account/crudusers"
+﻿@page "/account/crud/crudusers"
 @attribute [Authorize(
     Roles = 
     Constants.Security.ADMINISTRATOR + "," + 
@@ -19,7 +19,7 @@
                 OnActionFailure="@ActionFailure" />
 
     @{
-        if (IsInitialRender)
+        if (IsInitialized)
         {
             <SfDataManager AdaptorInstance="@typeof(APIAccountsAdapter)" Adaptor="Adaptors.CustomAdaptor"/>
         }
@@ -78,8 +78,7 @@
                 }
                 catch (AggregateException ex)
                 {
-                    // TODO Deal with exceptions
-                    throw ex;
+                    MainLayoutInstance.ShowExceptionToast(ex);
                 }
             }
         </GridColumns>
@@ -88,8 +87,9 @@
 @code{
     [CascadingParameter(Name = nameof(MainLayout))]
     public MainLayout MainLayoutInstance { get; set; }
-    
-    public bool IsInitialRender = false;
+
+    private bool IsInitialized;
+
     public List<string> ToolBarItems { get; set; } = new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" };
 
     private Dictionary<Type, EditType> editTypeDictionairy = new Dictionary<Type, EditType>
@@ -100,12 +100,10 @@
         { typeof(DateTimeOffset), EditType.DateTimePickerEdit },
     };
 
-    protected async override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        if (IsInitialRender == true)
+        if (IsInitialized == true)
             return;
-
-        IsInitialRender = true;
 
         HttpResponseMessage result = null;
 
@@ -136,6 +134,11 @@
         {
             MainLayoutInstance.ShowExceptionToast(new Exception("Something went wrong while deserializing the server response.", ex));
         }
+
+        IsInitialized = true;
+
+
+        await base.OnInitializedAsync();
     }
 
     //TODO place methods in seperate class

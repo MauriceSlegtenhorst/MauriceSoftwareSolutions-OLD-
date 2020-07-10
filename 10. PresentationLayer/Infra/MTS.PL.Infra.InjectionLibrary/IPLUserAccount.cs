@@ -26,6 +26,8 @@ namespace MTS.PL.Infra.Interfaces.Standard
 
         string LastName { get; set; }
 
+        string FullName { get; }
+
         int AccessFailedCount { get; set; }
 
         DateTimeOffset? LockoutEnd { get; set; }

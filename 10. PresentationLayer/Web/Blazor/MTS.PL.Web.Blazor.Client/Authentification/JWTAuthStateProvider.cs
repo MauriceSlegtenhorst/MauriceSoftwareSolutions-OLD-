@@ -11,45 +11,58 @@ using MTS.PL.Web.Blazor.Client.Utils;
 using Newtonsoft.Json;
 using MTS.PL.Infra.Interfaces.Standard;
 using MTS.PL.Infra.Entities.Standard;
+using Microsoft.AspNetCore.Components;
+using System.Diagnostics;
 
 namespace MTS.PL.Web.Blazor.Client.Authentification
 {
     public class JWTAuthStateProvider : AuthenticationStateProvider, ILoginService
     {
-        private readonly IJSRuntime js;
-        private readonly HttpClient httpClient;
+        private readonly IJSRuntime _js;
+        private readonly HttpClient _httpClient;
         private static readonly string TOKENKEY = "TOKENKEY";
+        private readonly NavigationManager _navigationManager;
+
         private AuthenticationState Anonymous => new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
 
-        public JWTAuthStateProvider(IJSRuntime js, HttpClient httpClient)
+        public JWTAuthStateProvider(IJSRuntime js, HttpClient httpClient, NavigationManager navigationManager)
         {
-            this.js = js;
-            this.httpClient = httpClient;
+            _js = js;
+            _httpClient = httpClient;
+            _navigationManager = navigationManager;
         }
 
         public async override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var token = await js.GetFromLocalStorage(TOKENKEY);
+            var token = await _js.GetFromLocalStorage(TOKENKEY);
 
             if (string.IsNullOrEmpty(token))
             {
                 return Anonymous;
             }
 
-            return BuildAuthenticationState(token);
+            var authState = BuildAuthenticationState(token);
+
+            if(authState.User.Identity.IsAuthenticated == false)
+            {
+                await Logout();
+                _navigationManager.NavigateTo(BlazorConstants.Pages.Authentication.LOGIN);
+            }
+
+            return authState;
         }
 
         public async Task Login(string token)
         {
-            await js.SetInLocalStorage(TOKENKEY, token);
+            await _js.SetInLocalStorage(TOKENKEY, token);
             var authState = BuildAuthenticationState(token);
             NotifyAuthenticationStateChanged(Task.FromResult(authState));
         }
 
         public async Task Logout()
         {
-            httpClient.DefaultRequestHeaders.Authorization = null;
-            await js.RemoveItem(TOKENKEY);
+            _httpClient.DefaultRequestHeaders.Authorization = null;
+            await _js.RemoveItem(TOKENKEY);
             NotifyAuthenticationStateChanged(Task.FromResult(Anonymous));
         }
 
@@ -59,7 +72,12 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
 
             var tokenObject = JsonConvert.DeserializeObject<PLUserToken>(token);
 
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenObject.Value);
+            // TODO Is this really working --> expecting true if token has expired. Looks like the opposite.
+            if (tokenObject.Expiration > DateTime.Now)
+                return new AuthenticationState(new ClaimsPrincipal());
+            
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenObject.Value);
 
             return authState;
         }

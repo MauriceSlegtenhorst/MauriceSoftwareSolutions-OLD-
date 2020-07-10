@@ -15,36 +15,41 @@
         <AuthorizeView>
             <NotAuthorized>
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="account/register">
+                    <NavLink class="nav-link" href="@BlazorConstants.Pages.Account.REGISTER">
                         <span class="oi oi-person" aria-hidden="true"></span> Register
                     </NavLink>
                 </li>
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="login">
+                    <NavLink class="nav-link" href="@BlazorConstants.Pages.Authentication.LOGIN">
                         <span class="oi oi-account-login" aria-hidden="true"></span> Login
                     </NavLink>
                 </li>
             </NotAuthorized>
         </AuthorizeView>
-        <AuthorizeView>
+        <AuthorizeView Roles="@Constants.Security.ADMINISTRATOR">
             <Authorized>
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="account">
-                        <span class="oi oi-person" aria-hidden="true"></span> Account
-                    </NavLink>
-                </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="logout">
-                        <span class="oi oi-account-logout" aria-hidden="true"></span> Logout
+                    <NavLink class="nav-link" href="@BlazorConstants.Pages.Account.CRUD_ACCOUNT">
+                        <span class="oi oi-person" aria-hidden="true"></span> CRUD Users
                     </NavLink>
                 </li>
             </Authorized>
         </AuthorizeView>
-        <AuthorizeView Roles="@Constants.Security.ADMINISTRATOR">
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="@BlazorConstants.Pages.CREDITS">
+                <span class="oi oi-thumb-up" aria-hidden="true"></span> Credits
+            </NavLink>
+        </li>
+        <AuthorizeView>
             <Authorized>
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="/account/crudusers">
-                        <span class="oi oi-person" aria-hidden="true"></span> CRUD Users
+                    <NavLink class="nav-link" href="@BlazorConstants.Pages.Account.EDIT_ACCOUNT">
+                        <span class="oi oi-person" aria-hidden="true"></span> Account
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="@BlazorConstants.Pages.Authentication.LOGOUT">
+                        <span class="oi oi-account-logout" aria-hidden="true"></span> Logout
                     </NavLink>
                 </li>
             </Authorized>

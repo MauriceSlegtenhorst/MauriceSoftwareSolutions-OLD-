@@ -52,30 +52,6 @@ namespace MTS.Core.GlobalLibrary
             public const string EMPLOYEE = "employee";
             public const string PRIVILEGED_EMPLOYEE = "privilegedemployee";
             public const string ADMINISTRATOR = "administrator";
-
-            public static string GetAccessLevelString(Roles accessLevel)
-            {
-                switch (accessLevel)
-                {
-                    default:
-                        return STANDARD_USER;
-
-                    case Roles.PrivilegedUser:
-                        return PRIVILEGED_USER;
-
-                    case Roles.Volenteer:
-                        return VOLENTEER;
-
-                    case Roles.Employee:
-                        return EMPLOYEE;
-
-                    case Roles.PrivilegedEmployee:
-                        return PRIVILEGED_EMPLOYEE;
-
-                    case Roles.Administrator:
-                        return ADMINISTRATOR;
-                }
-            }
         }
 
 #if DEBUG
@@ -99,6 +75,8 @@ namespace MTS.Core.GlobalLibrary
         }
 
         public static string[] VALID_EMAIL_DOMAINS = new string[] { "gmail", "yahoo", "hotmail", "outlook", "icloud", "me", "mac",  "aol", "msn", "wanadoo", "comcast", "live", "rediffmail", "outlook", "googlemail", "tiscali", "t-online", "telenet" };
+        public const byte NAME_MAX_LENGTH = 20;
+        public const byte NAME_MIN_LENGTH = 1;
 
         /// <summary>
         /// At least one upper case English letter,     (?=.*?[A-Z])

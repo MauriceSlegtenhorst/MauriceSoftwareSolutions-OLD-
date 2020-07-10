@@ -50,11 +50,36 @@ namespace MTS.PL.DatabaseAccess.CRUD.Account
             var dalUserAccount = new DALUserAccount
             {
                 UserName = email,
-                Email = email
+                Email = email,
+                Id = Guid.NewGuid().ToString()
             };
 
             IdentityResult result = await _userManager.CreateAsync(dalUserAccount, password);
 
+            return await HandleAccountCreationResult(result, dalUserAccount);
+        }
+
+        /// <exception cref="System.Exception">Thrown when the UserManager was not able to create the useraccount</exception>
+        /// <exception cref="System.ArgumentException">Thrown when the UserAccount parameter was null or invalid</exception>
+        public async Task<IBLUserAccount> CreateByAccountAsync(IPLUserAccount userAccount)
+        {
+            if (userAccount == null || String.IsNullOrEmpty(userAccount.Email) || String.IsNullOrEmpty(userAccount.Password))
+                throw new ArgumentException("Parameter cannot be null or ivalid");
+
+            var dalUserAccount = new DALUserAccount();
+
+            PropertyCopier<PLUserAccount, DALUserAccount>.Copy((PLUserAccount)userAccount, dalUserAccount);
+
+            dalUserAccount.UserName = dalUserAccount.Email;
+            dalUserAccount.Id = Guid.NewGuid().ToString();
+
+            IdentityResult result = await _userManager.CreateAsync(dalUserAccount, userAccount.Password);
+
+            return await HandleAccountCreationResult(result, dalUserAccount);
+        }
+
+        private async Task<IBLUserAccount> HandleAccountCreationResult(IdentityResult result, DALUserAccount dalUserAccount)
+        {
             if (result.Succeeded == false)
             {
                 var errors = new string[result.Errors.Count()];
@@ -68,44 +93,11 @@ namespace MTS.PL.DatabaseAccess.CRUD.Account
 
             await EmailHelper.SendConfirmationEmailAsync(dalUserAccount, _userManager, _emailSender);
 
-            dalUserAccount = await _userManager.FindByEmailAsync(email);
+            dalUserAccount = await _userManager.FindByEmailAsync(dalUserAccount.Email);
 
             await AddRolesToAccountAsync(dalUserAccount.Id, Constants.Roles.StandardUser);
 
             return dalUserAccount;
-        }
-
-        /// <exception cref="System.Exception">Thrown when the UserManager was not able to create the useraccount</exception>
-        /// <exception cref="System.ArgumentException">Thrown when the UserAccount parameter was null or invalid</exception>
-        public async Task<IBLUserAccount> CreateByAccountAsync(IPLUserAccount userAccount)
-        {
-            if (userAccount == null || String.IsNullOrEmpty(userAccount.Email) || String.IsNullOrEmpty(userAccount.Password) || String.IsNullOrEmpty(userAccount.Id))
-                throw new ArgumentException("Parameter cannot be null or ivalid");
-
-            var dalUserAccount = new DALUserAccount();
-
-            PropertyCopier<PLUserAccount, DALUserAccount>.Copy((PLUserAccount)userAccount, dalUserAccount);
-
-            IdentityResult result = await _userManager.CreateAsync(dalUserAccount, userAccount.Password);
-
-            if (result != null && result.Succeeded)
-            {
-                await EmailHelper.SendConfirmationEmailAsync(dalUserAccount, _userManager, _emailSender);
-
-                dalUserAccount = await _userManager.FindByEmailAsync(userAccount.Email);
-
-                return dalUserAccount; 
-            }
-            else
-            {
-                var errors = new string[result.Errors.Count()];
-                for (int i = 0; i < errors.Length; i++)
-                {
-                    errors[i] = result.Errors.ElementAt(i).Description;
-                }
-
-                throw new Exception(JsonConvert.SerializeObject(errors));
-            }
         }
         #endregion
 
@@ -131,21 +123,15 @@ namespace MTS.PL.DatabaseAccess.CRUD.Account
 
         /// <exception cref="System.ArgumentException">Thrown when the email parameter was null or empty</exception>
         /// <exception cref="System.Exception">Thrown when UserManager could not find any UserAccount with a matching email</exception>
-        public async Task<IBLUserAccount> ReadByEmailAsync(ICredentialHolder credentialHolder)
+        public async Task<IBLUserAccount> ReadByEmailAsync(string email)
         {
-            if (String.IsNullOrEmpty(credentialHolder.Email))
+            if (String.IsNullOrEmpty(email))
                 throw new ArgumentException("Parameters email cannot be null or empty");
 
-            if (String.IsNullOrEmpty(credentialHolder.Password))
-                throw new ArgumentException("Parameters password cannot be null or empty");
+            var efUserAccount = await _userManager.FindByEmailAsync(email);
 
-            var efUserAccount = await _userManager.FindByIdAsync(credentialHolder.Email);
-
-            if (efUserAccount != null)
+            if (efUserAccount == null)
                 throw new Exception("No UserAccount was found matching this email");
-
-            if (!await _userManager.CheckPasswordAsync(efUserAccount, credentialHolder.Password))
-                throw new Exception("Wrong password");
 
             return efUserAccount;
         }

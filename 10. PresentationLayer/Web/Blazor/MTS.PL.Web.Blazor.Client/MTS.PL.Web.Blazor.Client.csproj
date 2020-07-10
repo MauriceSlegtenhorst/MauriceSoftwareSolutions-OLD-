@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\Administrator\**" />
+    <Content Remove="Pages\Administrator\**" />
+    <EmbeddedResource Remove="Pages\Administrator\**" />
+    <None Remove="Pages\Administrator\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.0" PrivateAssets="all" />
@@ -14,10 +21,6 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.5" />
     <PackageReference Include="Syncfusion.Blazor" Version="18.1.0.59" />
     <PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Administrator\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -35,13 +35,9 @@ namespace MTS.PL.API.Controllers
         }
 
         #region Get
-        [Authorize(
-            Constants.Security.ADMINISTRATOR + "," +
-            Constants.Security.PRIVILEGED_EMPLOYEE + "," +
-            Constants.Security.EMPLOYEE
-            )]
+        [Authorize]
         [Route(Constants.AccountControllerEndpoints.GET_BY_ID)]
-        [HttpGet]
+        [HttpPut]
         public async Task<IActionResult> GetByIdAsync([FromBody] string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -71,7 +67,7 @@ namespace MTS.PL.API.Controllers
         [Authorize]
         [Route(Constants.AccountControllerEndpoints.GET_BY_EMAIL)]
         [HttpGet]
-        public async Task<IActionResult> GetByEmailAsync([FromBody] ICredentialHolder credentialHolder)
+        public async Task<IActionResult> GetByEmailAsync()
         {
             if (!ModelState.IsValid)
                 return _exceptionHandler.HandleException(new NullReferenceException("ModelState was invalid"), isServerSideException: false);
@@ -80,17 +76,22 @@ namespace MTS.PL.API.Controllers
 
             try
             {
-                var dalUserAccount = await _accountAdapter.ReadByEmailAsync(credentialHolder);
+                string email = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email).Value;
+
+                if(String.IsNullOrEmpty(email))
+                    throw new NullReferenceException("Email could not be retreived/parsed from the claims");
+
+                var dalUserAccount = await _accountAdapter.ReadByEmailAsync(email);
 
                 plUserAccount = new PLUserAccount();
 
                 PropertyCopier<DALUserAccount, PLUserAccount>.Copy((DALUserAccount)dalUserAccount, (PLUserAccount)plUserAccount);
 
                 if (string.IsNullOrEmpty(plUserAccount.Id))
-                    throw new NullReferenceException("UserAccount has either no Id . Probably something went wrong during copying or retreiving data.");
+                    throw new NullReferenceException("UserAccount has no Id . Probably something went wrong during copying or retreiving data.");
 
                 if(string.IsNullOrEmpty(plUserAccount.Email))
-                    throw new NullReferenceException("UserAccount has either no email. Probably something went wrong during copying or retreiving data.");
+                    throw new NullReferenceException("UserAccount has no email. Probably something went wrong during copying or retreiving data.");
             }
             catch (Exception ex)
             {
@@ -178,7 +179,7 @@ namespace MTS.PL.API.Controllers
                             actionName: Constants.AccountControllerEndpoints.CREATE_BY_ACCOUNT,
                             controllerName: Constants.APIControllers.ACCOUNT,
                             routeValues: RouteData.Values,
-                            value: newUserAccount.Id);
+                            value: newUserAccount);
                 }
                 else
                 {
@@ -197,14 +198,15 @@ namespace MTS.PL.API.Controllers
         [HttpPatch]
         public async Task<IActionResult> UpdateByAccount([FromBody] PLUserAccount userAccount)
         {
-            if (ModelState.IsValid)
-            {
-                return Ok(await _accountAdapter.WriteAsync(userAccount));
-            }
-            else
-            {
+            if (ModelState.IsValid == false)
                 return _exceptionHandler.HandleException(new Exception("ModelState invalid"), isServerSideException: false);
-            }
+
+            var result = await _accountAdapter.WriteAsync(userAccount);
+
+            if(result.Succeeded == false)
+                return _exceptionHandler.HandleException(new Exception("Something went wrong while updating the user account"), isServerSideException: true);
+
+            return Ok();
         }
         #endregion
 

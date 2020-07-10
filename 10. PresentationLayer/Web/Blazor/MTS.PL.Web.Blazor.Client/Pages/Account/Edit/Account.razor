@@ -1,0 +1,326 @@
+﻿@page "/account/edit/account"
+@attribute [Authorize]
+@inject HttpClient _httpClient
+@using System.Net.Mail
+
+@if (IsInitialized == true && _plUserAccount != null)
+{
+    <SfCard>
+        <CardHeader>
+            <h3>Account for @_accountName</h3>
+        </CardHeader>
+        <CardContent>
+            <EditForm EditContext="_formContext" OnValidSubmit="SubmitForm">
+                <div class="content-wrapper">
+
+                    <DataAnnotationsValidator />
+
+                    <!--#region Firstname, affix and last name-->
+                    <div class="form-group row">
+                        <div class="col-xs-5 col-sm-5 col-lg-5 col-md-5">
+                            <SfTextBox Placeholder="First name" CssClass="@_firstNameCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                       ShowClearButton="true" @bind-Value="@_plUserAccount.FirstName" Blur="OnBlur" />
+
+                            <ValidationMessage For="@(() => _plUserAccount.FirstName)" />
+                        </div>
+
+                        <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                            <SfTextBox Placeholder="Affix" CssClass="@_affixCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                       ShowClearButton="true" @bind-Value="@_plUserAccount.Affix" Blur="OnBlur" />
+
+                            <ValidationMessage For="@(() => _plUserAccount.Affix)" />
+                        </div>
+
+                        <div class="col-xs-5 col-sm-5 col-lg-5 col-md-5">
+                            <SfTextBox Placeholder="Last name" CssClass="@_lastNameCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                       ShowClearButton="true" @bind-Value="@_plUserAccount.LastName" Blur="OnBlur" />
+
+                            <ValidationMessage For="@(() => _plUserAccount.Password)" />
+                        </div>
+                    </div>
+                    <!--#endregion-->
+
+                    <div class="form-group row">
+                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                            <SfTextBox Placeholder="Phone number" CssClass="@_phoneNumberCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                       ShowClearButton="true" @bind-Value="@_plUserAccount.PhoneNumber" Blur="OnBlur" />
+
+                            <ValidationMessage For="@(() => _plUserAccount.PhoneNumber)" />
+                        </div>
+                    </div>
+
+                    <!--#region Email and password-->
+                    <div class="form-group row">
+                        <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                            <SfTextBox Type="email" Placeholder="Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                       ShowClearButton="true" @bind-Value="@_plUserAccount.Email" Blur="OnBlur" />
+
+                            <ValidationMessage For="@(() => _plUserAccount.Email)" />
+
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                            <SfTextBox Type="password" Placeholder="Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                       ShowClearButton="true" @bind-Value="@_plUserAccount.Password" Blur="OnBlur" />
+
+                            <ValidationMessage For="@(() => _plUserAccount.Password)" />
+                        </div>
+                    </div>
+                    <!--#endregion-->
+
+                    <div class="form-group row">
+                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                            <SfButton Type="submit" CssClass="btn btn-primary" Content="Update" />
+                        </div>
+                    </div>
+
+                </div>
+            </EditForm>
+        </CardContent>
+    </SfCard>
+}
+else
+{
+    <p>Retreiving your account information...</p>
+}
+
+
+<style>
+    .e-input-picture::before {
+        content: '\e335';
+        font-family: e-icons;
+    }
+
+    .e-input-calendar::before {
+        content: '\e901';
+        font-family: e-icons;
+        font-size: 13px;
+    }
+
+    .content-wrapper {
+        width: 90%;
+        margin: 0 auto;
+        min-width: 85px;
+    }
+
+        .content-wrapper div.row {
+            padding: 15px 0px;
+        }
+
+    .custom-padding-05 {
+        padding-top: 5px;
+    }
+
+    @@media only screen and (max-width: 480px) {
+        .content-wrapper {
+            width: 92%;
+        }
+
+        .col-xs-6,
+        .col-xs-4,
+        .col-xs-12 {
+            padding: 10px 5px;
+            width: 100%;
+        }
+
+        .content-wrapper div.row {
+            padding: 0px;
+        }
+    }
+
+    #description td {
+        vertical-align: top;
+    }
+
+    .e-outline.e-float-input,
+    .e-outline.e-float-input.e-control-wrapper {
+        margin-top: 0;
+    }
+
+    .fabric .row.material2,
+    .bootstrap .row.material2,
+    .bootstrap4 .row.material2,
+    .highcontrast .row.material2 {
+        display: none;
+    }
+</style>
+
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthStateTask { get; set; }
+
+    [CascadingParameter(Name = nameof(MainLayout))]
+    public MainLayout MainLayoutInstance { get; set; }
+
+    private AuthenticationState _authState;
+
+    private bool IsInitialized;
+
+    private EditContext _formContext;
+
+    private IPLUserAccount _plUserAccount;
+
+    private string _accountName;
+
+    private string _firstNameCssClass;
+
+    private string _affixCssClass;
+
+    private string _lastNameCssClass;
+
+    private string _phoneNumberCssClass;
+
+    private string _emailCssClass;
+
+    private string _passwordCssClass;
+    private Regex _passwordRegex;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            MainLayoutInstance.ShowSpinner();
+            _plUserAccount = await GetUserAccount();
+            MainLayoutInstance.HideSpinner();
+        }
+        catch (Exception ex)
+        {
+            MainLayoutInstance.ShowExceptionToast(ex);
+        }
+
+        _formContext = new EditContext(_plUserAccount);
+
+        _passwordRegex = new Regex(Constants.VALID_PASSWORD_PATTERN);
+
+        _authState = await AuthStateTask;
+
+        _accountName = _plUserAccount.FullName ?? _plUserAccount.Email;
+
+        IsInitialized = true;
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task<IPLUserAccount> GetUserAccount()
+    {
+        string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_BY_EMAIL}";
+        MainLayoutInstance.ShowSpinner();
+        var result = await _httpClient.GetAsync(url);
+        MainLayoutInstance.HideSpinner();
+
+        if (result.IsSuccessStatusCode == false)
+            MainLayoutInstance.ShowExceptionToast(new Exception($"Something went wrong while calling the server. {result.StatusCode}: {result.ReasonPhrase}"));
+
+        return JsonConvert.DeserializeObject<PLUserAccount>(await result.Content.ReadAsStringAsync());
+    }
+
+    private async Task SubmitForm()
+    {
+        MainLayoutInstance.ShowSpinner();
+        var result = await _httpClient.PatchAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT}", new StringContent(JsonConvert.SerializeObject(_plUserAccount), Encoding.UTF8, Constants.MediaTypes.JSON));
+        MainLayoutInstance.HideSpinner();
+
+        if (result.IsSuccessStatusCode == false)
+            MainLayoutInstance.ShowExceptionToast(new Exception($"Something went wrong while calling the server. {result.StatusCode}: {result.ReasonPhrase}"));
+
+        MainLayoutInstance.ShowSuccessToast("Your account has been updated. ", "Account update successfull");
+    }
+
+    private void OnBlur(FocusOutEventArgs args)
+    {
+        // TODO Check one field instead of whole form
+        CheckForm();
+    }
+
+    private void CheckForm()
+    {
+        if (_formContext.Validate() == false)
+        {
+            _firstNameCssClass = ValidateName(_plUserAccount.FirstName) ? "e-success" : "e-error";
+
+            _affixCssClass = ValidateName(_plUserAccount.Affix) ? "e-success" : "e-error";
+
+            _lastNameCssClass = ValidateName(_plUserAccount.LastName) ? "e-success" : "e-error";
+
+            _phoneNumberCssClass = ValidatePhoneNumber(_plUserAccount.PhoneNumber) ? "e-success" : "e-error";
+
+            _emailCssClass = ValidateEmail(_plUserAccount.Email) ? "e-success" : "e-error";
+
+            _passwordCssClass = ValidatePassword(_plUserAccount.Password) ? "e-success" : "e-error";
+        }
+        else
+        {
+            _firstNameCssClass = "e-success";
+            _affixCssClass = "e-success";
+            _lastNameCssClass = "e-success";
+            _phoneNumberCssClass = "e-success";
+            _emailCssClass = "e-success";
+            _passwordCssClass = "e-success";
+        }
+
+        StateHasChanged();
+    }
+
+    private bool ValidateName(string firstName)
+    {
+        if (String.IsNullOrEmpty(firstName) == true)
+            return true;
+
+        return firstName.Length > 1 && firstName.Length < 20;
+    }
+
+    private bool ValidatePhoneNumber(string phoneNumber)
+    {
+        if (phoneNumber == null)
+            return true;
+
+        PhoneAttribute phoneAttribute = new PhoneAttribute();
+
+        return phoneAttribute.IsValid(phoneNumber);
+    }
+
+    private bool ValidateEmail(string email)
+    {
+        if (String.IsNullOrEmpty(email))
+            return false;
+
+        if (email.Length < 6)
+            return false;
+
+        string domainAndTopLvlDomain;
+        string domain;
+
+        try
+        {
+            domainAndTopLvlDomain = email.Split('@')[1];
+
+            domain = domainAndTopLvlDomain.Split('.')[0];
+        }
+        catch
+        {
+            return false;
+        }
+
+        if (Constants.VALID_EMAIL_DOMAINS.Contains(domain) == false)
+            return false;
+
+        try
+        {
+            var _email = new MailAddress(email.Normalize());
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
+
+        EmailAddressAttribute emailAddressAttribute = new EmailAddressAttribute();
+
+        return emailAddressAttribute.IsValid(email);
+    }
+
+    private bool ValidatePassword(string password)
+    {
+        return _passwordRegex.IsMatch(password);
+    }
+}

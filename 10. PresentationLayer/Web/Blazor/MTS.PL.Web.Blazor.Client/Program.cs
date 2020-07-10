@@ -24,7 +24,11 @@ namespace MTS.PL.Web.Blazor.Client
 
             builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri(Constants.API_BASE_ADDRESS) });
 
+            // https://stackoverflow.com/questions/59051760/adding-jwt-httpclient-handler-with-blazor-asp-net-core-3-1-0-preview-3
+            //builder.Services.AddSingletonn 
+
             #region Security
+            builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
 
             builder.Services.AddScoped<JWTAuthStateProvider>();
