@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using MTS.Core.GlobalLibrary;
 using MTS.PL.Infra.Interfaces.Standard;
 using MTS.PL.Web.Blazor.Client.Authentification;
+using MTS.PL.Web.Blazor.Client.Entities;
+using MTS.PL.Web.Blazor.Client.Utils;
 using Syncfusion.Blazor;
 using Syncfusion.Licensing;
 
@@ -16,7 +18,7 @@ namespace MTS.PL.Web.Blazor.Client
     {
         public static async Task Main(string[] args)
         {
-            SyncfusionLicenseProvider.RegisterLicense("##SyncfusionLicense##");
+            SyncfusionLicenseProvider.RegisterLicense("Mjg0NTA5QDMxMzgyZTMyMmUzMEUzQjJjdDB0bEFqZ1hIS3JVVnpvVHlMRnJGdG94YXpXNDMzblp6Vmxsc2c9");
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -24,8 +26,7 @@ namespace MTS.PL.Web.Blazor.Client
 
             builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri(Constants.API_BASE_ADDRESS) });
 
-            // https://stackoverflow.com/questions/59051760/adding-jwt-httpclient-handler-with-blazor-asp-net-core-3-1-0-preview-3
-            //builder.Services.AddSingletonn 
+            builder.Services.AddSingleton<IStateManager, StateManager>();
 
             #region Security
             builder.Services.AddOptions();
