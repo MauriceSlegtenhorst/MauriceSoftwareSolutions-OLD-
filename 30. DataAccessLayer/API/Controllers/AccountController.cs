@@ -101,8 +101,7 @@ namespace MTS.PL.API.Controllers
             return Ok(plUserAccount);
         }
 
-        [Authorize(
-            Roles =
+        [Authorize(Roles =
             Constants.Security.ADMINISTRATOR + "," +
             Constants.Security.PRIVILEGED_EMPLOYEE)]
         [Route(Constants.AccountControllerEndpoints.GET_ALL)]
