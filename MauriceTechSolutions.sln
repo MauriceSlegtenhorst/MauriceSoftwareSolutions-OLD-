@@ -57,6 +57,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MTS.BL.Infra.Interfaces.Sta
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MTS.DAL.Entities.Standard", "MTS.DAL.Entities.Standard\MTS.DAL.Entities.Standard.csproj", "{90602373-9D89-4BC8-8237-D4F9535B0C16}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MTS.PL.UserInterface", "10. PresentationLayer\MTS.PL.Razor\MTS.PL.UserInterface.csproj", "{C4FBFDEF-CE69-478D-9883-5146743CE2D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +117,10 @@ Global
 		{90602373-9D89-4BC8-8237-D4F9535B0C16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90602373-9D89-4BC8-8237-D4F9535B0C16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90602373-9D89-4BC8-8237-D4F9535B0C16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4FBFDEF-CE69-478D-9883-5146743CE2D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4FBFDEF-CE69-478D-9883-5146743CE2D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4FBFDEF-CE69-478D-9883-5146743CE2D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4FBFDEF-CE69-478D-9883-5146743CE2D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +146,7 @@ Global
 		{976DD53C-B594-43C6-8B58-64EA3A3A6D83} = {BCDB8FDA-52AD-40D1-8974-3FAD9AD897C0}
 		{1FC819BC-0890-4C1C-85C9-38D76E541B0C} = {479CBDEE-E299-421F-B9AC-54DA5DAB10B4}
 		{90602373-9D89-4BC8-8237-D4F9535B0C16} = {68935153-0753-4ADA-B010-3DD4CB068799}
+		{C4FBFDEF-CE69-478D-9883-5146743CE2D4} = {83E5CADE-2D64-44C9-956E-5BB806780670}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7DDA1294-038E-47BD-9AF1-CDB9ADCB4B5F}

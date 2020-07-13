@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Infra\MTS.PL.Infra.BlazorLibrary\MTS.PL.Entities.Standard.csproj" />
     <ProjectReference Include="..\..\..\Infra\MTS.PL.Infra.InjectionLibrary\MTS.PL.Infra.Interfaces.Standard.csproj" />
+    <ProjectReference Include="..\..\..\MTS.PL.Razor\MTS.PL.UserInterface.csproj" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
