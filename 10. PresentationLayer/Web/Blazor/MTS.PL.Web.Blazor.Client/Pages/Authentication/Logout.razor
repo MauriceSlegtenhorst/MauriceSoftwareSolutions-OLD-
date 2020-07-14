@@ -5,8 +5,8 @@
 <h1>Logging out</h1>
 
 @code{
-    [CascadingParameter(Name = nameof(MainLayout))]
-    public MainLayout MainLayoutInstance { get; set; }
+    [CascadingParameter(Name = nameof(MainLayoutComponent))]
+    public MainLayoutComponent MainLayoutInstance { get; set; }
 
     protected async override void OnInitialized()
     {

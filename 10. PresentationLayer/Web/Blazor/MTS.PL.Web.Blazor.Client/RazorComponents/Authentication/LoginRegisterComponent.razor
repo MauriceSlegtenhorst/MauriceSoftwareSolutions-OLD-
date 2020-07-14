@@ -135,8 +135,8 @@
 
 @code
 {
-    [CascadingParameter(Name = nameof(MainLayout))]
-    public MainLayout MainLayoutInstance { get; set; }
+    [CascadingParameter(Name = nameof(MainLayoutComponent))]
+    public MainLayoutComponent MainLayoutInstance { get; set; }
 
     private EditContext _formContext;
 
@@ -154,7 +154,6 @@
 
     [Parameter]
     public bool IsLogin { get; set; }
-
 
     private InputModel _inputModel;
 

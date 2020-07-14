@@ -150,8 +150,8 @@ else
     [CascadingParameter]
     public Task<AuthenticationState> AuthStateTask { get; set; }
 
-    [CascadingParameter(Name = nameof(MainLayout))]
-    public MainLayout MainLayoutInstance { get; set; }
+    [CascadingParameter(Name = nameof(MainLayoutComponent))]
+    public MainLayoutComponent MainLayoutInstance { get; set; }
 
     private AuthenticationState _authState;
 

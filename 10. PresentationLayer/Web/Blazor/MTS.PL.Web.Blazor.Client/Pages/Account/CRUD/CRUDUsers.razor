@@ -85,8 +85,8 @@
 </SfGrid>
 
 @code{
-    [CascadingParameter(Name = nameof(MainLayout))]
-    public MainLayout MainLayoutInstance { get; set; }
+    [CascadingParameter(Name = nameof(MainLayoutComponent))]
+    public MainLayoutComponent MainLayoutInstance { get; set; }
 
     private bool IsInitialized;
 
@@ -126,6 +126,7 @@
         try
         {
             APIAccountsAdapter.httpClient = _httpClient;
+            string json = await result.Content.ReadAsStringAsync();
             var accounts = JsonConvert.DeserializeObject<List<PLUserAccount>>(await result.Content.ReadAsStringAsync());
 
             APIAccountsAdapter.PLUserAccounts = accounts;
