@@ -1,0 +1,24 @@
+﻿@import "_theme.scss";
+
+.sidebar {
+    $sidebar-collapsed-threshold-width: 1vw;
+
+    background-image: linear-gradient(180deg, $color-black, $color-dark-gray 70%);
+
+    .row-top {
+        background-color: $color-black;
+        height: 5vh;
+    }
+
+    .nav-item {
+        font-size: 1rem;
+        color: $color-blue;
+        border-radius: 4px;
+        height: 3rem;
+
+    }
+
+    @media screen and (max-width: $sidebar-collapsed-threshold-width) {
+
+    }
+}
