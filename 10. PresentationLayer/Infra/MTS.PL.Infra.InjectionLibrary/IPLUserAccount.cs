@@ -33,5 +33,7 @@ namespace MTS.PL.Infra.Interfaces.Standard
         DateTimeOffset? LockoutEnd { get; set; }
 
         bool TwoFactorEnabled { get; set; }
+
+        DateTime LockoutEndDateTime { get; set; }
     }
 }

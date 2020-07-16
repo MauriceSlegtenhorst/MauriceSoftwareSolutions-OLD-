@@ -1,13 +1,21 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-.fullscreen{
-    width:100%;
+.fill-maxed{
     height:100%;
+    max-height:100%;
+
+    width: 100%;
+    max-width:100%;
 }
+
+.e-grid .e-spinner-pane {
+        display:none;
+} 
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    height: 100%;
+    max-width: 100vw;
+    max-height: 100vh;
     background-color: #393e46;
     color: #eeeeee;
 }
@@ -126,7 +134,7 @@ app {
 }
 
 #blazor-error-ui {
-    background: lightyellow;
+    background: #000000;
     bottom: 0;
     box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
     display: none;

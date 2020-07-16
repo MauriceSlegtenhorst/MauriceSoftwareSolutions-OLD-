@@ -31,7 +31,6 @@ namespace MTS.PL.Infra.Entities.Standard
         [StringLength(maximumLength: 10, MinimumLength = 10, ErrorMessage = "Phone number is to short or long")]
         public string PhoneNumber { get; set; }
 
-        [Required]
         [Display(Name = "Password", ShortName = "Password", Description = "Super duper secret password for the user's account")]
         [DataType(DataType.Password)]
         [RegularExpression(Constants.VALID_PASSWORD_PATTERN)]
@@ -53,6 +52,7 @@ namespace MTS.PL.Infra.Entities.Standard
         [Display(Name = "Last name", ShortName = "L. name", Description = "Last name of the user")]
         [StringLength(maximumLength: Constants.NAME_MAX_LENGTH, MinimumLength = Constants.NAME_MIN_LENGTH, ErrorMessage = "Last name is to short or long")]
         public string LastName { get; set; }
+
 
         public string FullName 
         { 
@@ -79,7 +79,30 @@ namespace MTS.PL.Infra.Entities.Standard
         [Display(Name = "Access fail count", ShortName = "Access fails", Description = "Times someone tried to login into this account and failed")]
         public int AccessFailedCount { get; set; }
 
-        [Display(Name = "Lockout end", ShortName = "Lock end", Description = "Offset untill an account is locked")]
+        [Display(Name = "Lockout end", ShortName = "Lock end", Description = "Offset until an account is locked")]
         public DateTimeOffset? LockoutEnd { get; set; }
+
+        [Display(Name = "Lockout date", ShortName = "Lock date", Description = "The date at wich the lockout ends")]
+        public DateTime LockoutEndDateTime 
+        {
+            get
+            {
+                if (LockoutEnd == null)
+                    return default;
+
+                return LockoutEnd.GetValueOrDefault().UtcDateTime;
+            }
+
+            set
+            {
+                if (value == null)
+                    return;
+
+                if (value.Kind != DateTimeKind.Utc)
+                    value = value.ToUniversalTime();
+
+                LockoutEnd = value;
+            }
+        }
     }
 }
