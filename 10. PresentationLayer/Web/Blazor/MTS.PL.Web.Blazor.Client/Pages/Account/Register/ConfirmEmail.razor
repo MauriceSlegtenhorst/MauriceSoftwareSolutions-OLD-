@@ -25,21 +25,21 @@ else
     public string Code { get; set; }
 
     private bool emailIsConfirmed;
-    private bool isRendering;
 
     private IEnumerable<string> messages;
 
     private SfSpinner spinnerComponent;
     private string targetSpinner = "#container";
 
-    private IConfirmEmailHolder confirmEmailHolder;
-
     protected override async Task OnInitializedAsync()
     {
         spinnerComponent.ShowSpinner(targetSpinner);
 
-        confirmEmailHolder.UserId = UserId;
-        confirmEmailHolder.Code = Code;
+        object confirmEmailHolder = new
+        {
+            UserId = UserId,
+            Code = Code
+        };
 
         string uri = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CONFIRM_EMAIL}";
 

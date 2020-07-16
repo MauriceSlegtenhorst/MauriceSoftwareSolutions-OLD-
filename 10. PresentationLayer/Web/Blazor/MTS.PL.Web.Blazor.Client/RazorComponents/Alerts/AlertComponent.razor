@@ -2,33 +2,33 @@
     .content {
         padding: 10px;
     }
-    
-    .icon-size {
-        font-size: 25px;
+
+    .icon{
+        font-size: 1.5rem;
+        padding: 0.5rem;
+    }
+
+    .center-vertical {
+        display: inline-block;
+        vertical-align: middle;
     }
 </style>
 
-<div class="@_topCSSClass" role="alert">
+<div class="@_topCSSClass col-12" role="alert">
     @if (!String.IsNullOrEmpty(Title)) 
     {
         <div class="row">
-            <span class="icon-size @_iconCSSClass" aria-hidden="true" />
-            <div class="content">
-                <p>
-                    <h4> @Title</h4>
-                </p>
-            </div>
+            <span class="icon @_iconCSSClass" aria-hidden="true"/>
+            <h4 class="center-vertical align-self-stretch">@Title</h4>
         </div>    
     }
     
     @if (!String.IsNullOrEmpty(Subtitle))
     {
-        <div class="row">
-            <div class="content">
+        <div class="row ">
                 <p>
                     <h5>@Subtitle</h5>
                 </p>
-            </div>
         </div>
     }
 
@@ -38,10 +38,10 @@
             @{
             if (ShowContentAsList == true)
             {
-                <div class="content list-group">
+                <div class="list-group">
                     @foreach (string message in ContentMessages)
                     {
-                    <span>- @message</span>
+                    <span class="list-inline-item">- @message</span>
                     }
                 </div>
             }
@@ -93,19 +93,19 @@
         {
             default:
                 _topCSSClass = "alert alert-info";
-                _iconCSSClass = "oi oi-info content";
+                _iconCSSClass = "oi oi-info";
                 break;
             case AlertTypeEnum.Success:
                 _topCSSClass = "alert alert-success";
-                _iconCSSClass = "oi oi-check content";
+                _iconCSSClass = "oi oi-check";
                 break;
             case AlertTypeEnum.Warning:
                 _topCSSClass = "alert alert-warning";
-                _iconCSSClass = "oi oi-warning content";
+                _iconCSSClass = "oi oi-warning";
                 break;
             case AlertTypeEnum.Danger:
                 _topCSSClass = "alert alert-danger";
-                _iconCSSClass = "oi oi-warning content";
+                _iconCSSClass = "oi oi-warning";
                 break;
         }
 

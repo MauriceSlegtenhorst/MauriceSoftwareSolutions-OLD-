@@ -3,81 +3,57 @@
 @inject NavigationManager _navigationManager
 @using System.Net.Mail
 
-<SfCard>
-    <CardHeader>
-        <h3>Please enter your details</h3>
-    </CardHeader>
-    <CardContent>
-        <EditForm EditContext="@_formContext" OnValidSubmit="SubmitForm">
-            <div class="content-wrapper">
+<div class="align-content-center">
+    <div id="card">
+        <SfCard>
+            <CardHeader>
+                <h3>Please enter your details</h3>
+            </CardHeader>
+            <CardContent>
+                <EditForm EditContext="@_formContext" OnValidSubmit="SubmitForm">
+                    <div class="content-wrapper">
 
-                <DataAnnotationsValidator />
+                        <DataAnnotationsValidator />
 
-                @if (_resultErrors.Count() > 0)
-                {
-                    <div class="form-group row">
-                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                            <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Danger" Title="@_resultTitle" ContentMessages="@_resultErrors" />
+                        <div class="form-group row">
+                            <SfTextBox Type="InputType.Email" Placeholder="Enter Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                       ShowClearButton="true" OnBlur="@CheckForm" @bind-Value="@_inputModel.Email" />
+
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
                         </div>
-                    </div>
-                }
 
-                <div class="form-group row">
-                    <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                        <SfTextBox @ref="_tbEmail" Type="email" Placeholder="Enter Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                   ShowClearButton="true" @bind-Value="@_inputModel.Email" Blur="OnEmailBlur" />
+                        <div class="form-group row">
+                            <SfTextBox Type="InputType.Password" Placeholder="Enter Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                       ShowClearButton="true" OnBlur="@CheckForm" @bind-Value="@_inputModel.Password" />
 
-                        <ValidationMessage For="@(() => _inputModel.Email)" />
-
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                        <SfTextBox @ref="_tbPassword" Type="password" Placeholder="Enter Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                   ShowClearButton="true" @bind-Value="@_inputModel.Password" Blur="OnPasswordBlur" />
-
-                        <ValidationMessage For="@(() => _inputModel.Password)" />
-                    </div>
-                </div>
-
-                @if (IsLogin == false)
-                {
-                    <div class="form-group row">
-                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                            <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Password must atleast" ContentMessages="Constants.VALID_PASSWORD_REQUIREMENTS" ShowContentAsList="true" />
+                            <ValidationMessage For="@(() => _inputModel.Password)" />
                         </div>
-                    </div>
-                }
 
-                <div class="form-group form-check row">
-                    <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                        <SfCheckBox Label="Remember me?" @bind-Checked="@_inputModel.RememberMe" />
-                    </div>
-                </div>
+                        @if (IsLogin == false)
+                        {
+                            <div class="form-group row">
+                                <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Password must atleast" ContentMessages="Constants.VALID_PASSWORD_REQUIREMENTS" ShowContentAsList="true" />
+                            </div>
+                        }
 
-                <div class="form-group row">
-                    <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                        <SfButton Type="submit" CssClass="btn btn-primary" Content="@_btnContent" />
-                    </div>
-                </div>
+                        <div class="form-group form-check row">
+                            <SfCheckBox Label="Remember me?" @bind-Checked="@_inputModel.RememberMe" />
+                        </div>
 
-            </div>
-        </EditForm>
-    </CardContent>
-</SfCard>
+                        <div class="form-group row">
+                            <SfButton Type="submit" CssClass="btn btn-primary" Content="@_btnContent" />
+                        </div>
+
+                    </div>
+                </EditForm>
+            </CardContent>
+        </SfCard>
+    </div>
+</div>
 
 <style>
-    .e-input-picture::before {
-        content: '\e335';
-        font-family: e-icons;
-    }
-
-    .e-input-calendar::before {
-        content: '\e901';
-        font-family: e-icons;
-        font-size: 13px;
+    #card{
+        max-width: 60%;
     }
 
     .content-wrapper {
@@ -88,6 +64,7 @@
 
         .content-wrapper div.row {
             padding: 15px 0px;
+            align-content: center;
         }
 
     .custom-padding-05 {
@@ -96,7 +73,12 @@
 
     @@media only screen and (max-width: 480px) {
         .content-wrapper {
-            width: 92%;
+            width: 92vw;
+        }
+
+        #card{
+            max-width: 100%;
+            width:100%;
         }
 
         .col-xs-6,
@@ -135,43 +117,59 @@
 
     private EditContext _formContext;
 
-    private SfTextBox _tbEmail;
     private string _emailCssClass;
 
-    private SfTextBox _tbPassword;
     private Regex _passwordRegex;
     private string _passwordCssClass;
 
     private string _btnContent;
 
-    private string _resultTitle;
-    private IEnumerable<string> _resultErrors;
-
     [Parameter]
     public bool IsLogin { get; set; }
 
 
-    private InputModel _inputModel;
+    public InputModel _inputModel;
 
-    private class InputModel
+    public class InputModel
     {
+        private string email;
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get => email ?? (email = String.Empty); set => email = value; }
 
+        private string password;
         [Required]
         [DataType(DataType.Password)]
         [RegularExpression(
             pattern: Constants.VALID_PASSWORD_PATTERN,
             ErrorMessage = Constants.PASSWORD_ERROR_MESSAGE)]
-        public string Password { get; set; }
+        public string Password { get => password ?? (password = String.Empty); set => password = value; }
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
 
+
+    protected override Task OnInitializedAsync()
+    {
+        _btnContent = IsLogin ? "Log in" : "Register";
+
+        _passwordRegex = new Regex(Constants.VALID_PASSWORD_PATTERN);
+
+        _inputModel = new InputModel();
+
+        _formContext = new EditContext(_inputModel);
+
+        return base.OnInitializedAsync();
+    }
+
     private async Task SubmitForm()
     {
+        if (ValidateEmail(_inputModel.Email) == false || ValidatePassword(_inputModel.Password) == false)
+        {
+            MainLayoutInstance.ShowExceptionToast(new Exception("A valid email and password are required."));
+        }
+
         string requestUrl;
 
         if (IsLogin)
@@ -181,16 +179,20 @@
 
         HttpResponseMessage result;
 
+        MainLayoutInstance.ShowSpinner();
+
         try
         {
-            MainLayoutInstance.ShowSpinner();
             result = await _httpClient.PutAsJsonAsync(requestUrl, _inputModel);
-            MainLayoutInstance.HideSpinner();
         }
         catch (Exception ex)
         {
-            _resultErrors = new[] {  "Something went wrong while requesting a login.", ex.Message };
+            MainLayoutInstance.ShowExceptionToast(ex);
             return;
+        }
+        finally
+        {
+            MainLayoutInstance.HideSpinner();
         }
 
         var resultContentAsString = await result?.Content.ReadAsStringAsync();
@@ -219,33 +221,17 @@
         }
         else
         {
-            _resultErrors = JsonConvert.DeserializeObject<IEnumerable<string>>(resultContentAsString);
+            IEnumerable<string> resultErrors = JsonConvert.DeserializeObject<IEnumerable<string>>(resultContentAsString);
+
+            var stringBuilder = new StringBuilder();
+
+            foreach (var item in resultErrors)
+            {
+                stringBuilder.AppendLine($"- {item}");
+            }
+            Exception ex = new Exception(stringBuilder.ToString());
+            MainLayoutInstance.ShowExceptionToast(ex);
         }
-    }
-
-    protected override Task OnInitializedAsync()
-    {
-        _btnContent = IsLogin ? "Log in" : "Register";
-
-        _resultErrors = new string[0];
-
-        _inputModel = new InputModel();
-
-        _formContext = new EditContext(_inputModel);
-
-        _passwordRegex = new Regex(Constants.VALID_PASSWORD_PATTERN);
-
-        return base.OnInitializedAsync();
-    }
-
-    private void OnEmailBlur(FocusOutEventArgs args)
-    {
-        CheckForm();
-    }
-
-    private void OnPasswordBlur(FocusOutEventArgs args)
-    {
-        CheckForm();
     }
 
     private void CheckForm()
