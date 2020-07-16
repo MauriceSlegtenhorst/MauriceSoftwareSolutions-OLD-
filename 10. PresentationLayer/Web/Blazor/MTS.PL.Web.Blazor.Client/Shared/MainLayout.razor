@@ -26,11 +26,11 @@
         </CascadingValue>
     </div>
 
-    <div class="col-lg-4 control-section">
+
         <SfToast @ref="Toast" ID="toast_type">
             <ToastPosition X="Center" Y="Top"></ToastPosition>
         </SfToast>
-    </div>
+
 </div>
 
 <style>
@@ -119,7 +119,7 @@
             Title = title,
             Content = message,
             ShowProgressBar = true,
-            Width = "40%"
+            ShowCloseButton = true
         };
 
         ShowToast(toastModel);
@@ -153,8 +153,7 @@
             Title = "An Exception has occurred",
             Content = contentBuilder.ToString(),
             ShowCloseButton = true,
-            TimeOut = 0,
-            Width = "40%"
+            TimeOut = 0
         };
 #else
     toastModel = new ToastModel
