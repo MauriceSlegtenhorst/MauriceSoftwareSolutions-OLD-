@@ -144,21 +144,6 @@ app {
     top: 0.5rem;
 }
 
-.card-form{
-   height: 100%;
-   width: 100%;
-   padding: 2rem;
-}
-
-.card-container {
-    height: 100%;
-    vertical-align: central;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    align-self: center;
-}
-
 @media (max-width: 767.98px) {
     .main .top-row:not(.auth) {
         display: none;
