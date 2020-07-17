@@ -34,6 +34,6 @@ namespace MTS.PL.Infra.Interfaces.Standard
 
         bool TwoFactorEnabled { get; set; }
 
-        DateTime LockoutEndDateTime { get; set; }
+        DateTime? LockoutEndDateTime { get; set; }
     }
 }

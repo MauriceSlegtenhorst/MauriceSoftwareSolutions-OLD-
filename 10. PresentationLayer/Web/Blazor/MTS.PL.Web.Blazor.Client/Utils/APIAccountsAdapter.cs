@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using MTS.PL.Infra.Interfaces.Standard;
 using MTS.Core.GlobalLibrary;
 using MTS.PL.Infra.Entities.Standard;
+using System.Collections.ObjectModel;
 
 namespace MTS.PL.Web.Blazor.Client.Utils
 {

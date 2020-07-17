@@ -3,8 +3,11 @@
 @using Syncfusion.Blazor.FileManager;
 
 <h1>Cloud storage</h1>
+<h4>Your own personal cloud storage!</h4>
 
-<div class="fullscreen">
+<AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@messages" />
+
+<div class="fill-maxed">
     <SfFileManager>
         <FileManagerAjaxSettings Url="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/FileOperations"
                                  UploadUrl="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/Upload"
@@ -15,9 +18,11 @@
 </div>
 
 @code {
+    private IEnumerable<string> messages;
+
     protected override Task OnInitializedAsync()
     {
-
+        messages = new[] { BlazorConstants.UNDER_CONSTRUCTION_MESSAGE_AVAILIBLE, "Not yet connected to storage." };
 
         return base.OnInitializedAsync();
     }

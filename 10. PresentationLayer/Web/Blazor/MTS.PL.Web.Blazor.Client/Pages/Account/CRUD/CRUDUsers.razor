@@ -9,13 +9,15 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
 <h1>CRUD accounts</h1>
 <h4>Create, read, update and delete accounts</h4>
 
-@if (IsInitialized)
+<AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@messages" />
+
+@if (_isInitialized == true)
 {
     <div class="fill-maxed">
         <SfGrid ID="Grid"
-                @ref="CrudGrid"
+                @ref="_crudGrid"
                 TValue="PLUserAccount"
-                Toolbar="@ToolBarItems"
+                Toolbar="@_toolBarItems"
                 EnablePersistence="true"
                 AllowPaging="true"
                 AllowSorting="true"
@@ -24,10 +26,11 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
             <GridEditSettings AllowAdding="true"
                               AllowEditing="true"
                               AllowDeleting="true"
-                              Mode="EditMode.Dialog" />
+                              Mode="EditMode.Dialog"
+                              Dialog="_dialogSettings"/>
 
             <GridEvents TValue="PLUserAccount"
-                        OnActionFailure="@ActionFailure"
+                        OnActionFailure="ActionFailure"
                         OnLoad="ShowSpinner"
                         DataBound="HideSpinner"
                         OnActionBegin="OnActionBegin"
@@ -40,38 +43,59 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
                     List<Exception> exceptions = null;
                     try
                     {
-                        PropertyInfo[] propertyInfos = typeof(PLUserAccount).GetProperties(
-                            BindingFlags.Public | BindingFlags.Instance)
-                            .Where(p => p.CanWrite == true &&
-                            p.PropertyType != typeof(DateTimeOffset?)).ToArray();
-
-                        if (propertyInfos.Any())
+                        if (_propertyInfos.Any() == true)
                         {
-                            foreach (PropertyInfo properyInfo in propertyInfos)
+                            foreach (PropertyInfo properyInfo in _propertyInfos)
                             {
                                 try
                                 {
                                     string field = properyInfo.Name;
                                     string header = PropertyNameConverter.ConvertFromProperty(properyInfo.Name);
-                                    bool isPrimKey = properyInfo.Name == "Id";
+                                    bool isPrimKey = properyInfo.Name == nameof(PLUserAccount.Id);
                                     bool canWrite = properyInfo.CanWrite;
                                     EditType editType = EditType.DefaultEdit;
                                     editTypeDictionairy.TryGetValue(properyInfo.PropertyType, out editType);
                                     bool isCheckBox = editType == EditType.BooleanEdit;
                                     TextAlign textAlignment = isCheckBox ? TextAlign.Center : TextAlign.Left;
-                                    string width = isCheckBox ? "75" : "200";
+                                    string width;
+
+                                    if (editType == EditType.NumericEdit || editType == EditType.BooleanEdit)
+                                        width = "30";
+                                    else
+                                        width = null;
 
                                     Debug.WriteLine($"Field: {field} | EditType: {Enum.GetName(typeof(EditType), editType)}");
 
-                                    <GridColumn Field="@field"
-                                                HeaderText="@header"
-                                                IsPrimaryKey="@isPrimKey"
-                                                IsIdentity="@isPrimKey"
-                                                EditType="@editType"
-                                                AllowEditing="@canWrite"
-                                                DisplayAsCheckBox="@isCheckBox"
-                                                TextAlign="@textAlignment"
-                                                Width="10"/>
+                                    // Workaround so we don't remove validation of the other fields
+                                    if (field == "Password")
+                                    {
+                                        ValidationRules _validationRules = new ValidationRules();
+                                        <GridColumn Field="@field"
+                                                    HeaderText="@header"
+                                                    IsPrimaryKey="@isPrimKey"
+                                                    IsIdentity="@isPrimKey"
+                                                    EditType="@editType"
+                                                    AllowEditing="@canWrite"
+                                                    DisplayAsCheckBox="@isCheckBox"
+                                                    TextAlign="@textAlignment"
+                                                    MaxWidth="@width"
+                                                    Width="@width" 
+                                                    ValidationRules="_validationRules"/>
+                                    }
+                                    else
+                                    {
+                                        <GridColumn Field="@field"
+                                                    HeaderText="@header"
+                                                    IsPrimaryKey="@isPrimKey"
+                                                    IsIdentity="@isPrimKey"
+                                                    EditType="@editType"
+                                                    AllowEditing="@canWrite"
+                                                    DisplayAsCheckBox="@isCheckBox"
+                                                    TextAlign="@textAlignment"
+                                                    MaxWidth="@width"
+                                                    Width="@width" />
+                                    }
+
                                 }
                                 catch (Exception ex)
                                 {
@@ -87,7 +111,7 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
                             if (exceptions == null)
                                 exceptions = new List<Exception>();
 
-                            exceptions.Add(new ArgumentException("fromObject empty"));
+                            exceptions.Add(new ArgumentException("No properties were found in useraccount"));
                         }
 
                         if (exceptions != null)
@@ -113,28 +137,41 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
     [CascadingParameter(Name = nameof(MainLayout))]
     public MainLayout MainLayoutInstance { get; set; }
 
-    private SfGrid<PLUserAccount> CrudGrid;
+    private IEnumerable<string> messages;
 
-    private bool IsInitialized;
+    private SfGrid<PLUserAccount> _crudGrid;
 
-    public List<string> ToolBarItems { get; set; } = new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" };
+    private DialogSettings _dialogSettings = new DialogSettings { MinHeight="500px", Width="500px" };
+
+    private List<string> _toolBarItems { get; set; } = new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update", "ColumnChooser" };
+
+    PropertyInfo[] _propertyInfos;
 
     private Dictionary<Type, EditType> editTypeDictionairy = new Dictionary<Type, EditType>
-{
+    {
         { typeof(String), EditType.DefaultEdit },
         { typeof(Boolean), EditType.BooleanEdit },
         { typeof(Int32), EditType.NumericEdit },
         { typeof(Enum), EditType.DropDownEdit },
-        { typeof(DateTime?), EditType.DateTimePickerEdit },
-        { typeof(DateTime), EditType.DateTimePickerEdit }
+        { typeof(DateTime?), EditType.DateTimePickerEdit }
     };
+
+    private bool _isInitialized;
 
     protected override async Task OnInitializedAsync()
     {
-        if (IsInitialized == true)
+        if (_isInitialized == true)
             return;
 
         MainLayoutInstance.ShowSpinner();
+
+        messages = new[] { BlazorConstants.UNDER_CONSTRUCTION_MESSAGE_AVAILIBLE, "Shows error but works." };
+
+        _propertyInfos = typeof(PLUserAccount).GetProperties(
+        BindingFlags.Public | BindingFlags.Instance)
+        .Where(p => p.CanWrite == true &&
+        p.PropertyType != typeof(DateTimeOffset?))
+        .ToArray();
 
         HttpResponseMessage result = null;
 
@@ -166,10 +203,9 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
             MainLayoutInstance.ShowExceptionToast(new Exception("Something went wrong while deserializing the server response.", ex));
         }
 
-        IsInitialized = true;
-
-
         await base.OnInitializedAsync();
+
+        _isInitialized = true;
     }
 
     public void ActionFailure(Syncfusion.Blazor.Grids.FailureEventArgs args)
