@@ -21,6 +21,7 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
         private readonly IJSRuntime _js;
         private readonly HttpClient _httpClient;
         private static readonly string TOKENKEY = "TOKENKEY";
+        private PLUserToken _plUserToken;
         private readonly NavigationManager _navigationManager;
 
         private AuthenticationState Anonymous => new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
@@ -46,7 +47,14 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
             if(authenticationState.User.Identity.IsAuthenticated == false)
             {
                 await Logout();
-                _navigationManager.NavigateTo(BlazorConstants.Pages.Authentication.LOGIN);
+                string returnUrl;
+
+                if (_plUserToken.Expiration < DateTime.UtcNow)
+                    returnUrl = BlazorConstants.Pages.Authentication.TOKEN_EXPIRED;
+                else
+                    returnUrl = BlazorConstants.Pages.Authentication.UNAUTHORIZED;
+
+                _navigationManager.NavigateTo(returnUrl);
             }
 
             return authenticationState;
@@ -70,13 +78,13 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
         {
             var authState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt")));
 
-            var tokenObject = JsonConvert.DeserializeObject<PLUserToken>(token);
+            _plUserToken = JsonConvert.DeserializeObject<PLUserToken>(token);
 
-            if (tokenObject.Expiration < DateTime.UtcNow)
+            if (_plUserToken.Expiration < DateTime.UtcNow)
                 return Anonymous;
             
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenObject.Value);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _plUserToken.Value);
 
             return authState;
         }

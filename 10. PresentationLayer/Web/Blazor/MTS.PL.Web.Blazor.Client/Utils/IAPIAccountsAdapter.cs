@@ -7,7 +7,6 @@ namespace MTS.PL.Web.Blazor.Client.Utils
 {
     public interface IAPIAccountsAdapter
     {
-        List<PLUserAccount> PLUserAccounts { get; set; }
 
         Task<object> InsertAsync(DataManager dataManager, object data, string key);
         object Read(DataManagerRequest dataManager, string key = null);

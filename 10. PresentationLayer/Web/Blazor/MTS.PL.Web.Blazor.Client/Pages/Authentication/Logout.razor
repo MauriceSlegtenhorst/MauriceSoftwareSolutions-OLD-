@@ -1,5 +1,5 @@
 ﻿@page "/authentication/logout"
-@inject HttpClient _httpClient
+@inject IHttpClientFactory _httpClientFactory
 @inject ILoginService  _loginService
 
 <h1>Logging out</h1>
@@ -24,7 +24,7 @@
         {
             MainLayoutInstance.ShowSpinner();
 
-            result = await _httpClient.SendAsync(request);
+            result = await _httpClientFactory.CreateClient().SendAsync(request);
 
             MainLayoutInstance.HideSpinner();
         }

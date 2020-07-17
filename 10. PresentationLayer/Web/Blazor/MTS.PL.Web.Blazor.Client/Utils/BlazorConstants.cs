@@ -6,6 +6,7 @@
         public const string UNDER_CONSTRUCTION_MESSAGE = "This part or page is under construction and is therefore unavailible to you.\nThank you for your patience.";
         public const string UNDER_CONSTRUCTION_MESSAGE_AVAILIBLE = "This part or page is under construction and might therefore misbehave.\nThank you for your understanding.";
 
+        public const string API_NAME = "apiname";
         public class Pages
         { 
             public class Account

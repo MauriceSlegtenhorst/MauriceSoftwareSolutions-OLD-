@@ -3,8 +3,7 @@
 Roles =
 Constants.Security.ADMINISTRATOR + "," +
 Constants.Security.PRIVILEGED_EMPLOYEE)]
-@inject HttpClient _httpClient
-@inject IAPIAccountsAdapter _apiAccountAdapter
+@inject IHttpClientFactory  _httpClientFactory
 @using GridActions = Syncfusion.Blazor.Grids.Action
 
 <h1>CRUD accounts</h1>
@@ -28,16 +27,16 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
                               AllowEditing="true"
                               AllowDeleting="true"
                               Mode="EditMode.Dialog"
-                              Dialog="_dialogSettings"/>
+                              Dialog="_dialogSettings" />
 
             <GridEvents TValue="PLUserAccount"
                         OnActionFailure="ActionFailure"
                         OnLoad="ShowSpinner"
                         DataBound="HideSpinner"
                         OnActionBegin="OnActionBegin"
-                        OnActionComplete="HideSpinner"/>
+                        OnActionComplete="HideSpinner" />
 
-            <SfDataManager AdaptorInstance="@typeof(APIAccountsAdapter)"  Adaptor="Adaptors.CustomAdaptor" />
+            <SfDataManager AdaptorInstance="@typeof(APIAccountsAdapter)" Adaptor="Adaptors.CustomAdaptor" />
 
             <GridColumns>
                 @{
@@ -80,8 +79,8 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
                                                     DisplayAsCheckBox="@isCheckBox"
                                                     TextAlign="@textAlignment"
                                                     MaxWidth="@width"
-                                                    Width="@width" 
-                                                    ValidationRules="_validationRules"/>
+                                                    Width="@width"
+                                                    ValidationRules="_validationRules" />
                                     }
                                     else
                                     {
@@ -142,14 +141,14 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
 
     private SfGrid<PLUserAccount> _crudGrid;
 
-    private DialogSettings _dialogSettings = new DialogSettings { MinHeight="500px", Width="500px" };
+    private DialogSettings _dialogSettings = new DialogSettings { MinHeight = "500px", Width = "500px" };
 
     private List<string> _toolBarItems { get; set; } = new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update", "ColumnChooser" };
 
     PropertyInfo[] _propertyInfos;
 
     private Dictionary<Type, EditType> editTypeDictionairy = new Dictionary<Type, EditType>
-    {
+{
         { typeof(String), EditType.DefaultEdit },
         { typeof(Boolean), EditType.BooleanEdit },
         { typeof(Int32), EditType.NumericEdit },
@@ -178,7 +177,8 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
 
         try
         {
-            result = await _httpClient.GetAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_ALL}");
+
+            result = await _httpClientFactory.CreateClient(BlazorConstants.API_NAME).GetAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_ALL}");
         }
         catch (Exception ex)
         {
@@ -194,7 +194,7 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
 
         try
         {
-            APIAccountsAdapter._httpClient = _httpClient;
+            APIAccountsAdapter.httpClient = _httpClientFactory.CreateClient();
             var accounts = JsonConvert.DeserializeObject<List<PLUserAccount>>(await result.Content.ReadAsStringAsync());
 
             APIAccountsAdapter.PLUserAccounts = accounts;

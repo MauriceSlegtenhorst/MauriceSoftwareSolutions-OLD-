@@ -1,6 +1,6 @@
 ﻿@page "/account/edit/account"
 @attribute [Authorize]
-@inject HttpClient _httpClient
+@inject IHttpClientFactory _httpClientFactory
 @using System.Net.Mail
 
 @if (IsInitialized == true && _plUserAccount != null)
@@ -85,67 +85,6 @@ else
     <p>Retreiving your account information...</p>
 }
 
-
-<style>
-   /* .e-input-picture::before {
-        content: '\e335';
-        font-family: e-icons;
-    }
-
-    .e-input-calendar::before {
-        content: '\e901';
-        font-family: e-icons;
-        font-size: 13px;
-    }
-
-    .content-wrapper {
-        width: 90%;
-        margin: 0 auto;
-        min-width: 85px;
-    }
-
-        .content-wrapper div.row {
-            padding: 15px 0px;
-        }
-
-    .custom-padding-05 {
-        padding-top: 5px;
-    }
-
-    @@media only screen and (max-width: 480px) {
-        .content-wrapper {
-            width: 92%;
-        }
-
-        .col-xs-6,
-        .col-xs-4,
-        .col-xs-12 {
-            padding: 10px 5px;
-            width: 100%;
-        }
-
-        .content-wrapper div.row {
-            padding: 0px;
-        }
-    }
-
-    #description td {
-        vertical-align: top;
-    }
-
-    .e-outline.e-float-input,
-    .e-outline.e-float-input.e-control-wrapper {
-        margin-top: 0;
-    }
-
-    .fabric .row.material2,
-    .bootstrap .row.material2,
-    .bootstrap4 .row.material2,
-    .highcontrast .row.material2 {
-        display: none;*/
-    }
-</style>
-
 @code {
     [CascadingParameter]
     public Task<AuthenticationState> AuthStateTask { get; set; }
@@ -205,9 +144,8 @@ else
     private async Task<IPLUserAccount> GetUserAccount()
     {
         string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_BY_EMAIL}";
-        MainLayoutInstance.ShowSpinner();
-        var result = await _httpClient.GetAsync(url);
-        MainLayoutInstance.HideSpinner();
+
+        var result = await _httpClientFactory.CreateClient().GetAsync(url);
 
         if (result.IsSuccessStatusCode == false)
             MainLayoutInstance.ShowExceptionToast(new Exception($"Something went wrong while calling the server. {result.StatusCode}: {result.ReasonPhrase}"));
@@ -218,7 +156,7 @@ else
     private async Task SubmitForm()
     {
         MainLayoutInstance.ShowSpinner();
-        var result = await _httpClient.PatchAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT}", new StringContent(JsonConvert.SerializeObject(_plUserAccount), Encoding.UTF8, Constants.MediaTypes.JSON));
+        var result = await _httpClientFactory.CreateClient().PatchAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT}", new StringContent(JsonConvert.SerializeObject(_plUserAccount), Encoding.UTF8, Constants.MediaTypes.JSON));
         MainLayoutInstance.HideSpinner();
 
         if (result.IsSuccessStatusCode == false)

@@ -1,4 +1,4 @@
-﻿@inject HttpClient _httpClient
+﻿@inject IHttpClientFactory _httpClientFactory
 @inject ILoginService  _loginService
 @inject NavigationManager _navigationManager
 @using System.Net.Mail
@@ -52,7 +52,7 @@
 </div>
 
 <style>
-    #card{
+    #card {
         max-width: 60%;
     }
 
@@ -76,9 +76,9 @@
             width: 92vw;
         }
 
-        #card{
+        #card {
             max-width: 100%;
-            width:100%;
+            width: 100%;
         }
 
         .col-xs-6,
@@ -183,7 +183,7 @@
 
         try
         {
-            result = await _httpClient.PutAsJsonAsync(requestUrl, _inputModel);
+            result = await _httpClientFactory.CreateClient(BlazorConstants.API_NAME).PutAsJsonAsync(requestUrl, _inputModel);
         }
         catch (Exception ex)
         {
@@ -205,7 +205,7 @@
 
                 MainLayoutInstance.ShowToast(new ToastModel
                 {
-                    CssClass= "e-toast-success",
+                    CssClass = "e-toast-success",
                     Icon = "e-success toast-icons",
                     Title = "Login was succesfull",
                     Content = $"Account for {_inputModel.Email} is now logged in.",
@@ -238,7 +238,7 @@
     {
         if (_formContext.Validate() == false)
         {
-            if(ValidateEmail(_inputModel.Email) == false)
+            if (ValidateEmail(_inputModel.Email) == false)
                 _emailCssClass = "e-error";
             else
                 _emailCssClass = "e-success";
