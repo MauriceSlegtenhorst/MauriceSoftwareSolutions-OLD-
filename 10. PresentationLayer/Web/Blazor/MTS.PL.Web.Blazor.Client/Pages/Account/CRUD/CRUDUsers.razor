@@ -4,6 +4,7 @@ Roles =
 Constants.Security.ADMINISTRATOR + "," +
 Constants.Security.PRIVILEGED_EMPLOYEE)]
 @inject HttpClient _httpClient
+@inject IAPIAccountsAdapter _apiAccountAdapter
 @using GridActions = Syncfusion.Blazor.Grids.Action
 
 <h1>CRUD accounts</h1>
@@ -36,7 +37,7 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
                         OnActionBegin="OnActionBegin"
                         OnActionComplete="HideSpinner"/>
 
-            <SfDataManager AdaptorInstance="@typeof(APIAccountsAdapter)" Adaptor="Adaptors.CustomAdaptor" />
+            <SfDataManager AdaptorInstance="@typeof(APIAccountsAdapter)"  Adaptor="Adaptors.CustomAdaptor" />
 
             <GridColumns>
                 @{
@@ -193,7 +194,7 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
 
         try
         {
-            APIAccountsAdapter.httpClient = _httpClient;
+            APIAccountsAdapter._httpClient = _httpClient;
             var accounts = JsonConvert.DeserializeObject<List<PLUserAccount>>(await result.Content.ReadAsStringAsync());
 
             APIAccountsAdapter.PLUserAccounts = accounts;
