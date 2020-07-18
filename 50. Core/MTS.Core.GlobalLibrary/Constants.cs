@@ -6,8 +6,8 @@ namespace MTS.Core.GlobalLibrary
     {
         public class MSS
         {
-            public const string WHAT_IS_MSS = 
-                "Maurice Software Solutions is an \"attic project\" developed by Maurice to showcase the programming skills of Maurice. Aside from that there is actual functionality to be found for users with an account. " +
+            public const string WHAT_IS_MSS =
+                "Maurice Software Solutions is an \"attic project\" developed by Maurice to showcase the programming skills of Maurice. Aside from that there is actual functionality to be found like fully-fledged, unlimited cloud storage and a chatroom." +
                 "Maurice is dedicated to improving Maurice Software Solutions as a whole regularly whilst adding new features.";
 
             public const string ABOUT_MAURICE_1 = 
@@ -28,7 +28,7 @@ namespace MTS.Core.GlobalLibrary
                 "Whilst trying to fix my personal problems I started really liking programming and started to develop in Android Studio. I developed several android apps for myself and others learning more and more about Java, XML, SQLite and even some Kotling. ";
 
             public const string ABOUT_MAURICE_5 =
-                "Now that some time has passed, I got referred to ITvitae. They could help me get more into the software development world and possibly get me a job in this field. " +
+                "Now that some time has passed, I got referred to ITvitae. They could help me get into the software development world and possibly get me a job in this field. " +
                 "A new time arrives for me when I pass all the tests and am allowed into ITvitae as a participant of the C# Software Development department. Liking it from the start I spend a lot of time on location to make projects and improve my C# development skills. " +
                 "In one year, I have learned so incredibly much working like this and I still am.";
 
