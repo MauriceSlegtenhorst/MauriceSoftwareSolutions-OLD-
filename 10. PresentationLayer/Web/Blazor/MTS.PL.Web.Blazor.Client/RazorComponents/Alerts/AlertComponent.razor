@@ -1,62 +1,39 @@
-﻿<style>
-    .content {
-        padding: 10px;
-    }
-
-    .icon{
-        font-size: 1.5rem;
-        padding: 0.5rem;
-    }
-
-    .center-vertical {
-        display: inline-block;
-        vertical-align: middle;
-    }
-</style>
-
-<div class="@_topCSSClass col-12" role="alert">
+﻿<div class="@_topCSSClass" role="alert">
     @if (!String.IsNullOrEmpty(Title)) 
     {
         <div class="row">
-            <span class="icon @_iconCSSClass" aria-hidden="true"/>
-            <h4 class="center-vertical align-self-stretch">@Title</h4>
+            <span class="@_iconCSSClass" aria-hidden="true"/>
+            <h4>@Title</h4>
         </div>    
     }
     
     @if (!String.IsNullOrEmpty(Subtitle))
     {
         <div class="row ">
-                <p>
-                    <h5>@Subtitle</h5>
-                </p>
+            <h5>@Subtitle</h5>
         </div>
     }
 
     @if (ContentMessages != null)
     {
-        <div class="row">
-            @{
-            if (ShowContentAsList == true)
-            {
-                <div class="list-group">
-                    @foreach (string message in ContentMessages)
-                    {
-                    <span class="list-inline-item">- @message</span>
-                    }
-                </div>
-            }
-
-            if(ShowContentAsList == false)
-            {
-        <div class="list-group">
-            @foreach (string message in ContentMessages)
-            {
-                <span>@message</span>
-            }
-        </div>
+        if (ShowContentAsList == true)
+        {
+            <div class="list-group">
+                @foreach (string message in ContentMessages)
+                {
+                    <span>- @message</span>
+                }
+            </div>
         }
-    }
-    </div>
+        else
+        {
+            <div class="list-group">
+                @foreach (string message in ContentMessages)
+                {
+                    <span>@message</span>
+                }
+            </div>
+        }
     }
 </div>
 
@@ -93,19 +70,19 @@
         {
             default:
                 _topCSSClass = "alert alert-info";
-                _iconCSSClass = "oi oi-info";
+                _iconCSSClass = "alert-icon oi oi-info";
                 break;
             case AlertTypeEnum.Success:
                 _topCSSClass = "alert alert-success";
-                _iconCSSClass = "oi oi-check";
+                _iconCSSClass = "alert-icon oi oi-check";
                 break;
             case AlertTypeEnum.Warning:
                 _topCSSClass = "alert alert-warning";
-                _iconCSSClass = "oi oi-warning";
+                _iconCSSClass = "alert-icon oi oi-warning";
                 break;
             case AlertTypeEnum.Danger:
                 _topCSSClass = "alert alert-danger";
-                _iconCSSClass = "oi oi-warning";
+                _iconCSSClass = "alert-icon oi oi-warning";
                 break;
         }
 

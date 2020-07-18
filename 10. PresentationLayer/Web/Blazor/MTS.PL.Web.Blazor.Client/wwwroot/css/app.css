@@ -8,9 +8,18 @@
     max-width:100%;
 }
 
-.e-grid .e-spinner-pane {
-        display:none;
-} 
+.alert-icon{
+    float: left;
+    font-size: 1.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.text-align-center{
+    float: left;
+    text-align: center;
+   
+}
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

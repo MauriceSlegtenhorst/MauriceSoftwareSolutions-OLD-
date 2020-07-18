@@ -19,18 +19,19 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
     public class JWTAuthStateProvider : AuthenticationStateProvider, ILoginService
     {
         private readonly IJSRuntime _js;
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
         private static readonly string TOKENKEY = "TOKENKEY";
-        private PLUserToken _plUserToken;
         private readonly NavigationManager _navigationManager;
 
         private AuthenticationState Anonymous => new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
 
-        public JWTAuthStateProvider(IJSRuntime js, HttpClient httpClient, NavigationManager navigationManager)
+        public PLUserToken CurrentToken { get; set; }
+
+        public JWTAuthStateProvider(IJSRuntime js, NavigationManager navigationManager, IHttpClientFactory httpClientFactory)
         {
             _js = js;
-            _httpClient = httpClient;
             _navigationManager = navigationManager;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async override Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -42,22 +43,7 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
                 return Anonymous;
             }
 
-            var authenticationState = BuildAuthenticationState(token);
-
-            if(authenticationState.User.Identity.IsAuthenticated == false)
-            {
-                await Logout();
-                string returnUrl;
-
-                if (_plUserToken.Expiration < DateTime.UtcNow)
-                    returnUrl = BlazorConstants.Pages.Authentication.TOKEN_EXPIRED;
-                else
-                    returnUrl = BlazorConstants.Pages.Authentication.UNAUTHORIZED;
-
-                _navigationManager.NavigateTo(returnUrl);
-            }
-
-            return authenticationState;
+            return BuildAuthenticationState(token);
         }
 
         public async Task Login(string token)
@@ -69,7 +55,7 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
 
         public async Task Logout()
         {
-            _httpClient.DefaultRequestHeaders.Authorization = null;
+            //_httpClient.DefaultRequestHeaders.Authorization = null;
             await _js.RemoveItem(TOKENKEY);
             NotifyAuthenticationStateChanged(Task.FromResult(Anonymous));
         }
@@ -78,13 +64,12 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
         {
             var authState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt")));
 
-            _plUserToken = JsonConvert.DeserializeObject<PLUserToken>(token);
+            CurrentToken = JsonConvert.DeserializeObject<PLUserToken>(token);
 
-            if (_plUserToken.Expiration < DateTime.UtcNow)
+            if (CurrentToken.Expiration < DateTime.UtcNow)
                 return Anonymous;
-            
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _plUserToken.Value);
+            //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _plUserToken.Value);
 
             return authState;
         }

@@ -4,15 +4,20 @@
 
 <h4>You are not allowed to see this content</h4>
 
-<h5>What caused this problem?</h5>
+<div class="alert alert-info" role="alert">
 
-<div class="list-group">
-    <span>- It could be that your session time has expired. A simple <a href="@BlazorConstants.Pages.Authentication.LOGIN">login</a> should eliminate the issue.</span>
-    <span>- It could be that you are actually not allowed to see this content. You could ask an administrator for help with this issue.</span>
-    <span>- It could be that your security token somehow got deleted. This usally happpens when you clear/cleanup your browser or pc. You will have to <a href="@BlazorConstants.Pages.Authentication.LOGIN">login</a> again to possibly eliminate the issue.</span>
+    <div class="row">
+        <span class="alert-icon oi oi-info" aria-hidden="true" />
+        <h4>What caused this problem?</h4>
+    </div>
+
+    <div class="list-group">
+        <span>- It could be that your session time has expired. A simple <strong><a href="@BlazorConstants.Pages.Authentication.LOGIN">login</a></strong> should eliminate the issue.</span>
+        <span>- It could be that you are actually not allowed to see this content. You could ask an administrator for help with this issue.</span>
+        <span>- It could be that your security token somehow got deleted. This usally happpens when you clear/cleanup your browser or pc. You will have to <strong><a href="@BlazorConstants.Pages.Authentication.LOGIN">login</a></strong> again to possibly eliminate the issue.</span>
+    </div>
 </div>
 
+    @code {
 
-@code {
-
-}
+    }

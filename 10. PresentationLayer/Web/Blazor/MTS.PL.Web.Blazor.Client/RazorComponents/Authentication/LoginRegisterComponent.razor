@@ -124,6 +124,9 @@
 
     private string _btnContent;
 
+    private bool _isEmailValid;
+    private bool _isPasswordValid;
+
     [Parameter]
     public bool IsLogin { get; set; }
 
@@ -165,10 +168,8 @@
 
     private async Task SubmitForm()
     {
-        if (ValidateEmail(_inputModel.Email) == false || ValidatePassword(_inputModel.Password) == false)
-        {
-            MainLayoutInstance.ShowExceptionToast(new Exception("A valid email and password are required."));
-        }
+        if (_isEmailValid == false || _isPasswordValid == false)
+            return;
 
         string requestUrl;
 
@@ -234,22 +235,38 @@
         }
     }
 
+
+
     private void CheckForm()
     {
         if (_formContext.Validate() == false)
         {
             if (ValidateEmail(_inputModel.Email) == false)
+            {
+                _isEmailValid = false;
                 _emailCssClass = "e-error";
+            }
             else
+            {
+                _isEmailValid = true;
                 _emailCssClass = "e-success";
+            }
 
             if (ValidatePassword(_inputModel.Password) == false)
+            {
+                _isPasswordValid = false;
                 _passwordCssClass = "e-error";
+            }
             else
+            {
+                _isPasswordValid = true;
                 _passwordCssClass = "e-success";
+            }
         }
         else
         {
+            _isEmailValid = true;
+            _isPasswordValid = true;
             _emailCssClass = "e-success";
             _passwordCssClass = "e-success";
         }

@@ -145,7 +145,7 @@ else
     {
         string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_BY_EMAIL}";
 
-        var result = await _httpClientFactory.CreateClient().GetAsync(url);
+        var result = await _httpClientFactory.CreateClient(BlazorConstants.API_NAME).GetAsync(url);
 
         if (result.IsSuccessStatusCode == false)
             MainLayoutInstance.ShowExceptionToast(new Exception($"Something went wrong while calling the server. {result.StatusCode}: {result.ReasonPhrase}"));
@@ -156,7 +156,7 @@ else
     private async Task SubmitForm()
     {
         MainLayoutInstance.ShowSpinner();
-        var result = await _httpClientFactory.CreateClient().PatchAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT}", new StringContent(JsonConvert.SerializeObject(_plUserAccount), Encoding.UTF8, Constants.MediaTypes.JSON));
+        var result = await _httpClientFactory.CreateClient(BlazorConstants.API_NAME).PatchAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT}", new StringContent(JsonConvert.SerializeObject(_plUserAccount), Encoding.UTF8, Constants.MediaTypes.JSON));
         MainLayoutInstance.HideSpinner();
 
         if (result.IsSuccessStatusCode == false)
