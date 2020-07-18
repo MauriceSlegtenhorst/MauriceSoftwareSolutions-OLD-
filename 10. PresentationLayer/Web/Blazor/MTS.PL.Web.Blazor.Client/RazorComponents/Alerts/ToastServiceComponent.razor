@@ -1,0 +1,34 @@
+﻿@inject IToastService _toastService
+@inherits AToastServiceComponent
+
+<SfToast @ref="_toast" ID="toast_type">
+    <ToastPosition X="Center" Y="Top"/>
+</SfToast>
+
+@code { 
+    private SfToast _toast;
+
+    protected override void OnInitialized()
+    {
+        _toastService.OnShow += ShowToast;
+        _toastService.OnHide += HideToast;
+
+        base.OnInitialized();
+    }
+
+    private void ShowToast(ToastModel toastModel)
+    {
+        _toast.Show(toastModel);
+    }
+
+    private void HideToast()
+    {
+        _toast.Hide();
+    }
+
+    public override void Dispose()
+    {
+        _toastService.OnShow -= ShowToast;
+        _toastService.OnHide -= HideToast;
+    }
+}

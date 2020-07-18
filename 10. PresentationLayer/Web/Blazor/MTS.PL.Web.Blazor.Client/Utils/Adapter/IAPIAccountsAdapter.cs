@@ -3,7 +3,7 @@ using Syncfusion.Blazor;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MTS.PL.Web.Blazor.Client.Utils
+namespace MTS.PL.Web.Blazor.Client.Utils.Adapter
 {
     public interface IAPIAccountsAdapter
     {

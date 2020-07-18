@@ -8,12 +8,10 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
-using MTS.PL.Infra.Interfaces.Standard;
 using MTS.Core.GlobalLibrary;
 using MTS.PL.Infra.Entities.Standard;
-using System.Collections.ObjectModel;
 
-namespace MTS.PL.Web.Blazor.Client.Utils
+namespace MTS.PL.Web.Blazor.Client.Utils.Adapter
 {
     public class APIAccountsAdapter : DataAdaptor
     {

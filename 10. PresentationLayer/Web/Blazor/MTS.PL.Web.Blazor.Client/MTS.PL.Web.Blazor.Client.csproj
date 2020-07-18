@@ -29,7 +29,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Pages\Contact\" />
     <Folder Include="wwwroot\css\scss\" />
+    <Folder Include="wwwroot\Images\Maurice\" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

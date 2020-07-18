@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using MTS.PL.Web.Blazor.Client.Utils;
 using Newtonsoft.Json;
 using MTS.PL.Infra.Interfaces.Standard;
 using MTS.PL.Infra.Entities.Standard;
 using Microsoft.AspNetCore.Components;
 using System.Diagnostics;
+using MTS.PL.Web.Blazor.Client.Utils.Extensions;
 
 namespace MTS.PL.Web.Blazor.Client.Authentification
 {

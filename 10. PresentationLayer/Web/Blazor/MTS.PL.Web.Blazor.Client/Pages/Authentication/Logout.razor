@@ -1,4 +1,6 @@
 ﻿@page "/authentication/logout"
+@inject IToastService _toastService
+@inject ISpinnerService _spinnerService
 @inject IHttpClientFactory _httpClientFactory
 @inject ILoginService  _loginService
 
@@ -22,27 +24,20 @@
 
         try
         {
-            MainLayoutInstance.ShowSpinner();
+            _spinnerService.ShowSpinner();
 
-            result = await _httpClientFactory.CreateClient().SendAsync(request);
+            result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).SendAsync(request);
 
-            MainLayoutInstance.HideSpinner();
+            _spinnerService.HideSpinner();
         }
         catch (Exception ex)
         {
-            MainLayoutInstance.ShowExceptionToast(ex);
+            _toastService.ShowExceptionToast(ex);
         }
 
         if (result.IsSuccessStatusCode)
         {
-            MainLayoutInstance.ShowToast(new ToastModel
-            {
-                CssClass = "e-toast-success",
-                Icon = "e-success toast-icons",
-                Title = "Logout was succesfull",
-                Content = $"You are now logged out.",
-                ShowProgressBar = true
-            });
+            _toastService.ShowSuccessToast("You are now logged in", "Logout was succesfull");
 
             await _loginService.Logout();
         }

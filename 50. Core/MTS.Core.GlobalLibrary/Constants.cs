@@ -2,21 +2,51 @@
 
 namespace MTS.Core.GlobalLibrary
 {
-    public static class Constants
+    public class Constants
     {
-        public static class MTS
+        public class MSS
         {
-            public const string WHAT_IS_MTS = "Maurice Tech Solutions was developed to showcase the programming skills of Maurice.";
+            public const string WHAT_IS_MSS = 
+                "Maurice Software Solutions is an \"attic project\" developed by Maurice to showcase the programming skills of Maurice. Aside from that there is actual functionality to be found for users with an account. " +
+                "Maurice is dedicated to improving Maurice Software Solutions as a whole regularly whilst adding new features.";
+
+            public const string ABOUT_MAURICE_1 = 
+                "I am an enthusiastic man with a strong passion for programming. People call me social, friendly and helpful. Those are also the things that give me energy besides coding of course.  " +
+                "Although I was much more social in my early years, I still like it. Things that interest me are space, innovation in general, new technologies, extreme sports, shooting guns (for sports), computer parts and I like to go for a jog every now and then.";
+
+            public const string ABOUT_MAURICE_2 =
+                "Early in my childhood (I think I was thirteen) my older brother gave me a book called \"Coding in Visual Basic\" which sparked my interest in coding. " +
+                "I started coding regularly but I didn’t have I clue what I was doing but I liked the feeling of creating things and making them work. Soon I created my very first program, a beautiful slot machine with cheat options for many things like infinite money. " +
+                "At this point I didn’t know yet if I wanted to make this my main profession, I just liked it as a hobby.";
+
+            public const string ABOUT_MAURICE_3 =
+                "Thinking I like other things such as commerce and owning a store later, I headed this way starting a study called \"Ondernemer Detailhandel\" which translates to Retail entrepreneur and successfully completed it. " +
+                "Next I started a new study called \"Commerciele Economie\" which translates into Commerce Economics. This one I didn’t finish. Personal problems prevented me from getting to the finish and I ended up stopping. " +
+                "There were many reasons for this but most importantly it did not interest me enough to keep on going. ";
+
+            public const string ABOUT_MAURICE_4 =
+                "Whilst trying to fix my personal problems I started really liking programming and started to develop in Android Studio. I developed several android apps for myself and others learning more and more about Java, XML, SQLite and even some Kotling. ";
+
+            public const string ABOUT_MAURICE_5 =
+                "Now that some time has passed, I got referred to ITvitae. They could help me get more into the software development world and possibly get me a job in this field. " +
+                "A new time arrives for me when I pass all the tests and am allowed into ITvitae as a participant of the C# Software Development department. Liking it from the start I spend a lot of time on location to make projects and improve my C# development skills. " +
+                "In one year, I have learned so incredibly much working like this and I still am.";
+
+            public const string ABOUT_MAURICE_6 =
+                "Now I have a good understanding of languages like C#, SQL, SQLite, HTML, XAML, XML, JavaScript, SCSS and CSS. But I must admit, I like C# and XAML the most out of all of these as they seem the most logically constructed to me. ";
+
+            public const string ABOUT_MAURICE_7 =
+                "That’s it. If you want to know more about me or Maurice Software Solutions, please navigate to the feedback or contact page. Have a good one!";
         }
 
-        public static class APIControllers
+        public class APIControllers
         {
             public const string ACCOUNT = "account";
             public const string IDENTITY = "identity";
             public const string CREDITS = "credits";
         }
 
-        public static class AccountControllerEndpoints
+        public class AccountControllerEndpoints
         {
             public const string GET_BY_ID = "getbyid";
             public const string GET_BY_EMAIL = "getbyemail";
@@ -31,20 +61,20 @@ namespace MTS.Core.GlobalLibrary
             public const string REMOVE_ROLES_FROM_ACCOUNT = "removerolesfromaccount";
         }
         
-        public static class IdentityControllerEndpoints
+        public class IdentityControllerEndpoints
         {
             public const string LOG_IN = "login";
             public const string LOG_OUT = "logout";
         }
 
-        public static class MediaTypes
+        public class MediaTypes
         {
             public const string JSON = "application/json";
             public const string FORM_URL_ENCODED = "application/x-www-form-urlencoded";
             public const string MULTIPART_FORM_DATA = "multipart/form-data";
         }
 
-        public static class Security
+        public class Security
         {
             public const string STANDARD_USER = "standarduser";
             public const string PRIVILEGED_USER = "privilegeduser";

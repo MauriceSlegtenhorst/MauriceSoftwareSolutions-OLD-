@@ -1,6 +1,8 @@
-﻿@page "/account/edit/account"
+﻿@page "/account/edit"
 @attribute [Authorize]
 @inject IHttpClientFactory _httpClientFactory
+@inject IToastService _toastService
+@inject ISpinnerService _spinnerService
 @using System.Net.Mail
 
 @if (IsInitialized == true && _plUserAccount != null)
@@ -89,9 +91,6 @@ else
     [CascadingParameter]
     public Task<AuthenticationState> AuthStateTask { get; set; }
 
-    [CascadingParameter(Name = nameof(MainLayout))]
-    public MainLayout MainLayoutInstance { get; set; }
-
     private AuthenticationState _authState;
 
     private bool IsInitialized;
@@ -119,13 +118,13 @@ else
     {
         try
         {
-            MainLayoutInstance.ShowSpinner();
+            _spinnerService.ShowSpinner();
             _plUserAccount = await GetUserAccount();
-            MainLayoutInstance.HideSpinner();
+            _spinnerService.HideSpinner();
         }
         catch (Exception ex)
         {
-            MainLayoutInstance.ShowExceptionToast(ex);
+            _toastService.ShowExceptionToast(ex);
         }
 
         _formContext = new EditContext(_plUserAccount);
@@ -145,24 +144,24 @@ else
     {
         string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_BY_EMAIL}";
 
-        var result = await _httpClientFactory.CreateClient(BlazorConstants.API_NAME).GetAsync(url);
+        var result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).GetAsync(url);
 
         if (result.IsSuccessStatusCode == false)
-            MainLayoutInstance.ShowExceptionToast(new Exception($"Something went wrong while calling the server. {result.StatusCode}: {result.ReasonPhrase}"));
+            _toastService.ShowExceptionToast(new Exception($"Something went wrong while calling the server. {result.StatusCode}: {result.ReasonPhrase}"));
 
         return JsonConvert.DeserializeObject<PLUserAccount>(await result.Content.ReadAsStringAsync());
     }
 
     private async Task SubmitForm()
     {
-        MainLayoutInstance.ShowSpinner();
-        var result = await _httpClientFactory.CreateClient(BlazorConstants.API_NAME).PatchAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT}", new StringContent(JsonConvert.SerializeObject(_plUserAccount), Encoding.UTF8, Constants.MediaTypes.JSON));
-        MainLayoutInstance.HideSpinner();
+        _spinnerService.ShowSpinner();
+        var result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PatchAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT}", new StringContent(JsonConvert.SerializeObject(_plUserAccount), Encoding.UTF8, Constants.MediaTypes.JSON));
+        _spinnerService.HideSpinner();
 
         if (result.IsSuccessStatusCode == false)
-            MainLayoutInstance.ShowExceptionToast(new Exception($"Something went wrong while calling the server. {result.StatusCode}: {result.ReasonPhrase}"));
+            _toastService.ShowExceptionToast(new Exception($"Something went wrong while calling the server. {result.StatusCode}: {result.ReasonPhrase}"));
 
-        MainLayoutInstance.ShowSuccessToast("Your account has been updated. ", "Account update successfull");
+        _toastService.ShowSuccessToast("Your account has been updated. ", "Account update successfull");
     }
 
     private void OnBlur(FocusOutEventArgs args)

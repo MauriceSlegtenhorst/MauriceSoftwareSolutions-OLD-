@@ -1,5 +1,7 @@
 ﻿@inject IHttpClientFactory _httpClientFactory
 @inject ILoginService  _loginService
+@inject IToastService _toastService
+@inject ISpinnerService _spinnerService
 @inject NavigationManager _navigationManager
 @using System.Net.Mail
 
@@ -180,20 +182,20 @@
 
         HttpResponseMessage result;
 
-        MainLayoutInstance.ShowSpinner();
+        _spinnerService.ShowSpinner();
 
         try
         {
-            result = await _httpClientFactory.CreateClient(BlazorConstants.API_NAME).PutAsJsonAsync(requestUrl, _inputModel);
+            result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PutAsJsonAsync(requestUrl, _inputModel);
         }
         catch (Exception ex)
         {
-            MainLayoutInstance.ShowExceptionToast(ex);
+            _toastService.ShowExceptionToast(ex);
             return;
         }
         finally
         {
-            MainLayoutInstance.HideSpinner();
+            _spinnerService.HideSpinner();
         }
 
         var resultContentAsString = await result?.Content.ReadAsStringAsync();
@@ -204,7 +206,7 @@
             {
                 await _loginService.Login(resultContentAsString);
 
-                MainLayoutInstance.ShowToast(new ToastModel
+                _toastService.ShowToast(new ToastModel
                 {
                     CssClass = "e-toast-success",
                     Icon = "e-success toast-icons",
@@ -231,7 +233,7 @@
                 stringBuilder.AppendLine($"- {item}");
             }
             Exception ex = new Exception(stringBuilder.ToString());
-            MainLayoutInstance.ShowExceptionToast(ex);
+            _toastService.ShowExceptionToast(ex);
         }
     }
 

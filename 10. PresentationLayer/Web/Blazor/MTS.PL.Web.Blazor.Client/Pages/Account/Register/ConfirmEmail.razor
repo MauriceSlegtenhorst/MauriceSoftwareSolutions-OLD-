@@ -1,5 +1,5 @@
 ﻿@page "/account/register/confirmemail/{UserId}/{Code}"
-@inject HttpClient _httpClient
+@inject IHttpClientFactory _httpClientFactory 
 
 <h1>Email confirmation</h1>
 
@@ -43,7 +43,7 @@ else
 
         string uri = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CONFIRM_EMAIL}";
 
-        var result = await _httpClient.PutAsJsonAsync(uri, confirmEmailHolder);
+        var result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PutAsJsonAsync(uri, confirmEmailHolder);
 
         string message = null;
 

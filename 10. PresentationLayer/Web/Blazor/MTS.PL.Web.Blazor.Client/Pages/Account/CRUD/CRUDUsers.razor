@@ -4,6 +4,8 @@ Roles =
 Constants.Security.ADMINISTRATOR + "," +
 Constants.Security.PRIVILEGED_EMPLOYEE)]
 @inject IHttpClientFactory  _httpClientFactory
+@inject IToastService _toastService
+@inject ISpinnerService _spinnerService
 @using GridActions = Syncfusion.Blazor.Grids.Action
 
 <h1>CRUD accounts</h1>
@@ -125,7 +127,7 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
                     }
                     catch (Exception ex)
                     {
-                        MainLayoutInstance.ShowExceptionToast(ex);
+                        _toastService.ShowExceptionToast(ex);
                     }
                 }
             </GridColumns>
@@ -134,9 +136,6 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
 }
 
 @code{
-    [CascadingParameter(Name = nameof(MainLayout))]
-    public MainLayout MainLayoutInstance { get; set; }
-
     private IEnumerable<string> messages;
 
     private SfGrid<PLUserAccount> _crudGrid;
@@ -163,7 +162,7 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
         if (_isInitialized == true)
             return;
 
-        MainLayoutInstance.ShowSpinner();
+        _spinnerService.ShowSpinner();
 
         messages = new[] { BlazorConstants.UNDER_CONSTRUCTION_MESSAGE_AVAILIBLE, "Shows error but works." };
 
@@ -178,30 +177,30 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
         try
         {
 
-            result = await _httpClientFactory.CreateClient(BlazorConstants.API_NAME).GetAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_ALL}");
+            result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).GetAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_ALL}");
         }
         catch (Exception ex)
         {
-            MainLayoutInstance.ShowExceptionToast(new Exception("Something went wrong while calling the server.", ex));
+            _toastService.ShowExceptionToast(new Exception("Something went wrong while calling the server.", ex));
             return;
         }
 
         if (result.IsSuccessStatusCode == false)
         {
-            MainLayoutInstance.ShowExceptionToast(new Exception($"Call was unsuccessfull:\n{result.StatusCode}\n{result.ReasonPhrase}"));
+            _toastService.ShowExceptionToast(new Exception($"Call was unsuccessfull:\n{result.StatusCode}\n{result.ReasonPhrase}"));
             return;
         }
 
         try
         {
-            APIAccountsAdapter.httpClient = _httpClientFactory.CreateClient();
+            APIAccountsAdapter.httpClient = _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API);
             var accounts = JsonConvert.DeserializeObject<List<PLUserAccount>>(await result.Content.ReadAsStringAsync());
 
             APIAccountsAdapter.PLUserAccounts = accounts;
         }
         catch (Exception ex)
         {
-            MainLayoutInstance.ShowExceptionToast(new Exception("Something went wrong while deserializing the server response.", ex));
+            _toastService.ShowExceptionToast(new Exception("Something went wrong while deserializing the server response.", ex));
         }
 
         await base.OnInitializedAsync();
@@ -212,24 +211,25 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
     public void ActionFailure(Syncfusion.Blazor.Grids.FailureEventArgs args)
     {
 
-        MainLayoutInstance.ShowExceptionToast(new Exception($"An action failure occurred: {args.Error.ToString()}"));
+        _toastService.ShowExceptionToast(new Exception($"An action failure occurred: {args.Error.ToString()}"));
     }
 
+    // Here because of limitations of SfGrid events
     public void ShowSpinner()
     {
-        MainLayoutInstance.ShowSpinner();
+        _spinnerService.ShowSpinner();
     }
 
     public void HideSpinner()
     {
-        MainLayoutInstance.HideSpinner();
+        _spinnerService.HideSpinner();
     }
 
     public void OnActionBegin(ActionEventArgs<PLUserAccount> args)
     {
         if (args.RequestType.HasFlag(GridActions.Filtering | GridActions.Sorting))
         {
-            MainLayoutInstance.ShowSpinner();
+            _spinnerService.ShowSpinner();
         }
     }
 }
