@@ -3,68 +3,78 @@
 
 <PageHeaderComponent PageName="Welcome to Maurice Software Solutions!" Subtitle="A site about software and Maurice" />
 
-<hr class="solid">
+<div class="padding-side">
+    <hr class="solid">
 
-<h5></h5>
-
-<div class="row">
-    <div class="col-xl-6 col-lg-6 col- col-md-12 col-sm-12">
-        <div class="row">
+    <div class="row padding-vertical-bottom">
+        <div class="col-xl-6 col-lg-6 col- col-md-12 col-sm-12 padding-horizontal-right">
             <SfCard>
-                <CardHeader Title="What can I do here?" />
-                <CardContent>
-                    <p>@Constants.MSS.WHAT_IS_MSS</p>
-                </CardContent>
-                <CardFooter>
-                    <CardFooterContent>
-                        <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
-                    </CardFooterContent>
-                </CardFooter>
+                <div class="segment height03">
+                    <img src="images/logo/logo-square-maurice-software-solutions.png" alt="MSS logo" class="overlay-image" />
+                    <CardHeader Title="What is MSS?" />
+                    <CardContent>
+                        <p>@Constants.MSS.WHAT_IS_MSS</p>
+                    </CardContent>
+                    <CardFooter>
+                        <CardFooterContent>
+                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
+                        </CardFooterContent>
+                    </CardFooter>
+                </div>
             </SfCard>
         </div>
-        <div class="row">
+
+        <div class="col-xl-6 col-lg-6 col- col-md-12 col-sm-12 padding-horizontal-left">
             <SfCard>
-                <CardHeader Title="Who is Maurice?" SubTitle="Software Developer" />
-                <CardContent Content="C#, SQL, SQLite, HTML, XAML, XML, JavaScript, SCSS and CSS. Born on 27th of april 1991. Living in The Netherlands, Zuid-Holland, Voorschoten. Loves coding." />
-                <CardFooter>
-                    <CardFooterContent>
-                        <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
-                    </CardFooterContent>
-                </CardFooter>
+                <div class="segment height03">
+                    <img src="images/maurice/pasfoto.jpg" alt="Maurice photo" class="overlay-image" />
+                    <CardHeader Title="Software Developer" SubTitle="Maurice Slegtenhorst" />
+                    <CardContent Content="C#, SQL, SQLite, HTML, XAML, XML, JavaScript, SCSS and CSS. Born on 27th of april 1991. Living in The Netherlands, Zuid-Holland, Voorschoten. Loves coding." />
+                    <CardFooter>
+                        <CardFooterContent>
+                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
+                        </CardFooterContent>
+                    </CardFooter>
+                </div>
             </SfCard>
         </div>
     </div>
 
-    <div class="col-xl-6 col-lg-6 col- col-md-12 col-sm-12">
-        <SfCard>
-            <img src="images/maurice/pasfoto.jpg" alt="Maurice photo" style="width:100%; height:40%" />
-            <CardHeader Title="Software Developer" SubTitle="Maurice Slegtenhorst" />
-            <CardContent Content="C#, SQL, SQLite, HTML, XAML, XML, JavaScript, SCSS and CSS. Born on 27th of april 1991. Living in The Netherlands, Zuid-Holland, Voorschoten. Loves coding." />
-            <CardFooter>
-                <CardFooterContent>
-                    <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
-                </CardFooterContent>
-            </CardFooter>
-        </SfCard>
+    <div class="row padding-vertical-top">
+        <div class="col-12">
+            <SfCard>
+                <div class="segment">
+                    <img src="images/coding/code.png" alt="code" class="overlay-image"/>
+                    <CardHeader Title="Software Developer" SubTitle="Maurice Slegtenhorst" />
+                    <CardContent>
+                        <p>@Constants.MSS.ABOUT_MAURICE_1</p>
+
+                        <p>@Constants.MSS.ABOUT_MAURICE_2</p>
+
+                        <p>@Constants.MSS.ABOUT_MAURICE_3</p>
+
+                        <p>@Constants.MSS.ABOUT_MAURICE_4</p>
+
+                        <p>@Constants.MSS.ABOUT_MAURICE_5</p>
+
+                        <p>@Constants.MSS.ABOUT_MAURICE_6</p>
+
+                        <p>@Constants.MSS.ABOUT_MAURICE_7</p>
+                    </CardContent>
+                    <CardFooter>
+                        <CardFooterContent>
+                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
+                        </CardFooterContent>
+                    </CardFooter>
+                </div>
+            </SfCard>
+        </div>
     </div>
 </div>
 
-
-<p>@Constants.MSS.ABOUT_MAURICE_1</p>
-
-<p>@Constants.MSS.ABOUT_MAURICE_2</p>
-
-<p>@Constants.MSS.ABOUT_MAURICE_3</p>
-
-<p>@Constants.MSS.ABOUT_MAURICE_4</p>
-
-<p>@Constants.MSS.ABOUT_MAURICE_5</p>
-
-<p>@Constants.MSS.ABOUT_MAURICE_6</p>
-
-<p>@Constants.MSS.ABOUT_MAURICE_7</p>
-
 @code{
+    private string _cardCss = "";
+
     private IEnumerable<string> messages;
 
     protected override Task OnInitializedAsync()
