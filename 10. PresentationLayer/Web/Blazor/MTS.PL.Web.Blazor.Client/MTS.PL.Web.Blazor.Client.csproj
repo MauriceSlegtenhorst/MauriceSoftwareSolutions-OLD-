@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Contact\" />
     <Folder Include="wwwroot\css\scss\" />
   </ItemGroup>
 

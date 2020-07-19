@@ -8,8 +8,7 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
 @inject ISpinnerService _spinnerService
 @using GridActions = Syncfusion.Blazor.Grids.Action
 
-<h1>CRUD accounts</h1>
-<h4>Create, read, update and delete accounts</h4>
+<PageHeaderComponent PageName="All accounts" Subtitle="Create, read, update and delete accounts" />
 
 <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@messages" />
 

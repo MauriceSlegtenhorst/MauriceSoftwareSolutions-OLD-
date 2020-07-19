@@ -4,7 +4,7 @@
 @inject IHttpClientFactory _httpClientFactory
 @inject ILoginService  _loginService
 
-<h1>Logging out</h1>
+<PageHeaderComponent PageName="Logout" Subtitle="Trying to logout" />
 
 @code{
     [CascadingParameter(Name = nameof(MainLayout))]
@@ -37,7 +37,7 @@
 
         if (result.IsSuccessStatusCode)
         {
-            _toastService.ShowSuccessToast("You are now logged in", "Logout was succesfull");
+            _toastService.ShowSuccessToast("You are now logged out", "Logout was succesfull");
 
             await _loginService.Logout();
         }

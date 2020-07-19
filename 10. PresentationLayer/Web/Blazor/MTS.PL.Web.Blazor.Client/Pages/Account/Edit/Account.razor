@@ -5,6 +5,8 @@
 @inject ISpinnerService _spinnerService
 @using System.Net.Mail
 
+    <PageHeaderComponent PageName="Personal account" Subtitle="Edit your account." />
+
 @if (IsInitialized == true && _plUserAccount != null)
 {
     <SfCard>
@@ -80,6 +82,11 @@
                 </div>
             </EditForm>
         </CardContent>
+        <CardFooter>
+            <small>
+                Only email and password are mandatory
+            </small>
+        </CardFooter>
     </SfCard>
 }
 else
