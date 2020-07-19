@@ -4,6 +4,7 @@ namespace MTS.Core.GlobalLibrary
 {
     public class Constants
     {
+        // Insiration for desighn https://xd.adobe.com/ideas/principles/web-design/11-website-layouts-that-made-content-shine-in-2019/
         public class MSS
         {
             public const string WHAT_IS_MSS =
