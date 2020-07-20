@@ -26,12 +26,12 @@ namespace MTS.Core.GlobalLibrary
         public class MSS
         {
             public const string WHAT_IS_MSS =
-                "Maurice Software Solutions is an \"attic project\" developed by Maurice to showcase the programming skills of Maurice. Aside from that there is actual functionality to be found like fully-fledged, unlimited cloud storage and a chatroom." +
-                "Maurice is dedicated to improving Maurice Software Solutions as a whole regularly whilst adding new features.";
+                "Maurice Software Solutions is an \"attic project\" developed by me, Maurice to showcase my programming skills. Aside from that there is functionality to be found like a fully-fledged cloud storage and a chatroom. " +
+                "I am dedicated to improving Maurice Software Solutions regularly whilst adding new features.";
 
             public const string ABOUT_MAURICE_1 = 
                 "I am an enthusiastic man with a strong passion for programming. People call me social, friendly and helpful. Those are also the things that give me energy besides coding of course.  " +
-                "Although I was much more social in my early years, I still like it. Things that interest me are space, innovation in general, new technologies, extreme sports, shooting guns (for sports), computer parts and I like to go for a jog every now and then.";
+                "Things that interest me are space, innovation in general, new technologies, shooting guns (for sports), computer parts and I like to go for a jog every now and then.";
 
             public const string ABOUT_MAURICE_2 =
                 "Early in my childhood (I think I was thirteen) my older brother gave me a book called \"Coding in Visual Basic\" which sparked my interest in coding. " +

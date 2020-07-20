@@ -12,7 +12,7 @@ $RGB_BLACK: (0,0,0);
 $RGB_SMOKE_WHITE: (238,238,238);
 $RGB_GRAY: (57,62,70);
 
-$PADDING: 1.7vw;
+$PADDING: 1.25vw;
 
 app {
     position: relative;
@@ -33,61 +33,64 @@ a, .btn-link {
     color: $BLUE;
 }
 
-.segment {
-    .height01 {
-        $height: 40vh;
+.reset-card-jusification{
+    justify-content: space-between !important;
+}
 
-        height: $height;
-        min-height: $height;
-        max-height: $height;
+.std-card-height {
+    $height: 60vh;
+    height: $height;
+    min-height: $height;
+    max-height: $height;
+}
+
+.card-image {
+   /* max-height: 50vh;*/
+/*    width:100%;*/
+
+    .card-image-wrapper {
+        width: 100%;
+        max-width:100%;
+        display: inline-block;
+        overflow: hidden;
     }
+}
 
+.col-margin-right {
+    margin-right: $PADDING / 2;
+}
 
-    .height02 {
-        $height: 50vh;
+.col-margin-left {
+    margin-left: $PADDING / 2;
+}
 
-        height: $height;
-        min-height: $height;
-        max-height: $height;
-    }
-
-    .height03 {
-        $height: 60vh;
-
-        height: $height;
-        min-height: $height;
-        max-height: $height;
-    }
-
-    .height04 {
-        $height: 70vh;
-
-        height: $height;
-        min-height: $height;
-        max-height: $height;
-    }
+.center-content {
+    position: relative;
+    top: 100%;
+    left: 100%;
+    transform: translate(-150%, 5%);
 }
 
 .padding-side {
-
-    padding-left: $PADDING;
-    padding-right: $PADDING;
+    margin-left: $PADDING;
+    margin-right: $PADDING;
+    margin-bottom: $PADDING;
 }
 
 .padding-horizontal-right{
-    padding-right: $PADDING / 2;
+    margin-right: $PADDING / 2;
 }
 
 .padding-horizontal-left {
-    padding-left: $PADDING / 2;
+    margin-left: $PADDING / 2;
 }
 
 .padding-vertical-top{
-    padding-top: $PADDING / 2;
+    margin-top: $PADDING;
 }
 
 .padding-vertical-bottom {
-    padding-bottom: $PADDING / 2;
+    margin-bottom: $PADDING ;
 }
 /* Main container */
 .overlay-image {
@@ -276,6 +279,16 @@ html, body {
 }
 
 @media (max-width: 767.98px) {
+    .col-margin-right {
+        margin-right: 0;
+        margin-bottom: $PADDING / 2;
+    }
+
+    .col-margin-left {
+        margin-left: 0;
+        margin-top: $PADDING / 2;
+    }
+
     .main .top-row:not(.auth) {
         display: none;
     }
