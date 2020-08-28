@@ -3,38 +3,111 @@
 
 <PageHeaderComponent PageName="Welcome to Maurice Software Solutions!" Subtitle="A site about software and Maurice" />
 
-<h5>What can I do here?</h5>
+<style>
+    .img {
+        display: block;
+        width: 100%;
+        height: 40vh;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 
-<p>@Constants.MSS.WHAT_IS_MSS</p>
+    #img_logo {
+        background-image: url('/Images/Logo/logo-horizontal-small.png');
 
-<h5>Who is Maurice?</h5>
+    }
 
-<div class="col-lg-3 col-md-3 col-sm-6">
-    <SfCard>
-        <img src="images/maurice/pasfoto.jpg" alt="Maurice photo" style="width:100%; height:40%"/>
-        <CardHeader Title="Software Developer" SubTitle="Maurice Slegtenhorst" />
-        <CardContent Content="C#, SQL, SQLite, HTML, XAML, XML, JavaScript, SCSS and CSS. Born on 27th of april 1991. Living in The Netherlands, Zuid-Holland, Voorschoten. Loves coding." />
-        <CardFooter>
-            <CardFooterContent>
-                <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
-            </CardFooterContent>
-        </CardFooter>
-    </SfCard>
+    #img_maurice {
+        background-image: url('/Images/Maurice/Pasfoto.JPG');
+    }
+</style>
+
+<div class="padding-side">
+
+    <hr class="solid">
+
+    <div class="padding-vertical-bottom">
+
+        <div class="row m-0">
+
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 p-0">
+                <div class="col-margin-right">
+                    <div class="reset-card-jusification e-card col-12 std-card-height">
+
+
+                           <div id="img_logo" class="img"/>
+
+
+                        <div class="e-card-header">
+                            <div class="e-card-header-caption">
+                                <div class="e-card-header-title">What is MSS?</div>
+                            </div>
+                        </div>
+
+                        <div class="e-card-content">
+                            <p>@Constants.MSS.WHAT_IS_MSS</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 p-0">
+                <div class="col-margin-left">
+                    <div class="reset-card-jusification e-card col-12 std-card-height">
+
+                        <div id="img_maurice" class="img"/>
+
+                        <div class="e-card-header">
+                            <div class="e-card-header-caption">
+                                <div class="e-card-header-title">Software Developer</div>
+                                <div class="e-card-sub-title">Maurice Slegtenhorst</div>
+                            </div>
+                        </div>
+
+                        <div class="e-card-content">
+                            C#, SQL, SQLite, HTML, XAML, XML, JavaScript, SCSS and CSS. Born on 27th of april 1991. Living in The Netherlands, Zuid-Holland, Voorschoten. Loves coding.
+                        </div>
+
+                        <div class="e-card-actions">
+
+                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
+                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickMoreAbout">More about</SfButton>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*<div class="padding-vertical-top">
+
+        <div class="row m-0">
+
+            <div class="col-12 p-0">
+                    <div class="reset-card-jusification e-card col-12 std-card-height">
+                        <img src="images/maurice/pasfoto.jpg" alt="Maurice photo" class="card-image">
+                        <div class="e-card-header">
+                            <div class="e-card-header-caption">
+                                <div class="e-card-header-title">Software Developer</div>
+                                <div class="e-card-sub-title">Maurice Slegtenhorst</div>
+                            </div>
+                        </div>
+
+
+                        <div class="e-card-content">
+                           
+                        </div>
+
+                        <div class="e-card-actions">
+
+                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>*@
 </div>
-
-<p>@Constants.MSS.ABOUT_MAURICE_1</p>
-
-<p>@Constants.MSS.ABOUT_MAURICE_2</p>
-
-<p>@Constants.MSS.ABOUT_MAURICE_3</p>
-
-<p>@Constants.MSS.ABOUT_MAURICE_4</p>
-
-<p>@Constants.MSS.ABOUT_MAURICE_5</p>
-
-<p>@Constants.MSS.ABOUT_MAURICE_6</p>
-
-<p>@Constants.MSS.ABOUT_MAURICE_7</p>
 
 @code{
     private IEnumerable<string> messages;
@@ -47,6 +120,11 @@
     }
 
     private void OnClickLinkedIN()
+    {
+        _navigationManager.NavigateTo("https://www.linkedin.com/in/mauriceslegtenhorst/");
+    }
+
+    private void OnClickMoreAbout()
     {
         _navigationManager.NavigateTo("https://www.linkedin.com/in/mauriceslegtenhorst/");
     }

@@ -1,3 +1,4 @@
+
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -32,8 +33,8 @@ namespace MTS.PL.Web.Blazor.Client
             builder.Services.AddTransient<AuthenticationHandler>();
 
             builder.Services.AddHttpClient(
-                BlazorConstants.HttpClients.API, 
-                client => 
+                BlazorConstants.HttpClients.API,
+                client =>
                 {
                     client.BaseAddress = new Uri(Constants.API_BASE_ADDRESS);
                 })
@@ -54,7 +55,7 @@ namespace MTS.PL.Web.Blazor.Client
             #endregion
 
             builder.Services.AddSyncfusionBlazor();
-            
+
             await builder.Build().RunAsync();
         }
     }

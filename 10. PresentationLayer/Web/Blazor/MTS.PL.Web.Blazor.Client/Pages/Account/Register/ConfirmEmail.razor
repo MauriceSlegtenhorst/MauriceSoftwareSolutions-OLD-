@@ -1,21 +1,9 @@
 ﻿@page "/account/register/confirmemail/{UserId}/{Code}"
-@inject IHttpClientFactory _httpClientFactory 
+@inject IHttpClientFactory _httpClientFactory
+@inject ISpinnerService _spinnerService
+@inject IToastService _toastService
 
-<h1>Email confirmation</h1>
-
-<h3>@messages</h3>
-
-@if (emailIsConfirmed)
-{
-    <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Success" Title="Email confirmed" ContentMessages="@messages" />
-}
-else
-{
-    <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Danger" Title="Email confirmation failed" ContentMessages="@messages" />
-}
-
-<div id="container"></div>
-<SfSpinner @ref="spinnerComponent" Target="#container" Label="Confirming email" />
+<PageHeaderComponent PageName="Email confirmation" Subtitle="Validating your email" />
 
 @code {
     [Parameter]
@@ -24,16 +12,9 @@ else
     [Parameter]
     public string Code { get; set; }
 
-    private bool emailIsConfirmed;
-
-    private IEnumerable<string> messages;
-
-    private SfSpinner spinnerComponent;
-    private string targetSpinner = "#container";
-
     protected override async Task OnInitializedAsync()
     {
-        spinnerComponent.ShowSpinner(targetSpinner);
+        _spinnerService.ShowSpinner("Validation in progress...");
 
         object confirmEmailHolder = new
         {
@@ -49,17 +30,14 @@ else
 
         if (result.IsSuccessStatusCode)
         {
-            message = $"Your email address has been succesfully confirmed. It might take some time before Maurice confirms your account.";
-            emailIsConfirmed = true;
+            _toastService.ShowSuccessToast("Your email address has successfully been confirmed. It might take some time before Maurice confirms your account.", "Email confirmation complete");
         }
         else
         {
             message = await result.Content.ReadAsStringAsync();
         }
 
-        messages = new[] { message };
-
-        spinnerComponent.HideSpinner(targetSpinner);
+        _spinnerService.HideSpinner();
 
         await base.OnInitializedAsync();
     }

@@ -1,0 +1,16 @@
+﻿@page "/Contact"
+
+<PageHeaderComponent PageName="Contact" Subtitle="Want to tell something? Fill in the form" />
+
+<AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@messages" />
+
+@code {
+    private IEnumerable<string> messages;
+
+    protected override Task OnInitializedAsync()
+    {
+        messages = new[] { BlazorConstants.UNDER_CONSTRUCTION_MESSAGE };
+
+        return base.OnInitializedAsync();
+    }
+}

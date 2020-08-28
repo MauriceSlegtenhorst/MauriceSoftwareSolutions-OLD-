@@ -4,6 +4,24 @@ namespace MTS.Core.GlobalLibrary
 {
     public class Constants
     {
+        public class Colors
+        {
+            public const string HEX_BLUE_LIGHT = "#5baab3";
+            public const string RGB_BLUE_LIGHT = "(91,170,179)";
+
+            public const string HEX_BLUE = "#0366d6";
+            public const string RGB_BLUE = "(3,102,214)";
+
+            public const string HEX_BLACK = "#000000";
+            public const string RGB_BLACK = "(0,0,0)";
+
+            public const string HEX_SMOKE_WHITE = "#eeeeee";
+            public const string RGB_SMOKE_WHITE = "(238,238,238)";
+            
+            public const string HEX_GRAY = "#393e46";
+            public const string RGB_GRAY = "(57,62,70)";
+        }
+
         // Insiration for desighn https://xd.adobe.com/ideas/principles/web-design/11-website-layouts-that-made-content-shine-in-2019/
         public class MSS
         {

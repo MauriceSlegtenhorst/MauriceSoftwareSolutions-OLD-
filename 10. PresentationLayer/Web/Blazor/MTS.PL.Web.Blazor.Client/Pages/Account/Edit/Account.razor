@@ -5,87 +5,96 @@
 @inject ISpinnerService _spinnerService
 @using System.Net.Mail
 
-@if (IsInitialized == true && _plUserAccount != null)
-{
-    <SfCard>
-        <CardHeader>
-            <h3>Account for @_accountName</h3>
-        </CardHeader>
-        <CardContent>
-            <EditForm EditContext="_formContext" OnValidSubmit="SubmitForm">
-                <div class="content-wrapper">
+<PageHeaderComponent PageName="Personal account" Subtitle="Edit your account." />
 
-                    <DataAnnotationsValidator />
+<div class="center-content">
+    @if (IsInitialized == true && _plUserAccount != null)
+    {
+        <SfCard>
+            <CardHeader>
+                <h3>Account for @_accountName</h3>
+            </CardHeader>
+            <CardContent>
+                <EditForm EditContext="_formContext" OnValidSubmit="SubmitForm">
+                    <div class="content-wrapper">
 
-                    <!--#region Firstname, affix and last name-->
-                    <div class="row">
-                        <div class="col-xs-5 col-sm-5 col-lg-5 col-md-5">
-                            <SfTextBox Placeholder="First name" CssClass="@_firstNameCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                       ShowClearButton="true" @bind-Value="@_plUserAccount.FirstName" Blur="OnBlur" />
+                        <DataAnnotationsValidator />
 
-                            <ValidationMessage For="@(() => _plUserAccount.FirstName)" />
+                        <!--#region Firstname, affix and last name-->
+                        <div class="row">
+                            <div class="col-xs-5 col-sm-5 col-lg-5 col-md-5">
+                                <SfTextBox Placeholder="First name" CssClass="@_firstNameCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                           ShowClearButton="true" @bind-Value="@_plUserAccount.FirstName" Blur="OnBlur" />
+
+                                <ValidationMessage For="@(() => _plUserAccount.FirstName)" />
+                            </div>
+
+                            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                                <SfTextBox Placeholder="Affix" CssClass="@_affixCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                           ShowClearButton="true" @bind-Value="@_plUserAccount.Affix" Blur="OnBlur" />
+
+                                <ValidationMessage For="@(() => _plUserAccount.Affix)" />
+                            </div>
+
+                            <div class="col-xs-5 col-sm-5 col-lg-5 col-md-5">
+                                <SfTextBox Placeholder="Last name" CssClass="@_lastNameCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                           ShowClearButton="true" @bind-Value="@_plUserAccount.LastName" Blur="OnBlur" />
+
+                                <ValidationMessage For="@(() => _plUserAccount.Password)" />
+                            </div>
+                        </div>
+                        <!--#endregion-->
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                <SfTextBox Placeholder="Phone number" CssClass="@_phoneNumberCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                           ShowClearButton="true" @bind-Value="@_plUserAccount.PhoneNumber" Blur="OnBlur" />
+
+                                <ValidationMessage For="@(() => _plUserAccount.PhoneNumber)" />
+                            </div>
                         </div>
 
-                        <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
-                            <SfTextBox Placeholder="Affix" CssClass="@_affixCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                       ShowClearButton="true" @bind-Value="@_plUserAccount.Affix" Blur="OnBlur" />
+                        <!--#region Email and password-->
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                                <SfTextBox Type="InputType.Email" Placeholder="Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                           ShowClearButton="true" @bind-Value="@_plUserAccount.Email" Blur="OnBlur" />
 
-                            <ValidationMessage For="@(() => _plUserAccount.Affix)" />
+                                <ValidationMessage For="@(() => _plUserAccount.Email)" />
+
+                                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
+                            </div>
+
+                            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                                <SfTextBox Type="InputType.Password" Placeholder="Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                           ShowClearButton="true" @bind-Value="@_plUserAccount.Password" Blur="OnBlur" />
+
+                                <ValidationMessage For="@(() => _plUserAccount.Password)" />
+                            </div>
+                        </div>
+                        <!--#endregion-->
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                <SfButton Type="submit" CssClass="btn btn-primary" Content="Update" />
+                            </div>
                         </div>
 
-                        <div class="col-xs-5 col-sm-5 col-lg-5 col-md-5">
-                            <SfTextBox Placeholder="Last name" CssClass="@_lastNameCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                       ShowClearButton="true" @bind-Value="@_plUserAccount.LastName" Blur="OnBlur" />
-
-                            <ValidationMessage For="@(() => _plUserAccount.Password)" />
-                        </div>
                     </div>
-                    <!--#endregion-->
-
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                            <SfTextBox Placeholder="Phone number" CssClass="@_phoneNumberCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                       ShowClearButton="true" @bind-Value="@_plUserAccount.PhoneNumber" Blur="OnBlur" />
-
-                            <ValidationMessage For="@(() => _plUserAccount.PhoneNumber)" />
-                        </div>
-                    </div>
-
-                    <!--#region Email and password-->
-                    <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                            <SfTextBox Type="InputType.Email" Placeholder="Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                       ShowClearButton="true" @bind-Value="@_plUserAccount.Email" Blur="OnBlur" />
-
-                            <ValidationMessage For="@(() => _plUserAccount.Email)" />
-
-                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
-                        </div>
-
-                        <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                            <SfTextBox Type="InputType.Password" Placeholder="Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                       ShowClearButton="true" @bind-Value="@_plUserAccount.Password" Blur="OnBlur" />
-
-                            <ValidationMessage For="@(() => _plUserAccount.Password)" />
-                        </div>
-                    </div>
-                    <!--#endregion-->
-
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                            <SfButton Type="submit" CssClass="btn btn-primary" Content="Update" />
-                        </div>
-                    </div>
-
-                </div>
-            </EditForm>
-        </CardContent>
-    </SfCard>
-}
-else
-{
-    <p>Retreiving your account information...</p>
-}
+                </EditForm>
+            </CardContent>
+            <CardFooter>
+                <small>
+                    Only email and password are mandatory
+                </small>
+            </CardFooter>
+        </SfCard>
+    }
+    else
+    {
+        <p>Retreiving your account information...</p>
+    }
+</div>
 
 @code {
     [CascadingParameter]
