@@ -3,6 +3,26 @@
 
 <PageHeaderComponent PageName="Welcome to Maurice Software Solutions!" Subtitle="A site about software and Maurice" />
 
+<style>
+    .img {
+        display: block;
+        width: 100%;
+        height: 40vh;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    #img_logo {
+        background-image: url('/Images/Logo/logo-horizontal-small.png');
+
+    }
+
+    #img_maurice {
+        background-image: url('/Images/Maurice/Pasfoto.JPG');
+    }
+</style>
+
 <div class="padding-side">
 
     <hr class="solid">
@@ -15,9 +35,9 @@
                 <div class="col-margin-right">
                     <div class="reset-card-jusification e-card col-12 std-card-height">
 
-                        <div class="card-image-wrapper">
-                            <img src="images/logo/logo-horizontal-small.png" alt="MSS logo" class="card-image" />
-                        </div>
+
+                           <div id="img_logo" class="img"/>
+
 
                         <div class="e-card-header">
                             <div class="e-card-header-caption">
@@ -35,9 +55,9 @@
             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 p-0">
                 <div class="col-margin-left">
                     <div class="reset-card-jusification e-card col-12 std-card-height">
-                        <div class="card-image-wrapper">
-                            <img src="images/maurice/pasfoto.jpg" alt="Maurice photo" class="card-image">
-                        </div>
+
+                        <div id="img_maurice" class="img"/>
+
                         <div class="e-card-header">
                             <div class="e-card-header-caption">
                                 <div class="e-card-header-title">Software Developer</div>

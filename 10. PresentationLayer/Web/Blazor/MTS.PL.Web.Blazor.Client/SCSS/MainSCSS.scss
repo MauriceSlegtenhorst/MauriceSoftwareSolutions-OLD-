@@ -6,13 +6,18 @@ $BLACK: #000000;
 $SMOKE_WHITE: #eeeeee;
 $GRAY: #393e46;
 
-$RGB_BLUE_LIGHT: (91,170,179);
-$RGB_BLUE: (3,102,214);
-$RGB_BLACK: (0,0,0);
-$RGB_SMOKE_WHITE: (238,238,238);
-$RGB_GRAY: (57,62,70);
+$RGB_BLUE_LIGHT: rgb(91,170,179);
+$RGB_BLUE: rgb(3,102,214);
+$RGB_BLACK: rgb(0,0,0);
+$RGB_SMOKE_WHITE: rgb(238,238,238);
+$RGB_GRAY: rgb(57,62,70);
 
 $PADDING: 1.25vw;
+
+$STANDARD_CARD_HEIGHT: 80vh;
+
+$SCREEN_WIDTH: 100vw;
+$SCREEN_HEIGHT: 100vh;
 
 app {
     position: relative;
@@ -38,22 +43,9 @@ a, .btn-link {
 }
 
 .std-card-height {
-    $height: 60vh;
-    height: $height;
-    min-height: $height;
-    max-height: $height;
-}
-
-.card-image {
-   /* max-height: 50vh;*/
-/*    width:100%;*/
-
-    .card-image-wrapper {
-        width: 100%;
-        max-width:100%;
-        display: inline-block;
-        overflow: hidden;
-    }
+    height: $STANDARD_CARD_HEIGHT;
+    min-height: $STANDARD_CARD_HEIGHT;
+    max-height: $STANDARD_CARD_HEIGHT;
 }
 
 .col-margin-right {
