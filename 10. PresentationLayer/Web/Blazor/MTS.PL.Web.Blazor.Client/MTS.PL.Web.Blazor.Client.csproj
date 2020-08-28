@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Pages\Administrator\**" />
+    <Compile Remove="Pages\Contact\**" />
     <Content Remove="Pages\Administrator\**" />
+    <Content Remove="Pages\Contact\**" />
     <EmbeddedResource Remove="Pages\Administrator\**" />
+    <EmbeddedResource Remove="Pages\Contact\**" />
     <None Remove="Pages\Administrator\**" />
+    <None Remove="Pages\Contact\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,7 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Contact\" />
     <Folder Include="wwwroot\css\scss\" />
   </ItemGroup>
 

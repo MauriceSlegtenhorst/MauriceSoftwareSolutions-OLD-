@@ -7,37 +7,41 @@ namespace MTS.Core.GlobalLibrary
         // Insiration for desighn https://xd.adobe.com/ideas/principles/web-design/11-website-layouts-that-made-content-shine-in-2019/
         public class MSS
         {
+            //TODO Dit aanpasbaar maken voor admins op de pagina zelf. Content zou sws aanpasbaar moeten zijn en niet hardcoded! Voor nu even zo.
             public const string WHAT_IS_MSS =
-                "Maurice Software Solutions is an \"attic project\" developed by Maurice to showcase the programming skills of Maurice. Aside from that there is actual functionality to be found like fully-fledged, unlimited cloud storage and a chatroom." +
-                "Maurice is dedicated to improving Maurice Software Solutions as a whole regularly whilst adding new features.";
+                "Maurice Software Solutions was created to showcase my programming skills and to have some fun. Aside from that there is handy and fun functionality to be found like a fully-fledged, " +
+                "unlimited personal cloud storage system and a chatroom. And those are just the things I am currently working on. " +
+                "I am dedicated to improving Maurice Software Solutions as a whole regularly whilst adding cool new features.";
 
-            public const string ABOUT_MAURICE_1 = 
-                "I am an enthusiastic man with a strong passion for programming. People call me social, friendly and helpful. Those are also the things that give me energy besides coding of course.  " +
-                "Although I was much more social in my early years, I still like it. Things that interest me are space, innovation in general, new technologies, extreme sports, shooting guns (for sports), computer parts and I like to go for a jog every now and then.";
+            public const string ABOUT_MAURICE_1 =
+                "I am an enthusiastic man with a strong passion for programming. Social and friendly going. Coding has been my hobby from an early age. When I was 13, " +
+                "I made my first program in Visual Basic. A slot machine where there were secret options to get infinite money for example. Later, around the age of 18, " +
+                "I started working with Java, XML and Android Studio. With this I built a number of Android apps including an applocker. " +
+                "This app allowed the user to choose which apps and services needed an additional password or fingerprint to be used.";
 
             public const string ABOUT_MAURICE_2 =
-                "Early in my childhood (I think I was thirteen) my older brother gave me a book called \"Coding in Visual Basic\" which sparked my interest in coding. " +
-                "I started coding regularly but I didn’t have I clue what I was doing but I liked the feeling of creating things and making them work. Soon I created my very first program, a beautiful slot machine with cheat options for many things like infinite money. " +
-                "At this point I didn’t know yet if I wanted to make this my main profession, I just liked it as a hobby.";
+                "Friends and especially family regularly ask me for help with electronics and software related matters. " +
+                "I think this is because I have been busy with software and hardware practically my whole life.";
 
             public const string ABOUT_MAURICE_3 =
-                "Thinking I like other things such as commerce and owning a store later, I headed this way starting a study called \"Ondernemer Detailhandel\" which translates to Retail entrepreneur and successfully completed it. " +
-                "Next I started a new study called \"Commerciele Economie\" which translates into Commerce Economics. This one I didn’t finish. Personal problems prevented me from getting to the finish and I ended up stopping. " +
-                "There were many reasons for this but most importantly it did not interest me enough to keep on going. ";
+                "Marketing and commerce seemed to be my career choice for a long time. During my higher professional education, Commercial Economics, I found out that this did not meet my expectations.";
 
             public const string ABOUT_MAURICE_4 =
-                "Whilst trying to fix my personal problems I started really liking programming and started to develop in Android Studio. I developed several android apps for myself and others learning more and more about Java, XML, SQLite and even some Kotling. ";
+                "At one point I ended up at ITvitae and started working on my C# programming skills. This went well for me because Java is similar in syntax to C#. " +
+                "Here I have made several complicated programs with C# and related languages such as SQL, HTML XAML, JavaScript and CSS. At ITvitae I have greatly improved my software development skills. " +
+                "After about a year I have successfully completed the process.";
 
             public const string ABOUT_MAURICE_5 =
-                "Now that some time has passed, I got referred to ITvitae. They could help me get into the software development world and possibly get me a job in this field. " +
-                "A new time arrives for me when I pass all the tests and am allowed into ITvitae as a participant of the C# Software Development department. Liking it from the start I spend a lot of time on location to make projects and improve my C# development skills. " +
-                "In one year, I have learned so incredibly much working like this and I still am.";
+                "My interests lie in the latest techniques in software development and electronics. In particular what advantages and disadvantages there are. " +
+                "For example, I can get enthusiastic about developments such as Blazor. This offers such cool options within the internet landscape. " +
+                "For example, the website can be installed as a local application and C# can be used instead of JavaScript! If I find something interesting, " +
+                "I want to find out and test it. See what has gotten better or worse.";
 
             public const string ABOUT_MAURICE_6 =
-                "Now I have a good understanding of languages like C#, SQL, SQLite, HTML, XAML, XML, JavaScript, SCSS and CSS. But I must admit, I like C# and XAML the most out of all of these as they seem the most logically constructed to me. ";
+                "Besides my passion for programming, I am also interested in hardware. For example, I have built my own PC and home server. That very server you are accessing right now.";
 
             public const string ABOUT_MAURICE_7 =
-                "That’s it. If you want to know more about me or Maurice Software Solutions, please navigate to the feedback or contact page. Have a good one!";
+                "That’s it. If you want to know more about me or Maurice Software Solutions, please navigate to the feedback or contact page to ask your question";
         }
 
         public class APIControllers
