@@ -64,7 +64,7 @@ namespace MTS.PL.DatabaseAccess.CRUD.Account
         public async Task<IBLUserAccount> CreateByAccountAsync(IPLUserAccount userAccount)
         {
             if (userAccount == null || String.IsNullOrEmpty(userAccount.Email) || String.IsNullOrEmpty(userAccount.Password))
-                throw new ArgumentException("Parameter cannot be null or ivalid");
+                throw new ArgumentException("Parameter cannot be null or invalid");
 
             var dalUserAccount = new DALUserAccount();
 
