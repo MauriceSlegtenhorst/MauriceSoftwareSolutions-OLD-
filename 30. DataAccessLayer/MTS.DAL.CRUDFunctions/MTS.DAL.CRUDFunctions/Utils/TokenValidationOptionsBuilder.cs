@@ -10,6 +10,19 @@ namespace MTS.PL.DatabaseAccess.Utils
     {
         internal static TokenValidationParameters Build(string issuerSigningKey)
         {
+            //if (issuerSigningKey == null)
+            //    return new TokenValidationParameters()
+            //    {
+            //        ValidateIssuer = true,
+            //        ValidateAudience = true,
+            //        ValidateLifetime = true,
+            //        ValidateIssuerSigningKey = true,
+            //        IssuerSigningKey = null,
+            //        ClockSkew = TimeSpan.Zero,
+            //        ValidAudience = Constants.API_BASE_ADDRESS,
+            //        ValidIssuer = Constants.API_BASE_ADDRESS
+            //    };
+
             return new TokenValidationParameters
             {
                 ValidateIssuer = true,

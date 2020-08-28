@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MTS.PL.API.Utils.ExceptionHandler;
 using MTS.PL.DatabaseAccess.Extensions;
+using MTS.PL.API.Utils.ExceptionHandler;
 
 namespace MTS.PL.API
 {

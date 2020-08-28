@@ -15,7 +15,7 @@ namespace MTS.PL.DatabaseAccess.Utils
         {
             var code = await userManager.GenerateEmailConfirmationTokenAsync(dalUserAccount);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = $"{Constants.BLAZOR_WEB_BASE_ADDRESS}/account/confirmemail/{dalUserAccount.Id}/{code}";
+            var callbackUrl = $"{Constants.BLAZOR_WEB_BASE_ADDRESS}/account/register/confirmemail?UserId={dalUserAccount.Id}&Code={code}";
 
             await emailSender.SendEmailAsync(
                         dalUserAccount.Email,

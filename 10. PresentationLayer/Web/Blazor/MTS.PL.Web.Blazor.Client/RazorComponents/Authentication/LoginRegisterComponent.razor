@@ -5,8 +5,6 @@
 @inject NavigationManager _navigationManager
 @using System.Net.Mail
 
-<div class="align-content-center">
-    <div id="card">
         <SfCard>
             <CardHeader>
                 <h3>Please enter your details</h3>
@@ -37,10 +35,12 @@
                                 <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Password must atleast" ContentMessages="Constants.VALID_PASSWORD_REQUIREMENTS" ShowContentAsList="true" />
                             </div>
                         }
-
-                        <div class="form-group form-check row">
-                            <SfCheckBox Label="Remember me?" @bind-Checked="@_inputModel.RememberMe" />
-                        </div>
+                        else
+                        {
+                            <div class="form-group form-check row">
+                                <SfCheckBox Label="Remember me?" @bind-Checked="@_inputModel.RememberMe" />
+                            </div>
+                        }
 
                         <div class="form-group row">
                             <SfButton Type="submit" CssClass="btn btn-primary" Content="@_btnContent" />
@@ -50,14 +50,8 @@
                 </EditForm>
             </CardContent>
         </SfCard>
-    </div>
-</div>
 
 <style>
-    #card {
-        max-width: 60%;
-    }
-
     .content-wrapper {
         width: 90%;
         margin: 0 auto;

@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using MTS.PL.Infra.Interfaces.Standard;
-using MTS.PL.Web.Blazor.Client.Shared;
+using MTS.PL.Web.Blazor.Client.Authentification;
 using MTS.PL.Web.Blazor.Client.Utils;
+using MTS.PL.Web.Blazor.Client.Shared;
 using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -31,7 +29,7 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
         {
             var authState = await _jwtAuthStateProvider.GetAuthenticationStateAsync();
 
-            if(authState.User.Identity.IsAuthenticated == true)
+            if (authState.User.Identity.IsAuthenticated == true)
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _jwtAuthStateProvider.CurrentToken.Value);
             else
             {
@@ -41,8 +39,8 @@ namespace MTS.PL.Web.Blazor.Client.Authentification
             HttpResponseMessage response = null;
 
             response = await base.SendAsync(request, cancellationToken);
-            
-            
+
+
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 await _jwtAuthStateProvider.Logout();
