@@ -19,7 +19,6 @@ namespace MTS.PL.DatabaseAccess.CRUD.Account
     public sealed class AccountAdapter : AccountAdapterHelper, IAccountAdapter
     {
         private readonly UserManager<DALUserAccount> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
 
         public AccountAdapter(
@@ -30,7 +29,6 @@ namespace MTS.PL.DatabaseAccess.CRUD.Account
             base(roleManager, userManager, seedData)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
             _emailSender = emailSender;
         }
 

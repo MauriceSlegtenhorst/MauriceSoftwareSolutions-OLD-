@@ -2,19 +2,31 @@
 @inject IHttpClientFactory _httpClientFactory
 @inject ISpinnerService _spinnerService
 @inject IToastService _toastService
+@inject NavigationManager _navigationManager
+
+
 
 <PageHeaderComponent PageName="Email confirmation" Subtitle="Validating your email" />
 
 @code {
-    [Parameter]
     public string UserId { get; set; }
 
-    [Parameter]
     public string Code { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         _spinnerService.ShowSpinner("Validation in progress...");
+
+        Uri uri = _navigationManager.ToAbsoluteUri(_navigationManager.Uri);
+
+        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("userid", out var param))
+        {
+            UserId = param;
+        }
+        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("code", out var param2))
+        {
+            Code = param2;
+        }
 
         object confirmEmailHolder = new
         {
@@ -22,9 +34,20 @@
             Code = Code
         };
 
-        string uri = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CONFIRM_EMAIL}";
+        uri = new Uri($"{Constants.API_BASE_ADDRESS}/{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CONFIRM_EMAIL}");
 
-        var result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PutAsJsonAsync(uri, confirmEmailHolder);
+        var client = _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API);
+        //client.DefaultRequestHeaders.Clear();
+        //client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(Constants.MediaTypes.JSON));
+
+        string json = JsonConvert.SerializeObject(confirmEmailHolder);
+
+        Debug.WriteLine(json);
+
+        StringContent content = new StringContent(json, Encoding.UTF8, Constants.MediaTypes.JSON);
+
+        //var result = await client.PutAsJsonAsync(uri, confirmEmailHolder);
+        var result = await client.PutAsync(uri, content);
 
         string message = null;
 
@@ -35,6 +58,7 @@
         else
         {
             message = await result.Content.ReadAsStringAsync();
+            _toastService.ShowExceptionToast(new Exception(message));
         }
 
         _spinnerService.HideSpinner();

@@ -315,7 +315,7 @@ namespace MTS.PL.API.Controllers
         [HttpPut]
         public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailHolder confirmEmailHolder)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && !String.IsNullOrEmpty(confirmEmailHolder.UserId) && !String.IsNullOrEmpty(confirmEmailHolder.Code))
             {
                 var result = await _accountAdapter.ConfirmEmailAsync(confirmEmailHolder.UserId, confirmEmailHolder.Code);
 
