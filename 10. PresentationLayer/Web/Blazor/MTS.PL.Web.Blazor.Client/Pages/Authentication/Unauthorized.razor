@@ -2,20 +2,21 @@
 
 <PageHeaderComponent PageName="Unauthorized" Subtitle="You are not allowed to see this content" />
 
-<div class="alert alert-info" role="alert">
-
-    <div class="row">
-        <span class="alert-icon oi oi-info" aria-hidden="true" />
-        <h4>What could have caused this problem?</h4>
+<div class="row col-12 padding-vertical-top">
+    <div class="col-xl-2 col-lg-2 col-md-1 col-sm-1" />
+    <div class="col-xl-8 col-lg-8 col-md-10 col-sm-10">
+        <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="What could have caused this problem?" ShowContentAsList="true" ContentMessages="_infoContentMessages" ContentIsHtml="true" />
     </div>
-
-    <div class="list-group">
-        <span>- It could be that your session time has expired. A simple <strong><a href="@BlazorConstants.Pages.Authentication.LOGIN">login</a></strong> should eliminate the issue.</span>
-        <span>- It could be that you are actually not allowed to see this content. You could ask an administrator for help with this issue.</span>
-        <span>- It could be that your security token somehow got deleted. This usally happpens when you clear/cleanup your browser or pc. You will have to <strong><a href="@BlazorConstants.Pages.Authentication.LOGIN">login</a></strong> again to possibly eliminate the issue.</span>
-    </div>
+    <div class="col-xl-2 col-lg-2 col-md-1 col-sm-1" />
 </div>
 
-    @code {
-
-    }
+@code {
+    private string[] _infoContentMessages = new string[]
+    {
+        $"It could be that your session time has expired. A simple <strong><a href=\"{BlazorConstants.Pages.Authentication.LOGIN}\">login</a></strong> should eliminate the issue",
+        $"It could be that you are actually not allowed to see this content. You could ask an administrator for help with this issue",
+        $"It could be that your security token somehow got deleted. This usally happpens when you clear/cleanup your browser or pc. " +
+        $"You will have to <strong><a href=\"{BlazorConstants.Pages.Authentication.LOGIN }\">login</a></strong> again to eliminate the issue",
+        $"If none of the above has resolved your problem, please kindly <strong><a href=\"{BlazorConstants.Pages.Feedback.FEEDBACK}\">contact</a></strong> us and explain your problem"
+    };
+}

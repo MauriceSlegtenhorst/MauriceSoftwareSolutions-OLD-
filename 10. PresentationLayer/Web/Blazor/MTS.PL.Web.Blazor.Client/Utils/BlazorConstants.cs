@@ -25,9 +25,15 @@
             public class Authentication
             {
                 public const string UNAUTHORIZED = "/authentication/unauthorized";
+                public const string AUTHORIZING = "/authentication/authorizing";
                 public const string TOKEN_EXPIRED = "/authentication/tokenexpired";
                 public const string LOGIN = "/authentication/login";
                 public const string LOGOUT = "/authentication/logout";
+            }
+
+            public class Error
+            {
+                public const string NOT_FOUND = "/error/notfound";
             }
 
             public class CloudStorage

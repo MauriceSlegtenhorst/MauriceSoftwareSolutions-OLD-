@@ -18,23 +18,49 @@
     {
         if (ShowContentAsList == true)
         {
-            <div class="list-group">
-                @foreach (string message in ContentMessages)
-                {
-                    <span>- @message</span>
+            <div class="list-group padding-horizontal-left">
+                @{ 
+                    if(ContentIsHtml == true)
+                    {
+                        foreach (var message in ContentMessages)
+                        {
+                            <span>- @((MarkupString)message)</span>
+                        }
+                    }
+                    else
+                    {
+                        foreach (var message in ContentMessages)
+                        {
+                            <span>- @message</span>
+                        }
+                    }
                 }
             </div>
         }
         else
         {
-            <div class="list-group">
-                @foreach (string message in ContentMessages)
-                {
-                    <span>@message</span>
+            <div class="list-group padding-horizontal-left">
+                @{ 
+                    if(ContentIsHtml == true)
+                    {
+                        foreach (var message in ContentMessages)
+                        {
+                            <span>@((MarkupString)message)</span>
+                        }
+                    }
+                    else
+                    {
+                        foreach (var message in ContentMessages)
+                        {
+                            <span>@message</span>
+                        }
+                    }
                 }
             </div>
         }
     }
+
+
 </div>
 
 @code {
@@ -52,6 +78,9 @@
 
     [Parameter]
     public bool ShowContentAsList { get; set; }
+
+    [Parameter]
+    public bool ContentIsHtml { get; set; }
 
     private string _topCSSClass;
     private string _iconCSSClass;

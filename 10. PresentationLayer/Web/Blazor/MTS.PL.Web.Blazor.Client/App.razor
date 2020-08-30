@@ -3,7 +3,7 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <Authorizing>
-                    <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Authorizing..." Subtitle="Please stand by" />
+                    <MTS.PL.Web.Blazor.Client.Pages.Authentication.Authorizing/>
                 </Authorizing>
                 <NotAuthorized>
                     <MTS.PL.Web.Blazor.Client.Pages.Authentication.Unauthorized/>
@@ -12,7 +12,7 @@
         </Found>
         <NotFound>
             <LayoutView Layout="@typeof(MainLayout)">
-                <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Warning" Title="Nope, nothing here" Subtitle="Nothing was found at this address" />
+                <MTS.PL.Web.Blazor.Client.Pages.Error.NotFound />
             </LayoutView>
         </NotFound>
     </Router>

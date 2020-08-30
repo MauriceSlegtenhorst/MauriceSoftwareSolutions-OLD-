@@ -1,59 +1,101 @@
 ﻿@page "/account/register/confirmemail"
-@inject IHttpClientFactory _httpClientFactory
 @inject ISpinnerService _spinnerService
+@inject IHttpClientFactory _httpClientFactory
 @inject IToastService _toastService
 @inject NavigationManager _navigationManager
 
+<PageHeaderComponent PageName="Email confirmation" Subtitle="Validating your account" />
 
+<div class="row col-12 padding-vertical-top">
+    <div class="col-xl-2 col-lg-2 col-md-1 col-sm-1" />
+    <div class="col-xl-8 col-lg-8 col-md-10 col-sm-10">
+        <SfCard>
+            <CardHeader>
+                <h3>@_cardHeaderContent</h3>
+            </CardHeader>
+            <CardContent>
+                <div class="row col-12">
+                    <div class="col-4">
+                        <p>Reading confirmation data</p>
+                    </div>
 
-<PageHeaderComponent PageName="Email confirmation" Subtitle="Validating your email" />
+                    <div class="col-4">
+                        <p>Sending data to server</p>
+                    </div>
+
+                    <div class="col-4">
+                        <p>Receive OK from server</p>
+                    </div>
+                </div>
+
+                <SfProgressBar @ref="LinearInstance" Type="ProgressType.Linear" ID="LinearSegment"
+                                Height="30" Width="100%" SegmentCount="3" GapWidth="5"
+                                Value="@ProgressValue" Minimum="0" Maximum="100" CornerRadius="CornerType.Square"
+                                TrackThickness="15"
+                                ProgressThickness="15">
+                    <ProgressBarEvents ProgressCompleted="ProgressCompleted"/>
+                    <ProgressBarAnimation Enable="true" Duration="500" Delay="0" />
+                </SfProgressBar>
+
+                <div class="padding-vertical-top">
+                    <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Steps in the email verification process" ShowContentAsList="true" ContentMessages="_infoContentMessages" />
+                    </div>
+            </CardContent>
+        </SfCard>
+    </div>
+    <div class="col-xl-2 col-lg-2 col-md-1 col-sm-1" />
+</div>
 
 @code {
-    public string UserId { get; set; }
+    private SfProgressBar LinearInstance;
+    private int ProgressValue;
 
-    public string Code { get; set; }
+    private string _cardHeaderContent;
+
+    private string[] _infoContentMessages = new string[] { "Step one: You click the confirmation link send to your email", "Step two: Request activation of this account", "Step three: A server administrator accepts your account as valid", "Step four: Enjoy your account"};
+
+    private string _userId;
+
+    private string _code;
 
     protected override async Task OnInitializedAsync()
     {
-        _spinnerService.ShowSpinner("Validation in progress...");
+        ProgressValue = 33;
+        _cardHeaderContent = "Status: Unvalidated";
 
         Uri uri = _navigationManager.ToAbsoluteUri(_navigationManager.Uri);
 
+        // Workaround for long querystrings
         if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("userid", out var param))
         {
-            UserId = param;
+            _userId = param;
         }
         if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("code", out var param2))
         {
-            Code = param2;
+            _code = param2;
         }
 
         object confirmEmailHolder = new
         {
-            UserId = UserId,
-            Code = Code
+            UserId = _userId,
+            Code = _code
         };
+
+        ProgressValue = 66;
 
         uri = new Uri($"{Constants.API_BASE_ADDRESS}/{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CONFIRM_EMAIL}");
 
         var client = _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API);
-        //client.DefaultRequestHeaders.Clear();
-        //client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(Constants.MediaTypes.JSON));
 
-        string json = JsonConvert.SerializeObject(confirmEmailHolder);
+        StringContent content = new StringContent(JsonConvert.SerializeObject(confirmEmailHolder), Encoding.UTF8, Constants.MediaTypes.JSON);
 
-        Debug.WriteLine(json);
-
-        StringContent content = new StringContent(json, Encoding.UTF8, Constants.MediaTypes.JSON);
-
-        //var result = await client.PutAsJsonAsync(uri, confirmEmailHolder);
         var result = await client.PutAsync(uri, content);
 
         string message = null;
 
         if (result.IsSuccessStatusCode)
         {
-            _toastService.ShowSuccessToast("Your email address has successfully been confirmed. It might take some time before Maurice confirms your account.", "Email confirmation complete");
+            ProgressValue = 100;
         }
         else
         {
@@ -61,8 +103,12 @@
             _toastService.ShowExceptionToast(new Exception(message));
         }
 
-        _spinnerService.HideSpinner();
-
         await base.OnInitializedAsync();
+    }
+
+    private void ProgressCompleted()
+    {
+        _toastService.ShowSuccessToast("Your email address has successfully been confirmed. It might take some time before Maurice confirms your account.", "Email confirmation complete");
+        _cardHeaderContent = "Status: Validated. Awaiting approval";
     }
 }

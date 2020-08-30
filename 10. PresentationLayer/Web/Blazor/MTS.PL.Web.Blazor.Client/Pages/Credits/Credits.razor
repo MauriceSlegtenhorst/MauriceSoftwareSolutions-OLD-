@@ -2,7 +2,13 @@
 
 <PageHeaderComponent PageName="Credits" Subtitle="Sites and people that helped me" />
 
-<AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@messages" />
+<div class="row col-12 padding-vertical-top">
+    <div class="col-xl-2 col-lg-2 col-md-1 col-sm-1" />
+    <div class="col-xl-8 col-lg-8 col-md-10 col-sm-10">
+        <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@messages" />
+    </div>
+    <div class="col-xl-2 col-lg-2 col-md-1 col-sm-1" />
+</div>
 
 @code {
     private IEnumerable<string> messages;

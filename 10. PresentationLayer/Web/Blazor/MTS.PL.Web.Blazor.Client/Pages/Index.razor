@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject NavigationManager _navigationManager
+@inject ISpinnerService _spinnerService
 
 <PageHeaderComponent PageName="Welcome to Maurice Software Solutions!" Subtitle="A site about software and Maurice" />
 
@@ -127,5 +128,10 @@
     private void OnClickMoreAbout()
     {
         _navigationManager.NavigateTo("https://www.linkedin.com/in/mauriceslegtenhorst/");
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
     }
 }

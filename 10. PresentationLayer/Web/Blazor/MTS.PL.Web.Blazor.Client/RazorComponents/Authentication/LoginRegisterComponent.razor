@@ -5,51 +5,51 @@
 @inject NavigationManager _navigationManager
 @using System.Net.Mail
 
-        <SfCard>
-            <CardHeader>
-                <h3>Please enter your details</h3>
-            </CardHeader>
-            <CardContent>
-                <EditForm EditContext="@_formContext" OnValidSubmit="SubmitForm">
-                    <div class="content-wrapper">
+<SfCard>
+    <CardHeader>
+        <h3>Please enter your details</h3>
+    </CardHeader>
+    <CardContent>
+        <EditForm EditContext="@_formContext" OnValidSubmit="SubmitForm">
+            <div class="content-wrapper">
 
-                        <DataAnnotationsValidator />
+                <DataAnnotationsValidator />
 
-                        <div class="form-group row">
-                            <SfTextBox Type="InputType.Email" Placeholder="Enter Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                       ShowClearButton="true" OnBlur="@CheckForm" @bind-Value="@_inputModel.Email" />
+                <div class="form-group row">
+                    <SfTextBox Type="InputType.Email" Placeholder="Enter Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                ShowClearButton="true" OnBlur="@CheckForm" @bind-Value="@_inputModel.Email" />
 
-                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
-                        </div>
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
+                </div>
 
-                        <div class="form-group row">
-                            <SfTextBox Type="InputType.Password" Placeholder="Enter Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                       ShowClearButton="true" OnBlur="@CheckForm" @bind-Value="@_inputModel.Password" />
+                <div class="form-group row">
+                    <SfTextBox Type="InputType.Password" Placeholder="Enter Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                ShowClearButton="true" OnBlur="@CheckForm" @bind-Value="@_inputModel.Password" />
 
-                            <ValidationMessage For="@(() => _inputModel.Password)" />
-                        </div>
+                    <ValidationMessage For="@(() => _inputModel.Password)" />
+                </div>
 
-                        @if (IsLogin == false)
-                        {
-                            <div class="form-group row">
-                                <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Password must atleast" ContentMessages="Constants.VALID_PASSWORD_REQUIREMENTS" ShowContentAsList="true" />
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="form-group form-check row">
-                                <SfCheckBox Label="Remember me?" @bind-Checked="@_inputModel.RememberMe" />
-                            </div>
-                        }
-
-                        <div class="form-group row">
-                            <SfButton Type="submit" CssClass="btn btn-primary" Content="@_btnContent" />
-                        </div>
-
+                @if (IsLogin == false)
+                {
+                    <div class="form-group row col-12">
+                        <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Password must atleast" ContentMessages="Constants.VALID_PASSWORD_REQUIREMENTS" ShowContentAsList="true" />
                     </div>
-                </EditForm>
-            </CardContent>
-        </SfCard>
+                }
+                else
+                {
+                    <div class="form-group row form-check">
+                        <SfCheckBox Label="Remember me?" @bind-Checked="@_inputModel.RememberMe" />
+                    </div>
+                }
+
+                <div class="form-group row">
+                    <SfButton Type="submit" CssClass="btn btn-primary" Content="@_btnContent" />
+                </div>
+
+            </div>
+        </EditForm>
+    </CardContent>
+</SfCard>
 
 <style>
     .content-wrapper {
@@ -98,25 +98,19 @@
         margin-top: 0;
     }
 
-    .fabric .row.material2,
-    .bootstrap .row.material2,
-    .bootstrap4 .row.material2,
-    .highcontrast .row.material2 {
+    .fabric .row.material2 {
         display: none;
     }
 </style>
 
 @code
 {
-    [CascadingParameter(Name = nameof(MainLayout))]
-    public MainLayout MainLayoutInstance { get; set; }
-
     private EditContext _formContext;
 
-    private string _emailCssClass;
+    private string _emailCssClass = "e-outline e-float-input";
 
     private Regex _passwordRegex;
-    private string _passwordCssClass;
+    private string _passwordCssClass = "e-outline e-float-input";
 
     private string _btnContent;
 
@@ -131,18 +125,18 @@
 
     public class InputModel
     {
-        private string email;
+        private string email = String.Empty;
         [Required]
         [EmailAddress]
-        public string Email { get => email ?? (email = String.Empty); set => email = value; }
+        public string Email { get => email ?? (email = String.Empty); set => email = value ?? String.Empty; }
 
-        private string password;
+        private string password = String.Empty;
         [Required]
         [DataType(DataType.Password)]
         [RegularExpression(
             pattern: Constants.VALID_PASSWORD_PATTERN,
             ErrorMessage = Constants.PASSWORD_ERROR_MESSAGE)]
-        public string Password { get => password ?? (password = String.Empty); set => password = value; }
+        public string Password { get => password ?? (password = String.Empty); set => password = value ?? String.Empty; }
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
@@ -264,8 +258,6 @@
             _emailCssClass = "e-success";
             _passwordCssClass = "e-success";
         }
-
-        StateHasChanged();
     }
 
     private bool ValidateEmail(string email)
@@ -297,7 +289,7 @@
         {
             var _email = new MailAddress(email.Normalize());
         }
-        catch (FormatException)
+        catch
         {
             return false;
         }
@@ -307,6 +299,9 @@
 
     private bool ValidatePassword(string password)
     {
+        if (String.IsNullOrEmpty(password))
+            return false;
+
         return _passwordRegex.IsMatch(password);
     }
 }

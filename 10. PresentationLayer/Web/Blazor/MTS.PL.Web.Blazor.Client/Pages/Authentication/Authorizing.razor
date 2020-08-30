@@ -1,0 +1,18 @@
+﻿@page "/authentication/authorizing"
+
+<PageHeaderComponent PageName="Authorizing" Subtitle="Authenticating your account" />
+
+<div class="row col-12 padding-vertical-top">
+    <div class="col-xl-2 col-lg-2 col-md-1 col-sm-1" />
+    <div class="col-xl-8 col-lg-8 col-md-10 col-sm-10">
+        <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Trying to see who you are..."  ContentMessages="@_infoContentMessages" ContentIsHtml="true" />
+    </div>
+    <div class="col-xl-2 col-lg-2 col-md-1 col-sm-1" />
+</div>
+
+@code {
+    private string[] _infoContentMessages = new string[] 
+    {
+        $"Please stand by. If nothing happens after a few seconds, go to the <strong><a href=\"{BlazorConstants.Pages.Authentication.LOGIN}\">login page</a><strong>" 
+    };
+}

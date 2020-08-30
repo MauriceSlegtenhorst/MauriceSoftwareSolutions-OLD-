@@ -10,132 +10,147 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
 
 <PageHeaderComponent PageName="All accounts" Subtitle="Create, read, update and delete accounts" />
 
-<AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@messages" />
+<div class="row col-12 padding-vertical-top">
+    <div class="col-xl-1 col-lg-1 col-md-0 col-sm-0" />
+    <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12">
 
-@if (_isInitialized == true)
-{
-    <div class="fill-maxed">
-        <SfGrid ID="Grid"
-                @ref="_crudGrid"
-                TValue="PLUserAccount"
-                Toolbar="@_toolBarItems"
-                EnablePersistence="true"
-                AllowPaging="true"
-                AllowSorting="true"
-                ShowColumnChooser="true">
+        <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@messages" />
 
-            <GridEditSettings AllowAdding="true"
-                              AllowEditing="true"
-                              AllowDeleting="true"
-                              Mode="EditMode.Dialog"
-                              Dialog="_dialogSettings" />
+        @if (_isInitialized == true)
+        {
+            <div class="fill-maxed">
+                <SfGrid ID="Grid"
+                        @ref="_crudGrid"
+                        TValue="PLUserAccount"
+                        Toolbar="@_toolBarItems"
+                        EnablePersistence="true"
+                        AllowPaging="true"
+                        AllowSorting="true"
+                        ShowColumnChooser="true"
+                        EnableHover="true">
 
-            <GridEvents TValue="PLUserAccount"
-                        OnActionFailure="ActionFailure"
-                        OnLoad="ShowSpinner"
-                        DataBound="HideSpinner"
-                        OnActionBegin="OnActionBegin"
-                        OnActionComplete="HideSpinner" />
+                    <GridEditSettings AllowAdding="true"
+                                      AllowEditing="true"
+                                      AllowDeleting="true"
+                                      Mode="EditMode.Dialog"
+                                      Dialog="_dialogSettings" />
 
-            <SfDataManager AdaptorInstance="@typeof(APIAccountsAdapter)" Adaptor="Adaptors.CustomAdaptor" />
+                    <GridEvents TValue="PLUserAccount"
+                                OnActionFailure="ActionFailure"
+                                OnLoad="ShowSpinner"
+                                DataBound="HideSpinner"
+                                OnActionBegin="OnActionBegin"
+                                OnActionComplete="HideSpinner" />
 
-            <GridColumns>
-                @{
-                    List<Exception> exceptions = null;
-                    try
-                    {
-                        if (_propertyInfos.Any() == true)
-                        {
-                            foreach (PropertyInfo properyInfo in _propertyInfos)
+                    <SfDataManager AdaptorInstance="@typeof(APIAccountsAdapter)" Adaptor="Adaptors.CustomAdaptor" />
+
+                    <GridColumns>
+                        @{
+                            List<Exception> exceptions = null;
+                            try
                             {
-                                try
+                                if (_propertyInfos.Any() == true)
                                 {
-                                    string field = properyInfo.Name;
-                                    string header = PropertyNameConverter.ConvertFromProperty(properyInfo.Name);
-                                    bool isPrimKey = properyInfo.Name == nameof(PLUserAccount.Id);
-                                    bool canWrite = properyInfo.CanWrite;
-                                    EditType editType = EditType.DefaultEdit;
-                                    editTypeDictionairy.TryGetValue(properyInfo.PropertyType, out editType);
-                                    bool isCheckBox = editType == EditType.BooleanEdit;
-                                    TextAlign textAlignment = isCheckBox ? TextAlign.Center : TextAlign.Left;
-                                    string width;
-
-                                    if (editType == EditType.NumericEdit || editType == EditType.BooleanEdit)
-                                        width = "30";
-                                    else
-                                        width = null;
-
-                                    Debug.WriteLine($"Field: {field} | EditType: {Enum.GetName(typeof(EditType), editType)}");
-
-                                    // Workaround so we don't remove validation of the other fields
-                                    if (field == "Password")
+                                    foreach (PropertyInfo properyInfo in _propertyInfos)
                                     {
-                                        ValidationRules _validationRules = new ValidationRules();
-                                        <GridColumn Field="@field"
-                                                    HeaderText="@header"
-                                                    IsPrimaryKey="@isPrimKey"
-                                                    IsIdentity="@isPrimKey"
-                                                    EditType="@editType"
-                                                    AllowEditing="@canWrite"
-                                                    DisplayAsCheckBox="@isCheckBox"
-                                                    TextAlign="@textAlignment"
-                                                    MaxWidth="@width"
-                                                    Width="@width"
-                                                    ValidationRules="_validationRules" />
-                                    }
-                                    else
-                                    {
-                                        <GridColumn Field="@field"
-                                                    HeaderText="@header"
-                                                    IsPrimaryKey="@isPrimKey"
-                                                    IsIdentity="@isPrimKey"
-                                                    EditType="@editType"
-                                                    AllowEditing="@canWrite"
-                                                    DisplayAsCheckBox="@isCheckBox"
-                                                    TextAlign="@textAlignment"
-                                                    MaxWidth="@width"
-                                                    Width="@width" />
-                                    }
+                                        try
+                                        {
+                                            string field = properyInfo.Name;
+                                            string header = PropertyNameConverter.ConvertFromProperty(properyInfo.Name);
+                                            bool isPrimKey = properyInfo.Name == nameof(PLUserAccount.Id);
+                                            bool canWrite = properyInfo.CanWrite;
+                                            EditType editType = EditType.DefaultEdit;
+                                            editTypeDictionairy.TryGetValue(properyInfo.PropertyType, out editType);
+                                            bool isCheckBox = editType == EditType.BooleanEdit;
+                                            TextAlign textAlignment = isCheckBox ? TextAlign.Center : TextAlign.Left;
+                                            string width;
 
+                                            if (editType == EditType.NumericEdit || editType == EditType.BooleanEdit)
+                                                width = "30";
+                                            else
+                                                width = null;
+
+                                            Debug.WriteLine($"Field: {field} | EditType: {Enum.GetName(typeof(EditType), editType)}");
+
+                                            // Workaround so we don't remove validation of the other fields
+                                            <SfTooltip ShowTipPointer="true" OpensOn="Hover" On>
+                                                <TooltipTemplates>
+                                                    <Content>Test</Content>
+                                                </TooltipTemplates>
+                                                @{
+                                                    if (field == "Password")
+                                                    {
+                                                        ValidationRules _validationRules = new ValidationRules();
+                                                        <GridColumn Field="@header"
+                                                                    HeaderText="@header"
+                                                                    IsPrimaryKey="@isPrimKey"
+                                                                    IsIdentity="@isPrimKey"
+                                                                    EditType="@editType"
+                                                                    AllowEditing="@canWrite"
+                                                                    DisplayAsCheckBox="@isCheckBox"
+                                                                    TextAlign="@textAlignment"
+                                                                    MaxWidth="@width"
+                                                                    Width="@width"
+                                                                    ValidationRules="_validationRules" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <GridColumn Field="@field"
+                                                                    HeaderText="@header"
+                                                                    IsPrimaryKey="@isPrimKey"
+                                                                    IsIdentity="@isPrimKey"
+                                                                    EditType="@editType"
+                                                                    AllowEditing="@canWrite"
+                                                                    DisplayAsCheckBox="@isCheckBox"
+                                                                    TextAlign="@textAlignment"
+                                                                    MaxWidth="@width"
+                                                                    Width="@width" />
+                                                    }
+                                                }
+                                            </SfTooltip>
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            if (exceptions == null)
+                                                exceptions = new List<Exception>();
+
+                                            exceptions.Add(ex);
+                                        }
+                                    }
                                 }
-                                catch (Exception ex)
+                                else
                                 {
                                     if (exceptions == null)
                                         exceptions = new List<Exception>();
 
-                                    exceptions.Add(ex);
+                                    exceptions.Add(new ArgumentException("No properties were found in useraccount"));
                                 }
+
+                                if (exceptions != null)
+                                {
+                                    if (exceptions.Count > 1)
+                                        throw new AggregateException(exceptions);
+                                    else
+                                        throw exceptions[0];
+                                }
+
+                            }
+                            catch (Exception ex)
+                            {
+                                _toastService.ShowExceptionToast(ex);
                             }
                         }
-                        else
-                        {
-                            if (exceptions == null)
-                                exceptions = new List<Exception>();
+                    </GridColumns>
+                </SfGrid>
+            </div>
+        }
 
-                            exceptions.Add(new ArgumentException("No properties were found in useraccount"));
-                        }
-
-                        if (exceptions != null)
-                        {
-                            if (exceptions.Count > 1)
-                                throw new AggregateException(exceptions);
-                            else
-                                throw exceptions[0];
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        _toastService.ShowExceptionToast(ex);
-                    }
-                }
-            </GridColumns>
-        </SfGrid>
     </div>
-}
+    <div class="col-xl-1 col-lg-1 col-md-0 col-sm-0" />
+</div>
 
 @code{
-    private IEnumerable<string> messages;
+    private string[] messages = new string[] { BlazorConstants.UNDER_CONSTRUCTION_MESSAGE_AVAILIBLE, "Shows error but works." };
 
     private SfGrid<PLUserAccount> _crudGrid;
 
@@ -162,8 +177,6 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
             return;
 
         _spinnerService.ShowSpinner();
-
-        messages = new[] { BlazorConstants.UNDER_CONSTRUCTION_MESSAGE_AVAILIBLE, "Shows error but works." };
 
         _propertyInfos = typeof(PLUserAccount).GetProperties(
         BindingFlags.Public | BindingFlags.Instance)
