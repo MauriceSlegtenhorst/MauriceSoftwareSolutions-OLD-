@@ -5,15 +5,20 @@
 <PageHeaderComponent PageName="Welcome to Maurice Software Solutions!" Subtitle="A site about software and Maurice" />
 
 <div class="row col-12 padding-vertical-top">
-
+    <!--#region Card 1 MSS-->
     <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-        <SfCard>
-            <CardHeader>
-                <h3>What is all this?</h3>
-            </CardHeader>
-            <CardContent>
+        <div class="e-card" ID="maurice-card">
+            <!--Header-->
+            <div class="e-card-header">
+                <div class="e-card-header-caption">
+                    <div class="e-card-header-title">
+                        <h4>About me and MSS</h4>
+                    </div>
+                </div> 
+            </div>
+            <div class="e-card-content">
                 <strong>What is MSS?</strong>
-                <p> @Constants.MSS.WHAT_IS_MSS</p>
+                <p>@Constants.MSS.WHAT_IS_MSS</p>
 
                 <strong>Who is Maurice?</strong>
                 <p>@Constants.MSS.ABOUT_MAURICE_1</p>
@@ -29,43 +34,52 @@
                 <p>@Constants.MSS.ABOUT_MAURICE_6</p>
 
                 <p>@Constants.MSS.ABOUT_MAURICE_7</p>
-            </CardContent>
-        </SfCard>
+            </div>
+        </div>
     </div>
+    <!--#endregion-->
 
+    <!--#region Card 2 Maurice-->
     <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-        <SfCard>
-            <img src="/Images/Maurice/Pasfoto.jpg" id="maurice_picture"/>
-            <CardHeader>
-                <div>
-                    <div class="row">
-                        <h3>Maurice Sebastian Slegtenhorst</h3>
-                    </div>
+        <div class="e-card" ID="maurice-card">
+            <!--Picture-->
+            <div class="e-card-image">
+                <img id="maurice-picture" src="/Images/Maurice/pasfoto-flat.png"/>
+            </div>
 
-                    <div class="row">
-                        <h4>C# Software Developer</h4>
+            <!--Header-->
+            <div class="e-card-header">
+                <div class="e-card-header-caption">
+                    <div class="e-card-header-title">
+                        <h4>Maurice Slegtenhorst</h4>
+                    </div>
+                    <div class="e-card-sub-title">
+                        <h5>C# Software Developer</h5>
                     </div>
                 </div>
-            </CardHeader>
-            <CardContent>
+            </div>
+
+            <!--Body-->
+            <div class="e-card-content">
                 <strong>What can he do?</strong>
-                <p> @Constants.MSS.MAURICE_SKILLS</p>
+                <p>@Constants.MSS.MAURICE_SKILLS</p>
 
                 <strong>Maurice in a nutshell</strong>
                 <p>@Constants.MSS.ABOUT_MAURICE_SHORT</p>
-            </CardContent>
-            <CardFooter>
-                <CardFooterContent>
-                    <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
-                    <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickMoreAbout">More about</SfButton>
-                </CardFooterContent>
-            </CardFooter>
-        </SfCard>
+            </div>
+
+            <!--Footer-->
+            <div class="e-card-actions">
+                <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
+                <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickMoreAbout">More about</SfButton>
+            </div>
+        </div>
     </div>
+    <!--#endregion-->
 </div>
 
 <style>
-    #maurice_picture{
+    #maurice-picture{
         max-width:100%;
     }
 </style>

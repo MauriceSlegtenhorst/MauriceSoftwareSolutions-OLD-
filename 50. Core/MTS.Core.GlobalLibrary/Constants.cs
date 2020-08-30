@@ -61,9 +61,9 @@ namespace MTS.Core.GlobalLibrary
             public const string ABOUT_MAURICE_7 =
                 "That’s it. If you want to know more about me or Maurice Software Solutions, please navigate to the feedback or contact page to ask your question";
 
-            public const string MAURICE_SKILLS = "C#, JavaScript, SQL, HTML5, CSS3, XAML, XML, JSON, jQuery";
+            public const string MAURICE_SKILLS = "C#, JavaScript, SQL, HTML5, CSS3, XAML and XML";
 
-            public const string ABOUT_MAURICE_SHORT = "Born on 27th of april 1991. Living in The Netherlands in Voorschoten sinds then. Loves coding and fiddling with electronics. Likes to go for a jog or socialize";
+            public const string ABOUT_MAURICE_SHORT = "Born on 27th of april 1991 and living in The Netherlands sinds then. Loves coding and fiddling with electronics. Likes to go for a jog or socialize";
         }
 
         public class APIControllers
