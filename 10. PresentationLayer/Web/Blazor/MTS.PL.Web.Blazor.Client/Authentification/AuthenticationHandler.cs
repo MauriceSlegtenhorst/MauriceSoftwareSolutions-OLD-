@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MTS.PL.Web.Blazor.Client.Authentification;
 using MTS.PL.Web.Blazor.Client.Utils;
-using MTS.PL.Web.Blazor.Client.Shared;
 using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using MTS.PL.Web.Blazor.Client.Shared;
 
 namespace MTS.PL.Web.Blazor.Client.Authentification
 {

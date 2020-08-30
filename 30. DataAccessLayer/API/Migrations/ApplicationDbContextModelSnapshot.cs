@@ -19,6 +19,42 @@ namespace MTS.BL.API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("MTS.DAL.Entities.Core.EditPageContent.DALPageSection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Header")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PageSections");
+                });
+
+            modelBuilder.Entity("MTS.DAL.Entities.Core.EditPageContent.DALParagraph", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DALPageSectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DALPageSectionId");
+
+                    b.ToTable("DALParagraph");
+                });
+
             modelBuilder.Entity("MTS.PL.Entities.Core.DALUserAccount", b =>
                 {
                     b.Property<string>("Id")
@@ -249,6 +285,13 @@ namespace MTS.BL.API.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("MTS.DAL.Entities.Core.EditPageContent.DALParagraph", b =>
+                {
+                    b.HasOne("MTS.DAL.Entities.Core.EditPageContent.DALPageSection", null)
+                        .WithMany("Paragraphs")
+                        .HasForeignKey("DALPageSectionId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

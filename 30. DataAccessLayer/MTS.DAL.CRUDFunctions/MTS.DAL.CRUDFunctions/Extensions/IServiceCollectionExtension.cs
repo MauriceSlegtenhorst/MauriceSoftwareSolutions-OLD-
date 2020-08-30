@@ -10,6 +10,7 @@ using MTS.PL.Interfaces.Standard;
 using MTS.PL.Infra.Entities;
 using MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter;
 using MTS.PL.Entities.Core;
+using MTS.PL.DatabaseAccess.DataContext;
 
 namespace MTS.PL.DatabaseAccess.Extensions
 {
