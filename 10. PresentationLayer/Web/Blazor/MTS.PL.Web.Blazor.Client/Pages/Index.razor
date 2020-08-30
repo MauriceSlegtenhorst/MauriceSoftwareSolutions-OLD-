@@ -4,111 +4,71 @@
 
 <PageHeaderComponent PageName="Welcome to Maurice Software Solutions!" Subtitle="A site about software and Maurice" />
 
-<style>
-    .img {
-        display: block;
-        width: 100%;
-        height: 40vh;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
+<div class="row col-12 padding-vertical-top">
 
-    #img_logo {
-        background-image: url('/Images/Logo/logo-horizontal-small.png');
+    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+        <SfCard>
+            <CardHeader>
+                <h3>What is all this?</h3>
+            </CardHeader>
+            <CardContent>
+                <strong>What is MSS?</strong>
+                <p> @Constants.MSS.WHAT_IS_MSS</p>
 
-    }
+                <strong>Who is Maurice?</strong>
+                <p>@Constants.MSS.ABOUT_MAURICE_1</p>
 
-    #img_maurice {
-        background-image: url('/Images/Maurice/Pasfoto.JPG');
-    }
-</style>
+                <p>@Constants.MSS.ABOUT_MAURICE_2</p>
 
-<div class="padding-side">
+                <p>@Constants.MSS.ABOUT_MAURICE_3</p>
 
-    <hr class="solid">
+                <p>@Constants.MSS.ABOUT_MAURICE_4</p>
 
-    <div class="padding-vertical-bottom">
+                <p>@Constants.MSS.ABOUT_MAURICE_5</p>
 
-        <div class="row m-0">
+                <p>@Constants.MSS.ABOUT_MAURICE_6</p>
 
-            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 p-0">
-                <div class="col-margin-right">
-                    <div class="reset-card-jusification e-card col-12 std-card-height">
-
-
-                           <div id="img_logo" class="img"/>
-
-
-                        <div class="e-card-header">
-                            <div class="e-card-header-caption">
-                                <div class="e-card-header-title">What is MSS?</div>
-                            </div>
-                        </div>
-
-                        <div class="e-card-content">
-                            <p>@Constants.MSS.WHAT_IS_MSS</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 p-0">
-                <div class="col-margin-left">
-                    <div class="reset-card-jusification e-card col-12 std-card-height">
-
-                        <div id="img_maurice" class="img"/>
-
-                        <div class="e-card-header">
-                            <div class="e-card-header-caption">
-                                <div class="e-card-header-title">Software Developer</div>
-                                <div class="e-card-sub-title">Maurice Slegtenhorst</div>
-                            </div>
-                        </div>
-
-                        <div class="e-card-content">
-                            C#, SQL, SQLite, HTML, XAML, XML, JavaScript, SCSS and CSS. Born on 27th of april 1991. Living in The Netherlands, Zuid-Holland, Voorschoten. Loves coding.
-                        </div>
-
-                        <div class="e-card-actions">
-
-                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
-                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickMoreAbout">More about</SfButton>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <p>@Constants.MSS.ABOUT_MAURICE_7</p>
+            </CardContent>
+        </SfCard>
     </div>
 
-    @*<div class="padding-vertical-top">
-
-        <div class="row m-0">
-
-            <div class="col-12 p-0">
-                    <div class="reset-card-jusification e-card col-12 std-card-height">
-                        <img src="images/maurice/pasfoto.jpg" alt="Maurice photo" class="card-image">
-                        <div class="e-card-header">
-                            <div class="e-card-header-caption">
-                                <div class="e-card-header-title">Software Developer</div>
-                                <div class="e-card-sub-title">Maurice Slegtenhorst</div>
-                            </div>
-                        </div>
-
-
-                        <div class="e-card-content">
-                           
-                        </div>
-
-                        <div class="e-card-actions">
-
-                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
-                        </div>
+    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+        <SfCard>
+            <img src="/Images/Maurice/Pasfoto.jpg" id="maurice_picture"/>
+            <CardHeader>
+                <div>
+                    <div class="row">
+                        <h3>Maurice Sebastian Slegtenhorst</h3>
                     </div>
-            </div>
-        </div>
-    </div>*@
+
+                    <div class="row">
+                        <h4>C# Software Developer</h4>
+                    </div>
+                </div>
+            </CardHeader>
+            <CardContent>
+                <strong>What can he do?</strong>
+                <p> @Constants.MSS.MAURICE_SKILLS</p>
+
+                <strong>Maurice in a nutshell</strong>
+                <p>@Constants.MSS.ABOUT_MAURICE_SHORT</p>
+            </CardContent>
+            <CardFooter>
+                <CardFooterContent>
+                    <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
+                    <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickMoreAbout">More about</SfButton>
+                </CardFooterContent>
+            </CardFooter>
+        </SfCard>
+    </div>
 </div>
+
+<style>
+    #maurice_picture{
+        max-width:100%;
+    }
+</style>
 
 @code{
     private IEnumerable<string> messages;
