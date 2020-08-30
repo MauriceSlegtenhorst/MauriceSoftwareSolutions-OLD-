@@ -1,10 +1,21 @@
 ﻿@page "/account/accountsubmitted"
 
-<h1>Account submitted for review</h1>
+<PageHeaderComponent PageName="Account submitted" Subtitle="Your account has been submitted" />
 
-<div class="content">
-    <p>
-        Thank you for submitting your account. Please confirm your email address by checking your mail and clicking the confirmation link.
-        Keep in mind Maurice needs to confirm your account aswell befor you can use it.
-    </p>
+<div class="row col-12 padding-vertical-top">
+    <div class="col-xl-2 col-lg-2 col-md-1 col-sm-1" />
+    <div class="col-xl-8 col-lg-8 col-md-10 col-sm-10">
+        <SfCard>
+            <CardHeader>
+                <h3>Thank you for registering!</h3>
+            </CardHeader>
+            
+            <CardContent>
+                <div class="padding-vertical-top">
+                    <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Steps in the email verification process" ShowContentAsList="true" ContentMessages="Constants.Verification.Email.EMAIL_VERIFICATION_STEPS" />
+                </div>
+            </CardContent>
+        </SfCard>
+    </div>
+    <div class="col-xl-2 col-lg-2 col-md-1 col-sm-1" />
 </div>

@@ -73,41 +73,34 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
                                             Debug.WriteLine($"Field: {field} | EditType: {Enum.GetName(typeof(EditType), editType)}");
 
                                             // Workaround so we don't remove validation of the other fields
-                                            <SfTooltip ShowTipPointer="true" OpensOn="Hover" On>
-                                                <TooltipTemplates>
-                                                    <Content>Test</Content>
-                                                </TooltipTemplates>
-                                                @{
-                                                    if (field == "Password")
-                                                    {
-                                                        ValidationRules _validationRules = new ValidationRules();
-                                                        <GridColumn Field="@header"
-                                                                    HeaderText="@header"
-                                                                    IsPrimaryKey="@isPrimKey"
-                                                                    IsIdentity="@isPrimKey"
-                                                                    EditType="@editType"
-                                                                    AllowEditing="@canWrite"
-                                                                    DisplayAsCheckBox="@isCheckBox"
-                                                                    TextAlign="@textAlignment"
-                                                                    MaxWidth="@width"
-                                                                    Width="@width"
-                                                                    ValidationRules="_validationRules" />
-                                                    }
-                                                    else
-                                                    {
-                                                        <GridColumn Field="@field"
-                                                                    HeaderText="@header"
-                                                                    IsPrimaryKey="@isPrimKey"
-                                                                    IsIdentity="@isPrimKey"
-                                                                    EditType="@editType"
-                                                                    AllowEditing="@canWrite"
-                                                                    DisplayAsCheckBox="@isCheckBox"
-                                                                    TextAlign="@textAlignment"
-                                                                    MaxWidth="@width"
-                                                                    Width="@width" />
-                                                    }
-                                                }
-                                            </SfTooltip>
+                                            if (field == "Password")
+                                            {
+                                                ValidationRules _validationRules = new ValidationRules();
+                                                <GridColumn Field="@header"
+                                                            HeaderText="@header"
+                                                            IsPrimaryKey="@isPrimKey"
+                                                            IsIdentity="@isPrimKey"
+                                                            EditType="@editType"
+                                                            AllowEditing="@canWrite"
+                                                            DisplayAsCheckBox="@isCheckBox"
+                                                            TextAlign="@textAlignment"
+                                                            MaxWidth="@width"
+                                                            Width="@width"
+                                                            ValidationRules="_validationRules" />
+                                            }
+                                            else
+                                            {
+                                                <GridColumn Field="@field"
+                                                            HeaderText="@header"
+                                                            IsPrimaryKey="@isPrimKey"
+                                                            IsIdentity="@isPrimKey"
+                                                            EditType="@editType"
+                                                            AllowEditing="@canWrite"
+                                                            DisplayAsCheckBox="@isCheckBox"
+                                                            TextAlign="@textAlignment"
+                                                            MaxWidth="@width"
+                                                            Width="@width" />
+                                            }
                                         }
                                         catch (Exception ex)
                                         {

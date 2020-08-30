@@ -38,8 +38,8 @@
                 </SfProgressBar>
 
                 <div class="padding-vertical-top">
-                    <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Steps in the email verification process" ShowContentAsList="true" ContentMessages="_infoContentMessages" />
-                    </div>
+                    <AlertComponent AlertType="AlertComponent.AlertTypeEnum.Info" Title="Steps in the email verification process" ShowContentAsList="true" ContentMessages="Constants.Verification.Email.EMAIL_VERIFICATION_STEPS" />
+                </div>
             </CardContent>
         </SfCard>
     </div>
@@ -51,8 +51,6 @@
     private int ProgressValue;
 
     private string _cardHeaderContent;
-
-    private string[] _infoContentMessages = new string[] { "Step one: You click the confirmation link send to your email", "Step two: Request activation of this account", "Step three: A server administrator accepts your account as valid", "Step four: Enjoy your account"};
 
     private string _userId;
 

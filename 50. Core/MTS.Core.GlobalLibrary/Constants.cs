@@ -148,5 +148,17 @@ namespace MTS.Core.GlobalLibrary
             "Have a length of 8"
         };
         public const string PASSWORD_ERROR_MESSAGE = "This password does not meet the requirements";
+
+        public class Verification
+        {
+            public class Email
+            {
+                public const string STEP1 = "Step one: You click the confirmation link we send to your email";
+                public const string STEP2 = "Step two: Request activation by a server administrator";
+                public const string STEP3 = "Step three: A server administrator accepts your account as valid";
+                public const string STEP4 = "Step four: Enjoy your account!";
+                public static string[] EMAIL_VERIFICATION_STEPS = new string[] { STEP1, STEP2, STEP3, STEP4 };
+            }
+        }
     }
 }
