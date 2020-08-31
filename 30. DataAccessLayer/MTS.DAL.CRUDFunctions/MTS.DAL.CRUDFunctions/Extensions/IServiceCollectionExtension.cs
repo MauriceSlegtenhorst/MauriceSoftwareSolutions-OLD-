@@ -2,17 +2,17 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using MTS.PL.DatabaseAccess.CRUD.Account;
-using MTS.PL.DatabaseAccess.DataContext;
-using MTS.PL.DatabaseAccess.CRUD.Identity;
-using MTS.PL.Infra.Interfaces;
-using MTS.PL.Interfaces.Standard;
-using MTS.PL.Infra.Entities;
-using MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter;
-using MTS.PL.Entities.Core;
-using MTS.PL.DatabaseAccess.DataContext;
+using MTS.DAL.DatabaseAccess.CRUD.Account;
+using MTS.DAL.DatabaseAccess.DataContext;
+using MTS.DAL.DatabaseAccess.CRUD.Identity;
+using MTS.DAL.Interfaces.Standard;
+using MTS.DAL.Entities.Core;
+using MTS.BL.Infra.Entities;
+using MTS.BL.Infra.Interfaces;
+using MTS.BL.Infra.Interfaces.Standard.DatabaseAdapter;
+using MTS.DAL.DatabaseAccess.CRUD.EditPages;
 
-namespace MTS.PL.DatabaseAccess.Extensions
+namespace MTS.DAL.DatabaseAccess.Extensions
 {
     public static class IServiceCollectionExtension
     {
@@ -55,6 +55,8 @@ namespace MTS.PL.DatabaseAccess.Extensions
             services.AddTransient<IAccountAdapter, AccountAdapter>();
 
             services.AddTransient<IIdentityAdapter, IdentityAdapter>();
+
+            services.AddTransient<IEditPageAdapter, EditPagesAdapter>();
 
             services.AddSingleton<DbConfigurations>();
 

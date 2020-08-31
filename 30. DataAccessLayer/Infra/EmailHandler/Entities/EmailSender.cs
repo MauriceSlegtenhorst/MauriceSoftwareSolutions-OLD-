@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Options;
-using MTS.PL.Infra.Interfaces;
+using MTS.BL.Infra.Interfaces;
 using System;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MTS.PL.Infra.Entities
+namespace MTS.BL.Infra.Entities
 {
     public class EmailSender : IEmailSender
     {

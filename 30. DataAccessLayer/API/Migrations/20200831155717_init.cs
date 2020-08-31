@@ -67,6 +67,18 @@ namespace MTS.BL.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PageSections",
+                columns: table => new
+                {
+                    PageSectionId = table.Column<Guid>(nullable: false),
+                    PageRoute = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PageSections", x => x.PageSectionId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -172,6 +184,56 @@ namespace MTS.BL.API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SectionParts",
+                columns: table => new
+                {
+                    SectionPartId = table.Column<Guid>(nullable: false),
+                    Type = table.Column<string>(nullable: true),
+                    Content = table.Column<string>(nullable: true),
+                    PageSectionId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SectionParts", x => x.SectionPartId);
+                    table.ForeignKey(
+                        name: "FK_SectionParts_PageSections_PageSectionId",
+                        column: x => x.PageSectionId,
+                        principalTable: "PageSections",
+                        principalColumn: "PageSectionId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "PageSections",
+                columns: new[] { "PageSectionId", "PageRoute" },
+                values: new object[] { new Guid("575420f9-efec-4cf0-a8e3-85067021899d"), "Index" });
+
+            migrationBuilder.InsertData(
+                table: "SectionParts",
+                columns: new[] { "SectionPartId", "Content", "PageSectionId", "Type" },
+                values: new object[,]
+                {
+                    { new Guid("049c54e3-4755-438e-a7d3-1ea468fb234f"), "About me and MSS", new Guid("575420f9-efec-4cf0-a8e3-85067021899d"), "Title1" },
+                    { new Guid("a7fc8654-8708-4566-9470-899a6b184ab5"), "What is MSS?", new Guid("575420f9-efec-4cf0-a8e3-85067021899d"), "Header1" },
+                    { new Guid("9b65798d-e038-44d7-9de7-3a6ceaa46d00"), "Maurice Software Solutions was created to showcase my programming skills and to have some fun. Aside from that there is handy and fun functionality to be found like a fully-fledged, unlimited personal cloud storage system and a chatroom. And those are just the things I am currently working on. I am dedicated to improving Maurice Software Solutions as a whole regularly whilst adding cool new features.", new Guid("575420f9-efec-4cf0-a8e3-85067021899d"), "Body1" },
+                    { new Guid("e7865892-a7f4-4da4-a1bf-7a0aaff3476e"), "Who is Maurice?", new Guid("575420f9-efec-4cf0-a8e3-85067021899d"), "Header2" },
+                    { new Guid("845fcfce-8def-4ba3-a83c-20849c64a04c"), @"I am an enthusiastic man with a strong passion for programming. Social and friendly going. Coding has been my hobby from an early age. When I was 13, I made my first program in Visual Basic. A slot machine where there were secret options to get infinite money for example. Later, around the age of 18, I started working with Java, XML and Android Studio. With this I built a number of Android apps including an applocker. This app allowed the user to choose which apps and services needed an additional password or fingerprint to be used.
+
+                Friends and especially family regularly ask me for help with electronics and software related matters. I think this is because I have been busy with software and hardware practically my whole life.
+
+                Marketing and commerce seemed to be my career choice for a long time. During my higher professional education, Commercial Economics, I found out that this did not meet my expectations.
+
+                At one point I ended up at ITvitae and started working on my C# programming skills. This went well for me because Java is similar in syntax to C#. Here I have made several complicated programs with C# and related languages such as SQL, HTML XAML, JavaScript and CSS. At ITvitae I have greatly improved my software development skills. After about a year I have successfully completed the process.
+
+                My interests lie in the latest techniques in software development and electronics. In particular what advantages and disadvantages there are. For example, I can get enthusiastic about developments such as Blazor. This offers such cool options within the internet landscape. For example, the website can be installed as a local application and C# can be used instead of JavaScript! If I find something interesting, I want to find out and test it. See what has gotten better or worse.
+
+                Besides my passion for programming, I am also interested in hardware. For example, I have built my own PC and home server. That very server you are accessing right now.
+
+                That’s it. If you want to know more about me or Maurice Software Solutions, please navigate to the feedback or contact page to ask your question
+                ", new Guid("575420f9-efec-4cf0-a8e3-85067021899d"), "Body2" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -210,6 +272,11 @@ namespace MTS.BL.API.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SectionParts_PageSectionId",
+                table: "SectionParts",
+                column: "PageSectionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -233,10 +300,16 @@ namespace MTS.BL.API.Migrations
                 name: "Credits");
 
             migrationBuilder.DropTable(
+                name: "SectionParts");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "PageSections");
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MTS.PL.Infra.Interfaces.Standard;
+using MTS.BL.Infra.Interfaces.Standard;
 
-namespace MTS.PL.Entities.Core
+namespace MTS.DAL.Entities.Core
 {
     public class DALUserAccount : IdentityUser, IBLUserAccount
     {

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MTS.PL.DatabaseAccess.Utils
+namespace MTS.DAL.DatabaseAccess.Utils
 {
     internal sealed class TokenValidationOptionsBuilder
     {

@@ -1,20 +1,22 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MTS.PL.DatabaseAccess.Utils;
+﻿
+using Microsoft.AspNetCore.Identity;
+using MTS.DAL.DatabaseAccess.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MTS.PL.Interfaces.Standard;
+using MTS.DAL.Interfaces.Standard;
 using MTS.Core.GlobalLibrary.Utils;
 using MTS.Core.GlobalLibrary;
-using MTS.PL.Infra.Interfaces;
+using MTS.BL.Infra.Interfaces;
 using MTS.PL.Infra.Interfaces.Standard;
-using MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter;
+using MTS.BL.Infra.Interfaces.Standard.DatabaseAdapter;
 using MTS.PL.Infra.Entities.Standard;
-using MTS.PL.Entities.Core;
+using MTS.DAL.Entities.Core;
+using MTS.BL.Infra.Interfaces.Standard;
 
-namespace MTS.PL.DatabaseAccess.CRUD.Account
+namespace MTS.DAL.DatabaseAccess.CRUD.Account
 {
     public sealed class AccountAdapter : AccountAdapterHelper, IAccountAdapter
     {

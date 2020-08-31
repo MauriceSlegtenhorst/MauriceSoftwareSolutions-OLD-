@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using MTS.PL.DatabaseAccess.Utils;
+using MTS.DAL.DatabaseAccess.Utils;
 
-namespace MTS.PL.DatabaseAccess.DataContext
+namespace MTS.DAL.DatabaseAccess.DataContext
 {
     public sealed class DbConfigurations
     {

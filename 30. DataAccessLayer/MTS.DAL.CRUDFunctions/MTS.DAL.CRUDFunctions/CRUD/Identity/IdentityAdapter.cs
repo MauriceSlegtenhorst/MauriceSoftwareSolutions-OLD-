@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MTS.PL.DatabaseAccess.Utils;
-using MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter;
-using MTS.PL.Infra.Interfaces.Standard;
-using MTS.PL.Entities.Standard;
-using MTS.PL.Entities.Core;
-using MTS.PL.DatabaseAccess.DataContext;
+using MTS.DAL.DatabaseAccess.Utils;
+using MTS.BL.Infra.Interfaces.Standard.DatabaseAdapter;
+using MTS.BL.Infra.Interfaces.Standard;
+using MTS.BL.Entities.Standard;
+using MTS.DAL.Entities.Core;
+using MTS.DAL.DatabaseAccess.DataContext;
 
-namespace MTS.PL.DatabaseAccess.CRUD.Identity
+namespace MTS.DAL.DatabaseAccess.CRUD.Identity
 {
     public sealed class IdentityAdapter : IdentityAdapterHelper, IIdentityAdapter
     {

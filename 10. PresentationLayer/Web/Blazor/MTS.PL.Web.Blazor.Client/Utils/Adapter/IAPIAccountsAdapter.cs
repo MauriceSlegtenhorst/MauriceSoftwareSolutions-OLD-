@@ -1,6 +1,4 @@
-﻿using MTS.PL.Infra.Entities.Standard;
-using Syncfusion.Blazor;
-using System.Collections.Generic;
+﻿using Syncfusion.Blazor;
 using System.Threading.Tasks;
 
 namespace MTS.PL.Web.Blazor.Client.Utils.Adapter

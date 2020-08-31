@@ -1,6 +1,6 @@
-﻿using MTS.PL.Infra.Interfaces.Standard;
+﻿using MTS.BL.Infra.Interfaces.Standard;
 
-namespace MTS.PL.Infra.Entities
+namespace MTS.BL.Infra.Entities
 {
     public sealed class AuthMessageSenderOptions : IAuthMessageSenderOptions
     {

@@ -1,7 +1,7 @@
-﻿using MTS.PL.Infra.Interfaces.Standard;
+﻿using MTS.BL.Infra.Interfaces.Standard;
 using System.Collections.Generic;
 
-namespace MTS.PL.Entities.Core
+namespace MTS.DAL.Entities.Core
 {
     public sealed class DALAuthentificationResult : IAuthentificationResult
     {

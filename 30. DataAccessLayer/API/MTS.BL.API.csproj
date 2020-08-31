@@ -6,8 +6,38 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200830190944_AddingPageSections.cs" />
-    <Compile Remove="Migrations\20200830190944_AddingPageSections.Designer.cs" />
+    <Compile Remove="Migrations\20200831064453_init.cs" />
+    <Compile Remove="Migrations\20200831064453_init.Designer.cs" />
+    <Compile Remove="Migrations\20200831092903_init.cs" />
+    <Compile Remove="Migrations\20200831092903_init.Designer.cs" />
+    <Compile Remove="Migrations\20200831093921_init.cs" />
+    <Compile Remove="Migrations\20200831093921_init.Designer.cs" />
+    <Compile Remove="Migrations\20200831121153_init.cs" />
+    <Compile Remove="Migrations\20200831121153_init.Designer.cs" />
+    <Compile Remove="Migrations\20200831124119_init.cs" />
+    <Compile Remove="Migrations\20200831124119_init.Designer.cs" />
+    <Compile Remove="Migrations\20200831131442_init.cs" />
+    <Compile Remove="Migrations\20200831131442_init.Designer.cs" />
+    <Compile Remove="Migrations\20200831144248_init.cs" />
+    <Compile Remove="Migrations\20200831144248_init.Designer.cs" />
+    <Compile Remove="Migrations\20200831145431_init.cs" />
+    <Compile Remove="Migrations\20200831145431_init.Designer.cs" />
+    <Compile Remove="Migrations\20200831150748_init.cs" />
+    <Compile Remove="Migrations\20200831150748_init.Designer.cs" />
+    <Compile Remove="Migrations\20200831152801_RemoveDALFromTableNames.cs" />
+    <Compile Remove="Migrations\20200831152801_RemoveDALFromTableNames.Designer.cs" />
+    <Compile Remove="Migrations\20200831153221_init.cs" />
+    <Compile Remove="Migrations\20200831153221_init.Designer.cs" />
+    <Compile Remove="Migrations\20200831153506_init.cs" />
+    <Compile Remove="Migrations\20200831153506_init.Designer.cs" />
+    <Compile Remove="Migrations\20200831154107_init.cs" />
+    <Compile Remove="Migrations\20200831154107_init.Designer.cs" />
+    <Compile Remove="Migrations\20200831154418_init.cs" />
+    <Compile Remove="Migrations\20200831154418_init.Designer.cs" />
+    <Compile Remove="Migrations\20200831155008_init.cs" />
+    <Compile Remove="Migrations\20200831155008_init.Designer.cs" />
+    <Compile Remove="Migrations\20200831155430_init.cs" />
+    <Compile Remove="Migrations\20200831155430_init.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

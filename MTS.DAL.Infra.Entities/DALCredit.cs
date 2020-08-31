@@ -1,6 +1,6 @@
-﻿namespace MTS.PL.Entities
+﻿namespace MTS.DAL.Entities.Core
 {
-    public sealed class Credit
+    public sealed class DALCredit
     {
         public int Id { get; set; }
         public string MadeBy { get; set; }

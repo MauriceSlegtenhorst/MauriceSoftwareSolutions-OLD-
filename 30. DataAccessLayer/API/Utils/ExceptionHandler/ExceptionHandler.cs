@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Text;
 
-namespace MTS.PL.API.Utils.ExceptionHandler
+namespace MTS.DAL.API.Utils.ExceptionHandler
 {
     public sealed class ExceptionHandler : ControllerBase, IExceptionHandler
     {

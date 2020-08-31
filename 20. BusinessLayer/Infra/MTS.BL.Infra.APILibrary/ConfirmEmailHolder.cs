@@ -1,6 +1,6 @@
 ﻿using MTS.PL.Infra.Interfaces.Standard;
 
-namespace MTS.PL.Entities.Standard
+namespace MTS.BL.Entities.Standard
 {
     public sealed class ConfirmEmailHolder : IConfirmEmailHolder
     {

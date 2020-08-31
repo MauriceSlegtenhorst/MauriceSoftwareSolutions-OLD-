@@ -1,8 +1,8 @@
-﻿using MTS.PL.Infra.Interfaces.Standard;
+﻿using MTS.BL.Infra.Interfaces.Standard;
 using MTS.Core.GlobalLibrary;
 using System.ComponentModel.DataAnnotations;
 
-namespace MTS.PL.Entities.Standard
+namespace MTS.BL.Entities.Standard
 {
     public sealed class UserRolePairHolder : IUserRolePairHolder
     {

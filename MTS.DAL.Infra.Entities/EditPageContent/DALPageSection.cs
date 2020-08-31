@@ -1,16 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MTS.BL.Infra.Interfaces.Standard.EditPageContent;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MTS.DAL.Entities.Core.EditPageContent
 {
-    public sealed class DALPageSection
+    public sealed class DALPageSection : IBLPageSection
     {
-        public Guid Id { get; set; }
+        [Key]
+        public Guid PageSectionId { get; set; }
 
-        public string PageName { get; set; }
+        public string PageRoute { get; set; }
 
-        public string Header { get; set; }
+        public DALSectionPart[] DALSectionParts { get; set; }
 
-        public List<DALParagraph> Paragraphs { get; set; }
+        [NotMapped]
+        public IBLSectionPart[] Parts
+        {
+            get => DALSectionParts;
+            set => DALSectionParts = (DALSectionPart[])value;
+        }
     }
 }

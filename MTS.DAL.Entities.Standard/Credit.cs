@@ -1,6 +1,6 @@
-﻿using MTS.PL.Infra.Interfaces.Standard;
+﻿using MTS.BL.Infra.Interfaces.Standard;
 
-namespace MTS.PL.Entities.Standard
+namespace MTS.DAL.Entities.Standard
 {
     public sealed class Credit : ICredit
     {

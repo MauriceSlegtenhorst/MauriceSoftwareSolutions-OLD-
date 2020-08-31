@@ -1,7 +1,7 @@
 ﻿using MTS.PL.Infra.Interfaces.Standard;
 using System;
 
-namespace MTS.PL.Entities.Standard
+namespace MTS.BL.Entities.Standard
 {
     public class BLUserToken : IPLUserToken
     {

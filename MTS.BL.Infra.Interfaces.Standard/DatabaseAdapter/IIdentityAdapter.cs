@@ -1,6 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using MTS.BL.Infra.Interfaces.Standard;
+using System.Threading.Tasks;
 
-namespace MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter
+namespace MTS.BL.Infra.Interfaces.Standard.DatabaseAdapter
 {
     public interface IIdentityAdapter
     {

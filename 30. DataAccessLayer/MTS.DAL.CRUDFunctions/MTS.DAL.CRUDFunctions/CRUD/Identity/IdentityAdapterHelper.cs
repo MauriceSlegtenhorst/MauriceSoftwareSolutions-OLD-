@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MTS.PL.Entities.Core;
+using MTS.DAL.Entities.Core;
 using System.Collections.Generic;
 
-namespace MTS.PL.DatabaseAccess.CRUD.Identity
+namespace MTS.DAL.DatabaseAccess.CRUD.Identity
 {
     public abstract class IdentityAdapterHelper
     {

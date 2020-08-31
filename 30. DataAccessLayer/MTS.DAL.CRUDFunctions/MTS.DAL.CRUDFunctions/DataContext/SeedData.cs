@@ -1,11 +1,11 @@
-﻿using MTS.PL.Infra.Interfaces.Standard;
-using MTS.PL.Interfaces.Standard;
+﻿using MTS.BL.Infra.Interfaces.Standard;
+using MTS.DAL.Interfaces.Standard;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MTS.PL.Entities.Core;
+using MTS.DAL.Entities.Core;
 
-namespace MTS.PL.DatabaseAccess.DataContext
+namespace MTS.DAL.DatabaseAccess.DataContext
 {
     internal sealed class SeedData : ISeedData
     {
@@ -13,13 +13,13 @@ namespace MTS.PL.DatabaseAccess.DataContext
         {
             var accountHolder = new List<IBLUserAccount>();
 
-            accountHolder.AddRange(await CreateAdminAccounts());
-            accountHolder.AddRange(await CreatePrivilegedEmployeeAccounts());
+            accountHolder.AddRange(await CreateAdminAccountsAsync());
+            accountHolder.AddRange(await CreatePrivilegedEmployeeAccountsAsync());
 
             return accountHolder;
         }
 
-        private Task<IEnumerable<IBLUserAccount>> CreateAdminAccounts()
+        private Task<IEnumerable<IBLUserAccount>> CreateAdminAccountsAsync()
         {
             var accountHolder = new IBLUserAccount[]
             {
@@ -49,7 +49,7 @@ namespace MTS.PL.DatabaseAccess.DataContext
             return Task.FromResult(accountHolder.AsEnumerable());
         }
 
-        private Task<IEnumerable<IBLUserAccount>> CreatePrivilegedEmployeeAccounts()
+        private Task<IEnumerable<IBLUserAccount>> CreatePrivilegedEmployeeAccountsAsync()
         {
             var accountHolder = new IBLUserAccount[]
             {

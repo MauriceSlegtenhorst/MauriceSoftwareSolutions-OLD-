@@ -4,7 +4,7 @@ using MTS.PL.Infra.Interfaces.Standard;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter
+namespace MTS.BL.Infra.Interfaces.Standard.DatabaseAdapter
 {
     public interface IAccountAdapter
     {

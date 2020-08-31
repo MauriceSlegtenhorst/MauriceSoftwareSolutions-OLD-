@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MTS.PL.Infra.Interfaces.Standard;
+using MTS.BL.Infra.Interfaces.Standard;
 using System;
 
-namespace MTS.PL.Entities.Core
+namespace MTS.DAL.Entities.Core
 {
     public class DLUserToken : IdentityUserToken<string>, IBLUserToken
     {

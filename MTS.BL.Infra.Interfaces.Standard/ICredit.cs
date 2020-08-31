@@ -1,4 +1,4 @@
-﻿namespace MTS.PL.Infra.Interfaces.Standard
+﻿namespace MTS.BL.Infra.Interfaces.Standard
 {
     public interface ICredit
     {

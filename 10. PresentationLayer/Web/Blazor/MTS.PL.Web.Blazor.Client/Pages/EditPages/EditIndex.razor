@@ -1,6 +1,7 @@
-﻿@page "/editpages/index"
+﻿@page "/editpages/editindex"
 
 <PageHeaderComponent PageName="Edit pages" Subtitle="Home page" />
+
 <div class="row col-12 padding-vertical-top">
     <EditForm EditContext="@_formContext" OnValidSubmit="SubmitFormAsync">
         <!--#region Card 1 MSS-->
@@ -10,31 +11,24 @@
                 <div class="e-card-header">
                     <div class="e-card-header-caption">
                         <div class="e-card-header-title">
-                            <h4>About me and MSS</h4>
+                            <SfTextBox Type="InputType.Text" Placeholder="Title" FloatLabelType="@FloatLabelType.Always"
+                                       ShowClearButton="true" @bind-Value="@_inputModel.Title1" />
                         </div>
                     </div>
                 </div>
                 <div class="e-card-content">
-                    <strong>What is MSS?</strong>
-                    @*<p>@Constants.MSS.WHAT_IS_MSS</p>*@
-                    <SfTextBox Multiline="true">
-                        @
-                    </SfTextBox>
 
-                    <strong>Who is Maurice?</strong>
-                    <p>@Constants.MSS.ABOUT_MAURICE_1</p>
+                    <SfTextBox Type="InputType.Text" Placeholder="Header 1" FloatLabelType="@FloatLabelType.Always"
+                                ShowClearButton="true" @bind-Value="@_inputModel.Header1"/>
 
-                    <p>@Constants.MSS.ABOUT_MAURICE_2</p>
+                    <SfTextBox Type="InputType.Text" Placeholder="Body 1" FloatLabelType="@FloatLabelType.Always"
+                               ShowClearButton="true" Multiline="true" @bind-Value="@_inputModel.Body1" />
 
-                    <p>@Constants.MSS.ABOUT_MAURICE_3</p>
+                    <SfTextBox Type="InputType.Text" Placeholder="Header 2" FloatLabelType="@FloatLabelType.Always"
+                               ShowClearButton="true" @bind-Value="@_inputModel.Header2" />
 
-                    <p>@Constants.MSS.ABOUT_MAURICE_4</p>
-
-                    <p>@Constants.MSS.ABOUT_MAURICE_5</p>
-
-                    <p>@Constants.MSS.ABOUT_MAURICE_6</p>
-
-                    <p>@Constants.MSS.ABOUT_MAURICE_7</p>
+                    <SfTextBox Type="InputType.Text" Placeholder="Body 2" FloatLabelType="@FloatLabelType.Always"
+                               ShowClearButton="true" Multiline="true" @bind-Value="@_inputModel.Body2" />
                 </div>
             </div>
         </div>
@@ -70,8 +64,8 @@
 
                 <!--Footer-->
                 <div class="e-card-actions">
-                    <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
-                    <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickMoreAbout">More about</SfButton>
+                    <SfButton CssClass="e-btn e-outline e-primary">LinkedIn</SfButton>
+                    <SfButton CssClass="e-btn e-outline e-primary">More about</SfButton>
                 </div>
             </div>
         </div>
@@ -88,12 +82,36 @@
 @code{
     private EditContext _formContext;
 
+    private InputModel _inputModel;
+
     private class InputModel
     {
-        public string MyProperty { get; set; }
+        public string Title1 { get; set; } = String.Empty;
+
+        public string Header1 { get; set; } = String.Empty;
+
+        public string Body1 { get; set; } = String.Empty;
+
+        public string Header2 { get; set; } = String.Empty;
+
+        public string Body2 { get; set; } = String.Empty;
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        _inputModel = new InputModel();
+
+        _formContext = new EditContext(_inputModel);
+
+        return base.OnInitializedAsync();
     }
 
     private async Task SubmitFormAsync()
+    {
+
+    }
+
+    private async Task GetPageDataAsync()
     {
 
     }

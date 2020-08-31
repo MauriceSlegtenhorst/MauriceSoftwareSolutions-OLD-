@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using MTS.Core.GlobalLibrary;
-using MTS.PL.Entities.Core;
-using MTS.PL.Interfaces.Standard;
+using MTS.DAL.Entities.Core;
+using MTS.DAL.Interfaces.Standard;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MTS.PL.DatabaseAccess.CRUD.Account
+namespace MTS.DAL.DatabaseAccess.CRUD.Account
 {
     public abstract class AccountAdapterHelper
     {

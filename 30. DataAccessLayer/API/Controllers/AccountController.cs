@@ -7,17 +7,18 @@ using Microsoft.AspNetCore.Routing;
 using MTS.Core.GlobalLibrary;
 using MTS.Core.GlobalLibrary.Utils;
 using System.Linq;
-using MTS.PL.API.Utils.ExceptionHandler;
+using MTS.DAL.API.Utils.ExceptionHandler;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
 using System.Security.Claims;
+using MTS.DAL.Entities.Core;
+using MTS.BL.Entities.Standard;
+using MTS.BL.Infra.Interfaces.Standard.DatabaseAdapter;
 using MTS.PL.Infra.Interfaces.Standard;
-using MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter;
 using MTS.PL.Infra.Entities.Standard;
-using MTS.PL.Entities.Standard;
-using MTS.PL.Entities.Core;
+using MTS.BL.Infra.Interfaces.Standard;
 
-namespace MTS.PL.API.Controllers
+namespace MTS.DAL.API.Controllers
 {
     [ApiController]
     [Route(Constants.APIControllers.ACCOUNT)]
@@ -310,7 +311,6 @@ namespace MTS.PL.API.Controllers
         }
         #endregion
 
-        // Confirm email
         [Route(Constants.AccountControllerEndpoints.CONFIRM_EMAIL)]
         [HttpPut]
         public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailHolder confirmEmailHolder)

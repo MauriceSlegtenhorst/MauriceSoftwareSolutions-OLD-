@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MTS.PL.Entities.Standard;
-using MTS.PL.API.Utils.ExceptionHandler;
+using MTS.DAL.API.Utils.ExceptionHandler;
 using MTS.Core.GlobalLibrary;
-using MTS.PL.Infra.Interfaces.Standard.DatabaseAdapter;
+using MTS.BL.Infra.Interfaces.Standard.DatabaseAdapter;
+using MTS.BL.Entities.Standard;
 
-namespace MTS.PL.API.Controllers
+namespace MTS.DAL.API.Controllers
 {
     [Route(Constants.APIControllers.IDENTITY)]
     [ApiController]

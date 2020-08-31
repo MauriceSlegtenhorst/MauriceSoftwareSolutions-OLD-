@@ -1,7 +1,7 @@
 ﻿using MTS.PL.Infra.Interfaces.Standard;
 using System.Collections.Generic;
 
-namespace MTS.PL.Infra.Interfaces.Standard
+namespace MTS.BL.Infra.Interfaces.Standard
 {
     public interface IAuthentificationResult
     {
