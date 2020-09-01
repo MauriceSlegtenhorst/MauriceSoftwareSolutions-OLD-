@@ -21,10 +21,9 @@ namespace MTS.BL.API.Migrations
 
             modelBuilder.Entity("MTS.DAL.Entities.Core.DALCredit", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("CreditId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AuthorWebsite")
                         .HasColumnType("nvarchar(max)");
@@ -38,7 +37,7 @@ namespace MTS.BL.API.Migrations
                     b.Property<string>("MadeBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CreditId");
 
                     b.ToTable("Credits");
                 });
@@ -136,7 +135,7 @@ namespace MTS.BL.API.Migrations
                     b.HasData(
                         new
                         {
-                            PageSectionId = new Guid("575420f9-efec-4cf0-a8e3-85067021899d"),
+                            PageSectionId = new Guid("011531a2-e4e6-49a3-aebd-cc22348ae5f8"),
                             PageRoute = "Index"
                         });
                 });
@@ -150,10 +149,7 @@ namespace MTS.BL.API.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("DALPageSectionPageSectionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PageSectionId")
+                    b.Property<Guid>("PageSectionFK")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
@@ -161,42 +157,42 @@ namespace MTS.BL.API.Migrations
 
                     b.HasKey("SectionPartId");
 
-                    b.HasIndex("DALPageSectionPageSectionId");
+                    b.HasIndex("PageSectionFK");
 
                     b.ToTable("SectionParts");
 
                     b.HasData(
                         new
                         {
-                            SectionPartId = new Guid("049c54e3-4755-438e-a7d3-1ea468fb234f"),
+                            SectionPartId = new Guid("09b30f2f-ef08-44f7-94bd-560cbbb70250"),
                             Content = "About me and MSS",
-                            PageSectionId = new Guid("575420f9-efec-4cf0-a8e3-85067021899d"),
+                            PageSectionFK = new Guid("011531a2-e4e6-49a3-aebd-cc22348ae5f8"),
                             Type = "Title1"
                         },
                         new
                         {
-                            SectionPartId = new Guid("a7fc8654-8708-4566-9470-899a6b184ab5"),
+                            SectionPartId = new Guid("14317faa-dd85-4313-b4c8-8ffa1d0bc5df"),
                             Content = "What is MSS?",
-                            PageSectionId = new Guid("575420f9-efec-4cf0-a8e3-85067021899d"),
+                            PageSectionFK = new Guid("011531a2-e4e6-49a3-aebd-cc22348ae5f8"),
                             Type = "Header1"
                         },
                         new
                         {
-                            SectionPartId = new Guid("9b65798d-e038-44d7-9de7-3a6ceaa46d00"),
+                            SectionPartId = new Guid("e20ccceb-c95a-440b-915c-1a95857784f4"),
                             Content = "Maurice Software Solutions was created to showcase my programming skills and to have some fun. Aside from that there is handy and fun functionality to be found like a fully-fledged, unlimited personal cloud storage system and a chatroom. And those are just the things I am currently working on. I am dedicated to improving Maurice Software Solutions as a whole regularly whilst adding cool new features.",
-                            PageSectionId = new Guid("575420f9-efec-4cf0-a8e3-85067021899d"),
+                            PageSectionFK = new Guid("011531a2-e4e6-49a3-aebd-cc22348ae5f8"),
                             Type = "Body1"
                         },
                         new
                         {
-                            SectionPartId = new Guid("e7865892-a7f4-4da4-a1bf-7a0aaff3476e"),
+                            SectionPartId = new Guid("e000af2d-b5cc-494e-bf85-54514cda3856"),
                             Content = "Who is Maurice?",
-                            PageSectionId = new Guid("575420f9-efec-4cf0-a8e3-85067021899d"),
+                            PageSectionFK = new Guid("011531a2-e4e6-49a3-aebd-cc22348ae5f8"),
                             Type = "Header2"
                         },
                         new
                         {
-                            SectionPartId = new Guid("845fcfce-8def-4ba3-a83c-20849c64a04c"),
+                            SectionPartId = new Guid("b6eac4cf-5da0-43d2-a5f0-c5db083c88fd"),
                             Content = @"I am an enthusiastic man with a strong passion for programming. Social and friendly going. Coding has been my hobby from an early age. When I was 13, I made my first program in Visual Basic. A slot machine where there were secret options to get infinite money for example. Later, around the age of 18, I started working with Java, XML and Android Studio. With this I built a number of Android apps including an applocker. This app allowed the user to choose which apps and services needed an additional password or fingerprint to be used.
 
 Friends and especially family regularly ask me for help with electronics and software related matters. I think this is because I have been busy with software and hardware practically my whole life.
@@ -211,7 +207,7 @@ Besides my passion for programming, I am also interested in hardware. For exampl
 
 That’s it. If you want to know more about me or Maurice Software Solutions, please navigate to the feedback or contact page to ask your question
 ",
-                            PageSectionId = new Guid("575420f9-efec-4cf0-a8e3-85067021899d"),
+                            PageSectionFK = new Guid("011531a2-e4e6-49a3-aebd-cc22348ae5f8"),
                             Type = "Body2"
                         });
                 });
@@ -349,9 +345,11 @@ That’s it. If you want to know more about me or Maurice Software Solutions, pl
 
             modelBuilder.Entity("MTS.DAL.Entities.Core.EditPageContent.DALSectionPart", b =>
                 {
-                    b.HasOne("MTS.DAL.Entities.Core.EditPageContent.DALPageSection", null)
+                    b.HasOne("MTS.DAL.Entities.Core.EditPageContent.DALPageSection", "DALPageSection")
                         .WithMany("DALSectionParts")
-                        .HasForeignKey("DALPageSectionPageSectionId");
+                        .HasForeignKey("PageSectionFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

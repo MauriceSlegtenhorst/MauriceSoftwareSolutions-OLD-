@@ -4,6 +4,7 @@ using MTS.BL.Infra.Interfaces.Standard.EditPageContent;
 using MTS.DAL.DatabaseAccess.DataContext;
 using MTS.DAL.Entities.Core.EditPageContent;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,12 +23,12 @@ namespace MTS.DAL.DatabaseAccess.CRUD.EditPages
         #endregion
 
         #region Read
-        public async Task<IBLPageSection[]> ReadByPageRouteAsync(string pageRoute)
+        public async Task<ICollection<IBLPageSection>> ReadByPageRouteAsync(string pageRoute)
         {
             if (String.IsNullOrEmpty(pageRoute))
                 throw new ArgumentException("Parameters pageRoute cannot be null or empty");
 
-            var result = _dbContext.PageSections.Where(ps => ps.PageRoute == pageRoute);
+            var result = _dbContext.PageSections.Where(ps => ps.PageRoute == pageRoute).Include(sp => sp.DALSectionParts);
 
             return await result.ToArrayAsync();
         }

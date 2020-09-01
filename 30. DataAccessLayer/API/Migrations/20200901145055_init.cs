@@ -54,8 +54,7 @@ namespace MTS.BL.API.Migrations
                 name: "Credits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreditId = table.Column<Guid>(nullable: false),
                     MadeBy = table.Column<string>(nullable: true),
                     GotFrom = table.Column<string>(nullable: true),
                     LinkToImage = table.Column<string>(nullable: true),
@@ -63,7 +62,7 @@ namespace MTS.BL.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Credits", x => x.Id);
+                    table.PrimaryKey("PK_Credits", x => x.CreditId);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,34 +190,34 @@ namespace MTS.BL.API.Migrations
                     SectionPartId = table.Column<Guid>(nullable: false),
                     Type = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
-                    PageSectionId = table.Column<Guid>(nullable: false)
+                    PageSectionFK = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SectionParts", x => x.SectionPartId);
                     table.ForeignKey(
-                        name: "FK_SectionParts_PageSections_PageSectionId",
-                        column: x => x.PageSectionId,
+                        name: "FK_SectionParts_PageSections_PageSectionFK",
+                        column: x => x.PageSectionFK,
                         principalTable: "PageSections",
                         principalColumn: "PageSectionId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "PageSections",
                 columns: new[] { "PageSectionId", "PageRoute" },
-                values: new object[] { new Guid("575420f9-efec-4cf0-a8e3-85067021899d"), "Index" });
+                values: new object[] { new Guid("011531a2-e4e6-49a3-aebd-cc22348ae5f8"), "Index" });
 
             migrationBuilder.InsertData(
                 table: "SectionParts",
-                columns: new[] { "SectionPartId", "Content", "PageSectionId", "Type" },
+                columns: new[] { "SectionPartId", "Content", "PageSectionFK", "Type" },
                 values: new object[,]
                 {
-                    { new Guid("049c54e3-4755-438e-a7d3-1ea468fb234f"), "About me and MSS", new Guid("575420f9-efec-4cf0-a8e3-85067021899d"), "Title1" },
-                    { new Guid("a7fc8654-8708-4566-9470-899a6b184ab5"), "What is MSS?", new Guid("575420f9-efec-4cf0-a8e3-85067021899d"), "Header1" },
-                    { new Guid("9b65798d-e038-44d7-9de7-3a6ceaa46d00"), "Maurice Software Solutions was created to showcase my programming skills and to have some fun. Aside from that there is handy and fun functionality to be found like a fully-fledged, unlimited personal cloud storage system and a chatroom. And those are just the things I am currently working on. I am dedicated to improving Maurice Software Solutions as a whole regularly whilst adding cool new features.", new Guid("575420f9-efec-4cf0-a8e3-85067021899d"), "Body1" },
-                    { new Guid("e7865892-a7f4-4da4-a1bf-7a0aaff3476e"), "Who is Maurice?", new Guid("575420f9-efec-4cf0-a8e3-85067021899d"), "Header2" },
-                    { new Guid("845fcfce-8def-4ba3-a83c-20849c64a04c"), @"I am an enthusiastic man with a strong passion for programming. Social and friendly going. Coding has been my hobby from an early age. When I was 13, I made my first program in Visual Basic. A slot machine where there were secret options to get infinite money for example. Later, around the age of 18, I started working with Java, XML and Android Studio. With this I built a number of Android apps including an applocker. This app allowed the user to choose which apps and services needed an additional password or fingerprint to be used.
+                    { new Guid("09b30f2f-ef08-44f7-94bd-560cbbb70250"), "About me and MSS", new Guid("011531a2-e4e6-49a3-aebd-cc22348ae5f8"), "Title1" },
+                    { new Guid("14317faa-dd85-4313-b4c8-8ffa1d0bc5df"), "What is MSS?", new Guid("011531a2-e4e6-49a3-aebd-cc22348ae5f8"), "Header1" },
+                    { new Guid("e20ccceb-c95a-440b-915c-1a95857784f4"), "Maurice Software Solutions was created to showcase my programming skills and to have some fun. Aside from that there is handy and fun functionality to be found like a fully-fledged, unlimited personal cloud storage system and a chatroom. And those are just the things I am currently working on. I am dedicated to improving Maurice Software Solutions as a whole regularly whilst adding cool new features.", new Guid("011531a2-e4e6-49a3-aebd-cc22348ae5f8"), "Body1" },
+                    { new Guid("e000af2d-b5cc-494e-bf85-54514cda3856"), "Who is Maurice?", new Guid("011531a2-e4e6-49a3-aebd-cc22348ae5f8"), "Header2" },
+                    { new Guid("b6eac4cf-5da0-43d2-a5f0-c5db083c88fd"), @"I am an enthusiastic man with a strong passion for programming. Social and friendly going. Coding has been my hobby from an early age. When I was 13, I made my first program in Visual Basic. A slot machine where there were secret options to get infinite money for example. Later, around the age of 18, I started working with Java, XML and Android Studio. With this I built a number of Android apps including an applocker. This app allowed the user to choose which apps and services needed an additional password or fingerprint to be used.
 
                 Friends and especially family regularly ask me for help with electronics and software related matters. I think this is because I have been busy with software and hardware practically my whole life.
 
@@ -231,7 +230,7 @@ namespace MTS.BL.API.Migrations
                 Besides my passion for programming, I am also interested in hardware. For example, I have built my own PC and home server. That very server you are accessing right now.
 
                 That’s it. If you want to know more about me or Maurice Software Solutions, please navigate to the feedback or contact page to ask your question
-                ", new Guid("575420f9-efec-4cf0-a8e3-85067021899d"), "Body2" }
+                ", new Guid("011531a2-e4e6-49a3-aebd-cc22348ae5f8"), "Body2" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -274,9 +273,9 @@ namespace MTS.BL.API.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SectionParts_PageSectionId",
+                name: "IX_SectionParts_PageSectionFK",
                 table: "SectionParts",
-                column: "PageSectionId");
+                column: "PageSectionFK");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

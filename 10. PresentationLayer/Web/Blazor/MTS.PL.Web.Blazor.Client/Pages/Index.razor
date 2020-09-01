@@ -87,6 +87,8 @@
 @code{
     private IEnumerable<string> messages;
 
+    private bool _isInEditMode;
+
     protected override Task OnInitializedAsync()
     {
         messages = new[] { BlazorConstants.UNDER_CONSTRUCTION_MESSAGE };

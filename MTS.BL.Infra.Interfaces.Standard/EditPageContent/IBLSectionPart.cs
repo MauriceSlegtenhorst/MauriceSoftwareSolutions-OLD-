@@ -10,7 +10,7 @@ namespace MTS.BL.Infra.Interfaces.Standard.EditPageContent
 
         string Content { get; set; }
 
-        public Guid PageSectionId { get; set; }
+        public Guid PageSectionFK { get; set; }
         public IBLPageSection PageSection { get; set; }
     }
 }

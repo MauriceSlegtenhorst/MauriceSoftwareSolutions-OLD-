@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MTS.BL.Infra.Interfaces.Standard.EditPageContent
 {
@@ -8,6 +9,6 @@ namespace MTS.BL.Infra.Interfaces.Standard.EditPageContent
 
         string PageRoute { get; set; }
 
-        IBLSectionPart[] Parts { get; set; }
+        ICollection<IBLSectionPart> Parts { get; set; }
     }
 }

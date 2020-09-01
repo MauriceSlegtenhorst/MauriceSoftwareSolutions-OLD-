@@ -55,28 +55,28 @@ namespace MTS.DAL.DatabaseAccess.DataContext
                         SectionPartId = Guid.NewGuid(),
                         Type = "Title1",
                         Content = "About me and MSS",
-                        PageSectionId = sectionIds[0]
+                        PageSectionFK = sectionIds[0]
                     },
                     new DALSectionPart
                     {
                         SectionPartId = Guid.NewGuid(),
                         Type = "Header1",
                         Content = "What is MSS?",
-                        PageSectionId = sectionIds[0]
+                        PageSectionFK = sectionIds[0]
                     },
                     new DALSectionPart
                     {
                         SectionPartId = Guid.NewGuid(),
                         Type = "Body1",
                         Content = Constants.MSS.WHAT_IS_MSS,
-                        PageSectionId = sectionIds[0]
+                        PageSectionFK = sectionIds[0]
                     },
                     new DALSectionPart
                     {
                         SectionPartId = Guid.NewGuid(),
                         Type = "Header2",
                         Content = "Who is Maurice?",
-                        PageSectionId = sectionIds[0]
+                        PageSectionFK = sectionIds[0]
                     },
                     new DALSectionPart
                     {
@@ -97,7 +97,7 @@ namespace MTS.DAL.DatabaseAccess.DataContext
                         .AppendLine()
                         .AppendLine(Constants.MSS.ABOUT_MAURICE_7)
                         .ToString(),
-                        PageSectionId = sectionIds[0]
+                        PageSectionFK = sectionIds[0]
                     }
                     );
             });

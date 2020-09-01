@@ -71,6 +71,12 @@ namespace MTS.Core.GlobalLibrary
             public const string ACCOUNT = "account";
             public const string IDENTITY = "identity";
             public const string CREDITS = "credits";
+            public const string EDIT_PAGE = "editpage";
+        }
+
+        public class EditPageControllerEndpoints
+        {
+            public const string GET_BY_PAGE_ROUTE = "getbypageroute";
         }
 
         public class AccountControllerEndpoints

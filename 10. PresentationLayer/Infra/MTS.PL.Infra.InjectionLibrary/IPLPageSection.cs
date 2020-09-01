@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MTS.PL.Infra.Interfaces.Standard
 {
@@ -7,7 +8,5 @@ namespace MTS.PL.Infra.Interfaces.Standard
         Guid PageSectionId { get; set; }
 
         string PageRoute { get; set; }
-
-        IPLSectionPart[] DALSectionParts { get; set; }
     }
 }
