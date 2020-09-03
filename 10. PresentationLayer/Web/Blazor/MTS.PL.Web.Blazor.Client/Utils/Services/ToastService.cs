@@ -1,4 +1,5 @@
-﻿using Syncfusion.Blazor.Notifications;
+﻿using Microsoft.AspNetCore.Components;
+using Syncfusion.Blazor.Notifications;
 using System;
 using System.Text;
 
@@ -45,25 +46,27 @@ namespace MTS.PL.Web.Blazor.Client.Utils.Services
             var contentBuilder = new StringBuilder();
 
             contentBuilder.AppendLine($"{exception.GetType().Name}:");
-            contentBuilder.Append(exception.Message);
+            contentBuilder.AppendLine(exception.Message);
             contentBuilder.AppendLine();
             contentBuilder.AppendLine("Stack trace:");
-            contentBuilder.Append(exception.StackTrace);
+            contentBuilder.AppendLine(exception.StackTrace);
 
             if (exception.InnerException != null)
             {
                 contentBuilder.AppendLine($"{exception.InnerException.GetType().Name}:");
-                contentBuilder.Append(exception.InnerException.Message);
+                contentBuilder.AppendLine(exception.InnerException.Message);
                 contentBuilder.AppendLine("Stack trace:");
-                contentBuilder.Append(exception.InnerException.StackTrace);
+                contentBuilder.AppendLine(exception.InnerException.StackTrace);
             }
+
+            MarkupString markupString = (MarkupString)contentBuilder.ToString();
 
             toastModel = new ToastModel
             {
                 CssClass = "e-toast-danger",
                 Icon = "e-error toast-icons",
                 Title = "An Exception has occurred",
-                Content = contentBuilder.ToString(),
+                Content = markupString.Value,
                 ShowCloseButton = true,
                 TimeOut = 0
             };

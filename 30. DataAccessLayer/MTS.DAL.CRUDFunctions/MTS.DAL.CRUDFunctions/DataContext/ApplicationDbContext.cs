@@ -54,28 +54,28 @@ namespace MTS.DAL.DatabaseAccess.DataContext
                     {
                         SectionPartId = Guid.NewGuid(),
                         Type = "Title1",
-                        Content = "About me and MSS",
+                        Content = "<h4>About me and MSS</h4>",
                         PageSectionFK = sectionIds[0]
                     },
                     new DALSectionPart
                     {
                         SectionPartId = Guid.NewGuid(),
                         Type = "Header1",
-                        Content = "What is MSS?",
+                        Content = "<strong>What is MSS?</strong>",
                         PageSectionFK = sectionIds[0]
                     },
                     new DALSectionPart
                     {
                         SectionPartId = Guid.NewGuid(),
                         Type = "Body1",
-                        Content = Constants.MSS.WHAT_IS_MSS,
+                        Content = $"<p>{Constants.MSS.WHAT_IS_MSS}</p>",
                         PageSectionFK = sectionIds[0]
                     },
                     new DALSectionPart
                     {
                         SectionPartId = Guid.NewGuid(),
                         Type = "Header2",
-                        Content = "Who is Maurice?",
+                        Content = "<strong>Who is Maurice?</strong>",
                         PageSectionFK = sectionIds[0]
                     },
                     new DALSectionPart
@@ -83,19 +83,19 @@ namespace MTS.DAL.DatabaseAccess.DataContext
                         SectionPartId = Guid.NewGuid(),
                         Type = "Body2",
                         Content = new StringBuilder()
-                        .AppendLine(Constants.MSS.ABOUT_MAURICE_1)
+                        .Append("<p>").Append(Constants.MSS.ABOUT_MAURICE_1).Append("</p>")
                         .AppendLine()
-                        .AppendLine(Constants.MSS.ABOUT_MAURICE_2)
+                        .Append("<p>").Append(Constants.MSS.ABOUT_MAURICE_2).Append("</p>")
                         .AppendLine()
-                        .AppendLine(Constants.MSS.ABOUT_MAURICE_3)
+                        .Append("<p>").Append(Constants.MSS.ABOUT_MAURICE_3).Append("</p>")
                         .AppendLine()
-                        .AppendLine(Constants.MSS.ABOUT_MAURICE_4)
+                        .Append("<p>").Append(Constants.MSS.ABOUT_MAURICE_4).Append("</p>")
                         .AppendLine()
-                        .AppendLine(Constants.MSS.ABOUT_MAURICE_5)
+                        .Append("<p>").Append(Constants.MSS.ABOUT_MAURICE_5).Append("</p>")
                         .AppendLine()
-                        .AppendLine(Constants.MSS.ABOUT_MAURICE_6)
+                        .Append("<p>").Append(Constants.MSS.ABOUT_MAURICE_6).Append("</p>")
                         .AppendLine()
-                        .AppendLine(Constants.MSS.ABOUT_MAURICE_7)
+                        .Append("<p>").Append(Constants.MSS.ABOUT_MAURICE_7).Append("</p>")
                         .ToString(),
                         PageSectionFK = sectionIds[0]
                     }

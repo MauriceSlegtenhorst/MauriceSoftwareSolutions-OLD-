@@ -1,6 +1,9 @@
 ﻿@page "/"
 @inject NavigationManager _navigationManager
+@inject IHttpClientFactory _httpClientFactory
 @inject ISpinnerService _spinnerService
+@inject IToastService _toastService
+@inject IEditPageService _editPageService
 
 <PageHeaderComponent PageName="Welcome to Maurice Software Solutions!" Subtitle="A site about software and Maurice" />
 
@@ -9,42 +12,135 @@
     <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
         <div class="e-card" ID="maurice-card">
             <!--Header-->
-            <div class="e-card-header">
+            <div class="e-card-header" style=" padding: 16px">
                 <div class="e-card-header-caption">
                     <div class="e-card-header-title">
-                        <h4>About me and MSS</h4>
+                        @if (_editPageService.GetEditMode() == false)
+                        {
+                            @_inputModel.MarkupTitle1
+                        }
+                        else
+                        {
+                            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                                <SplitterPanes>
+                                    <SplitterPane Size="50%" Min="30%">
+                                        <ContentTemplate>
+                                            <div class="p-3">
+                                                <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Title1Changed" @bind-Value="@_inputModel.Title1"/>
+                                            </div>
+                                        </ContentTemplate>
+                                    </SplitterPane>
+                                    <SplitterPane Size="50%" Min="30%">
+                                        <ContentTemplate >
+                                            <div class="p-3">
+                                                @_inputModel.MarkupTitle1
+                                            </div>
+                                        </ContentTemplate>
+                                    </SplitterPane>
+                                </SplitterPanes>
+                            </SfSplitter>
+                        }
                     </div>
-                </div> 
+                </div>
             </div>
             <div class="e-card-content">
-                <strong>What is MSS?</strong>
-                <p>@Constants.MSS.WHAT_IS_MSS</p>
+                @if (_editPageService.GetEditMode() == false)
+                {
+                    @_inputModel.MarkupHeader1
+                    @_inputModel.MarkupBody1
 
-                <strong>Who is Maurice?</strong>
-                <p>@Constants.MSS.ABOUT_MAURICE_1</p>
+                    @_inputModel.MarkupHeader2
+                    @_inputModel.MarkupBody2
+                }
+                else
+                {
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Header1Changed" @bind-Value="@_inputModel.Header1" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @_inputModel.MarkupHeader1
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
 
-                <p>@Constants.MSS.ABOUT_MAURICE_2</p>
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Body1Changed" CssClass="@tbMultiLineCss"
+                                                   @bind-Value="@_inputModel.Body1" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @_inputModel.MarkupBody1
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
 
-                <p>@Constants.MSS.ABOUT_MAURICE_3</p>
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Header2Changed" @bind-Value="@_inputModel.Header2" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @_inputModel.MarkupHeader2
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
 
-                <p>@Constants.MSS.ABOUT_MAURICE_4</p>
-
-                <p>@Constants.MSS.ABOUT_MAURICE_5</p>
-
-                <p>@Constants.MSS.ABOUT_MAURICE_6</p>
-
-                <p>@Constants.MSS.ABOUT_MAURICE_7</p>
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Body2Changed" CssClass="@tbMultiLineCss" @bind-Value="@_inputModel.Body2" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @_inputModel.MarkupBody2
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
+                }
             </div>
         </div>
     </div>
     <!--#endregion-->
-
     <!--#region Card 2 Maurice-->
     <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
         <div class="e-card" ID="maurice-card">
             <!--Picture-->
             <div class="e-card-image">
-                <img id="maurice-picture" src="/Images/Maurice/pasfoto-flat.png"/>
+                <img id="maurice-picture" src="/Images/Maurice/pasfoto-flat.png" />
             </div>
 
             <!--Header-->
@@ -79,21 +175,188 @@
 </div>
 
 <style>
-    #maurice-picture{
-        max-width:100%;
+    #maurice-picture {
+        max-width: 100%;
+    }
+
+    .multilineTextBox{
+        height: inherit;
+    }
+
+    .theme {
+        background-color: #393e46 !important;
+        color: #eeeeee !important;
     }
 </style>
 
 @code{
     private IEnumerable<string> messages;
 
-    private bool _isInEditMode;
+    private InputModel _inputModel;
+
+    private string splitterPaneCss = "theme";
+
+    private string tbMultiLineCss = "multilineTextBox";
 
     protected override Task OnInitializedAsync()
     {
         messages = new[] { BlazorConstants.UNDER_CONSTRUCTION_MESSAGE };
 
+        _inputModel = new InputModel();
+
+        _editPageService.OnToggle += OnToggleEditMode;
+
         return base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender == true)
+        {
+            _spinnerService.ShowSpinner("Fetching page data");
+            string pageJSON = await GetPageDataAsync();
+            _spinnerService.HideSpinner();
+
+            await FillInReceivedData(pageJSON);
+
+            StateHasChanged();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private class InputModel
+    {
+        public MarkupString MarkupTitle1 { get; private set; }
+        private string title1;
+        public string Title1
+        {
+            get => title1;
+            set
+            {
+                title1 = value;
+                MarkupTitle1 = new MarkupString(title1);
+            }
+        }
+
+        public MarkupString MarkupHeader1 { get; private set; }
+        private string header1;
+        public string Header1
+        {
+            get => header1;
+            set
+            {
+                header1 = value;
+                MarkupHeader1 = new MarkupString(header1);
+            }
+        }
+
+        public MarkupString MarkupBody1 { get; private set; }
+        private string body1;
+        public string Body1
+        {
+            get => body1;
+            set
+            {
+                body1 = value;
+                MarkupBody1 = new MarkupString(body1);
+            }
+        }
+
+        public MarkupString MarkupHeader2 { get; private set; }
+        private string header2;
+        public string Header2
+        {
+            get => header2;
+            set
+            {
+                header2 = value;
+                MarkupHeader2 = new MarkupString(header2);
+            }
+        }
+
+        public MarkupString MarkupBody2 { get; private set; }
+        private string body2;
+        public string Body2
+        {
+            get => body2;
+            set
+            {
+                body2 = value;
+                MarkupBody2 = new MarkupString(body2);
+            }
+        }
+    }
+
+    private async Task<string> GetPageDataAsync()
+    {
+        string requestUrl = $"{Constants.APIControllers.EDIT_PAGE}/{Constants.EditPageControllerEndpoints.GET_BY_PAGE_ROUTE}";
+
+        HttpResponseMessage result = null;
+
+        try
+        {
+            result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PutAsJsonAsync(requestUrl, "Index");
+        }
+        catch (Exception ex)
+        {
+            _toastService.ShowExceptionToast(ex);
+        }
+
+        return await result.Content.ReadAsStringAsync();
+    }
+
+    private Task FillInReceivedData(string json)
+    {
+        var plPageSections = JsonConvert.DeserializeObject<List<PLPageSection>>(json);
+
+        _inputModel.Title1 =    plPageSections.First().PLSectionParts.First(p => p.Type == "Title1").Content;
+        _inputModel.Header1 =   plPageSections.First().PLSectionParts.First(p => p.Type == "Header1").Content;
+        _inputModel.Body1 =     plPageSections.First().PLSectionParts.First(p => p.Type == "Body1").Content;
+        _inputModel.Header2 =   plPageSections.First().PLSectionParts.First(p => p.Type == "Header2").Content;
+        _inputModel.Body2 =     plPageSections.First().PLSectionParts.First(p => p.Type == "Body2").Content;
+
+        if(String.IsNullOrEmpty(_inputModel.Title1))
+            _inputModel.Title1 = nameof(_inputModel.Title1) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModel.Header1))
+            _inputModel.Title1 = nameof(_inputModel.Header1) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModel.Body1))
+            _inputModel.Title1 = nameof(_inputModel.Body1) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModel.Header2))
+            _inputModel.Title1 = nameof(_inputModel.Header2) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModel.Body2))
+            _inputModel.Title1 = nameof(_inputModel.Body2) + " was found empty";
+
+        return Task.CompletedTask;
+    }
+
+    private void Title1Changed(InputEventArgs eventArgs)
+    {
+        _inputModel.Title1 = eventArgs.Value;
+    }
+
+    private void Header1Changed(InputEventArgs eventArgs)
+    {
+        _inputModel.Header1 = eventArgs.Value;
+    }
+
+    private void Body1Changed(InputEventArgs eventArgs)
+    {
+        _inputModel.Body1 = eventArgs.Value;
+    }
+
+    private void Header2Changed(InputEventArgs eventArgs)
+    {
+        _inputModel.Header2 = eventArgs.Value;
+    }
+
+    private void Body2Changed(InputEventArgs eventArgs)
+    {
+        _inputModel.Body2 = eventArgs.Value;
     }
 
     private void OnClickLinkedIN()
@@ -106,8 +369,10 @@
         _navigationManager.NavigateTo("https://www.linkedin.com/in/mauriceslegtenhorst/");
     }
 
-    protected override void OnInitialized()
+    private void OnToggleEditMode()
     {
-        base.OnInitialized();
+        StateHasChanged();
     }
+
+    
 }

@@ -17,14 +17,14 @@
 
                 <div class="form-group row">
                     <SfTextBox Type="InputType.Email" Placeholder="Enter Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                ShowClearButton="true" OnBlur="@CheckForm" @bind-Value="@_inputModel.Email" />
+                               ShowClearButton="true" OnBlur="@CheckForm" @bind-Value="@_inputModel.Email" />
 
                     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
                 </div>
 
                 <div class="form-group row">
                     <SfTextBox Type="InputType.Password" Placeholder="Enter Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                ShowClearButton="true" OnBlur="@CheckForm" @bind-Value="@_inputModel.Password" />
+                               ShowClearButton="true" OnBlur="@CheckForm" @bind-Value="@_inputModel.Password" />
 
                     <ValidationMessage For="@(() => _inputModel.Password)" />
                 </div>
@@ -105,6 +105,7 @@
 
 @code
 {
+
     private EditContext _formContext;
 
     private string _emailCssClass = "e-outline e-float-input";
@@ -151,157 +152,162 @@
 
         _inputModel = new InputModel();
 
-        _formContext = new EditContext(_inputModel);
+#if DEBUG
+        _inputModel.Email = "mauricetechsolution@outlook.com";
+        _inputModel.Password = "MTS1991password!";
+#endif
 
-        return base.OnInitializedAsync();
-    }
+_formContext = new EditContext(_inputModel);
 
-    private async Task SubmitForm()
+return base.OnInitializedAsync();
+}
+
+private async Task SubmitForm()
+{
+if (_isEmailValid == false || _isPasswordValid == false)
+    return;
+
+string requestUrl;
+
+if (IsLogin)
+    requestUrl = $"{Constants.APIControllers.IDENTITY}/{Constants.IdentityControllerEndpoints.LOG_IN}";
+else
+    requestUrl = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CREATE_BY_CREDENTIALS}";
+
+HttpResponseMessage result;
+
+_spinnerService.ShowSpinner();
+
+try
+{
+    result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PutAsJsonAsync(requestUrl, _inputModel);
+}
+catch (Exception ex)
+{
+    _toastService.ShowExceptionToast(ex);
+    return;
+}
+finally
+{
+    _spinnerService.HideSpinner();
+}
+
+var resultContentAsString = await result.Content.ReadAsStringAsync();
+
+if (result.IsSuccessStatusCode)
+{
+    if (IsLogin)
     {
-        if (_isEmailValid == false || _isPasswordValid == false)
-            return;
+        await _loginService.Login(resultContentAsString);
 
-        string requestUrl;
-
-        if (IsLogin)
-            requestUrl = $"{Constants.APIControllers.IDENTITY}/{Constants.IdentityControllerEndpoints.LOG_IN}";
-        else
-            requestUrl = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CREATE_BY_CREDENTIALS}";
-
-        HttpResponseMessage result;
-
-        _spinnerService.ShowSpinner();
-
-        try
+        _toastService.ShowToast(new ToastModel
         {
-            result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PutAsJsonAsync(requestUrl, _inputModel);
-        }
-        catch (Exception ex)
-        {
-            _toastService.ShowExceptionToast(ex);
-            return;
-        }
-        finally
-        {
-            _spinnerService.HideSpinner();
-        }
+            CssClass = "e-toast-success",
+            Icon = "e-success toast-icons",
+            Title = "Login was succesfull",
+            Content = $"Account for {_inputModel.Email} is now logged in.",
+            ShowProgressBar = true
+        });
 
-        var resultContentAsString = await result?.Content.ReadAsStringAsync();
-
-        if (result.IsSuccessStatusCode)
-        {
-            if (IsLogin)
-            {
-                await _loginService.Login(resultContentAsString);
-
-                _toastService.ShowToast(new ToastModel
-                {
-                    CssClass = "e-toast-success",
-                    Icon = "e-success toast-icons",
-                    Title = "Login was succesfull",
-                    Content = $"Account for {_inputModel.Email} is now logged in.",
-                    ShowProgressBar = true
-                });
-
-                _navigationManager.NavigateTo("/");
-            }
-            else
-            {
-                _navigationManager.NavigateTo("/account/accountsubmitted");
-            }
-        }
-        else
-        {
-            IEnumerable<string> resultErrors = JsonConvert.DeserializeObject<IEnumerable<string>>(resultContentAsString);
-
-            var stringBuilder = new StringBuilder();
-
-            foreach (var item in resultErrors)
-            {
-                stringBuilder.AppendLine($"- {item}");
-            }
-            Exception ex = new Exception(stringBuilder.ToString());
-            _toastService.ShowExceptionToast(ex);
-        }
+        _navigationManager.NavigateTo("/");
     }
-
-    private void CheckForm()
+    else
     {
-        if (_formContext.Validate() == false)
-        {
-            if (ValidateEmail(_inputModel.Email) == false)
-            {
-                _isEmailValid = false;
-                _emailCssClass = "e-error";
-            }
-            else
-            {
-                _isEmailValid = true;
-                _emailCssClass = "e-success";
-            }
-
-            if (ValidatePassword(_inputModel.Password) == false)
-            {
-                _isPasswordValid = false;
-                _passwordCssClass = "e-error";
-            }
-            else
-            {
-                _isPasswordValid = true;
-                _passwordCssClass = "e-success";
-            }
-        }
-        else
-        {
-            _isEmailValid = true;
-            _isPasswordValid = true;
-            _emailCssClass = "e-success";
-            _passwordCssClass = "e-success";
-        }
+        _navigationManager.NavigateTo("/account/accountsubmitted");
     }
+}
+else
+{
+    IEnumerable<string> resultErrors = JsonConvert.DeserializeObject<IEnumerable<string>>(resultContentAsString);
 
-    private bool ValidateEmail(string email)
+    var stringBuilder = new StringBuilder();
+
+    foreach (var item in resultErrors)
     {
-        if (String.IsNullOrEmpty(email))
-            return false;
-
-        if (email.Length < 6)
-            return false;
-
-        string domainAndTopLvlDomain;
-        string domain;
-
-        try
-        {
-            domainAndTopLvlDomain = email.Split('@')[1];
-
-            domain = domainAndTopLvlDomain.Split('.')[0];
-        }
-        catch
-        {
-            return false;
-        }
-
-        if (Constants.VALID_EMAIL_DOMAINS.Contains(domain) == false)
-            return false;
-
-        try
-        {
-            var _email = new MailAddress(email.Normalize());
-        }
-        catch
-        {
-            return false;
-        }
-
-        return true;
+        stringBuilder.AppendLine($"- {item}");
     }
+    Exception ex = new Exception(stringBuilder.ToString());
+    _toastService.ShowExceptionToast(ex);
+}
+}
 
-    private bool ValidatePassword(string password)
+private void CheckForm()
+{
+if (_formContext.Validate() == false)
+{
+    if (ValidateEmail(_inputModel.Email) == false)
     {
-        if (String.IsNullOrEmpty(password))
-            return false;
-
-        return _passwordRegex.IsMatch(password);
+        _isEmailValid = false;
+        _emailCssClass = "e-error";
     }
+    else
+    {
+        _isEmailValid = true;
+        _emailCssClass = "e-success";
+    }
+
+    if (ValidatePassword(_inputModel.Password) == false)
+    {
+        _isPasswordValid = false;
+        _passwordCssClass = "e-error";
+    }
+    else
+    {
+        _isPasswordValid = true;
+        _passwordCssClass = "e-success";
+    }
+}
+else
+{
+    _isEmailValid = true;
+    _isPasswordValid = true;
+    _emailCssClass = "e-success";
+    _passwordCssClass = "e-success";
+}
+}
+
+private bool ValidateEmail(string email)
+{
+if (String.IsNullOrEmpty(email))
+    return false;
+
+if (email.Length < 6)
+    return false;
+
+string domainAndTopLvlDomain;
+string domain;
+
+try
+{
+    domainAndTopLvlDomain = email.Split('@')[1];
+
+    domain = domainAndTopLvlDomain.Split('.')[0];
+}
+catch
+{
+    return false;
+}
+
+if (Constants.VALID_EMAIL_DOMAINS.Contains(domain) == false)
+    return false;
+
+try
+{
+    var _email = new MailAddress(email.Normalize());
+}
+catch
+{
+    return false;
+}
+
+return true;
+}
+
+private bool ValidatePassword(string password)
+{
+if (String.IsNullOrEmpty(password))
+    return false;
+
+return _passwordRegex.IsMatch(password);
+}
 }

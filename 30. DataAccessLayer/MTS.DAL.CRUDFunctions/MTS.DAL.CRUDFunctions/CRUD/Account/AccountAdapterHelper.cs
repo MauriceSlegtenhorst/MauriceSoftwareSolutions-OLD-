@@ -118,6 +118,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
 
                 try
                 {
+                    // TODO Set this in EnviromentVariables instead of hardcoded
                     createAccountResult = await _userManager.CreateAsync((DALUserAccount)account, "MTS1991password!");
                 }
                 catch (Exception ex)

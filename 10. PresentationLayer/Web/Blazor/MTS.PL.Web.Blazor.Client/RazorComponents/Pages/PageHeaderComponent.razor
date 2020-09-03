@@ -1,20 +1,17 @@
-﻿@*<div>
-        <div id="header-container" />
-        <div id="header-content">
-            <h1>@PageName</h1>
-            <h4>@Subtitle</h4>
-        </div>
-    </div>*@
+﻿@inject IEditPageService _editPageService
 
-    <div class=" overlay-image _b1 ">
-        @*<img class=" image _b2 " src="/Images/Coding/JSBlazorCode.png" alt="Image could not load" />*@
-        <div class=" image" />
-        <div class=" text _2 ">
-            <h1>@PageName</h1>
-            <h4>@Subtitle</h4>
-        </div>
-
+<div class="overlay-image _b1 ">
+    <div class=" image" />
+    <div class=" text _2 ">
+        <h1>@PageName</h1>
+        <h4>@Subtitle</h4>
+        <AuthorizeView Roles="@_roles">
+            <Authorized>
+                <SfButton CssClass="e-small" OnClick="ToggleEdit">@_editMode</SfButton>
+            </Authorized>
+        </AuthorizeView>
     </div>
+</div>
 
 
 @code {
@@ -23,4 +20,28 @@
 
     [Parameter]
     public string Subtitle { get; set; }
+
+    private string _editMode;
+
+    private string _roles = $"{Constants.Security.ADMINISTRATOR},{Constants.Security.PRIVILEGED_EMPLOYEE},{Constants.Security.EMPLOYEE}";
+
+    protected override Task OnInitializedAsync()
+    {
+        _editMode = (_editPageService.GetEditMode() ? "Save" : "Edit");
+        return base.OnInitializedAsync();
+    }
+
+    private void ToggleEdit()
+    {
+        if (_editPageService.GetEditMode() != true)
+        {
+            _editMode = "Save";
+        }
+        else
+        {
+            _editMode = "Edit";
+        }
+
+        _editPageService.ToggleEditMode();
+    }
 }
