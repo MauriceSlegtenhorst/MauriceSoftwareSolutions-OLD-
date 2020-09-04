@@ -35,6 +35,7 @@ namespace MTS.DAL.DatabaseAccess.DataContext
 
             Guid[] sectionIds = new Guid[]
             {
+                Guid.NewGuid(),
                 Guid.NewGuid()
             };
 
@@ -44,12 +45,19 @@ namespace MTS.DAL.DatabaseAccess.DataContext
                 {
                     PageSectionId = sectionIds[0],
                     PageRoute = "Index"
-                });
+                },
+                new DALPageSection
+                {
+                    PageSectionId = sectionIds[1],
+                    PageRoute = "Index"
+                }
+                );
             });
 
             builder.Entity<DALSectionPart>(sectionPart =>
             {
                 sectionPart.HasData(
+                #region Section 1
                     new DALSectionPart
                     {
                         SectionPartId = Guid.NewGuid(),
@@ -98,8 +106,68 @@ namespace MTS.DAL.DatabaseAccess.DataContext
                         .Append("<p>").Append(Constants.MSS.ABOUT_MAURICE_7).Append("</p>")
                         .ToString(),
                         PageSectionFK = sectionIds[0]
+                    },
+#endregion
+                #region Section 2
+                    new DALSectionPart
+                    {
+                        SectionPartId = Guid.NewGuid(),
+                        Type = "Title1",
+                        Content = "<h4>Maurice Slegtenhorst</h4>",
+                        PageSectionFK = sectionIds[1]
+                    },
+                    new DALSectionPart
+                    {
+                        SectionPartId = Guid.NewGuid(),
+                        Type = "SubTitle1",
+                        Content = "<h5>C# Software Developer</h5>",
+                        PageSectionFK = sectionIds[1]
+                    },
+                    new DALSectionPart
+                    {
+                        SectionPartId = Guid.NewGuid(),
+                        Type = "Header1",
+                        Content = "<strong>Contact information</strong>",
+                        PageSectionFK = sectionIds[1]
+                    },
+                    new DALSectionPart
+                    {
+                        SectionPartId = Guid.NewGuid(),
+                        Type = "Body1",
+                        Content =
+                        "<div class=\"row\"><div class=\"col - 6\">Phone number:</div><div class=\"col - 6\">+31 645377536</div></div><div class=\"row\"><div class=\"col - 6\">Personal e-mail:</div><div class=\"col - 6\">maurice.slegtenhorst@outlook.com</div></div><div class=\"row\"><div class=\"col - 6\">Student e-mail</div><div class=\"col - 6\">maurice.slegtenhorst@itvitaelearning.nl</div></div></p>",
+                        PageSectionFK = sectionIds[1]
+                    },
+                    new DALSectionPart
+                    {
+                        SectionPartId = Guid.NewGuid(),
+                        Type = "Header2",
+                        Content = "<strong>What can he do?</strong>",
+                        PageSectionFK = sectionIds[1]
+                    },
+                    new DALSectionPart
+                    {
+                        SectionPartId = Guid.NewGuid(),
+                        Type = "Body2",
+                        Content = $"<p>{Constants.MSS.MAURICE_SKILLS}</p>",
+                        PageSectionFK = sectionIds[1]
+                    },
+                    new DALSectionPart
+                    {
+                        SectionPartId = Guid.NewGuid(),
+                        Type = "Header3",
+                        Content = "<strong>Maurice in a nutshell</strong>",
+                        PageSectionFK = sectionIds[1]
+                    },
+                    new DALSectionPart
+                    {
+                        SectionPartId = Guid.NewGuid(),
+                        Type = "Body3",
+                        Content = $"<p>{Constants.MSS.ABOUT_MAURICE_SHORT}</p>",
+                        PageSectionFK = sectionIds[1]
                     }
-                    );
+                    #endregion
+                );
             });
             
         }

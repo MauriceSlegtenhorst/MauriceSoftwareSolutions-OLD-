@@ -120,6 +120,13 @@ a, .btn-link {
     max-width: 100%;
 }
 
+.multilineTextBox {
+    height: 100%;
+    height: -moz-available; /* WebKit-based browsers will ignore this. */
+    height: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+    height: fill-available;
+}
+
 .alert-icon {
     float: left;
     font-size: 1.5rem;

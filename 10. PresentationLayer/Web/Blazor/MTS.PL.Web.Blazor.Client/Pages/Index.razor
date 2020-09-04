@@ -17,7 +17,7 @@
                     <div class="e-card-header-title">
                         @if (_editPageService.GetEditMode() == false)
                         {
-                            @_inputModel.MarkupTitle1
+                            @_inputModelSection1.MarkupTitle1
                         }
                         else
                         {
@@ -26,14 +26,14 @@
                                     <SplitterPane Size="50%" Min="30%">
                                         <ContentTemplate>
                                             <div class="p-3">
-                                                <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Title1Changed" @bind-Value="@_inputModel.Title1"/>
+                                                <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section1Title1Changed" @bind-Value="@_inputModelSection1.Title1"/>
                                             </div>
                                         </ContentTemplate>
                                     </SplitterPane>
                                     <SplitterPane Size="50%" Min="30%">
                                         <ContentTemplate >
                                             <div class="p-3">
-                                                @_inputModel.MarkupTitle1
+                                                @_inputModelSection1.MarkupTitle1
                                             </div>
                                         </ContentTemplate>
                                     </SplitterPane>
@@ -46,11 +46,11 @@
             <div class="e-card-content">
                 @if (_editPageService.GetEditMode() == false)
                 {
-                    @_inputModel.MarkupHeader1
-                    @_inputModel.MarkupBody1
+                    @_inputModelSection1.MarkupHeader1
+                    @_inputModelSection1.MarkupBody1
 
-                    @_inputModel.MarkupHeader2
-                    @_inputModel.MarkupBody2
+                    @_inputModelSection1.MarkupHeader2
+                    @_inputModelSection1.MarkupBody2
                 }
                 else
                 {
@@ -59,14 +59,34 @@
                             <SplitterPane Size="50%" Min="30%" Collapsible="true">
                                 <ContentTemplate>
                                     <div class="p-3">
-                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Header1Changed" @bind-Value="@_inputModel.Header1" />
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section1Header1Changed" @bind-Value="@_inputModelSection1.Header1" />
                                     </div>
                                 </ContentTemplate>
                             </SplitterPane>
                             <SplitterPane Size="50%" Min="30%" Collapsible="true">
                                 <ContentTemplate>
                                     <div class="p-3">
-                                        @_inputModel.MarkupHeader1
+                                        @_inputModelSection1.MarkupHeader1
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
+
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3 fill-maxed">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section1Body1Changed" CssClass="@tbMultiLineCss"
+                                                   @bind-Value="@_inputModelSection1.Body1" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @_inputModelSection1.MarkupBody1
                                     </div>
                                 </ContentTemplate>
                             </SplitterPane>
@@ -78,34 +98,14 @@
                             <SplitterPane Size="50%" Min="30%" Collapsible="true">
                                 <ContentTemplate>
                                     <div class="p-3">
-                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Body1Changed" CssClass="@tbMultiLineCss"
-                                                   @bind-Value="@_inputModel.Body1" />
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section1Header2Changed" @bind-Value="@_inputModelSection1.Header2" />
                                     </div>
                                 </ContentTemplate>
                             </SplitterPane>
                             <SplitterPane Size="50%" Min="30%" Collapsible="true">
                                 <ContentTemplate>
                                     <div class="p-3">
-                                        @_inputModel.MarkupBody1
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                        </SplitterPanes>
-                    </SfSplitter>
-
-                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
-                        <SplitterPanes>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Header2Changed" @bind-Value="@_inputModel.Header2" />
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        @_inputModel.MarkupHeader2
+                                        @_inputModelSection1.MarkupHeader2
                                     </div>
                                 </ContentTemplate>
                             </SplitterPane>
@@ -116,15 +116,15 @@
                         <SplitterPanes>
                             <SplitterPane Size="50%" Min="30%" Collapsible="true">
                                 <ContentTemplate>
-                                    <div class="p-3">
-                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Body2Changed" CssClass="@tbMultiLineCss" @bind-Value="@_inputModel.Body2" />
+                                    <div class="p-3 fill-maxed">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section1Body2Changed" CssClass="@tbMultiLineCss" @bind-Value="@_inputModelSection1.Body2" />
                                     </div>
                                 </ContentTemplate>
                             </SplitterPane>
                             <SplitterPane Size="50%" Min="30%" Collapsible="true">
                                 <ContentTemplate>
                                     <div class="p-3">
-                                        @_inputModel.MarkupBody2
+                                        @_inputModelSection1.MarkupBody2
                                     </div>
                                 </ContentTemplate>
                             </SplitterPane>
@@ -147,21 +147,192 @@
             <div class="e-card-header">
                 <div class="e-card-header-caption">
                     <div class="e-card-header-title">
-                        <h4>Maurice Slegtenhorst</h4>
+                        @if (_editPageService.GetEditMode() == false)
+                        {
+                            @_inputModelSection2.MarkupTitle1
+                        }
+                        else
+                        {
+                            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                                <SplitterPanes>
+                                    <SplitterPane Size="50%" Min="30%">
+                                        <ContentTemplate>
+                                            <div class="p-3">
+                                                <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2Title1Changed" @bind-Value="@_inputModelSection2.Title1" />
+                                            </div>
+                                        </ContentTemplate>
+                                    </SplitterPane>
+                                    <SplitterPane Size="50%" Min="30%">
+                                        <ContentTemplate>
+                                            <div class="p-3">
+                                                @_inputModelSection2.MarkupTitle1
+                                            </div>
+                                        </ContentTemplate>
+                                    </SplitterPane>
+                                </SplitterPanes>
+                            </SfSplitter>
+                        }
                     </div>
                     <div class="e-card-sub-title">
-                        <h5>C# Software Developer</h5>
+                        @if (_editPageService.GetEditMode() == false)
+                        {
+                            @_inputModelSection2.MarkupSubTitle1
+                        }
+                        else
+                        {
+                            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                                <SplitterPanes>
+                                    <SplitterPane Size="50%" Min="30%">
+                                        <ContentTemplate>
+                                            <div class="p-3">
+                                                <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2Title1Changed" @bind-Value="@_inputModelSection2.SubTitle1" />
+                                            </div>
+                                        </ContentTemplate>
+                                    </SplitterPane>
+                                    <SplitterPane Size="50%" Min="30%">
+                                        <ContentTemplate>
+                                            <div class="p-3">
+                                                @_inputModelSection2.MarkupSubTitle1
+                                            </div>
+                                        </ContentTemplate>
+                                    </SplitterPane>
+                                </SplitterPanes>
+                            </SfSplitter>
+                        }
                     </div>
                 </div>
             </div>
 
             <!--Body-->
             <div class="e-card-content">
-                <strong>What can he do?</strong>
-                <p>@Constants.MSS.MAURICE_SKILLS</p>
+                @if (_editPageService.GetEditMode() == false)
+                {
+                    @_inputModelSection2.MarkupHeader1
+                    @_inputModelSection2.MarkupBody1
 
-                <strong>Maurice in a nutshell</strong>
-                <p>@Constants.MSS.ABOUT_MAURICE_SHORT</p>
+                    @_inputModelSection2.MarkupHeader2
+                    @_inputModelSection2.MarkupBody2
+
+                    @_inputModelSection2.MarkupHeader3
+                    @_inputModelSection2.MarkupBody3
+                }
+                else
+                {
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2Header1Changed" @bind-Value="@_inputModelSection2.Header1" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @_inputModelSection2.MarkupHeader1
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
+
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3 fill-maxed">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section2Body1Changed" CssClass="@tbMultiLineCss"
+                                                   @bind-Value="@_inputModelSection2.Body1" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @_inputModelSection2.MarkupBody1
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
+
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2Header2Changed" @bind-Value="@_inputModelSection2.Header2" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @_inputModelSection2.MarkupHeader2
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
+
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3 fill-maxed">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section2Body2Changed" CssClass="@tbMultiLineCss" @bind-Value="@_inputModelSection2.Body2" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @_inputModelSection2.MarkupBody2
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
+
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2Header3Changed" @bind-Value="@_inputModelSection2.Header3" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @_inputModelSection2.MarkupHeader3
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
+
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3 fill-maxed">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section2Body3Changed" CssClass="@tbMultiLineCss" @bind-Value="@_inputModelSection2.Body3" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @_inputModelSection2.MarkupBody3
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
+                }
             </div>
 
             <!--Footer-->
@@ -179,10 +350,6 @@
         max-width: 100%;
     }
 
-    .multilineTextBox{
-        height: inherit;
-    }
-
     .theme {
         background-color: #393e46 !important;
         color: #eeeeee !important;
@@ -192,41 +359,20 @@
 @code{
     private IEnumerable<string> messages;
 
-    private InputModel _inputModel;
+    private InputModelSection1 _inputModelSection1;
+
+    private InputModelSection2 _inputModelSection2;
 
     private string splitterPaneCss = "theme";
 
-    private string tbMultiLineCss = "multilineTextBox";
+    private string tbMultiLineCss = "fill-maxed";
 
-    protected override Task OnInitializedAsync()
+    private class InputModelSection1
     {
-        messages = new[] { BlazorConstants.UNDER_CONSTRUCTION_MESSAGE };
 
-        _inputModel = new InputModel();
+        public Guid SectionId { get; set; }
 
-        _editPageService.OnToggle += OnToggleEditMode;
-
-        return base.OnInitializedAsync();
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if(firstRender == true)
-        {
-            _spinnerService.ShowSpinner("Fetching page data");
-            string pageJSON = await GetPageDataAsync();
-            _spinnerService.HideSpinner();
-
-            await FillInReceivedData(pageJSON);
-
-            StateHasChanged();
-        }
-
-        await base.OnAfterRenderAsync(firstRender);
-    }
-
-    private class InputModel
-    {
+        public Guid Title1PartId { get; set; }
         public MarkupString MarkupTitle1 { get; private set; }
         private string title1;
         public string Title1
@@ -239,6 +385,7 @@
             }
         }
 
+        public Guid Header1PartId { get; set; }
         public MarkupString MarkupHeader1 { get; private set; }
         private string header1;
         public string Header1
@@ -251,6 +398,7 @@
             }
         }
 
+        public Guid Body1PartId { get; set; }
         public MarkupString MarkupBody1 { get; private set; }
         private string body1;
         public string Body1
@@ -263,6 +411,7 @@
             }
         }
 
+        public Guid Header2PartId { get; set; }
         public MarkupString MarkupHeader2 { get; private set; }
         private string header2;
         public string Header2
@@ -275,6 +424,7 @@
             }
         }
 
+        public Guid Body2PartId { get; set; }
         public MarkupString MarkupBody2 { get; private set; }
         private string body2;
         public string Body2
@@ -286,6 +436,134 @@
                 MarkupBody2 = new MarkupString(body2);
             }
         }
+    }
+
+    private class InputModelSection2
+    {
+
+        public Guid SectionId { get; set; }
+
+        public Guid Title1PartId { get; set; }
+        public MarkupString MarkupTitle1 { get; private set; }
+        private string title1;
+        public string Title1
+        {
+            get => title1;
+            set
+            {
+                title1 = value;
+                MarkupTitle1 = new MarkupString(title1);
+            }
+        }
+
+        public Guid SubTitle1PartId { get; set; }
+        public MarkupString MarkupSubTitle1 { get; private set; }
+        private string subTitle1;
+        public string SubTitle1
+        {
+            get => subTitle1;
+            set
+            {
+                subTitle1 = value;
+                MarkupSubTitle1 = new MarkupString(subTitle1);
+            }
+        }
+
+        public Guid Header1PartId { get; set; }
+        public MarkupString MarkupHeader1 { get; private set; }
+        private string header1;
+        public string Header1
+        {
+            get => header1;
+            set
+            {
+                header1 = value;
+                MarkupHeader1 = new MarkupString(header1);
+            }
+        }
+
+        public Guid Body1PartId { get; set; }
+        public MarkupString MarkupBody1 { get; private set; }
+        private string body1;
+        public string Body1
+        {
+            get => body1;
+            set
+            {
+                body1 = value;
+                MarkupBody1 = new MarkupString(body1);
+            }
+        }
+
+        public Guid Header2PartId { get; set; }
+        public MarkupString MarkupHeader2 { get; private set; }
+        private string header2;
+        public string Header2
+        {
+            get => header2;
+            set
+            {
+                header2 = value;
+                MarkupHeader2 = new MarkupString(header2);
+            }
+        }
+
+        public Guid Body2PartId { get; set; }
+        public MarkupString MarkupBody2 { get; private set; }
+        private string body2;
+        public string Body2
+        {
+            get => body2;
+            set
+            {
+                body2 = value;
+                MarkupBody2 = new MarkupString(body2);
+            }
+        }
+
+        public Guid Header3PartId { get; set; }
+        public MarkupString MarkupHeader3 { get; private set; }
+        private string header3;
+        public string Header3
+        {
+            get => header3;
+            set
+            {
+                header3 = value;
+                MarkupHeader3 = new MarkupString(header3);
+            }
+        }
+
+        public Guid Body3PartId { get; set; }
+        public MarkupString MarkupBody3 { get; private set; }
+        private string body3;
+        public string Body3
+        {
+            get => body3;
+            set
+            {
+                body3 = value;
+                MarkupBody3 = new MarkupString(body3);
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _inputModelSection1 = new InputModelSection1();
+
+        _inputModelSection2 = new InputModelSection2();
+
+        // TODO do this more early when page is requested
+        string pageJSON = await GetPageDataAsync();
+
+        await FillInReceivedData(pageJSON);
+
+        messages = new[] { BlazorConstants.UNDER_CONSTRUCTION_MESSAGE };
+
+        _editPageService.OnToggle += OnToggleEditMode;
+
+        await base.OnInitializedAsync();
     }
 
     private async Task<string> GetPageDataAsync()
@@ -310,54 +588,167 @@
     {
         var plPageSections = JsonConvert.DeserializeObject<List<PLPageSection>>(json);
 
-        _inputModel.Title1 =    plPageSections.First().PLSectionParts.First(p => p.Type == "Title1").Content;
-        _inputModel.Header1 =   plPageSections.First().PLSectionParts.First(p => p.Type == "Header1").Content;
-        _inputModel.Body1 =     plPageSections.First().PLSectionParts.First(p => p.Type == "Body1").Content;
-        _inputModel.Header2 =   plPageSections.First().PLSectionParts.First(p => p.Type == "Header2").Content;
-        _inputModel.Body2 =     plPageSections.First().PLSectionParts.First(p => p.Type == "Body2").Content;
-
-        if(String.IsNullOrEmpty(_inputModel.Title1))
-            _inputModel.Title1 = nameof(_inputModel.Title1) + " was found empty";
-
-        if (String.IsNullOrEmpty(_inputModel.Header1))
-            _inputModel.Title1 = nameof(_inputModel.Header1) + " was found empty";
-
-        if (String.IsNullOrEmpty(_inputModel.Body1))
-            _inputModel.Title1 = nameof(_inputModel.Body1) + " was found empty";
-
-        if (String.IsNullOrEmpty(_inputModel.Header2))
-            _inputModel.Title1 = nameof(_inputModel.Header2) + " was found empty";
-
-        if (String.IsNullOrEmpty(_inputModel.Body2))
-            _inputModel.Title1 = nameof(_inputModel.Body2) + " was found empty";
+        FillInSection1(plPageSections.First());
+        FillInSection2(plPageSections.Skip(1).First());
 
         return Task.CompletedTask;
     }
 
-    private void Title1Changed(InputEventArgs eventArgs)
+    private void FillInSection1(PLPageSection plPageSection)
     {
-        _inputModel.Title1 = eventArgs.Value;
+        _inputModelSection1.SectionId = plPageSection.PageSectionId;
+
+        _inputModelSection1.Title1PartId = plPageSection.PLSectionParts.First(p => p.Type == "Title1").SectionPartId;
+        _inputModelSection1.Title1 = plPageSection.PLSectionParts.First(p => p.Type == "Title1").Content;
+
+        _inputModelSection1.Header1PartId = plPageSection.PLSectionParts.First(p => p.Type == "Header1").SectionPartId;
+        _inputModelSection1.Header1 = plPageSection.PLSectionParts.First(p => p.Type == "Header1").Content;
+
+        _inputModelSection1.Body1PartId = plPageSection.PLSectionParts.First(p => p.Type == "Body1").SectionPartId;
+        _inputModelSection1.Body1 = plPageSection.PLSectionParts.First(p => p.Type == "Body1").Content;
+
+        _inputModelSection1.Header2PartId = plPageSection.PLSectionParts.First(p => p.Type == "Header2").SectionPartId;
+        _inputModelSection1.Header2 = plPageSection.PLSectionParts.First(p => p.Type == "Header2").Content;
+
+        _inputModelSection1.Body2PartId = plPageSection.PLSectionParts.First(p => p.Type == "Body2").SectionPartId;
+        _inputModelSection1.Body2 = plPageSection.PLSectionParts.First(p => p.Type == "Body2").Content;
+
+        if (String.IsNullOrEmpty(_inputModelSection1.Title1))
+            _inputModelSection1.Title1 = nameof(_inputModelSection1.Title1) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModelSection1.Header1))
+            _inputModelSection1.Title1 = nameof(_inputModelSection1.Header1) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModelSection1.Body1))
+            _inputModelSection1.Title1 = nameof(_inputModelSection1.Body1) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModelSection1.Header2))
+            _inputModelSection1.Title1 = nameof(_inputModelSection1.Header2) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModelSection1.Body2))
+            _inputModelSection1.Title1 = nameof(_inputModelSection1.Body2) + " was found empty";
     }
 
-    private void Header1Changed(InputEventArgs eventArgs)
+    private void FillInSection2(PLPageSection plPageSection)
     {
-        _inputModel.Header1 = eventArgs.Value;
+        _inputModelSection2.SectionId = plPageSection.PageSectionId;
+
+        _inputModelSection2.Title1PartId = plPageSection.PLSectionParts.First(p => p.Type == "Title1").SectionPartId;
+        _inputModelSection2.Title1 = plPageSection.PLSectionParts.First(p => p.Type == "Title1").Content;
+
+        _inputModelSection2.SubTitle1PartId = plPageSection.PLSectionParts.First(p => p.Type == "SubTitle1").SectionPartId;
+        _inputModelSection2.SubTitle1 = plPageSection.PLSectionParts.First(p => p.Type == "SubTitle1").Content;
+
+        _inputModelSection2.Header1PartId = plPageSection.PLSectionParts.First(p => p.Type == "Header1").SectionPartId;
+        _inputModelSection2.Header1 = plPageSection.PLSectionParts.First(p => p.Type == "Header1").Content;
+
+        _inputModelSection2.Body1PartId = plPageSection.PLSectionParts.First(p => p.Type == "Body1").SectionPartId;
+        _inputModelSection2.Body1 = plPageSection.PLSectionParts.First(p => p.Type == "Body1").Content;
+
+        _inputModelSection2.Header2PartId = plPageSection.PLSectionParts.First(p => p.Type == "Header2").SectionPartId;
+        _inputModelSection2.Header2 = plPageSection.PLSectionParts.First(p => p.Type == "Header2").Content;
+
+        _inputModelSection2.Body2PartId = plPageSection.PLSectionParts.First(p => p.Type == "Body2").SectionPartId;
+        _inputModelSection2.Body2 = plPageSection.PLSectionParts.First(p => p.Type == "Body2").Content;
+
+        _inputModelSection2.Header3PartId = plPageSection.PLSectionParts.First(p => p.Type == "Header3").SectionPartId;
+        _inputModelSection2.Header3 = plPageSection.PLSectionParts.First(p => p.Type == "Header3").Content;
+
+        _inputModelSection2.Body3PartId = plPageSection.PLSectionParts.First(p => p.Type == "Body3").SectionPartId;
+        _inputModelSection2.Body3 = plPageSection.PLSectionParts.First(p => p.Type == "Body3").Content;
+
+        if (String.IsNullOrEmpty(_inputModelSection2.Title1))
+            _inputModelSection2.Title1 = nameof(_inputModelSection2.Title1) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModelSection2.SubTitle1))
+            _inputModelSection2.SubTitle1 = nameof(_inputModelSection2.SubTitle1) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModelSection2.Header1))
+            _inputModelSection2.Header1 = nameof(_inputModelSection2.Header1) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModelSection2.Body1))
+            _inputModelSection2.Body1 = nameof(_inputModelSection2.Body1) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModelSection2.Header2))
+            _inputModelSection2.Header2 = nameof(_inputModelSection2.Header2) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModelSection2.Body2))
+            _inputModelSection2.Body2 = nameof(_inputModelSection2.Body2) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModelSection2.Header3))
+            _inputModelSection2.Header3 = nameof(_inputModelSection2.Header3) + " was found empty";
+
+        if (String.IsNullOrEmpty(_inputModelSection2.Body3))
+            _inputModelSection2.Body3 = nameof(_inputModelSection2.Body3) + " was found empty";
     }
 
-    private void Body1Changed(InputEventArgs eventArgs)
+    #region Section 1 methods
+    private void Section1Title1Changed(InputEventArgs eventArgs)
     {
-        _inputModel.Body1 = eventArgs.Value;
+        _inputModelSection1.Title1 = eventArgs.Value;
     }
 
-    private void Header2Changed(InputEventArgs eventArgs)
+    private void Section1Header1Changed(InputEventArgs eventArgs)
     {
-        _inputModel.Header2 = eventArgs.Value;
+        _inputModelSection1.Header1 = eventArgs.Value;
     }
 
-    private void Body2Changed(InputEventArgs eventArgs)
+    private void Section1Body1Changed(InputEventArgs eventArgs)
     {
-        _inputModel.Body2 = eventArgs.Value;
+        _inputModelSection1.Body1 = eventArgs.Value;
     }
+
+    private void Section1Header2Changed(InputEventArgs eventArgs)
+    {
+        _inputModelSection1.Header2 = eventArgs.Value;
+    }
+
+    private void Section1Body2Changed(InputEventArgs eventArgs)
+    {
+        _inputModelSection1.Body2 = eventArgs.Value;
+    }
+    #endregion
+    #region Section 2 methods
+    private void Section2Title1Changed(InputEventArgs eventArgs)
+    {
+        _inputModelSection2.Title1 = eventArgs.Value;
+    }
+
+    private void Section2SubTitle1Changed(InputEventArgs eventArgs)
+    {
+        _inputModelSection2.SubTitle1 = eventArgs.Value;
+    }
+
+    private void Section2Header1Changed(InputEventArgs eventArgs)
+    {
+        _inputModelSection2.Header1 = eventArgs.Value;
+    }
+
+    private void Section2Body1Changed(InputEventArgs eventArgs)
+    {
+        _inputModelSection2.Body1 = eventArgs.Value;
+    }
+
+    private void Section2Header2Changed(InputEventArgs eventArgs)
+    {
+        _inputModelSection2.Header2 = eventArgs.Value;
+    }
+
+    private void Section2Body2Changed(InputEventArgs eventArgs)
+    {
+        _inputModelSection2.Body2 = eventArgs.Value;
+    }
+
+    private void Section2Header3Changed(InputEventArgs eventArgs)
+    {
+        _inputModelSection2.Header3 = eventArgs.Value;
+    }
+
+    private void Section2Body3Changed(InputEventArgs eventArgs)
+    {
+        _inputModelSection2.Body3 = eventArgs.Value;
+    }
+    #endregion
 
     private void OnClickLinkedIN()
     {
@@ -369,10 +760,101 @@
         _navigationManager.NavigateTo("https://www.linkedin.com/in/mauriceslegtenhorst/");
     }
 
-    private void OnToggleEditMode()
+    private async void OnToggleEditMode()
     {
+        _spinnerService.ShowSpinner("Changing edit mode");
+
+        if (_editPageService.GetEditMode() == false)
+        {
+
+
+            HttpResponseMessage response = await SavePageDataAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                _toastService.ShowSuccessToast("Home page content save succesfull.");
+            }
+            else
+            {
+                _toastService.ShowExceptionToast(new Exception(await response.Content.ReadAsStringAsync()));
+            }
+        }
+
+        _spinnerService.HideSpinner();
+
         StateHasChanged();
     }
 
-    
+    private async Task<HttpResponseMessage> SavePageDataAsync()
+    {
+        //Debug.WriteLine($"{nameof(SavePageDataAsync)} executed");
+        PLPageSection[] plPageSections = await ConvertInputData();
+
+        HttpResponseMessage httpResponseMessage = null;
+
+        string requestUrl = $"{Constants.APIControllers.EDIT_PAGE}/{Constants.EditPageControllerEndpoints.UPDATE_BY_PAGE_SECTIONS}";
+
+        try
+        {
+            httpResponseMessage = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PutAsJsonAsync(requestUrl, plPageSections);
+        }
+        catch (Exception ex)
+        {
+            _toastService.ShowExceptionToast(ex);
+        }
+
+        return httpResponseMessage;
+    }
+
+    private Task<PLPageSection[]> ConvertInputData()
+    {
+        PLPageSection[] pageSections = new PLPageSection[]
+        {
+            new PLPageSection
+            {
+                PageRoute="Index",
+                PageSectionId = _inputModelSection1.SectionId,
+                PLSectionParts = new PLSectionPart[]
+                {
+                    new PLSectionPart
+                    {
+                        PageSectionId = _inputModelSection1.SectionId,
+                        SectionPartId = _inputModelSection1.Title1PartId,
+                        Content = _inputModelSection1.Title1,
+                        Type = nameof(_inputModelSection1.Title1)
+                    },
+                    new PLSectionPart
+                    {
+                        PageSectionId = _inputModelSection1.SectionId,
+                        SectionPartId = _inputModelSection1.Header1PartId,
+                        Content = _inputModelSection1.Header1,
+                        Type = nameof(_inputModelSection1.Header1)
+                    },
+                    new PLSectionPart
+                    {
+                        PageSectionId = _inputModelSection1.SectionId,
+                        SectionPartId = _inputModelSection1.Body1PartId,
+                        Content = _inputModelSection1.Body1,
+                        Type = nameof(_inputModelSection1.Body1)
+                    },
+                    new PLSectionPart
+                    {
+                        PageSectionId = _inputModelSection1.SectionId,
+                        SectionPartId = _inputModelSection1.Header2PartId,
+                        Content = _inputModelSection1.Header2,
+                        Type = nameof(_inputModelSection1.Header2)
+                    },
+                    new PLSectionPart
+                    {
+                        PageSectionId = _inputModelSection1.SectionId,
+                        SectionPartId = _inputModelSection1.Body2PartId,
+                        Content = _inputModelSection1.Body2,
+                        Type = nameof(_inputModelSection1.Body2)
+                    }
+                }
+            }
+        };
+
+        return Task.FromResult(pageSections);
+    }
 }

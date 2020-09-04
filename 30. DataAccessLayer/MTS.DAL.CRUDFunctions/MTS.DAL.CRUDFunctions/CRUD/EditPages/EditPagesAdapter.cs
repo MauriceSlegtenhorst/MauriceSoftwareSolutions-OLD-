@@ -28,9 +28,11 @@ namespace MTS.DAL.DatabaseAccess.CRUD.EditPages
             if (String.IsNullOrEmpty(pageRoute))
                 throw new ArgumentException("Parameters pageRoute cannot be null or empty");
 
-            var result = _dbContext.PageSections.Where(ps => ps.PageRoute == pageRoute).Include(sp => sp.DALSectionParts);
+            var result = _dbContext.PageSections.Where(ps => ps.PageRoute == pageRoute).Include(sp => sp.DALSectionParts).AsNoTracking();
 
-            return await result.ToArrayAsync();
+            ICollection<IBLPageSection> blPageSections = await result.ToArrayAsync();
+
+            return blPageSections;
         }
 
         public async Task<IBLPageSection> ReadByIdAsync(string id)
@@ -51,7 +53,28 @@ namespace MTS.DAL.DatabaseAccess.CRUD.EditPages
         }
         #endregion
 
-        #region Write
+        #region Update
+        public async Task UpdateByPageSectionsAsync(ICollection<IBLPageSection> blPageSections)
+        {
+            if (blPageSections == null)
+                throw new ArgumentNullException($"{nameof(blPageSections)} was null");
+
+            foreach (IBLPageSection blPageSection in blPageSections)
+            {
+                //DALPageSection pageFromDB = _dbContext.PageSections.First(ps => ps.PageSectionId == blPageSection.PageSectionId);
+
+                //pageFromDB.Parts = blPageSection.Parts;
+
+                foreach (IBLSectionPart blPart in blPageSection.Parts)
+                {
+                    _dbContext.Update(blPart);
+                }
+
+                _dbContext.Update((DALPageSection)blPageSection);
+            }
+
+            await _dbContext.SaveChangesAsync();
+        }
         #endregion
 
         #region Delete

@@ -9,5 +9,7 @@ namespace MTS.BL.Infra.Interfaces.Standard.DatabaseAdapter
         Task<ICollection<IBLPageSection>> ReadByPageRouteAsync(string pageRoute);
 
         Task<IBLPageSection> ReadByIdAsync(string id);
+
+        Task UpdateByPageSectionsAsync(ICollection<IBLPageSection> blPageSections);
     }
 }

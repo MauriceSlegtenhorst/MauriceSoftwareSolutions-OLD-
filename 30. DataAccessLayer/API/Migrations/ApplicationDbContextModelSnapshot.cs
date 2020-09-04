@@ -135,7 +135,12 @@ namespace MTS.BL.API.Migrations
                     b.HasData(
                         new
                         {
-                            PageSectionId = new Guid("9257ff20-ba3e-4b03-b236-86e15f3f3fde"),
+                            PageSectionId = new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"),
+                            PageRoute = "Index"
+                        },
+                        new
+                        {
+                            PageSectionId = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
                             PageRoute = "Index"
                         });
                 });
@@ -164,35 +169,35 @@ namespace MTS.BL.API.Migrations
                     b.HasData(
                         new
                         {
-                            SectionPartId = new Guid("c86d8007-2c0d-4b11-98e2-335339eb8caa"),
+                            SectionPartId = new Guid("17725189-47db-46dd-a582-3f4680d4e01a"),
                             Content = "<h4>About me and MSS</h4>",
-                            PageSectionFK = new Guid("9257ff20-ba3e-4b03-b236-86e15f3f3fde"),
+                            PageSectionFK = new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"),
                             Type = "Title1"
                         },
                         new
                         {
-                            SectionPartId = new Guid("f34f92bb-7225-4ead-9b91-1d3345225ff3"),
+                            SectionPartId = new Guid("94aabd8d-5a57-40e6-ab24-90462c6cedc6"),
                             Content = "<strong>What is MSS?</strong>",
-                            PageSectionFK = new Guid("9257ff20-ba3e-4b03-b236-86e15f3f3fde"),
+                            PageSectionFK = new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"),
                             Type = "Header1"
                         },
                         new
                         {
-                            SectionPartId = new Guid("42439b57-9c24-40b2-a130-8ce265b5504c"),
+                            SectionPartId = new Guid("0f37ae00-c67f-4832-bee8-7f1d51272c38"),
                             Content = "<p>Maurice Software Solutions was created to showcase my programming skills and to have some fun. Aside from that there is handy and fun functionality to be found like a fully-fledged, unlimited personal cloud storage system and a chatroom. And those are just the things I am currently working on. I am dedicated to improving Maurice Software Solutions as a whole regularly whilst adding cool new features.</p>",
-                            PageSectionFK = new Guid("9257ff20-ba3e-4b03-b236-86e15f3f3fde"),
+                            PageSectionFK = new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"),
                             Type = "Body1"
                         },
                         new
                         {
-                            SectionPartId = new Guid("e62201ef-61fa-4ae9-b717-7d973caf2f5b"),
+                            SectionPartId = new Guid("1e2c0185-8676-48e1-ba75-0c28bdf3a9f7"),
                             Content = "<strong>Who is Maurice?</strong>",
-                            PageSectionFK = new Guid("9257ff20-ba3e-4b03-b236-86e15f3f3fde"),
+                            PageSectionFK = new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"),
                             Type = "Header2"
                         },
                         new
                         {
-                            SectionPartId = new Guid("ddbd8206-7791-4e74-8e5e-2f38e85b8f10"),
+                            SectionPartId = new Guid("dd2c5219-6dff-496b-975e-c7a2c234dabf"),
                             Content = @"<p>I am an enthusiastic man with a strong passion for programming. Social and friendly going. Coding has been my hobby from an early age. When I was 13, I made my first program in Visual Basic. A slot machine where there were secret options to get infinite money for example. Later, around the age of 18, I started working with Java, XML and Android Studio. With this I built a number of Android apps including an applocker. This app allowed the user to choose which apps and services needed an additional password or fingerprint to be used.</p>
 <p>Friends and especially family regularly ask me for help with electronics and software related matters. I think this is because I have been busy with software and hardware practically my whole life.</p>
 <p>Marketing and commerce seemed to be my career choice for a long time. During my higher professional education, Commercial Economics, I found out that this did not meet my expectations.</p>
@@ -200,8 +205,64 @@ namespace MTS.BL.API.Migrations
 <p>My interests lie in the latest techniques in software development and electronics. In particular what advantages and disadvantages there are. For example, I can get enthusiastic about developments such as Blazor. This offers such cool options within the internet landscape. For example, the website can be installed as a local application and C# can be used instead of JavaScript! If I find something interesting, I want to find out and test it. See what has gotten better or worse.</p>
 <p>Besides my passion for programming, I am also interested in hardware. For example, I have built my own PC and home server. That very server you are accessing right now.</p>
 <p>That’s it. If you want to know more about me or Maurice Software Solutions, please navigate to the feedback or contact page to ask your question</p>",
-                            PageSectionFK = new Guid("9257ff20-ba3e-4b03-b236-86e15f3f3fde"),
+                            PageSectionFK = new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"),
                             Type = "Body2"
+                        },
+                        new
+                        {
+                            SectionPartId = new Guid("be6340aa-b3b2-40e7-b714-e326b3a2d1a1"),
+                            Content = "<h4>Maurice Slegtenhorst</h4>",
+                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            Type = "Title1"
+                        },
+                        new
+                        {
+                            SectionPartId = new Guid("5a62269a-200e-4369-9bf1-3bbb6f583533"),
+                            Content = "<h5>C# Software Developer</h5>",
+                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            Type = "SubTitle1"
+                        },
+                        new
+                        {
+                            SectionPartId = new Guid("015bc7a4-ca99-4a35-992a-4684cda74947"),
+                            Content = "<strong>Contact information</strong>",
+                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            Type = "Header1"
+                        },
+                        new
+                        {
+                            SectionPartId = new Guid("a176b1c9-128c-4eda-aecc-4ba06e2676bb"),
+                            Content = "<div class=\"row\"><div class=\"col - 6\">Phone number:</div><div class=\"col - 6\">+31 645377536</div></div><div class=\"row\"><div class=\"col - 6\">Personal e-mail:</div><div class=\"col - 6\">maurice.slegtenhorst@outlook.com</div></div><div class=\"row\"><div class=\"col - 6\">Student e-mail</div><div class=\"col - 6\">maurice.slegtenhorst@itvitaelearning.nl</div></div></p>",
+                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            Type = "Body1"
+                        },
+                        new
+                        {
+                            SectionPartId = new Guid("0a7ddc1b-f0af-42c6-b4fe-af2cef21991e"),
+                            Content = "<strong>What can he do?</strong>",
+                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            Type = "Header2"
+                        },
+                        new
+                        {
+                            SectionPartId = new Guid("5ec5b944-f7fb-4dd9-8424-606316770306"),
+                            Content = "<p>C#, JavaScript, SQL, HTML5, CSS3, XAML and XML</p>",
+                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            Type = "Body2"
+                        },
+                        new
+                        {
+                            SectionPartId = new Guid("f5c26e53-abb4-4b0c-b4d1-376809c9a3bd"),
+                            Content = "<strong>Maurice in a nutshell</strong>",
+                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            Type = "Header3"
+                        },
+                        new
+                        {
+                            SectionPartId = new Guid("38d7d41d-0326-4cb1-ae2c-a4d9aafa12bd"),
+                            Content = "<p>Born on 27th of april 1991 and living in The Netherlands sinds then. Loves coding and fiddling with electronics. Likes to go for a jog or socialize</p>",
+                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            Type = "Body3"
                         });
                 });
 

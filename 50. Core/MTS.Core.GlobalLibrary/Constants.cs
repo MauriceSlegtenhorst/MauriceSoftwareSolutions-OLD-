@@ -77,6 +77,7 @@ namespace MTS.Core.GlobalLibrary
         public class EditPageControllerEndpoints
         {
             public const string GET_BY_PAGE_ROUTE = "getbypageroute";
+            public const string UPDATE_BY_PAGE_SECTIONS = "UpdateByPageSections";
         }
 
         public class AccountControllerEndpoints
