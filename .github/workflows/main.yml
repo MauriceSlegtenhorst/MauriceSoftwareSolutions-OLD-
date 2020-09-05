@@ -19,10 +19,6 @@ jobs:
           # SDK version to use. Examples: 2.2.104, 3.1, 3.1.x
           dotnet-version: 3.1
 
-      # add .nojekyll file to tell GitHub pages to not treat this as a Jekyll project. (Allow files and folders starting with an underscore)
-      - name: Add .nojekyll file
-        run: touch release/wwwroot/.nojekyll
-
        # publishes Blazor project to the release-folder
       - name: Publish .NET Core Project
         run: dotnet publish '10. PresentationLayer/Web/Blazor/MTS.PL.Web.Blazor.Client/MTS.PL.Web.Blazor.Client.csproj' -c Release -o release --nologo
