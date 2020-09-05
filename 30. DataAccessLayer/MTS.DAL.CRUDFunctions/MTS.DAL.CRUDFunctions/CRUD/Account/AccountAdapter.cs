@@ -39,11 +39,6 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
         /// <exception cref="System.ArgumentException">Thrown when one or both of the parameters was null or empty</exception>
         public async Task<IBLUserAccount> CreateByEmailAndPasswordAsync(string email, string password)
         {
-#if DEBUG
-            // TODO Do this somewhere else when the program starts
-            await EnsureDefaultAccountsExists();
-#endif
-
             if (String.IsNullOrEmpty(email) || String.IsNullOrEmpty(password))
                 throw new ArgumentException("Parameters cannot be null or empty");
 

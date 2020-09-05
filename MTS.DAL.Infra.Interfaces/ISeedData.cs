@@ -7,7 +7,7 @@ namespace MTS.DAL.Interfaces.Standard
 {
     public interface ISeedData
     {
-        Task<IEnumerable<IBLUserAccount>> GetDefaultAccountsSeedDataAsync();
-
+        Task SeedPageSectionsAsync(object builderObject);
+        Task SeedAccountsAsync(object builderObject);
     }
 }

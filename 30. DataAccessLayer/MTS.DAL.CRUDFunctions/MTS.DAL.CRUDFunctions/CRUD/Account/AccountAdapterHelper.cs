@@ -22,6 +22,7 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
             _roleManager = roleManager;
             _userManager = userManager;
             _seedData = seedData;
+
         }
 
         #region Roles
@@ -105,41 +106,41 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Account
         /// <exception cref="System.Exception"></exception>
         /// <exception cref="System.NullReferenceException">Thrown when the user manager could not find anyone with the given email address</exception>
         /// <exception cref="System.ArgumentException">Thrown when the parameter was null or invalid</exception>
-        public async Task EnsureDefaultAccountsExists()
-        {
-            if (await _userManager.Users.AnyAsync() == true)
-                return;
+        //public async Task EnsureDefaultAccountsExists()
+        //{
+        //    if (await _userManager.Users.AnyAsync() == true)
+        //        return;
 
-            var accountsToAdd = await _seedData.GetDefaultAccountsSeedDataAsync();
+        //    var accountsToAdd = await _seedData.GetDefaultAccountsSeedDataAsync();
 
-            foreach (var account in accountsToAdd)
-            {
-                IdentityResult createAccountResult;
+        //    foreach (var account in accountsToAdd)
+        //    {
+        //        IdentityResult createAccountResult;
 
-                try
-                {
-                    // TODO Set this in EnviromentVariables instead of hardcoded
-                    createAccountResult = await _userManager.CreateAsync((DALUserAccount)account, "MTS1991password!");
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Something went wrong while creating the account for {account.Email}.", ex);
-                }
+        //        try
+        //        {
+        //            // TODO Set this in EnviromentVariables instead of hardcoded
+        //            createAccountResult = await _userManager.CreateAsync((DALUserAccount)account, "MTS1991password!");
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw new Exception($"Something went wrong while creating the account for {account.Email}.", ex);
+        //        }
 
-                if (createAccountResult.Succeeded == false)
-                    throw new Exception($"Something went wrong while creating {account.Email} account.");
+        //        if (createAccountResult.Succeeded == false)
+        //            throw new Exception($"Something went wrong while creating {account.Email} account.");
 
-                if (account.Email == "mauricetechsolution@outlook.com")
-                {
-                    var accountWithId = await _userManager.FindByEmailAsync(account.Email);
+        //        if (account.Email == "mauricetechsolution@outlook.com")
+        //        {
+        //            var accountWithId = await _userManager.FindByEmailAsync(account.Email);
 
-                    if (accountWithId == null)
-                        throw new NullReferenceException("AccountWithId was null");
+        //            if (accountWithId == null)
+        //                throw new NullReferenceException("AccountWithId was null");
 
-                    await AddRolesToAccountAsync(accountWithId.Id, Constants.Roles.Administrator);
-                }
-            }
-        }
+        //            await AddRolesToAccountAsync(accountWithId.Id, Constants.Roles.Administrator);
+        //        }
+        //    }
+        //}
         #endregion
     }
 }

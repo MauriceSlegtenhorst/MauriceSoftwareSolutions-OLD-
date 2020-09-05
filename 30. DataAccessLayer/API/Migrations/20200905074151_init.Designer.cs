@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MTS.BL.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200904123548_init")]
+    [Migration("20200905074151_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -119,6 +119,108 @@ namespace MTS.BL.API.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "6a543003-ac31-4db5-8900-66ed4178d576",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "31733f2c-f4c0-4b7d-a816-c7dd0d9e9c60",
+                            Email = "mauricesoftwaresolution@outlook.com",
+                            EmailConfirmed = true,
+                            FirstName = "Maurice",
+                            IsAdmitted = true,
+                            LastName = "Slegtenhorst",
+                            LockoutEnabled = true,
+                            NormalizedEmail = "MAURICESOFTWARESOLUTION@OUTLOOK.COM",
+                            NormalizedUserName = "MAURICESOFTWARESOLUTION@OUTLOOK.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==",
+                            PhoneNumber = "0645377536",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "fbc91da7-ab15-4855-91b8-e63fa51c97ba",
+                            TwoFactorEnabled = false,
+                            UserName = "mauricesoftwaresolution@outlook.com"
+                        },
+                        new
+                        {
+                            Id = "dfdf6cd0-19e9-4fb9-bb1d-76e214a0348a",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "d488f99f-5f39-4f40-9ba0-d4aaf5268935",
+                            Email = "hanneke.slegtenhorst1@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Hanneke",
+                            IsAdmitted = true,
+                            LastName = "Slegtenhorst",
+                            LockoutEnabled = true,
+                            NormalizedEmail = "HANNEKE.SLEGTENHORST1@GMAIL.COM",
+                            NormalizedUserName = "HANNEKE.SLEGTENHORST1@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==",
+                            PhoneNumber = "060017836617",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "28afc327-3f9e-4c5f-ac5f-d7161625a7b1",
+                            TwoFactorEnabled = false,
+                            UserName = "hanneke.slegtenhorst1@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "6ee3220d-7dc0-4da5-ac1d-2c23c14c0c5b",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "6b36d726-3939-4fda-8d2d-2e1fac74b901",
+                            Email = "privilegedemployee01@mss.nl",
+                            EmailConfirmed = true,
+                            FirstName = "PrivilegedEmployee_01",
+                            IsAdmitted = true,
+                            LastName = "None",
+                            LockoutEnabled = true,
+                            NormalizedEmail = "PRIVILEGEDEMPLOYEE01@MSS.NL",
+                            NormalizedUserName = "PRIVILEGEDEMPLOYEE01@MSS.NL",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==",
+                            PhoneNumber = "060042849790",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "c86cdcc5-b903-45aa-8895-82e1234e661e",
+                            TwoFactorEnabled = false,
+                            UserName = "privilegedemployee01@mss.nl"
+                        },
+                        new
+                        {
+                            Id = "51947d08-905f-46b0-90f7-4ab8078e782e",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a022f27c-f719-408a-894f-d9a2a519509d",
+                            Email = "employee01@mss.nl",
+                            EmailConfirmed = true,
+                            FirstName = "Employee_01",
+                            IsAdmitted = true,
+                            LastName = "None",
+                            LockoutEnabled = true,
+                            NormalizedEmail = "EMPLOYEE01@MSS.NL",
+                            NormalizedUserName = "EMPLOYEE01@MTS.NL",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==",
+                            PhoneNumber = "060038506665",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "3eb8f005-b421-4a58-a066-cc11e8578532",
+                            TwoFactorEnabled = false,
+                            UserName = "Employee01@MTS.nl"
+                        },
+                        new
+                        {
+                            Id = "e2f80e16-9aec-4e07-a5c6-58f021d17afa",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "595ff8b9-b824-463c-8cfe-af505b0f211b",
+                            Email = "standarduser01@mts.nl",
+                            EmailConfirmed = true,
+                            FirstName = "StandardUser_01",
+                            IsAdmitted = true,
+                            LastName = "None",
+                            LockoutEnabled = true,
+                            NormalizedEmail = "STANDARDUSER01@MSS.NL",
+                            NormalizedUserName = "STANDARDUSER01@MSS.NL",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==",
+                            PhoneNumber = "060073334147",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "125a43e9-b24b-45a0-85de-cd3c0452d322",
+                            TwoFactorEnabled = false,
+                            UserName = "standarduser01@mts.nl"
+                        });
                 });
 
             modelBuilder.Entity("MTS.DAL.Entities.Core.EditPageContent.DALPageSection", b =>
@@ -137,12 +239,12 @@ namespace MTS.BL.API.Migrations
                     b.HasData(
                         new
                         {
-                            PageSectionId = new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"),
+                            PageSectionId = new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"),
                             PageRoute = "Index"
                         },
                         new
                         {
-                            PageSectionId = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            PageSectionId = new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"),
                             PageRoute = "Index"
                         });
                 });
@@ -171,35 +273,35 @@ namespace MTS.BL.API.Migrations
                     b.HasData(
                         new
                         {
-                            SectionPartId = new Guid("17725189-47db-46dd-a582-3f4680d4e01a"),
+                            SectionPartId = new Guid("39aea878-58a0-449d-bf2b-8a8c7e19c91b"),
                             Content = "<h4>About me and MSS</h4>",
-                            PageSectionFK = new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"),
+                            PageSectionFK = new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"),
                             Type = "Title1"
                         },
                         new
                         {
-                            SectionPartId = new Guid("94aabd8d-5a57-40e6-ab24-90462c6cedc6"),
+                            SectionPartId = new Guid("01946315-59c5-43b9-8721-1bd17b508c00"),
                             Content = "<strong>What is MSS?</strong>",
-                            PageSectionFK = new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"),
+                            PageSectionFK = new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"),
                             Type = "Header1"
                         },
                         new
                         {
-                            SectionPartId = new Guid("0f37ae00-c67f-4832-bee8-7f1d51272c38"),
+                            SectionPartId = new Guid("3359c3fb-f0a1-411a-9864-497757110dd6"),
                             Content = "<p>Maurice Software Solutions was created to showcase my programming skills and to have some fun. Aside from that there is handy and fun functionality to be found like a fully-fledged, unlimited personal cloud storage system and a chatroom. And those are just the things I am currently working on. I am dedicated to improving Maurice Software Solutions as a whole regularly whilst adding cool new features.</p>",
-                            PageSectionFK = new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"),
+                            PageSectionFK = new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"),
                             Type = "Body1"
                         },
                         new
                         {
-                            SectionPartId = new Guid("1e2c0185-8676-48e1-ba75-0c28bdf3a9f7"),
+                            SectionPartId = new Guid("67b4c6ce-310e-43bc-a7cf-c2e128a16b20"),
                             Content = "<strong>Who is Maurice?</strong>",
-                            PageSectionFK = new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"),
+                            PageSectionFK = new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"),
                             Type = "Header2"
                         },
                         new
                         {
-                            SectionPartId = new Guid("dd2c5219-6dff-496b-975e-c7a2c234dabf"),
+                            SectionPartId = new Guid("b6193c4a-3bb6-42f5-9572-2178951fd91f"),
                             Content = @"<p>I am an enthusiastic man with a strong passion for programming. Social and friendly going. Coding has been my hobby from an early age. When I was 13, I made my first program in Visual Basic. A slot machine where there were secret options to get infinite money for example. Later, around the age of 18, I started working with Java, XML and Android Studio. With this I built a number of Android apps including an applocker. This app allowed the user to choose which apps and services needed an additional password or fingerprint to be used.</p>
 <p>Friends and especially family regularly ask me for help with electronics and software related matters. I think this is because I have been busy with software and hardware practically my whole life.</p>
 <p>Marketing and commerce seemed to be my career choice for a long time. During my higher professional education, Commercial Economics, I found out that this did not meet my expectations.</p>
@@ -207,63 +309,63 @@ namespace MTS.BL.API.Migrations
 <p>My interests lie in the latest techniques in software development and electronics. In particular what advantages and disadvantages there are. For example, I can get enthusiastic about developments such as Blazor. This offers such cool options within the internet landscape. For example, the website can be installed as a local application and C# can be used instead of JavaScript! If I find something interesting, I want to find out and test it. See what has gotten better or worse.</p>
 <p>Besides my passion for programming, I am also interested in hardware. For example, I have built my own PC and home server. That very server you are accessing right now.</p>
 <p>That’s it. If you want to know more about me or Maurice Software Solutions, please navigate to the feedback or contact page to ask your question</p>",
-                            PageSectionFK = new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"),
+                            PageSectionFK = new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"),
                             Type = "Body2"
                         },
                         new
                         {
-                            SectionPartId = new Guid("be6340aa-b3b2-40e7-b714-e326b3a2d1a1"),
+                            SectionPartId = new Guid("04c314d7-3853-482b-864f-15e230e7920d"),
                             Content = "<h4>Maurice Slegtenhorst</h4>",
-                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            PageSectionFK = new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"),
                             Type = "Title1"
                         },
                         new
                         {
-                            SectionPartId = new Guid("5a62269a-200e-4369-9bf1-3bbb6f583533"),
+                            SectionPartId = new Guid("e84b936c-1555-4eae-9ee8-a6d43f54b26e"),
                             Content = "<h5>C# Software Developer</h5>",
-                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            PageSectionFK = new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"),
                             Type = "SubTitle1"
                         },
                         new
                         {
-                            SectionPartId = new Guid("015bc7a4-ca99-4a35-992a-4684cda74947"),
+                            SectionPartId = new Guid("7c958ec2-f9a3-4f2c-93b0-3384c67ae48b"),
                             Content = "<strong>Contact information</strong>",
-                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            PageSectionFK = new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"),
                             Type = "Header1"
                         },
                         new
                         {
-                            SectionPartId = new Guid("a176b1c9-128c-4eda-aecc-4ba06e2676bb"),
+                            SectionPartId = new Guid("81317e89-bace-4a41-a152-ba2b6f9f7bc3"),
                             Content = "<div class=\"row\"><div class=\"col - 6\">Phone number:</div><div class=\"col - 6\">+31 645377536</div></div><div class=\"row\"><div class=\"col - 6\">Personal e-mail:</div><div class=\"col - 6\">maurice.slegtenhorst@outlook.com</div></div><div class=\"row\"><div class=\"col - 6\">Student e-mail</div><div class=\"col - 6\">maurice.slegtenhorst@itvitaelearning.nl</div></div></p>",
-                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            PageSectionFK = new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"),
                             Type = "Body1"
                         },
                         new
                         {
-                            SectionPartId = new Guid("0a7ddc1b-f0af-42c6-b4fe-af2cef21991e"),
+                            SectionPartId = new Guid("aa303979-bc14-442e-8e05-8eaab8bdc177"),
                             Content = "<strong>What can he do?</strong>",
-                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            PageSectionFK = new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"),
                             Type = "Header2"
                         },
                         new
                         {
-                            SectionPartId = new Guid("5ec5b944-f7fb-4dd9-8424-606316770306"),
+                            SectionPartId = new Guid("3843a84c-4028-4f1a-9c43-4d6a518502a5"),
                             Content = "<p>C#, JavaScript, SQL, HTML5, CSS3, XAML and XML</p>",
-                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            PageSectionFK = new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"),
                             Type = "Body2"
                         },
                         new
                         {
-                            SectionPartId = new Guid("f5c26e53-abb4-4b0c-b4d1-376809c9a3bd"),
+                            SectionPartId = new Guid("7847fc82-0913-4ab7-8fea-dc2c4ee59301"),
                             Content = "<strong>Maurice in a nutshell</strong>",
-                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            PageSectionFK = new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"),
                             Type = "Header3"
                         },
                         new
                         {
-                            SectionPartId = new Guid("38d7d41d-0326-4cb1-ae2c-a4d9aafa12bd"),
+                            SectionPartId = new Guid("ab503d45-82a1-4b5b-91fd-4daa9043da32"),
                             Content = "<p>Born on 27th of april 1991 and living in The Netherlands sinds then. Loves coding and fiddling with electronics. Likes to go for a jog or socialize</p>",
-                            PageSectionFK = new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"),
+                            PageSectionFK = new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"),
                             Type = "Body3"
                         });
                 });
@@ -293,6 +395,50 @@ namespace MTS.BL.API.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "d4be0aa2-d394-4324-9301-6b0e83d6871d",
+                            ConcurrencyStamp = "befe7b7e-0771-4388-bd51-f00687800f3e",
+                            Name = "administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "d8ef71df-4a62-4790-83ce-c15675027a9d",
+                            ConcurrencyStamp = "c35275cd-162a-4be8-932e-d17f107953d2",
+                            Name = "privilegedemployee",
+                            NormalizedName = "PRIVILEGEDEMPLOYEE"
+                        },
+                        new
+                        {
+                            Id = "b9a4c02a-ef45-414c-9681-78d7bcfd4ab0",
+                            ConcurrencyStamp = "5eb8ee71-28ca-44b0-8120-daf201c4918e",
+                            Name = "employee",
+                            NormalizedName = "EMPLOYEE"
+                        },
+                        new
+                        {
+                            Id = "f36c72e5-4d61-437e-a735-e8c749742de8",
+                            ConcurrencyStamp = "d2195338-bda2-46e6-83e1-0908468fdbb5",
+                            Name = "volenteer",
+                            NormalizedName = "VOLENTEER"
+                        },
+                        new
+                        {
+                            Id = "079fecff-1904-4b72-942f-987aa2f8ccb6",
+                            ConcurrencyStamp = "9e4f4a24-7a28-4c1a-b4ab-cc7efd0f7022",
+                            Name = "privilegeduser",
+                            NormalizedName = "PRIVILEGEDUSER"
+                        },
+                        new
+                        {
+                            Id = "b347297d-d6bf-4082-8dcf-d156510b9c8a",
+                            ConcurrencyStamp = "2c0eed2b-c76f-40ac-998e-6ff5e83ace6f",
+                            Name = "standarduser",
+                            NormalizedName = "STANDARDUSER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -378,6 +524,33 @@ namespace MTS.BL.API.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "6a543003-ac31-4db5-8900-66ed4178d576",
+                            RoleId = "d4be0aa2-d394-4324-9301-6b0e83d6871d"
+                        },
+                        new
+                        {
+                            UserId = "dfdf6cd0-19e9-4fb9-bb1d-76e214a0348a",
+                            RoleId = "d4be0aa2-d394-4324-9301-6b0e83d6871d"
+                        },
+                        new
+                        {
+                            UserId = "6ee3220d-7dc0-4da5-ac1d-2c23c14c0c5b",
+                            RoleId = "d8ef71df-4a62-4790-83ce-c15675027a9d"
+                        },
+                        new
+                        {
+                            UserId = "51947d08-905f-46b0-90f7-4ab8078e782e",
+                            RoleId = "b9a4c02a-ef45-414c-9681-78d7bcfd4ab0"
+                        },
+                        new
+                        {
+                            UserId = "e2f80e16-9aec-4e07-a5c6-58f021d17afa",
+                            RoleId = "b347297d-d6bf-4082-8dcf-d156510b9c8a"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

@@ -204,39 +204,75 @@ namespace MTS.BL.API.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "PageSections",
-                columns: new[] { "PageSectionId", "PageRoute" },
-                values: new object[] { new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"), "Index" });
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "d4be0aa2-d394-4324-9301-6b0e83d6871d", "befe7b7e-0771-4388-bd51-f00687800f3e", "administrator", "ADMINISTRATOR" },
+                    { "d8ef71df-4a62-4790-83ce-c15675027a9d", "c35275cd-162a-4be8-932e-d17f107953d2", "privilegedemployee", "PRIVILEGEDEMPLOYEE" },
+                    { "b9a4c02a-ef45-414c-9681-78d7bcfd4ab0", "5eb8ee71-28ca-44b0-8120-daf201c4918e", "employee", "EMPLOYEE" },
+                    { "f36c72e5-4d61-437e-a735-e8c749742de8", "d2195338-bda2-46e6-83e1-0908468fdbb5", "volenteer", "VOLENTEER" },
+                    { "079fecff-1904-4b72-942f-987aa2f8ccb6", "9e4f4a24-7a28-4c1a-b4ab-cc7efd0f7022", "privilegeduser", "PRIVILEGEDUSER" },
+                    { "b347297d-d6bf-4082-8dcf-d156510b9c8a", "2c0eed2b-c76f-40ac-998e-6ff5e83ace6f", "standarduser", "STANDARDUSER" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "Affix", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "IsAdmitted", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "6a543003-ac31-4db5-8900-66ed4178d576", 0, null, "31733f2c-f4c0-4b7d-a816-c7dd0d9e9c60", "mauricesoftwaresolution@outlook.com", true, "Maurice", true, "Slegtenhorst", true, null, "MAURICESOFTWARESOLUTION@OUTLOOK.COM", "MAURICESOFTWARESOLUTION@OUTLOOK.COM", "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==", "0645377536", true, "fbc91da7-ab15-4855-91b8-e63fa51c97ba", false, "mauricesoftwaresolution@outlook.com" },
+                    { "dfdf6cd0-19e9-4fb9-bb1d-76e214a0348a", 0, null, "d488f99f-5f39-4f40-9ba0-d4aaf5268935", "hanneke.slegtenhorst1@gmail.com", true, "Hanneke", true, "Slegtenhorst", true, null, "HANNEKE.SLEGTENHORST1@GMAIL.COM", "HANNEKE.SLEGTENHORST1@GMAIL.COM", "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==", "060017836617", true, "28afc327-3f9e-4c5f-ac5f-d7161625a7b1", false, "hanneke.slegtenhorst1@gmail.com" },
+                    { "6ee3220d-7dc0-4da5-ac1d-2c23c14c0c5b", 0, null, "6b36d726-3939-4fda-8d2d-2e1fac74b901", "privilegedemployee01@mss.nl", true, "PrivilegedEmployee_01", true, "None", true, null, "PRIVILEGEDEMPLOYEE01@MSS.NL", "PRIVILEGEDEMPLOYEE01@MSS.NL", "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==", "060042849790", true, "c86cdcc5-b903-45aa-8895-82e1234e661e", false, "privilegedemployee01@mss.nl" },
+                    { "51947d08-905f-46b0-90f7-4ab8078e782e", 0, null, "a022f27c-f719-408a-894f-d9a2a519509d", "employee01@mss.nl", true, "Employee_01", true, "None", true, null, "EMPLOYEE01@MSS.NL", "EMPLOYEE01@MTS.NL", "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==", "060038506665", true, "3eb8f005-b421-4a58-a066-cc11e8578532", false, "Employee01@MTS.nl" },
+                    { "e2f80e16-9aec-4e07-a5c6-58f021d17afa", 0, null, "595ff8b9-b824-463c-8cfe-af505b0f211b", "standarduser01@mts.nl", true, "StandardUser_01", true, "None", true, null, "STANDARDUSER01@MSS.NL", "STANDARDUSER01@MSS.NL", "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==", "060073334147", true, "125a43e9-b24b-45a0-85de-cd3c0452d322", false, "standarduser01@mts.nl" }
+                });
 
             migrationBuilder.InsertData(
                 table: "PageSections",
                 columns: new[] { "PageSectionId", "PageRoute" },
-                values: new object[] { new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"), "Index" });
+                values: new object[,]
+                {
+                    { new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"), "Index" },
+                    { new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Index" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[,]
+                {
+                    { "e2f80e16-9aec-4e07-a5c6-58f021d17afa", "b347297d-d6bf-4082-8dcf-d156510b9c8a" },
+                    { "6ee3220d-7dc0-4da5-ac1d-2c23c14c0c5b", "d8ef71df-4a62-4790-83ce-c15675027a9d" },
+                    { "dfdf6cd0-19e9-4fb9-bb1d-76e214a0348a", "d4be0aa2-d394-4324-9301-6b0e83d6871d" },
+                    { "6a543003-ac31-4db5-8900-66ed4178d576", "d4be0aa2-d394-4324-9301-6b0e83d6871d" },
+                    { "51947d08-905f-46b0-90f7-4ab8078e782e", "b9a4c02a-ef45-414c-9681-78d7bcfd4ab0" }
+                });
 
             migrationBuilder.InsertData(
                 table: "SectionParts",
                 columns: new[] { "SectionPartId", "Content", "PageSectionFK", "Type" },
                 values: new object[,]
                 {
-                    { new Guid("17725189-47db-46dd-a582-3f4680d4e01a"), "<h4>About me and MSS</h4>", new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"), "Title1" },
-                    { new Guid("94aabd8d-5a57-40e6-ab24-90462c6cedc6"), "<strong>What is MSS?</strong>", new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"), "Header1" },
-                    { new Guid("0f37ae00-c67f-4832-bee8-7f1d51272c38"), "<p>Maurice Software Solutions was created to showcase my programming skills and to have some fun. Aside from that there is handy and fun functionality to be found like a fully-fledged, unlimited personal cloud storage system and a chatroom. And those are just the things I am currently working on. I am dedicated to improving Maurice Software Solutions as a whole regularly whilst adding cool new features.</p>", new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"), "Body1" },
-                    { new Guid("1e2c0185-8676-48e1-ba75-0c28bdf3a9f7"), "<strong>Who is Maurice?</strong>", new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"), "Header2" },
-                    { new Guid("dd2c5219-6dff-496b-975e-c7a2c234dabf"), @"<p>I am an enthusiastic man with a strong passion for programming. Social and friendly going. Coding has been my hobby from an early age. When I was 13, I made my first program in Visual Basic. A slot machine where there were secret options to get infinite money for example. Later, around the age of 18, I started working with Java, XML and Android Studio. With this I built a number of Android apps including an applocker. This app allowed the user to choose which apps and services needed an additional password or fingerprint to be used.</p>
+                    { new Guid("ab503d45-82a1-4b5b-91fd-4daa9043da32"), "<p>Born on 27th of april 1991 and living in The Netherlands sinds then. Loves coding and fiddling with electronics. Likes to go for a jog or socialize</p>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Body3" },
+                    { new Guid("7847fc82-0913-4ab7-8fea-dc2c4ee59301"), "<strong>Maurice in a nutshell</strong>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Header3" },
+                    { new Guid("3843a84c-4028-4f1a-9c43-4d6a518502a5"), "<p>C#, JavaScript, SQL, HTML5, CSS3, XAML and XML</p>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Body2" },
+                    { new Guid("aa303979-bc14-442e-8e05-8eaab8bdc177"), "<strong>What can he do?</strong>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Header2" },
+                    { new Guid("81317e89-bace-4a41-a152-ba2b6f9f7bc3"), "<div class=\"row\"><div class=\"col - 6\">Phone number:</div><div class=\"col - 6\">+31 645377536</div></div><div class=\"row\"><div class=\"col - 6\">Personal e-mail:</div><div class=\"col - 6\">maurice.slegtenhorst@outlook.com</div></div><div class=\"row\"><div class=\"col - 6\">Student e-mail</div><div class=\"col - 6\">maurice.slegtenhorst@itvitaelearning.nl</div></div></p>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Body1" },
+                    { new Guid("e84b936c-1555-4eae-9ee8-a6d43f54b26e"), "<h5>C# Software Developer</h5>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "SubTitle1" },
+                    { new Guid("04c314d7-3853-482b-864f-15e230e7920d"), "<h4>Maurice Slegtenhorst</h4>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Title1" },
+                    { new Guid("b6193c4a-3bb6-42f5-9572-2178951fd91f"), @"<p>I am an enthusiastic man with a strong passion for programming. Social and friendly going. Coding has been my hobby from an early age. When I was 13, I made my first program in Visual Basic. A slot machine where there were secret options to get infinite money for example. Later, around the age of 18, I started working with Java, XML and Android Studio. With this I built a number of Android apps including an applocker. This app allowed the user to choose which apps and services needed an additional password or fingerprint to be used.</p>
                 <p>Friends and especially family regularly ask me for help with electronics and software related matters. I think this is because I have been busy with software and hardware practically my whole life.</p>
                 <p>Marketing and commerce seemed to be my career choice for a long time. During my higher professional education, Commercial Economics, I found out that this did not meet my expectations.</p>
                 <p>At one point I ended up at ITvitae and started working on my C# programming skills. This went well for me because Java is similar in syntax to C#. Here I have made several complicated programs with C# and related languages such as SQL, HTML XAML, JavaScript and CSS. At ITvitae I have greatly improved my software development skills. After about a year I have successfully completed the process.</p>
                 <p>My interests lie in the latest techniques in software development and electronics. In particular what advantages and disadvantages there are. For example, I can get enthusiastic about developments such as Blazor. This offers such cool options within the internet landscape. For example, the website can be installed as a local application and C# can be used instead of JavaScript! If I find something interesting, I want to find out and test it. See what has gotten better or worse.</p>
                 <p>Besides my passion for programming, I am also interested in hardware. For example, I have built my own PC and home server. That very server you are accessing right now.</p>
-                <p>That’s it. If you want to know more about me or Maurice Software Solutions, please navigate to the feedback or contact page to ask your question</p>", new Guid("7d8aa5ed-bb0a-4ca8-a9bf-46085cec9369"), "Body2" },
-                    { new Guid("be6340aa-b3b2-40e7-b714-e326b3a2d1a1"), "<h4>Maurice Slegtenhorst</h4>", new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"), "Title1" },
-                    { new Guid("5a62269a-200e-4369-9bf1-3bbb6f583533"), "<h5>C# Software Developer</h5>", new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"), "SubTitle1" },
-                    { new Guid("015bc7a4-ca99-4a35-992a-4684cda74947"), "<strong>Contact information</strong>", new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"), "Header1" },
-                    { new Guid("a176b1c9-128c-4eda-aecc-4ba06e2676bb"), "<div class=\"row\"><div class=\"col - 6\">Phone number:</div><div class=\"col - 6\">+31 645377536</div></div><div class=\"row\"><div class=\"col - 6\">Personal e-mail:</div><div class=\"col - 6\">maurice.slegtenhorst@outlook.com</div></div><div class=\"row\"><div class=\"col - 6\">Student e-mail</div><div class=\"col - 6\">maurice.slegtenhorst@itvitaelearning.nl</div></div></p>", new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"), "Body1" },
-                    { new Guid("0a7ddc1b-f0af-42c6-b4fe-af2cef21991e"), "<strong>What can he do?</strong>", new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"), "Header2" },
-                    { new Guid("5ec5b944-f7fb-4dd9-8424-606316770306"), "<p>C#, JavaScript, SQL, HTML5, CSS3, XAML and XML</p>", new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"), "Body2" },
-                    { new Guid("f5c26e53-abb4-4b0c-b4d1-376809c9a3bd"), "<strong>Maurice in a nutshell</strong>", new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"), "Header3" },
-                    { new Guid("38d7d41d-0326-4cb1-ae2c-a4d9aafa12bd"), "<p>Born on 27th of april 1991 and living in The Netherlands sinds then. Loves coding and fiddling with electronics. Likes to go for a jog or socialize</p>", new Guid("814c1475-113c-4c3c-bd9a-a4fbf36939b4"), "Body3" }
+                <p>That’s it. If you want to know more about me or Maurice Software Solutions, please navigate to the feedback or contact page to ask your question</p>", new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"), "Body2" },
+                    { new Guid("67b4c6ce-310e-43bc-a7cf-c2e128a16b20"), "<strong>Who is Maurice?</strong>", new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"), "Header2" },
+                    { new Guid("3359c3fb-f0a1-411a-9864-497757110dd6"), "<p>Maurice Software Solutions was created to showcase my programming skills and to have some fun. Aside from that there is handy and fun functionality to be found like a fully-fledged, unlimited personal cloud storage system and a chatroom. And those are just the things I am currently working on. I am dedicated to improving Maurice Software Solutions as a whole regularly whilst adding cool new features.</p>", new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"), "Body1" },
+                    { new Guid("01946315-59c5-43b9-8721-1bd17b508c00"), "<strong>What is MSS?</strong>", new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"), "Header1" },
+                    { new Guid("7c958ec2-f9a3-4f2c-93b0-3384c67ae48b"), "<strong>Contact information</strong>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Header1" },
+                    { new Guid("39aea878-58a0-449d-bf2b-8a8c7e19c91b"), "<h4>About me and MSS</h4>", new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"), "Title1" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -153,14 +153,15 @@
         _inputModel = new InputModel();
 
 #if DEBUG
-        _inputModel.Email = "mauricetechsolution@outlook.com";
-        _inputModel.Password = "MTS1991password!";
+        //TODO Remove this on release
+        _inputModel.Email = "mauricesoftwaresolution@outlook.com";
+        _inputModel.Password = "MTS1991Password!";
 #endif
 
-_formContext = new EditContext(_inputModel);
+        _formContext = new EditContext(_inputModel);
 
-return base.OnInitializedAsync();
-}
+        return base.OnInitializedAsync();   
+    }
 
 private async Task SubmitForm()
 {
