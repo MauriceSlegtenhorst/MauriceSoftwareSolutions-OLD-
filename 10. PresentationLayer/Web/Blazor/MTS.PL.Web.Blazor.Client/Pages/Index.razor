@@ -1,11 +1,12 @@
 ﻿@page "/"
+@implements IDisposable
 @inject NavigationManager _navigationManager
 @inject IHttpClientFactory _httpClientFactory
 @inject ISpinnerService _spinnerService
 @inject IToastService _toastService
 @inject IEditPageService _editPageService
 
-<PageHeaderComponent PageName="Welcome to Maurice Software Solutions!" Subtitle="A site about software and Maurice" />
+<PageHeaderComponent PageName="Welcome to Maurice Software Solutions!" Subtitle="A site about software development and Maurice" PageIsEditable="true" />
 
 <div class="row col-12 padding-vertical-top">
     <!--#region Card 1 MSS-->
@@ -784,6 +785,12 @@
 
         StateHasChanged();
     }
+
+    void IDisposable.Dispose()
+    {
+        _editPageService.OnToggle -= OnToggleEditMode;
+    }
+
 
     private async Task<HttpResponseMessage> SavePageDataAsync()
     {

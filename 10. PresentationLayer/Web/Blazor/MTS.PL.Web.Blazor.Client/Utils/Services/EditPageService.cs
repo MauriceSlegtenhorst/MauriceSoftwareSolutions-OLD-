@@ -15,8 +15,13 @@ namespace MTS.PL.Web.Blazor.Client.Utils.Services
 
         public void ToggleEditMode()
         {
+            if (OnToggle == null)
+                return;
+
+
+
             IsInEditMode = !IsInEditMode;
-            OnToggle?.Invoke();
+            OnToggle.Invoke();
         }
 
         public bool GetEditMode() => IsInEditMode;

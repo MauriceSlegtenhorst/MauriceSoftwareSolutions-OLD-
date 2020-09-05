@@ -1,15 +1,18 @@
 ﻿@inject IEditPageService _editPageService
 
 <div class="overlay-image _b1 ">
-    <div class=" image" />
-    <div class=" text _2 ">
+    <div class="image" />
+    <div class="text _2">
         <h1>@PageName</h1>
         <h4>@Subtitle</h4>
-        <AuthorizeView Roles="@_roles">
-            <Authorized>
-                <SfButton CssClass="e-small" OnClick="ToggleEdit">@_editMode</SfButton>
-            </Authorized>
-        </AuthorizeView>
+        @if (PageIsEditable == true)
+        {
+            <AuthorizeView Roles="@_roles">
+                <Authorized>
+                    <SfButton CssClass="e-small" OnClick="ToggleEdit">@_editMode</SfButton>
+                </Authorized>
+            </AuthorizeView>
+        }
     </div>
 </div>
 
@@ -21,6 +24,9 @@
     [Parameter]
     public string Subtitle { get; set; }
 
+    [Parameter]
+    public bool PageIsEditable { get; set; }
+
     private string _editMode;
 
     private string _roles = $"{Constants.Security.ADMINISTRATOR},{Constants.Security.PRIVILEGED_EMPLOYEE},{Constants.Security.EMPLOYEE}";
@@ -28,20 +34,16 @@
     protected override Task OnInitializedAsync()
     {
         _editMode = (_editPageService.GetEditMode() ? "Save" : "Edit");
+
         return base.OnInitializedAsync();
     }
 
     private void ToggleEdit()
     {
-        if (_editPageService.GetEditMode() != true)
+        if(PageIsEditable == true)
         {
-            _editMode = "Save";
+            _editMode = (_editPageService.GetEditMode() ? "Edit" : "Save");
+            _editPageService.ToggleEditMode();
         }
-        else
-        {
-            _editMode = "Edit";
-        }
-
-        _editPageService.ToggleEditMode();
     }
 }
