@@ -12,38 +12,57 @@ $RGB_GRAY: rgb(57,62,70);
 
 $PADDING: 1.25vw;
 
-$STANDARD_CARD_HEIGHT: 80vh;
-
 $SCREEN_WIDTH: 100vw;
 $SCREEN_HEIGHT: 100vh;
 
-app {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+$PAGE_TOP_BAR_HEIGHT: $SCREEN_HEIGHT / 100 * 5;
+$PAGE_HEADER_HEIGHT: $SCREEN_HEIGHT / 100 * 15;
+$PAGE_BODY_HEIGHT: $SCREEN_HEIGHT / 100 * 80;
+
+/*#region My css*/
+
+.page-top-bar {
+    height: $PAGE_TOP_BAR_HEIGHT;
+    min-height: $PAGE_TOP_BAR_HEIGHT;
+    max-height: $PAGE_TOP_BAR_HEIGHT;
 }
 
-hr.solid {
-    border-top: 5px solid $SMOKE_WHITE;
-
-    $padding: 3vh;
-
-    margin-top: $padding;
-    margin-bottom: $padding;
+.page-header {
+    height: $PAGE_HEADER_HEIGHT;
+    min-height: $PAGE_HEADER_HEIGHT;
+    max-height: $PAGE_HEADER_HEIGHT;
 }
 
-a, .btn-link {
-    color: $BLUE;
+.page-body {
+    height: $PAGE_BODY_HEIGHT;
+    min-height: $PAGE_BODY_HEIGHT;
+    max-height: $PAGE_BODY_HEIGHT;
 }
 
-.reset-card-jusification{
+
+.scroll-area {
+    overflow-y: scroll;
+    height:inherit;
+}
+
+@keyframes pop-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.popin {
+    animation: pop-in 0.4s ease;
+}
+
+.reset-card-jusification {
     justify-content: space-between !important;
-}
-
-.std-card-height {
-    height: $STANDARD_CARD_HEIGHT;
-    min-height: $STANDARD_CARD_HEIGHT;
-    max-height: $STANDARD_CARD_HEIGHT;
 }
 
 .col-margin-right {
@@ -65,7 +84,7 @@ a, .btn-link {
     margin-bottom: $PADDING;
 }
 
-.padding-horizontal-right{
+.padding-horizontal-right {
     margin-right: $PADDING / 2;
 }
 
@@ -73,12 +92,12 @@ a, .btn-link {
     margin-left: $PADDING / 2;
 }
 
-.padding-vertical-top{
+.padding-vertical-top {
     margin-top: $PADDING;
 }
 
 .padding-vertical-bottom {
-    margin-bottom: $PADDING ;
+    margin-bottom: $PADDING;
 }
 /* Main container */
 .overlay-image {
@@ -90,7 +109,7 @@ a, .btn-link {
         background-image: url('/Images/Coding/Code.png');
         display: block;
         width: 100%;
-        height: 20vh;
+        height: $PAGE_HEADER_HEIGHT;
         filter: blur(2px);
         -webkit-filter: blur(2px);
 
@@ -136,7 +155,27 @@ a, .btn-link {
     float: left;
     text-align: center;
 }
+/*#endregion */
 
+/*#region BlazorCss*/
+app {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+hr.solid {
+    border-top: 5px solid $SMOKE_WHITE;
+
+    $padding: 3vh;
+
+    margin-top: $padding;
+    margin-bottom: $padding;
+}
+
+a, .btn-link {
+    color: $BLUE;
+}
 html, body {
     /*font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;*/
     max-width: 100vw;
@@ -162,6 +201,7 @@ html, body {
 
     .content {
         z-index: 0;
+        position: fixed;
     }
 
     .top-row {
@@ -271,6 +311,13 @@ html, body {
     right: 0.75rem;
     top: 0.5rem;
 }
+/*#endregion */
+
+
+
+
+
+
 
 @media (max-width: 767.98px) {
     .col-margin-right {

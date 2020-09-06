@@ -8,342 +8,344 @@
 
 <PageHeaderComponent PageName="Welcome to Maurice Software Solutions!" Subtitle="A site about software development and Maurice" PageIsEditable="true" />
 
-<div class="row col-12 padding-vertical-top">
-    <!--#region Card 1 MSS-->
-    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-        <div class="e-card" ID="maurice-card">
-            <!--Header-->
-            <div class="e-card-header" style=" padding: 16px">
-                <div class="e-card-header-caption">
-                    <div class="e-card-header-title">
-                        @if (_editPageService.GetEditMode() == false)
-                        {
-                            @_inputModelSection1.MarkupTitle1
-                        }
-                        else
-                        {
-                            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
-                                <SplitterPanes>
-                                    <SplitterPane Size="50%" Min="30%">
-                                        <ContentTemplate>
-                                            <div class="p-3">
-                                                <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section1Title1Changed" @bind-Value="@_inputModelSection1.Title1"/>
-                                            </div>
-                                        </ContentTemplate>
-                                    </SplitterPane>
-                                    <SplitterPane Size="50%" Min="30%">
-                                        <ContentTemplate >
-                                            <div class="p-3">
-                                                @_inputModelSection1.MarkupTitle1
-                                            </div>
-                                        </ContentTemplate>
-                                    </SplitterPane>
-                                </SplitterPanes>
-                            </SfSplitter>
-                        }
+<div class="scroll-area page-body">
+    <div class="row col-12 padding-vertical-top">
+        <!--#region Card 1 MSS-->
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+            <div class="e-card" ID="maurice-card">
+                <!--Header-->
+                <div class="e-card-header" style=" padding: 16px">
+                    <div class="e-card-header-caption">
+                        <div class="e-card-header-title">
+                            @if (_editPageService.GetEditMode() == false)
+                            {
+                                @_inputModelSection1.MarkupTitle1
+                            }
+                            else
+                            {
+                                <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                                    <SplitterPanes>
+                                        <SplitterPane Size="50%" Min="30%">
+                                            <ContentTemplate>
+                                                <div class="p-3">
+                                                    <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section1Title1Changed" @bind-Value="@_inputModelSection1.Title1" />
+                                                </div>
+                                            </ContentTemplate>
+                                        </SplitterPane>
+                                        <SplitterPane Size="50%" Min="30%">
+                                            <ContentTemplate>
+                                                <div class="p-3">
+                                                    @_inputModelSection1.MarkupTitle1
+                                                </div>
+                                            </ContentTemplate>
+                                        </SplitterPane>
+                                    </SplitterPanes>
+                                </SfSplitter>
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="e-card-content">
-                @if (_editPageService.GetEditMode() == false)
-                {
-                    @_inputModelSection1.MarkupHeader1
-                    @_inputModelSection1.MarkupBody1
+                <div class="e-card-content">
+                    @if (_editPageService.GetEditMode() == false)
+                    {
+                        @_inputModelSection1.MarkupHeader1
+                        @_inputModelSection1.MarkupBody1
 
-                    @_inputModelSection1.MarkupHeader2
-                    @_inputModelSection1.MarkupBody2
-                }
-                else
-                {
-                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
-                        <SplitterPanes>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section1Header1Changed" @bind-Value="@_inputModelSection1.Header1" />
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        @_inputModelSection1.MarkupHeader1
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                        </SplitterPanes>
-                    </SfSplitter>
+                        @_inputModelSection1.MarkupHeader2
+                        @_inputModelSection1.MarkupBody2
+                    }
+                    else
+                    {
+                        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                            <SplitterPanes>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section1Header1Changed" @bind-Value="@_inputModelSection1.Header1" />
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            @_inputModelSection1.MarkupHeader1
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                            </SplitterPanes>
+                        </SfSplitter>
 
-                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
-                        <SplitterPanes>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3 fill-maxed">
-                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section1Body1Changed" CssClass="@tbMultiLineCss"
-                                                   @bind-Value="@_inputModelSection1.Body1" />
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        @_inputModelSection1.MarkupBody1
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                        </SplitterPanes>
-                    </SfSplitter>
+                        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                            <SplitterPanes>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3 fill-maxed">
+                                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section1Body1Changed" CssClass="@tbMultiLineCss"
+                                                       @bind-Value="@_inputModelSection1.Body1" />
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            @_inputModelSection1.MarkupBody1
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                            </SplitterPanes>
+                        </SfSplitter>
 
-                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
-                        <SplitterPanes>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section1Header2Changed" @bind-Value="@_inputModelSection1.Header2" />
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        @_inputModelSection1.MarkupHeader2
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                        </SplitterPanes>
-                    </SfSplitter>
+                        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                            <SplitterPanes>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section1Header2Changed" @bind-Value="@_inputModelSection1.Header2" />
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            @_inputModelSection1.MarkupHeader2
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                            </SplitterPanes>
+                        </SfSplitter>
 
-                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
-                        <SplitterPanes>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3 fill-maxed">
-                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section1Body2Changed" CssClass="@tbMultiLineCss" @bind-Value="@_inputModelSection1.Body2" />
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        @_inputModelSection1.MarkupBody2
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                        </SplitterPanes>
-                    </SfSplitter>
-                }
-            </div>
-        </div>
-    </div>
-    <!--#endregion-->
-    <!--#region Card 2 Maurice-->
-    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-        <div class="e-card" ID="maurice-card">
-            <!--Picture-->
-            <div class="e-card-image">
-                <img id="maurice-picture" src="/Images/Maurice/pasfoto-flat.png" />
-            </div>
-
-            <!--Header-->
-            <div class="e-card-header">
-                <div class="e-card-header-caption">
-                    <div class="e-card-header-title">
-                        @if (_editPageService.GetEditMode() == false)
-                        {
-                            @_inputModelSection2.MarkupTitle1
-                        }
-                        else
-                        {
-                            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
-                                <SplitterPanes>
-                                    <SplitterPane Size="50%" Min="30%">
-                                        <ContentTemplate>
-                                            <div class="p-3">
-                                                <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2Title1Changed" @bind-Value="@_inputModelSection2.Title1" />
-                                            </div>
-                                        </ContentTemplate>
-                                    </SplitterPane>
-                                    <SplitterPane Size="50%" Min="30%">
-                                        <ContentTemplate>
-                                            <div class="p-3">
-                                                @_inputModelSection2.MarkupTitle1
-                                            </div>
-                                        </ContentTemplate>
-                                    </SplitterPane>
-                                </SplitterPanes>
-                            </SfSplitter>
-                        }
-                    </div>
-                    <div class="e-card-sub-title">
-                        @if (_editPageService.GetEditMode() == false)
-                        {
-                            @_inputModelSection2.MarkupSubTitle1
-                        }
-                        else
-                        {
-                            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
-                                <SplitterPanes>
-                                    <SplitterPane Size="50%" Min="30%">
-                                        <ContentTemplate>
-                                            <div class="p-3">
-                                                <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2SubTitle1Changed" @bind-Value="@_inputModelSection2.SubTitle1" />
-                                            </div>
-                                        </ContentTemplate>
-                                    </SplitterPane>
-                                    <SplitterPane Size="50%" Min="30%">
-                                        <ContentTemplate>
-                                            <div class="p-3">
-                                                @_inputModelSection2.MarkupSubTitle1
-                                            </div>
-                                        </ContentTemplate>
-                                    </SplitterPane>
-                                </SplitterPanes>
-                            </SfSplitter>
-                        }
-                    </div>
+                        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                            <SplitterPanes>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3 fill-maxed">
+                                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section1Body2Changed" CssClass="@tbMultiLineCss" @bind-Value="@_inputModelSection1.Body2" />
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            @_inputModelSection1.MarkupBody2
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                            </SplitterPanes>
+                        </SfSplitter>
+                    }
                 </div>
             </div>
+        </div>
+        <!--#endregion-->
+        <!--#region Card 2 Maurice-->
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+            <div class="e-card" ID="maurice-card">
+                <!--Picture-->
+                <div class="e-card-image">
+                    <img id="maurice-picture" src="/Images/Maurice/pasfoto-flat.png" />
+                </div>
 
-            <!--Body-->
-            <div class="e-card-content">
-                @if (_editPageService.GetEditMode() == false)
-                {
-                    @_inputModelSection2.MarkupHeader1
-                    @_inputModelSection2.MarkupBody1
+                <!--Header-->
+                <div class="e-card-header">
+                    <div class="e-card-header-caption">
+                        <div class="e-card-header-title">
+                            @if (_editPageService.GetEditMode() == false)
+                            {
+                                @_inputModelSection2.MarkupTitle1
+                            }
+                            else
+                            {
+                                <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                                    <SplitterPanes>
+                                        <SplitterPane Size="50%" Min="30%">
+                                            <ContentTemplate>
+                                                <div class="p-3">
+                                                    <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2Title1Changed" @bind-Value="@_inputModelSection2.Title1" />
+                                                </div>
+                                            </ContentTemplate>
+                                        </SplitterPane>
+                                        <SplitterPane Size="50%" Min="30%">
+                                            <ContentTemplate>
+                                                <div class="p-3">
+                                                    @_inputModelSection2.MarkupTitle1
+                                                </div>
+                                            </ContentTemplate>
+                                        </SplitterPane>
+                                    </SplitterPanes>
+                                </SfSplitter>
+                            }
+                        </div>
+                        <div class="e-card-sub-title">
+                            @if (_editPageService.GetEditMode() == false)
+                            {
+                                @_inputModelSection2.MarkupSubTitle1
+                            }
+                            else
+                            {
+                                <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                                    <SplitterPanes>
+                                        <SplitterPane Size="50%" Min="30%">
+                                            <ContentTemplate>
+                                                <div class="p-3">
+                                                    <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2SubTitle1Changed" @bind-Value="@_inputModelSection2.SubTitle1" />
+                                                </div>
+                                            </ContentTemplate>
+                                        </SplitterPane>
+                                        <SplitterPane Size="50%" Min="30%">
+                                            <ContentTemplate>
+                                                <div class="p-3">
+                                                    @_inputModelSection2.MarkupSubTitle1
+                                                </div>
+                                            </ContentTemplate>
+                                        </SplitterPane>
+                                    </SplitterPanes>
+                                </SfSplitter>
+                            }
+                        </div>
+                    </div>
+                </div>
 
-                    @_inputModelSection2.MarkupHeader2
-                    @_inputModelSection2.MarkupBody2
+                <!--Body-->
+                <div class="e-card-content">
+                    @if (_editPageService.GetEditMode() == false)
+                    {
+                        @_inputModelSection2.MarkupHeader1
+                        @_inputModelSection2.MarkupBody1
 
-                    @_inputModelSection2.MarkupHeader3
-                    @_inputModelSection2.MarkupBody3
-                }
-                else
-                {
-                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
-                        <SplitterPanes>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2Header1Changed" @bind-Value="@_inputModelSection2.Header1" />
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        @_inputModelSection2.MarkupHeader1
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                        </SplitterPanes>
-                    </SfSplitter>
+                        @_inputModelSection2.MarkupHeader2
+                        @_inputModelSection2.MarkupBody2
 
-                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
-                        <SplitterPanes>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3 fill-maxed">
-                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section2Body1Changed" CssClass="@tbMultiLineCss"
-                                                   @bind-Value="@_inputModelSection2.Body1" />
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        @_inputModelSection2.MarkupBody1
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                        </SplitterPanes>
-                    </SfSplitter>
+                        @_inputModelSection2.MarkupHeader3
+                        @_inputModelSection2.MarkupBody3
+                    }
+                    else
+                    {
+                        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                            <SplitterPanes>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2Header1Changed" @bind-Value="@_inputModelSection2.Header1" />
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            @_inputModelSection2.MarkupHeader1
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                            </SplitterPanes>
+                        </SfSplitter>
 
-                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
-                        <SplitterPanes>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2Header2Changed" @bind-Value="@_inputModelSection2.Header2" />
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        @_inputModelSection2.MarkupHeader2
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                        </SplitterPanes>
-                    </SfSplitter>
+                        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                            <SplitterPanes>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3 fill-maxed">
+                                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section2Body1Changed" CssClass="@tbMultiLineCss"
+                                                       @bind-Value="@_inputModelSection2.Body1" />
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            @_inputModelSection2.MarkupBody1
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                            </SplitterPanes>
+                        </SfSplitter>
 
-                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
-                        <SplitterPanes>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3 fill-maxed">
-                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section2Body2Changed" CssClass="@tbMultiLineCss" @bind-Value="@_inputModelSection2.Body2" />
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        @_inputModelSection2.MarkupBody2
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                        </SplitterPanes>
-                    </SfSplitter>
+                        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                            <SplitterPanes>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2Header2Changed" @bind-Value="@_inputModelSection2.Header2" />
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            @_inputModelSection2.MarkupHeader2
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                            </SplitterPanes>
+                        </SfSplitter>
 
-                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
-                        <SplitterPanes>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2Header3Changed" @bind-Value="@_inputModelSection2.Header3" />
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        @_inputModelSection2.MarkupHeader3
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                        </SplitterPanes>
-                    </SfSplitter>
+                        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                            <SplitterPanes>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3 fill-maxed">
+                                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section2Body2Changed" CssClass="@tbMultiLineCss" @bind-Value="@_inputModelSection2.Body2" />
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            @_inputModelSection2.MarkupBody2
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                            </SplitterPanes>
+                        </SfSplitter>
 
-                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
-                        <SplitterPanes>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3 fill-maxed">
-                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section2Body3Changed" CssClass="@tbMultiLineCss" @bind-Value="@_inputModelSection2.Body3" />
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                                <ContentTemplate>
-                                    <div class="p-3">
-                                        @_inputModelSection2.MarkupBody3
-                                    </div>
-                                </ContentTemplate>
-                            </SplitterPane>
-                        </SplitterPanes>
-                    </SfSplitter>
-                }
-            </div>
+                        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                            <SplitterPanes>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="Section2Header3Changed" @bind-Value="@_inputModelSection2.Header3" />
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            @_inputModelSection2.MarkupHeader3
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                            </SplitterPanes>
+                        </SfSplitter>
 
-            <!--Footer-->
-            <div class="e-card-actions">
-                <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
-                <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickMoreAbout">More about</SfButton>
+                        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss">
+                            <SplitterPanes>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3 fill-maxed">
+                                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Multiline="true" Input="Section2Body3Changed" CssClass="@tbMultiLineCss" @bind-Value="@_inputModelSection2.Body3" />
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                    <ContentTemplate>
+                                        <div class="p-3">
+                                            @_inputModelSection2.MarkupBody3
+                                        </div>
+                                    </ContentTemplate>
+                                </SplitterPane>
+                            </SplitterPanes>
+                        </SfSplitter>
+                    }
+                </div>
+
+                <!--Footer-->
+                <div class="e-card-actions">
+                    <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickLinkedIN">LinkedIn</SfButton>
+                    <SfButton CssClass="e-btn e-outline e-primary" @onclick="OnClickMoreAbout">More about</SfButton>
+                </div>
             </div>
         </div>
+        <!--#endregion-->
     </div>
-    <!--#endregion-->
 </div>
 
 <style>

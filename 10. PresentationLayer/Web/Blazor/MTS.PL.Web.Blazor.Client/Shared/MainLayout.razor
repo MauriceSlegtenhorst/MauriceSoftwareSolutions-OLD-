@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager _navigationManager
 
     <ToastServiceComponent />
     <SpinnerServiceComponent />
@@ -8,15 +9,21 @@
     </div>
 
     <div class="main">
-        <div class="top-row px-4">
+        <div class="top-row px-4 page-top-bar">
             <span>
                 <AuthorizeView>
                     <Authorized>
                         Name: @context.User.Identity.Name |
                         Access level: @context.User.FindFirst(c => c.Type == ClaimTypes.Role).Value |
                     </Authorized>
+                    <NotAuthorized>
+                        <strong><a href="/authentication/login">Login</a></strong> or
+                        <strong><a href="/account/register" >Register</a></strong> 
+                        to see more of my work |
+                    </NotAuthorized>
                 </AuthorizeView>
-                This site is build by <strong><a href="https://www.linkedin.com/in/mauriceslegtenhorst/" target="_blank">Maurice Slegtenhorst</a></strong> with <strong><a href="http://blazor.net" target="_blank">Blazor WebAssembly</a></strong>
+                This site is build by <strong><a href="https://www.linkedin.com/in/mauriceslegtenhorst/" target="_blank">Maurice Slegtenhorst</a></strong> with 
+                <strong><a href="http://blazor.net" target="_blank">Blazor WebAssembly</a></strong>
             </span>
         </div>
 
