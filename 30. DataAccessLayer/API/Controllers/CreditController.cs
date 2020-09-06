@@ -35,7 +35,7 @@ namespace MTS.BL.API.Controllers
         {
             ICollection<IBLCreditCategory> blCategories = await _creditAdapter.ReadAllAsync();
 
-            ICollection<IPLCreditCategory> plCreditCategories = new List<IPLCreditCategory>();
+            ICollection<PLCreditCategory> plCreditCategories = new List<PLCreditCategory>();
 
             foreach (IBLCreditCategory blCategory in blCategories)
             {

@@ -1,22 +1,50 @@
 ﻿@page "/credits"
+@inject IHttpClientFactory _httpClientFactory
+@inject ISpinnerService _spinnerService
+@inject IToastService _toastService
 
 <PageHeaderComponent PageName="Credits" Subtitle="Sites and people that helped me" />
 
 <div class="row col-12 padding-vertical-top">
     <div class="col-xl-2 col-lg-2 col-md-1 col-sm-1" />
     <div class="col-xl-8 col-lg-8 col-md-10 col-sm-10">
-        <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@messages" />
+        <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@_messages" />
+
     </div>
     <div class="col-xl-2 col-lg-2 col-md-1 col-sm-1" />
 </div>
 
 @code {
-    private IEnumerable<string> messages;
+    private IEnumerable<string> _messages;
 
-    protected override Task OnInitializedAsync()
+    private PLCreditCategory[] _creditCategories;
+
+    protected override async Task OnInitializedAsync()
     {
-        messages = new[] { BlazorConstants.UNDER_CONSTRUCTION_MESSAGE };
+        _messages = new[] { BlazorConstants.UNDER_CONSTRUCTION_MESSAGE };
 
-        return base.OnInitializedAsync();
+        _creditCategories = await GetCreditCategories();
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task<PLCreditCategory[]> GetCreditCategories()
+    {
+        string requestUrl = $"{Constants.APIControllers.CREDITS}/{Constants.CreditControllerEndPoints.READ_ALL_CREDIT_CATEGORY}";
+
+        HttpResponseMessage result = null;
+
+        try
+        {
+            result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).GetAsync(requestUrl);
+        }
+        catch (Exception ex)
+        {
+            _toastService.ShowExceptionToast(ex);
+        }
+
+        var resultJson = await result.Content.ReadAsStringAsync();
+
+        return JsonConvert.DeserializeObject<PLCreditCategory[]>(resultJson, new JsonSerializerSettings {  });
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MTS.PL.Infra.Interfaces.Standard.Credit;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace MTS.PL.Infra.Entities.Standard.Credit
@@ -12,6 +13,8 @@ namespace MTS.PL.Infra.Entities.Standard.Credit
         public string Description { get; set; }
 
         public ICollection<PLCredit> PLCredits { get; set; }
+
+        [JsonIgnore]
         public ICollection<IPLCredit> Credits 
         {
             get
