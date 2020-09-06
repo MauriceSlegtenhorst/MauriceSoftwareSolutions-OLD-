@@ -23,7 +23,7 @@ namespace MTS.Core.GlobalLibrary
         }
 
         // Insiration for desighn https://xd.adobe.com/ideas/principles/web-design/11-website-layouts-that-made-content-shine-in-2019/
-        public class MSS
+        public sealed class MSS
         {
             //TODO Dit aanpasbaar maken voor admins op de pagina zelf. Content zou sws aanpasbaar moeten zijn en niet hardcoded! Voor nu even zo.
             public const string WHAT_IS_MSS =
@@ -66,7 +66,7 @@ namespace MTS.Core.GlobalLibrary
             public const string ABOUT_MAURICE_SHORT = "Born on 27th of april 1991 and living in The Netherlands sinds then. Loves coding and fiddling with electronics. Likes to go for a jog or socialize";
         }
 
-        public class APIControllers
+        public sealed class APIControllers
         {
             public const string ACCOUNT = "account";
             public const string IDENTITY = "identity";
@@ -74,13 +74,18 @@ namespace MTS.Core.GlobalLibrary
             public const string EDIT_PAGE = "editpage";
         }
 
-        public class EditPageControllerEndpoints
+        public sealed class EditPageControllerEndpoints
         {
             public const string GET_BY_PAGE_ROUTE = "getbypageroute";
             public const string UPDATE_BY_PAGE_SECTIONS = "UpdateByPageSections";
         }
 
-        public class AccountControllerEndpoints
+        public sealed class CreditControllerEndPoints
+        {
+            public const string READ_ALL_CREDIT_CATEGORY = "readallcreditcategory";
+        }
+
+        public sealed class AccountControllerEndpoints
         {
             public const string GET_BY_ID = "getbyid";
             public const string GET_BY_EMAIL = "getbyemail";

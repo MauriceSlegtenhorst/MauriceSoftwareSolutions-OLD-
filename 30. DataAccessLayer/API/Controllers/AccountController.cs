@@ -35,7 +35,7 @@ namespace MTS.DAL.API.Controllers
             _exceptionHandler = exceptionHandler;
         }
 
-        #region Get
+        #region Read
         [Authorize]
         [Route(Constants.AccountControllerEndpoints.GET_BY_ID)]
         [HttpPut]

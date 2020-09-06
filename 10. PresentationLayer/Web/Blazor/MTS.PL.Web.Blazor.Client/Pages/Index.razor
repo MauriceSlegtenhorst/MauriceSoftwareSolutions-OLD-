@@ -587,10 +587,10 @@
 
     private Task FillInReceivedData(string json)
     {
-        var plPageSections = JsonConvert.DeserializeObject<List<PLPageSection>>(json);
+        var plPageSections = JsonConvert.DeserializeObject<PLPageSection[]>(json);
 
-        FillInSection1(plPageSections.First());
-        FillInSection2(plPageSections.Skip(1).First());
+        FillInSection1(plPageSections.First(ps => ps.SectionNumber == 0));
+        FillInSection2(plPageSections.First(ps => ps.SectionNumber == 1));
 
         return Task.CompletedTask;
     }

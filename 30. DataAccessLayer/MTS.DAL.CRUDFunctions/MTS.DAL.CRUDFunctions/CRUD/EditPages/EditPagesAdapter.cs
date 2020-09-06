@@ -61,10 +61,6 @@ namespace MTS.DAL.DatabaseAccess.CRUD.EditPages
 
             foreach (IBLPageSection blPageSection in blPageSections)
             {
-                //DALPageSection pageFromDB = _dbContext.PageSections.First(ps => ps.PageSectionId == blPageSection.PageSectionId);
-
-                //pageFromDB.Parts = blPageSection.Parts;
-
                 foreach (IBLSectionPart blPart in blPageSection.Parts)
                 {
                     _dbContext.Update(blPart);

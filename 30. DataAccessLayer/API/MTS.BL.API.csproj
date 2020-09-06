@@ -20,6 +20,20 @@
     <Compile Remove="Migrations\20200904154737_init.Designer.cs" />
     <Compile Remove="Migrations\20200904155228_init.cs" />
     <Compile Remove="Migrations\20200904155228_init.Designer.cs" />
+    <Compile Remove="Migrations\20200905074151_init.cs" />
+    <Compile Remove="Migrations\20200905074151_init.Designer.cs" />
+    <Compile Remove="Migrations\20200905104309_AddingCreditsFeatures.cs" />
+    <Compile Remove="Migrations\20200905104309_AddingCreditsFeatures.Designer.cs" />
+    <Compile Remove="Migrations\20200905104550_init.cs" />
+    <Compile Remove="Migrations\20200905104550_init.Designer.cs" />
+    <Compile Remove="Migrations\20200905105152_init.cs" />
+    <Compile Remove="Migrations\20200905105152_init.Designer.cs" />
+    <Compile Remove="Migrations\20200905105715_init.cs" />
+    <Compile Remove="Migrations\20200905105715_init.Designer.cs" />
+    <Compile Remove="Migrations\20200905111052_init.cs" />
+    <Compile Remove="Migrations\20200905111052_init.Designer.cs" />
+    <Compile Remove="Migrations\20200905195440_init.cs" />
+    <Compile Remove="Migrations\20200905195440_init.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +59,10 @@
     <ProjectReference Include="..\..\50. Core\MTS.Core.GlobalLibrary\MTS.Core.GlobalLibrary.csproj" />
     <ProjectReference Include="..\..\MTS.DAL.Infra.Interfaces\MTS.DAL.Interfaces.Standard.csproj" />
     <ProjectReference Include="..\MTS.DAL.CRUDFunctions\MTS.DAL.CRUDFunctions\MTS.DAL.DatabaseAccess.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 

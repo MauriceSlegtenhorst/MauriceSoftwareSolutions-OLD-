@@ -11,6 +11,7 @@ using MTS.BL.Infra.Entities;
 using MTS.BL.Infra.Interfaces;
 using MTS.BL.Infra.Interfaces.Standard.DatabaseAdapter;
 using MTS.DAL.DatabaseAccess.CRUD.EditPages;
+using MTS.DAL.DatabaseAccess.CRUD.Credit;
 
 namespace MTS.DAL.DatabaseAccess.Extensions
 {
@@ -57,6 +58,8 @@ namespace MTS.DAL.DatabaseAccess.Extensions
             services.AddTransient<IIdentityAdapter, IdentityAdapter>();
 
             services.AddTransient<IEditPageAdapter, EditPagesAdapter>();
+
+            services.AddTransient<ICreditAdapter, CreditAdapter>();
 
             services.AddSingleton<DbConfigurations>();
 

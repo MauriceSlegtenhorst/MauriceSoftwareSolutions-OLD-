@@ -71,6 +71,7 @@ namespace MTS.BL.API.Controllers
                         new PLPageSection
                         {
                             PageSectionId = blPageSection.PageSectionId,
+                            SectionNumber = blPageSection.SectionNumber,
                             PageRoute = blPageSection.PageRoute,
                             PLSectionParts = plSectionParts
                         }

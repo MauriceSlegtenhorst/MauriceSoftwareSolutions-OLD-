@@ -51,18 +51,17 @@ namespace MTS.BL.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Credits",
+                name: "CreditCategories",
                 columns: table => new
                 {
-                    CreditId = table.Column<Guid>(nullable: false),
-                    MadeBy = table.Column<string>(nullable: true),
-                    GotFrom = table.Column<string>(nullable: true),
-                    LinkToImage = table.Column<string>(nullable: true),
-                    AuthorWebsite = table.Column<string>(nullable: true)
+                    CreditCategoryId = table.Column<Guid>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
+                    SubTitle = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Credits", x => x.CreditId);
+                    table.PrimaryKey("PK_CreditCategories", x => x.CreditCategoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -70,6 +69,7 @@ namespace MTS.BL.API.Migrations
                 columns: table => new
                 {
                     PageSectionId = table.Column<Guid>(nullable: false),
+                    SectionNumber = table.Column<int>(nullable: false),
                     PageRoute = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -184,6 +184,32 @@ namespace MTS.BL.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Credits",
+                columns: table => new
+                {
+                    CreditId = table.Column<Guid>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
+                    SubTitle = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    MadeBy = table.Column<string>(nullable: true),
+                    MadeByWebsite = table.Column<string>(nullable: true),
+                    GotFrom = table.Column<string>(nullable: true),
+                    GotFromWebsite = table.Column<string>(nullable: true),
+                    LinkToImage = table.Column<string>(nullable: true),
+                    CreditCategoryFK = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Credits", x => x.CreditId);
+                    table.ForeignKey(
+                        name: "FK_Credits_CreditCategories_CreditCategoryFK",
+                        column: x => x.CreditCategoryFK,
+                        principalTable: "CreditCategories",
+                        principalColumn: "CreditCategoryId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SectionParts",
                 columns: table => new
                 {
@@ -208,12 +234,12 @@ namespace MTS.BL.API.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "d4be0aa2-d394-4324-9301-6b0e83d6871d", "befe7b7e-0771-4388-bd51-f00687800f3e", "administrator", "ADMINISTRATOR" },
-                    { "d8ef71df-4a62-4790-83ce-c15675027a9d", "c35275cd-162a-4be8-932e-d17f107953d2", "privilegedemployee", "PRIVILEGEDEMPLOYEE" },
-                    { "b9a4c02a-ef45-414c-9681-78d7bcfd4ab0", "5eb8ee71-28ca-44b0-8120-daf201c4918e", "employee", "EMPLOYEE" },
-                    { "f36c72e5-4d61-437e-a735-e8c749742de8", "d2195338-bda2-46e6-83e1-0908468fdbb5", "volenteer", "VOLENTEER" },
-                    { "079fecff-1904-4b72-942f-987aa2f8ccb6", "9e4f4a24-7a28-4c1a-b4ab-cc7efd0f7022", "privilegeduser", "PRIVILEGEDUSER" },
-                    { "b347297d-d6bf-4082-8dcf-d156510b9c8a", "2c0eed2b-c76f-40ac-998e-6ff5e83ace6f", "standarduser", "STANDARDUSER" }
+                    { "ead5b150-ca04-4bce-a55d-83cf739dc7d8", "a009749f-22c8-41ce-8b71-7f3cf606ed9a", "administrator", "ADMINISTRATOR" },
+                    { "4c70af36-f0fc-457c-aede-1b0ec2247518", "3c7a3847-2824-46dc-af28-8a59c42b3852", "privilegedemployee", "PRIVILEGEDEMPLOYEE" },
+                    { "99e1d4e1-94b2-4ad0-9b63-56779bab8277", "8126c200-fb00-4a7a-ad68-39aac054b476", "employee", "EMPLOYEE" },
+                    { "2aa69a56-324d-4b2e-858f-e12421a9657f", "dd841d33-b52f-4baf-a774-0afbe389cdd5", "volenteer", "VOLENTEER" },
+                    { "126bccb1-67de-4865-8359-25f1eaf2c408", "d6287b54-a7f5-4d1d-95d8-2d97fb37bc16", "privilegeduser", "PRIVILEGEDUSER" },
+                    { "fdf58f7d-b2ba-443a-84c1-f4ece9b839b5", "1fec1417-b9a2-4347-8c75-49c7eb9e78ca", "standarduser", "STANDARDUSER" }
                 });
 
             migrationBuilder.InsertData(
@@ -221,20 +247,25 @@ namespace MTS.BL.API.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "Affix", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "IsAdmitted", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "6a543003-ac31-4db5-8900-66ed4178d576", 0, null, "31733f2c-f4c0-4b7d-a816-c7dd0d9e9c60", "mauricesoftwaresolution@outlook.com", true, "Maurice", true, "Slegtenhorst", true, null, "MAURICESOFTWARESOLUTION@OUTLOOK.COM", "MAURICESOFTWARESOLUTION@OUTLOOK.COM", "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==", "0645377536", true, "fbc91da7-ab15-4855-91b8-e63fa51c97ba", false, "mauricesoftwaresolution@outlook.com" },
-                    { "dfdf6cd0-19e9-4fb9-bb1d-76e214a0348a", 0, null, "d488f99f-5f39-4f40-9ba0-d4aaf5268935", "hanneke.slegtenhorst1@gmail.com", true, "Hanneke", true, "Slegtenhorst", true, null, "HANNEKE.SLEGTENHORST1@GMAIL.COM", "HANNEKE.SLEGTENHORST1@GMAIL.COM", "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==", "060017836617", true, "28afc327-3f9e-4c5f-ac5f-d7161625a7b1", false, "hanneke.slegtenhorst1@gmail.com" },
-                    { "6ee3220d-7dc0-4da5-ac1d-2c23c14c0c5b", 0, null, "6b36d726-3939-4fda-8d2d-2e1fac74b901", "privilegedemployee01@mss.nl", true, "PrivilegedEmployee_01", true, "None", true, null, "PRIVILEGEDEMPLOYEE01@MSS.NL", "PRIVILEGEDEMPLOYEE01@MSS.NL", "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==", "060042849790", true, "c86cdcc5-b903-45aa-8895-82e1234e661e", false, "privilegedemployee01@mss.nl" },
-                    { "51947d08-905f-46b0-90f7-4ab8078e782e", 0, null, "a022f27c-f719-408a-894f-d9a2a519509d", "employee01@mss.nl", true, "Employee_01", true, "None", true, null, "EMPLOYEE01@MSS.NL", "EMPLOYEE01@MTS.NL", "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==", "060038506665", true, "3eb8f005-b421-4a58-a066-cc11e8578532", false, "Employee01@MTS.nl" },
-                    { "e2f80e16-9aec-4e07-a5c6-58f021d17afa", 0, null, "595ff8b9-b824-463c-8cfe-af505b0f211b", "standarduser01@mts.nl", true, "StandardUser_01", true, "None", true, null, "STANDARDUSER01@MSS.NL", "STANDARDUSER01@MSS.NL", "AQAAAAEAACcQAAAAEHait8D6dTkmW3iXth8zPNDHAGkYHjA771sTtCrXDPkW+dB2URe0NbytgE6D5cwQKA==", "060073334147", true, "125a43e9-b24b-45a0-85de-cd3c0452d322", false, "standarduser01@mts.nl" }
+                    { "3ac0d468-eaf7-45dc-a817-ae5224276540", 0, null, "ea34b86d-7e85-45fe-b7bb-0436154a2135", "mauricesoftwaresolution@outlook.com", true, "Maurice", true, "Slegtenhorst", true, null, "MAURICESOFTWARESOLUTION@OUTLOOK.COM", "MAURICESOFTWARESOLUTION@OUTLOOK.COM", "AQAAAAEAACcQAAAAEIcVZGJyAFQ/+su7fIl8qk+S2g21JC2T/5LMyjWbUfkg2/r4uu/De/6y8xQh6bSbzg==", "0645377536", true, "46db7ffc-2111-4100-b2e4-77efa6d12d2d", false, "mauricesoftwaresolution@outlook.com" },
+                    { "7695a43b-9e4f-43a4-a6b7-bdf5fd1b9ebb", 0, null, "17d340a9-6d71-46f3-894f-8b73b85912b2", "hanneke.slegtenhorst1@gmail.com", true, "Hanneke", true, "Slegtenhorst", true, null, "HANNEKE.SLEGTENHORST1@GMAIL.COM", "HANNEKE.SLEGTENHORST1@GMAIL.COM", "AQAAAAEAACcQAAAAEIcVZGJyAFQ/+su7fIl8qk+S2g21JC2T/5LMyjWbUfkg2/r4uu/De/6y8xQh6bSbzg==", "060076761477", true, "f084ac69-a2f8-4889-a56c-d99c4202415f", false, "hanneke.slegtenhorst1@gmail.com" },
+                    { "3cd4f0f2-67f6-43cf-8dbd-e47bf7ca5964", 0, null, "c0a5b443-dbc4-4c1d-94f3-70a752d4be76", "privilegedemployee01@mss.nl", true, "PrivilegedEmployee_01", true, "None", true, null, "PRIVILEGEDEMPLOYEE01@MSS.NL", "PRIVILEGEDEMPLOYEE01@MSS.NL", "AQAAAAEAACcQAAAAEIcVZGJyAFQ/+su7fIl8qk+S2g21JC2T/5LMyjWbUfkg2/r4uu/De/6y8xQh6bSbzg==", "060090464683", true, "246ff64b-e568-4164-9a8e-7f987b762e8f", false, "privilegedemployee01@mss.nl" },
+                    { "a797f750-7595-4b14-8490-964282d9792f", 0, null, "a7cb966d-eab3-45af-8ab4-31e3341de65a", "employee01@mss.nl", true, "Employee_01", true, "None", true, null, "EMPLOYEE01@MSS.NL", "EMPLOYEE01@MTS.NL", "AQAAAAEAACcQAAAAEIcVZGJyAFQ/+su7fIl8qk+S2g21JC2T/5LMyjWbUfkg2/r4uu/De/6y8xQh6bSbzg==", "060026821470", true, "d9c8ddc6-0e85-40e0-aa6e-c0bf3ba37f68", false, "Employee01@MTS.nl" },
+                    { "c5a70434-3e5f-4dd9-86e4-e80c501c1935", 0, null, "c92bd219-6716-454e-bbe0-f40758dba802", "standarduser01@mts.nl", true, "StandardUser_01", true, "None", true, null, "STANDARDUSER01@MSS.NL", "STANDARDUSER01@MSS.NL", "AQAAAAEAACcQAAAAEIcVZGJyAFQ/+su7fIl8qk+S2g21JC2T/5LMyjWbUfkg2/r4uu/De/6y8xQh6bSbzg==", "060019710307", true, "ec5bd8b8-b99d-411f-acda-dfe8a2400bd4", false, "standarduser01@mts.nl" }
                 });
 
             migrationBuilder.InsertData(
+                table: "CreditCategories",
+                columns: new[] { "CreditCategoryId", "Description", "SubTitle", "Title" },
+                values: new object[] { new Guid("02e668f8-f7ca-4f8a-b033-09f61878f803"), null, "<h5>Sources that made UI development easier</h5>", "<h4>Don't reinvent the wheel<h4>" });
+
+            migrationBuilder.InsertData(
                 table: "PageSections",
-                columns: new[] { "PageSectionId", "PageRoute" },
+                columns: new[] { "PageSectionId", "PageRoute", "SectionNumber" },
                 values: new object[,]
                 {
-                    { new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"), "Index" },
-                    { new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Index" }
+                    { new Guid("c6e63cbd-588e-4283-a410-3a489c979525"), "Index", 0 },
+                    { new Guid("b8505101-d148-4869-ba87-0023a8cf634e"), "Index", 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -242,11 +273,20 @@ namespace MTS.BL.API.Migrations
                 columns: new[] { "UserId", "RoleId" },
                 values: new object[,]
                 {
-                    { "e2f80e16-9aec-4e07-a5c6-58f021d17afa", "b347297d-d6bf-4082-8dcf-d156510b9c8a" },
-                    { "6ee3220d-7dc0-4da5-ac1d-2c23c14c0c5b", "d8ef71df-4a62-4790-83ce-c15675027a9d" },
-                    { "dfdf6cd0-19e9-4fb9-bb1d-76e214a0348a", "d4be0aa2-d394-4324-9301-6b0e83d6871d" },
-                    { "6a543003-ac31-4db5-8900-66ed4178d576", "d4be0aa2-d394-4324-9301-6b0e83d6871d" },
-                    { "51947d08-905f-46b0-90f7-4ab8078e782e", "b9a4c02a-ef45-414c-9681-78d7bcfd4ab0" }
+                    { "c5a70434-3e5f-4dd9-86e4-e80c501c1935", "fdf58f7d-b2ba-443a-84c1-f4ece9b839b5" },
+                    { "3cd4f0f2-67f6-43cf-8dbd-e47bf7ca5964", "4c70af36-f0fc-457c-aede-1b0ec2247518" },
+                    { "7695a43b-9e4f-43a4-a6b7-bdf5fd1b9ebb", "ead5b150-ca04-4bce-a55d-83cf739dc7d8" },
+                    { "3ac0d468-eaf7-45dc-a817-ae5224276540", "ead5b150-ca04-4bce-a55d-83cf739dc7d8" },
+                    { "a797f750-7595-4b14-8490-964282d9792f", "99e1d4e1-94b2-4ad0-9b63-56779bab8277" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Credits",
+                columns: new[] { "CreditId", "CreditCategoryFK", "Description", "GotFrom", "GotFromWebsite", "LinkToImage", "MadeBy", "MadeByWebsite", "SubTitle", "Title" },
+                values: new object[,]
+                {
+                    { new Guid("f386ce3e-8087-4cb8-bf2a-b541f0edd169"), new Guid("02e668f8-f7ca-4f8a-b033-09f61878f803"), "<p>Most, if not all icons came from this provider. This font came with the project when it was created. I kept it for its ease of use.</p>", "Blazor WebAssembly project builder", "https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor", "https://img.stackshare.io/service/3029/iconic.png", null, "https://useiconic.com/open", "<h5>Provider of fonts and icons</h5>", "<h4>Open Iconic</h4>" },
+                    { new Guid("78d0bc31-c3d1-4e6e-b8e0-3c9d9ce2c340"), new Guid("02e668f8-f7ca-4f8a-b033-09f61878f803"), "<p>Some tasks while creating an UI are repetative. Syncfusion helps by providing components that cover these needs.</p>", "Syncfusion community license", "https://www.syncfusion.com/products/communitylicense", "https://cdn.syncfusion.com/content/images/Logo/Logo_150dpi.png", null, "https://www.syncfusion.com/blazor-components", "<h5>Easy to use premade Blazor components</h5>", "<h4>Syncfusion</h4>" }
                 });
 
             migrationBuilder.InsertData(
@@ -254,25 +294,25 @@ namespace MTS.BL.API.Migrations
                 columns: new[] { "SectionPartId", "Content", "PageSectionFK", "Type" },
                 values: new object[,]
                 {
-                    { new Guid("ab503d45-82a1-4b5b-91fd-4daa9043da32"), "<p>Born on 27th of april 1991 and living in The Netherlands sinds then. Loves coding and fiddling with electronics. Likes to go for a jog or socialize</p>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Body3" },
-                    { new Guid("7847fc82-0913-4ab7-8fea-dc2c4ee59301"), "<strong>Maurice in a nutshell</strong>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Header3" },
-                    { new Guid("3843a84c-4028-4f1a-9c43-4d6a518502a5"), "<p>C#, JavaScript, SQL, HTML5, CSS3, XAML and XML</p>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Body2" },
-                    { new Guid("aa303979-bc14-442e-8e05-8eaab8bdc177"), "<strong>What can he do?</strong>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Header2" },
-                    { new Guid("81317e89-bace-4a41-a152-ba2b6f9f7bc3"), "<div class=\"row\"><div class=\"col - 6\">Phone number:</div><div class=\"col - 6\">+31 645377536</div></div><div class=\"row\"><div class=\"col - 6\">Personal e-mail:</div><div class=\"col - 6\">maurice.slegtenhorst@outlook.com</div></div><div class=\"row\"><div class=\"col - 6\">Student e-mail</div><div class=\"col - 6\">maurice.slegtenhorst@itvitaelearning.nl</div></div></p>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Body1" },
-                    { new Guid("e84b936c-1555-4eae-9ee8-a6d43f54b26e"), "<h5>C# Software Developer</h5>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "SubTitle1" },
-                    { new Guid("04c314d7-3853-482b-864f-15e230e7920d"), "<h4>Maurice Slegtenhorst</h4>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Title1" },
-                    { new Guid("b6193c4a-3bb6-42f5-9572-2178951fd91f"), @"<p>I am an enthusiastic man with a strong passion for programming. Social and friendly going. Coding has been my hobby from an early age. When I was 13, I made my first program in Visual Basic. A slot machine where there were secret options to get infinite money for example. Later, around the age of 18, I started working with Java, XML and Android Studio. With this I built a number of Android apps including an applocker. This app allowed the user to choose which apps and services needed an additional password or fingerprint to be used.</p>
+                    { new Guid("eb61a4f0-2817-444e-90f8-79d16b2f4529"), @"<p>I am an enthusiastic man with a strong passion for programming. Social and friendly going. Coding has been my hobby from an early age. When I was 13, I made my first program in Visual Basic. A slot machine where there were secret options to get infinite money for example. Later, around the age of 18, I started working with Java, XML and Android Studio. With this I built a number of Android apps including an applocker. This app allowed the user to choose which apps and services needed an additional password or fingerprint to be used.</p>
                 <p>Friends and especially family regularly ask me for help with electronics and software related matters. I think this is because I have been busy with software and hardware practically my whole life.</p>
                 <p>Marketing and commerce seemed to be my career choice for a long time. During my higher professional education, Commercial Economics, I found out that this did not meet my expectations.</p>
                 <p>At one point I ended up at ITvitae and started working on my C# programming skills. This went well for me because Java is similar in syntax to C#. Here I have made several complicated programs with C# and related languages such as SQL, HTML XAML, JavaScript and CSS. At ITvitae I have greatly improved my software development skills. After about a year I have successfully completed the process.</p>
                 <p>My interests lie in the latest techniques in software development and electronics. In particular what advantages and disadvantages there are. For example, I can get enthusiastic about developments such as Blazor. This offers such cool options within the internet landscape. For example, the website can be installed as a local application and C# can be used instead of JavaScript! If I find something interesting, I want to find out and test it. See what has gotten better or worse.</p>
                 <p>Besides my passion for programming, I am also interested in hardware. For example, I have built my own PC and home server. That very server you are accessing right now.</p>
-                <p>That’s it. If you want to know more about me or Maurice Software Solutions, please navigate to the feedback or contact page to ask your question</p>", new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"), "Body2" },
-                    { new Guid("67b4c6ce-310e-43bc-a7cf-c2e128a16b20"), "<strong>Who is Maurice?</strong>", new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"), "Header2" },
-                    { new Guid("3359c3fb-f0a1-411a-9864-497757110dd6"), "<p>Maurice Software Solutions was created to showcase my programming skills and to have some fun. Aside from that there is handy and fun functionality to be found like a fully-fledged, unlimited personal cloud storage system and a chatroom. And those are just the things I am currently working on. I am dedicated to improving Maurice Software Solutions as a whole regularly whilst adding cool new features.</p>", new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"), "Body1" },
-                    { new Guid("01946315-59c5-43b9-8721-1bd17b508c00"), "<strong>What is MSS?</strong>", new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"), "Header1" },
-                    { new Guid("7c958ec2-f9a3-4f2c-93b0-3384c67ae48b"), "<strong>Contact information</strong>", new Guid("e080f91f-8487-4515-93a0-e5b50060ed3c"), "Header1" },
-                    { new Guid("39aea878-58a0-449d-bf2b-8a8c7e19c91b"), "<h4>About me and MSS</h4>", new Guid("952dbfe4-42f0-46ac-87cd-8fc1f8acf862"), "Title1" }
+                <p>That’s it. If you want to know more about me or Maurice Software Solutions, please navigate to the feedback or contact page to ask your question</p>", new Guid("c6e63cbd-588e-4283-a410-3a489c979525"), "Body2" },
+                    { new Guid("d672d408-624b-425b-84c0-c09779aaad42"), "<h4>Maurice Slegtenhorst</h4>", new Guid("b8505101-d148-4869-ba87-0023a8cf634e"), "Title1" },
+                    { new Guid("71067f26-7cf1-4aba-a9d5-c101b0725633"), "<h5>C# Software Developer</h5>", new Guid("b8505101-d148-4869-ba87-0023a8cf634e"), "SubTitle1" },
+                    { new Guid("852bf666-646e-4c1a-bd24-e80b78da167d"), "<p>Maurice Software Solutions was created to showcase my programming skills and to have some fun. Aside from that there is handy and fun functionality to be found like a fully-fledged, unlimited personal cloud storage system and a chatroom. And those are just the things I am currently working on. I am dedicated to improving Maurice Software Solutions as a whole regularly whilst adding cool new features.</p>", new Guid("c6e63cbd-588e-4283-a410-3a489c979525"), "Body1" },
+                    { new Guid("6c8e8c7f-4955-4d02-a8d7-d8f4900277a4"), "<div class=\"row\"><div class=\"col - 6\">Phone number:</div><div class=\"col - 6\">+31 645377536</div></div><div class=\"row\"><div class=\"col - 6\">Personal e-mail:</div><div class=\"col - 6\">maurice.slegtenhorst@outlook.com</div></div><div class=\"row\"><div class=\"col - 6\">Student e-mail</div><div class=\"col - 6\">maurice.slegtenhorst@itvitaelearning.nl</div></div></p>", new Guid("b8505101-d148-4869-ba87-0023a8cf634e"), "Body1" },
+                    { new Guid("179f4afb-7f98-416e-aea8-4d7eeb65e0d5"), "<strong>What can he do?</strong>", new Guid("b8505101-d148-4869-ba87-0023a8cf634e"), "Header2" },
+                    { new Guid("1a9ece75-da90-41db-8d6b-0f041e962b23"), "<p>C#, JavaScript, SQL, HTML5, CSS3, XAML and XML</p>", new Guid("b8505101-d148-4869-ba87-0023a8cf634e"), "Body2" },
+                    { new Guid("f8c48f69-4c87-4d50-8475-fca56da175da"), "<strong>Maurice in a nutshell</strong>", new Guid("b8505101-d148-4869-ba87-0023a8cf634e"), "Header3" },
+                    { new Guid("c2caf1ac-6e69-4a25-b1ce-dc6e5d1f98f4"), "<p>Born on 27th of april 1991 and living in The Netherlands sinds then. Loves coding and fiddling with electronics. Likes to go for a jog or socialize</p>", new Guid("b8505101-d148-4869-ba87-0023a8cf634e"), "Body3" },
+                    { new Guid("0648cb01-e522-41fa-be4e-f3c7664e1ac4"), "<strong>What is MSS?</strong>", new Guid("c6e63cbd-588e-4283-a410-3a489c979525"), "Header1" },
+                    { new Guid("1964c609-c7b6-4b1f-ab06-653c1fa71a2b"), "<h4>About me and MSS</h4>", new Guid("c6e63cbd-588e-4283-a410-3a489c979525"), "Title1" },
+                    { new Guid("dd640107-8672-4103-83dd-bf67259ee3c4"), "<strong>Who is Maurice?</strong>", new Guid("c6e63cbd-588e-4283-a410-3a489c979525"), "Header2" },
+                    { new Guid("110248e6-4a87-4a86-88a9-6b38e7577414"), "<strong>Contact information</strong>", new Guid("b8505101-d148-4869-ba87-0023a8cf634e"), "Header1" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -315,6 +355,11 @@ namespace MTS.BL.API.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Credits_CreditCategoryFK",
+                table: "Credits",
+                column: "CreditCategoryFK");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SectionParts_PageSectionFK",
                 table: "SectionParts",
                 column: "PageSectionFK");
@@ -348,6 +393,9 @@ namespace MTS.BL.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "CreditCategories");
 
             migrationBuilder.DropTable(
                 name: "PageSections");

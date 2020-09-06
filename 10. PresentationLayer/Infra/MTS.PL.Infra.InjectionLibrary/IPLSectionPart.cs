@@ -4,7 +4,7 @@ namespace MTS.PL.Infra.Interfaces.Standard
 {
     public interface IPLSectionPart
     {
-        public Guid SectionPartId { get; set; }
+        Guid SectionPartId { get; set; }
 
         /// <summary>
         /// Title1, header1, paragraph1

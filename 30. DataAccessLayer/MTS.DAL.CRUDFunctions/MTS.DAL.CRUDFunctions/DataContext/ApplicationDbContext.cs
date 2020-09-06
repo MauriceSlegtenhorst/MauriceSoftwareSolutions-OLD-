@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MTS.BL.Infra.Interfaces.Standard.EditPageContent;
-using MTS.Core.GlobalLibrary;
 using MTS.DAL.Entities.Core;
+using MTS.DAL.Entities.Core.Credit;
 using MTS.DAL.Entities.Core.EditPageContent;
 using MTS.DAL.Interfaces.Standard;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MTS.DAL.DatabaseAccess.DataContext
 {
@@ -19,6 +14,7 @@ namespace MTS.DAL.DatabaseAccess.DataContext
         public DbSet<DALPageSection> PageSections { get; set; }
         public DbSet<DALSectionPart> SectionParts { get; set; }
         public DbSet<DALUserAccount> UserAccounts { get; set; }
+        public DbSet<DALCreditCategory> CreditCategories { get; set; }
         public DbSet<DALCredit> Credits { get; set; }
 
         public ApplicationDbContext(
@@ -36,6 +32,8 @@ namespace MTS.DAL.DatabaseAccess.DataContext
             await _seedData.SeedPageSectionsAsync(builder);
 
             await _seedData.SeedAccountsAsync(builder);
+
+            await _seedData.SeedCredits(builder);
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using MTS.BL.Infra.Interfaces.Standard;
-using MTS.BL.Infra.Interfaces.Standard.EditPageContent;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace MTS.DAL.Interfaces.Standard
 {
@@ -9,5 +6,6 @@ namespace MTS.DAL.Interfaces.Standard
     {
         Task SeedPageSectionsAsync(object builderObject);
         Task SeedAccountsAsync(object builderObject);
+        Task SeedCredits(object builderObject);
     }
 }

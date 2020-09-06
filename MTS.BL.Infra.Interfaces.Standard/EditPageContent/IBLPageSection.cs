@@ -7,6 +7,8 @@ namespace MTS.BL.Infra.Interfaces.Standard.EditPageContent
     {
         Guid PageSectionId { get; set; }
 
+        int SectionNumber { get; set; }
+
         string PageRoute { get; set; }
 
         ICollection<IBLSectionPart> Parts { get; set; }

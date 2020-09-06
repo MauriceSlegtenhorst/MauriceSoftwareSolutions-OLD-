@@ -12,9 +12,11 @@ namespace MTS.DAL.Entities.Core.EditPageContent
         [Key]
         public Guid PageSectionId { get; set; }
 
+        public int SectionNumber { get; set; }
+
         public string PageRoute { get; set; }
 
-        [ForeignKey("PageSectionFK")]
+        [ForeignKey(nameof(DALSectionPart.PageSectionFK))]
         public ICollection<DALSectionPart> DALSectionParts { get; set; }
 
         [NotMapped]

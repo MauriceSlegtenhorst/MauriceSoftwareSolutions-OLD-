@@ -17,7 +17,7 @@ namespace MTS.DAL.Entities.Core.EditPageContent
 
         public string Content { get; set; }
 
-        [ForeignKey(nameof(DALPageSection))]
+        [ForeignKey(nameof(EditPageContent.DALPageSection.PageSectionId))]
         public Guid PageSectionFK { get; set; }
 
         public DALPageSection DALPageSection { get; set; }

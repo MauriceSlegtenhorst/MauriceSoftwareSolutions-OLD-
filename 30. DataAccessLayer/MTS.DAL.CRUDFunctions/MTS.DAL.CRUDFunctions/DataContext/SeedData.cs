@@ -11,6 +11,7 @@ using MTS.Core.GlobalLibrary;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using System.Diagnostics;
+using MTS.DAL.Entities.Core.Credit;
 
 namespace MTS.DAL.DatabaseAccess.DataContext
 {
@@ -32,11 +33,13 @@ namespace MTS.DAL.DatabaseAccess.DataContext
                     new DALPageSection
                     {
                         PageSectionId = sectionIds[0],
+                        SectionNumber = 0,
                         PageRoute = "Index"
                     },
                     new DALPageSection
                     {
                         PageSectionId = sectionIds[1],
+                        SectionNumber = 1,
                         PageRoute = "Index"
                     }
                 );
@@ -184,6 +187,69 @@ namespace MTS.DAL.DatabaseAccess.DataContext
             ));
 
             return Task.CompletedTask;
+        }
+
+        public Task SeedCredits(object builderObject)
+        {
+            var builder = (ModelBuilder)builderObject;
+
+            DALCreditCategory[] creditCategories = CreateCreditCategories();
+            builder.Entity<DALCreditCategory>(creditCategory => creditCategory.HasData
+            (
+               creditCategories
+            ));
+
+            DALCredit[] credits = CreateCredits(creditCategories);
+            builder.Entity<DALCredit>(credit => credit.HasData
+            (
+               credits
+            ));
+
+            return Task.CompletedTask;
+        }
+
+        private DALCreditCategory[] CreateCreditCategories()
+        {
+            return new DALCreditCategory[]
+            {
+                new DALCreditCategory
+                {
+                    CreditCategoryId = Guid.NewGuid(),
+                    Title = "<h4>Don't reinvent the wheel<h4>",
+                    SubTitle = "<h5>Sources that made UI development easier</h5>"
+                }
+            };
+        }
+
+        private DALCredit[] CreateCredits(DALCreditCategory[] creditCategories)
+        {
+            return new DALCredit[]
+            {
+                new DALCredit
+                {
+                    CreditId = Guid.NewGuid(),
+                    Title = "<h4>Open Iconic</h4>",
+                    SubTitle = "<h5>Provider of fonts and icons</h5>",
+                    LinkToImage = "https://img.stackshare.io/service/3029/iconic.png",
+                    GotFrom ="Blazor WebAssembly project builder",
+                    GotFromWebsite = "https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor",
+                    MadeByWebsite = "https://useiconic.com/open",
+                    Description = "<p>Most, if not all icons came from this provider. This font came with the project when it was created. I kept it for its ease of use.</p>",
+                    CreditCategoryFK = creditCategories.First(creditCategory => creditCategory.Title == "<h4>Don't reinvent the wheel<h4>").CreditCategoryId
+                },
+                new DALCredit
+                {
+                    CreditId = Guid.NewGuid(),
+                    Title = "<h4>Syncfusion</h4>",
+                    SubTitle = "<h5>Easy to use premade Blazor components</h5>",
+                    LinkToImage = "https://cdn.syncfusion.com/content/images/Logo/Logo_150dpi.png",
+                    GotFrom = "Syncfusion community license",
+                    GotFromWebsite = "https://www.syncfusion.com/products/communitylicense",
+                    MadeByWebsite = "https://www.syncfusion.com/blazor-components",
+                    Description = "<p>Some tasks while creating an UI are repetative. Syncfusion helps by providing components that cover these needs.</p>",
+                    CreditCategoryFK = creditCategories.First(creditCategory => creditCategory.Title == "<h4>Don't reinvent the wheel<h4>").CreditCategoryId
+                }
+            };
         }
 
         private IdentityRole[] CreateIdentityRoles()
