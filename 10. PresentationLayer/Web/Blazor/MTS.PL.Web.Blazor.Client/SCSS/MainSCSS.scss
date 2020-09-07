@@ -15,14 +15,17 @@ $PADDING: 1.25vw;
 $SCREEN_WIDTH: 100vw;
 $SCREEN_HEIGHT: 100vh;
 
+/*Top bar*/
 $PAGE_TOP_BAR_HEIGHT: $SCREEN_HEIGHT / 100 * 5;
 $PAGE_TOP_BAR_WIDTH: $SCREEN_WIDTH;
 
+/*Header*/
+$PAGE_HEADER_HEIGHT: $SCREEN_HEIGHT / 100 * 15;
+$PAGE_HEADER_WIDTH: $SCREEN_WIDTH;
+
+/*Body*/
 $PAGE_BODY_HEIGHT: $SCREEN_HEIGHT / 100 * 80;
 $PAGE_BODY_WIDTH: $SCREEN_WIDTH;
-
-$PAGE_BODY_HEADER_HEIGHT: $SCREEN_HEIGHT / 100 * 15;
-$PAGE_BODY_HEADER_WIDTH: $SCREEN_WIDTH - $PAGE_BODY_WIDTH;
 
 a, .btn-link {
     color: $BLUE;
@@ -37,13 +40,18 @@ app {
     max-width: $SCREEN_WIDTH;
     position: fixed;
     overflow:hidden;
+    
+}
+
+::-webkit-scrollbar{
+    display:none;
 }
 
 html, body {
-    /*font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;*/
-    background-color: $GRAY;
     color: $SMOKE_WHITE;
 }
+
+
 
 .btn-primary {
     color: $SMOKE_WHITE;
@@ -52,15 +60,31 @@ html, body {
 }
 
 .page {
+    z-index: 0;
+    background-image: url('/Images/Coding/background-blurred.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+
     &-top-bar {
-        z-index: 1;
+        z-index: 2;
         height: $PAGE_TOP_BAR_HEIGHT;
         min-height: $PAGE_TOP_BAR_HEIGHT;
         max-height: $PAGE_TOP_BAR_HEIGHT;
     }
 
+    &-header {
+        z-index: 2;
+        height: $PAGE_HEADER_HEIGHT;
+        min-height: $PAGE_HEADER_HEIGHT;
+        max-height: $PAGE_HEADER_HEIGHT;
+        text-align: center;
+        padding-top: $PAGE_HEADER_HEIGHT / 5;
+        padding-bottom: $PAGE_HEADER_HEIGHT / 5;
+    }
+
     &-body {
-        z-index: 0;
+        z-index: 1;
+        overflow-x: hidden;
         width: $PAGE_BODY_WIDTH;
         min-width: $PAGE_BODY_WIDTH;
         max-width: $PAGE_BODY_WIDTH;
@@ -72,35 +96,10 @@ html, body {
             overflow-y: scroll;
         }
 
-        &-header {
-            z-index: 1;
-            height: $PAGE_BODY_HEADER_HEIGHT;
-            min-height: $PAGE_BODY_HEADER_HEIGHT;
-            max-height: $PAGE_BODY_HEADER_HEIGHT;
-            width: $PAGE_BODY_HEADER_WIDTH;
-            min-width: $PAGE_BODY_HEADER_WIDTH;
-            max-width: $PAGE_BODY_HEADER_WIDTH;
-
-            &-image {
-                background-image: url('/Images/Coding/Code.png');
-                background-position: center;
-                background-repeat: no-repeat;
-                background-size: cover;
-                display: block;
-                width: $PAGE_BODY_HEADER_WIDTH;
-                height: $PAGE_BODY_HEADER_HEIGHT;
-                filter: blur(2px);
-                -webkit-filter: blur(2px);
-            }
-
-            &-text {
-                text-align: left;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: $PAGE_BODY_HEADER_WIDTH / 100 * 80;
-            }
+        &-normal-side-padding {
+            $padding: $PAGE_BODY_WIDTH / 100 * 5;
+            padding-left: $padding;
+            padding-right: $padding;
         }
     }
 }
@@ -123,6 +122,10 @@ html, body {
 
 .reset-card-jusification {
     justify-content: space-between !important;
+}
+
+.reset-card-background-color{
+    background-color: $BLACK !important;
 }
 
 .col-margin-right {
@@ -172,6 +175,7 @@ html, body {
     height: -moz-available; /* WebKit-based browsers will ignore this. */
     height: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
     height: fill-available;
+    
 }
 
 .alert-icon {
@@ -230,27 +234,6 @@ html, body {
 @media (min-width: 768px) {
     app {
         flex-direction: row;
-    }
-
-    .sidebar {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
-    }
-
-    .main .top-row {
-        position: sticky;
-        top: 0;
-    }
-
-    .navbar-toggler {
-        display: none;
-    }
-
-    .sidebar .collapse {
-        /* Never collapse the sidebar for wide screens */
-        display: block;
     }
 
     @font-face {

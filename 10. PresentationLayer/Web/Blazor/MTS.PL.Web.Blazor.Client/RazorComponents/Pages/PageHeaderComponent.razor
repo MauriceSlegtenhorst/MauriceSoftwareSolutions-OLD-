@@ -1,19 +1,16 @@
 ﻿@inject IEditPageService _editPageService
 
 <div class="page-header">
-    <div class="image" />
-    <div class="text _2">
-        <h1>@PageName</h1>
-        <h4>@Subtitle</h4>
-        @if (PageIsEditable == true)
-        {
-            <AuthorizeView Roles="@_roles">
-                <Authorized>
-                    <SfButton CssClass="e-small" OnClick="ToggleEdit">@_editMode</SfButton>
-                </Authorized>
-            </AuthorizeView>
-        }
-    </div>
+    <h1>@PageName</h1>
+    <h4>@Subtitle</h4>
+    @if (PageIsEditable == true)
+    {
+        <AuthorizeView Roles="@_roles">
+            <Authorized>
+                <SfButton CssClass="e-small" OnClick="ToggleEdit">@_editMode</SfButton>
+            </Authorized>
+        </AuthorizeView>
+    }
 </div>
 
 

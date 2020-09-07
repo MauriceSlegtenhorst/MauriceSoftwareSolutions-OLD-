@@ -1,32 +1,30 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager _navigationManager
 
-<ToastServiceComponent />
-<SpinnerServiceComponent />
+<div class="page">
+    <ToastServiceComponent />
+    <SpinnerServiceComponent />
 
-<div class="page-sidebar">
-    <NavMenuComponent />
+    <div class="page-top-bar">
+        <span>
+            <AuthorizeView>
+                <Authorized>
+                    Name: @context.User.Identity.Name |
+                    Access level: @context.User.FindFirst(c => c.Type == ClaimTypes.Role).Value |
+                </Authorized>
+                <NotAuthorized>
+                    <strong><a href="/authentication/login">Login</a></strong> or
+                    <strong><a href="/account/register">Register</a></strong>
+                    to see more of my work |
+                </NotAuthorized>
+            </AuthorizeView>
+            This site is build by <strong><a href="https://www.linkedin.com/in/mauriceslegtenhorst/" target="_blank">Maurice Slegtenhorst</a></strong> with
+            <strong><a href="http://blazor.net" target="_blank">Blazor WebAssembly</a></strong>
+        </span>
+    </div>
+
+    @Body
 </div>
-
-<div class="page-top-bar">
-    <span>
-        <AuthorizeView>
-            <Authorized>
-                Name: @context.User.Identity.Name |
-                Access level: @context.User.FindFirst(c => c.Type == ClaimTypes.Role).Value |
-            </Authorized>
-            <NotAuthorized>
-                <strong><a href="/authentication/login">Login</a></strong> or
-                <strong><a href="/account/register">Register</a></strong>
-                to see more of my work |
-            </NotAuthorized>
-        </AuthorizeView>
-        This site is build by <strong><a href="https://www.linkedin.com/in/mauriceslegtenhorst/" target="_blank">Maurice Slegtenhorst</a></strong> with
-        <strong><a href="http://blazor.net" target="_blank">Blazor WebAssembly</a></strong>
-    </span>
-</div>
-
-@Body
 
 @code
 {
