@@ -5,24 +5,62 @@
 
 <PageHeaderComponent PageName="Credits" Subtitle="Sites and people that helped me" />
 
-<div class="row col-12 padding-vertical-top">
-    <div class="col-xl-2 col-lg-2 col-md-1 col-sm-1" />
-    <div class="col-xl-8 col-lg-8 col-md-10 col-sm-10">
-        <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@_messages" />
+<div class="page-body page-body-scroll-area">
+    <div class="row padding-vertical-top page-body-normal-side-padding">
+        @if (_creditCategories != null)
+        {
+            for (int i = 0; i < _creditCategories.Length; i++)
+            {
+                <div class="d-block padding-vertical-bottom">
+                    @((MarkupString)_creditCategories[i].Title)
+                    @((MarkupString)_creditCategories[i].SubTitle)
+                    @((MarkupString)_creditCategories[i].Description)
+                </div>
+
+                bool rightSide = false;
+                int count = 0;
+                foreach (var item in _creditCategories[i].PLCredits)
+                {
+
+                    <div id="@ConvertToId(count)"></div>
+
+                    <div class="row w-100" style="margin-bottom: 80vh;">
+
+                        @if (rightSide == true)
+                        {
+                            <Animate class="w-100" Anchor="@("#" + ConvertToId(count))" AnchorPlacement="@Anchor.TopCenter" Animation="Animations.FadeUp" DurationMs="3000"
+                                     Easing="Easings.EaseInOutQuart" Once="false" Mirror="true">
+                                <div class="page-body-right-side">
+                                    <CreditComponent Credit="item" />
+                                </div>
+                            </Animate>
+                        }
+                        else
+                        {
+                            <Animate class="w-100" Anchor="@("#" + ConvertToId(count))" AnchorPlacement="@Anchor.TopCenter"  Animation="Animations.FadeUp" DurationMs="3000"
+                                     Easing="Easings.EaseInOutQuart" Once="false" Mirror="true">
+                                <div class="page-body-left-side">
+                                    <CreditComponent Credit="item" />
+                                </div>
+                            </Animate>
+                        }
+                    </div>
+
+
+                    count++;
+                    rightSide = !rightSide;
+                }
+            }
+        }
 
     </div>
-    <div class="col-xl-2 col-lg-2 col-md-1 col-sm-1" />
 </div>
 
 @code {
-    private IEnumerable<string> _messages;
-
     private PLCreditCategory[] _creditCategories;
 
     protected override async Task OnInitializedAsync()
     {
-        _messages = new[] { BlazorConstants.UNDER_CONSTRUCTION_MESSAGE };
-
         _creditCategories = await GetCreditCategories();
 
         await base.OnInitializedAsync();
@@ -45,6 +83,53 @@
 
         var resultJson = await result.Content.ReadAsStringAsync();
 
-        return JsonConvert.DeserializeObject<PLCreditCategory[]>(resultJson, new JsonSerializerSettings {  });
+        PLCreditCategory[] creditCategories = JsonConvert.DeserializeObject<PLCreditCategory[]>(resultJson);
+
+        return creditCategories;
     }
+
+    private string ConvertToId(int id)
+    {
+        char[] numberCharHolder = id.ToString().ToCharArray();
+        int[] intHolder = new int[numberCharHolder.Length];
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < intHolder.Length; i++)
+        {
+            _charIntDictionairy.TryGetValue(numberCharHolder[i], out intHolder[i]);
+            char convertedChar = default;
+            _intCharDictionairy.TryGetValue(intHolder[i], out convertedChar);
+            stringBuilder.Append(convertedChar);
+        }
+
+        return stringBuilder.ToString();
+    }
+
+    private Dictionary<int, char> _intCharDictionairy = new Dictionary<int, char>
+    {
+        {0,'a' },
+        {1,'b' },
+        {2,'c' },
+        {3,'d' },
+        {4,'e' },
+        {5,'f' },
+        {6,'g' },
+        {7,'h' },
+        {8,'i' },
+        {9,'j' }
+    };
+
+    private Dictionary<char, int> _charIntDictionairy = new Dictionary<char, int>
+    {
+        { '0', 0 },
+        { '1', 1 },
+        { '2', 2 },
+        { '3', 3 },
+        { '4', 4 },
+        { '5', 5 },
+        { '6', 6 },
+        { '7', 7 },
+        { '8', 8 },
+        { '9', 9 }
+    };
 }

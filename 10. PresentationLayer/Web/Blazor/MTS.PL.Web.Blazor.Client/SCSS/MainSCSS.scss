@@ -16,7 +16,7 @@ $SCREEN_WIDTH: 100vw;
 $SCREEN_HEIGHT: 100vh;
 
 /*Top bar*/
-$PAGE_TOP_BAR_HEIGHT: $SCREEN_HEIGHT / 100 * 5;
+$PAGE_TOP_BAR_HEIGHT: $SCREEN_HEIGHT / 100 * 10;
 $PAGE_TOP_BAR_WIDTH: $SCREEN_WIDTH;
 
 /*Header*/
@@ -24,7 +24,7 @@ $PAGE_HEADER_HEIGHT: $SCREEN_HEIGHT / 100 * 15;
 $PAGE_HEADER_WIDTH: $SCREEN_WIDTH;
 
 /*Body*/
-$PAGE_BODY_HEIGHT: $SCREEN_HEIGHT / 100 * 80;
+$PAGE_BODY_HEIGHT: $SCREEN_HEIGHT / 100 * 75;
 $PAGE_BODY_WIDTH: $SCREEN_WIDTH;
 
 a, .btn-link {
@@ -51,12 +51,15 @@ html, body {
     color: $SMOKE_WHITE;
 }
 
-
-
 .btn-primary {
     color: $SMOKE_WHITE;
     background-color: $BLUE_LIGHT;
     border-color: $BLUE_LIGHT;
+}
+
+.theme {
+    background-color: $BLACK !important;
+    color: $SMOKE_WHITE !important;
 }
 
 .page {
@@ -67,9 +70,69 @@ html, body {
 
     &-top-bar {
         z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: .5rem 1.5rem;
         height: $PAGE_TOP_BAR_HEIGHT;
         min-height: $PAGE_TOP_BAR_HEIGHT;
         max-height: $PAGE_TOP_BAR_HEIGHT;
+
+        &-open-icon {
+            width: 2rem;
+            font-size: 1.1rem;
+            vertical-align: text-top;
+            top: -2px;
+        }
+
+        &-nav-item {
+            font-size: 0.9rem;
+            color: $BLUE;
+
+            a {
+                border-radius: 0px;
+                height: 3rem;
+                display: flex;
+                align-items: center;
+                line-height: 3rem;
+            }
+
+            &active {
+                background-color: $GRAY;
+                font-weight: bold;
+            }
+
+            &:hover {
+                color: $BLUE_LIGHT !important;
+                background-color: $GRAY;
+                font-weight: bold;
+
+                & > a {
+                    color: $BLUE_LIGHT !important;
+                }
+            }
+
+            &-dropdown {
+                position: relative;
+                display: inline-block;
+                border-radius: 0;
+                height: 3rem;
+                align-items: center;
+                line-height: 3rem;
+                color: $BLUE;
+
+                &-content {
+                    display: none;
+                    position: absolute;
+                    background-color: $BLACK;
+                    min-width: 160px;
+                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                    z-index: 1;
+                    top: $PAGE_TOP_BAR_HEIGHT;
+                    right: 0px;
+                }
+            }
+        }
     }
 
     &-header {
@@ -100,6 +163,14 @@ html, body {
             $padding: $PAGE_BODY_WIDTH / 100 * 5;
             padding-left: $padding;
             padding-right: $padding;
+        }
+
+        &-left-side {
+            margin-right: 50%;
+        }
+
+        &-right-side {
+            margin-left: 50%;
         }
     }
 }
@@ -216,18 +287,6 @@ html, body {
     .col-margin-left {
         margin-left: 0;
         margin-top: $PADDING / 2;
-    }
-
-    .main .top-row:not(.auth) {
-        display: none;
-    }
-
-    .main .top-row.auth {
-        justify-content: space-between;
-    }
-
-    .main .top-row a, .main .top-row .btn-link {
-        margin-left: 0;
     }
 }
 

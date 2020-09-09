@@ -6,21 +6,64 @@
     <SpinnerServiceComponent />
 
     <div class="page-top-bar">
-        <span>
+            <!--Left-->
+            <ul class="nav flex-row">
+                <!--Left-->
+                <li class="@_navItemCss">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                        <span class="page-top-bar-open-icon oi oi-home" aria-hidden="true"></span> Home
+                    </NavLink>
+                </li>
+                <AuthorizeView Roles="@Constants.Security.ADMINISTRATOR">
+                    <Authorized>
+                        <li class="@_navItemCss">
+                            <NavLink class="nav-link" href="@BlazorConstants.Pages.Account.CRUD_ACCOUNT" Match="NavLinkMatch.All">
+                                <span class="page-top-bar-open-icon oi oi-person" aria-hidden="true"></span> CRUD Users
+                            </NavLink>
+                        </li>
+                    </Authorized>
+                </AuthorizeView>
+                <li class="@_navItemCss">
+                    <NavLink class="nav-link" href="@BlazorConstants.Pages.CREDITS" Match="NavLinkMatch.All">
+                        <span class="page-top-bar-open-icon oi oi-thumb-up" aria-hidden="true"></span> Credits
+                    </NavLink>
+                </li>
+            </ul>
+
+            <!--Right-->
             <AuthorizeView>
-                <Authorized>
-                    Name: @context.User.Identity.Name |
-                    Access level: @context.User.FindFirst(c => c.Type == ClaimTypes.Role).Value |
-                </Authorized>
                 <NotAuthorized>
-                    <strong><a href="/authentication/login">Login</a></strong> or
-                    <strong><a href="/account/register">Register</a></strong>
-                    to see more of my work |
+                    <ul class="nav flex-row-reverse">
+                        <li class="@_navItemCss">
+                            <NavLink class="nav-link" href="@BlazorConstants.Pages.Account.REGISTER" Match="NavLinkMatch.All">
+                                <span class="page-top-bar-open-icon oi oi-person" aria-hidden="true"></span> Register
+                            </NavLink>
+                        </li>
+                        <li class="@_navItemCss">
+                            <NavLink class="nav-link" @onclick="() => ToggleLogin()">
+                                <span class="page-top-bar-open-icon oi oi-account-login" aria-hidden="true"></span> Login
+                                <div class="page-top-bar-nav-item-dropdown-content" style="@_loginDropDownContentStyle" @onclick="@(() => _clickWasInsideLoginCard = true)">
+                                    <LoginRegisterComponent IsLogin="true" />
+                                </div>
+                            </NavLink>
+                        </li>
+                    </ul>
                 </NotAuthorized>
+                <Authorized>
+                    <ul class="nav flex-row-reverse">
+                        <li class="@_navItemCss">
+                            <NavLink class="nav-link" href="@BlazorConstants.Pages.Account.EDIT_ACCOUNT">
+                                <span class="page-top-bar-open-icon oi oi-person" aria-hidden="true"></span> Account
+                            </NavLink>
+                        </li>
+                        <li class="@_navItemCss">
+                            <NavLink class="nav-link" href="@BlazorConstants.Pages.Authentication.LOGOUT">
+                                <span class="page-top-bar-open-icon oi oi-account-logout" aria-hidden="true"></span> Logout
+                            </NavLink>
+                        </li>
+                    </ul>
+                </Authorized>
             </AuthorizeView>
-            This site is build by <strong><a href="https://www.linkedin.com/in/mauriceslegtenhorst/" target="_blank">Maurice Slegtenhorst</a></strong> with
-            <strong><a href="http://blazor.net" target="_blank">Blazor WebAssembly</a></strong>
-        </span>
     </div>
 
     @Body
@@ -28,5 +71,27 @@
 
 @code
 {
+    private string _navItemCss = "page-top-bar-nav-item";
 
+    private string _loginDropDownContentStyle;
+
+    private bool _isLoginVisible;
+
+    private bool _clickWasInsideLoginCard;
+
+    private void ToggleLogin()
+    {
+        if (_clickWasInsideLoginCard == false)
+        {
+            _isLoginVisible = !_isLoginVisible;
+
+            _loginDropDownContentStyle = (_isLoginVisible ? "display: inline-block;" : null);
+        }
+        else
+        {
+            _clickWasInsideLoginCard = false;
+        }
+    }
+
+    private class EmptyClass { }
 }
