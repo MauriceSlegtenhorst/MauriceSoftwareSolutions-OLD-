@@ -21,14 +21,11 @@
                 int count = 0;
                 foreach (var item in _creditCategories[i].PLCredits)
                 {
-
-                    <div id="@ConvertToId(count)"></div>
-
-                    <div class="row w-100" style="margin-bottom: 80vh;">
-
+                    <div class="row w-100" style="margin-bottom: 40vh;">
+                        <!--TODO animeren wanneer in het document view -->
                         @if (rightSide == true)
                         {
-                            <Animate class="w-100" Anchor="@("#" + ConvertToId(count))" AnchorPlacement="@Anchor.TopCenter" Animation="Animations.FadeUp" DurationMs="3000"
+                            <Animate class="w-100" Animation="Animations.FadeUp" DurationMs="2000"
                                      Easing="Easings.EaseInOutQuart" Once="false" Mirror="true">
                                 <div class="page-body-right-side">
                                     <CreditComponent Credit="item" />
@@ -37,7 +34,7 @@
                         }
                         else
                         {
-                            <Animate class="w-100" Anchor="@("#" + ConvertToId(count))" AnchorPlacement="@Anchor.TopCenter"  Animation="Animations.FadeUp" DurationMs="3000"
+                            <Animate class="w-100" Animation="Animations.FadeUp" DurationMs="2000"
                                      Easing="Easings.EaseInOutQuart" Once="false" Mirror="true">
                                 <div class="page-body-left-side">
                                     <CreditComponent Credit="item" />
@@ -45,7 +42,6 @@
                             </Animate>
                         }
                     </div>
-
 
                     count++;
                     rightSide = !rightSide;

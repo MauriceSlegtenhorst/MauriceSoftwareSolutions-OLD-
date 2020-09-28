@@ -9,12 +9,16 @@
   <ItemGroup>
     <Compile Remove="Pages\Administrator\**" />
     <Compile Remove="Pages\Contact\**" />
+    <Compile Remove="wwwroot\css\scss\**" />
     <Content Remove="Pages\Administrator\**" />
     <Content Remove="Pages\Contact\**" />
+    <Content Remove="wwwroot\css\scss\**" />
     <EmbeddedResource Remove="Pages\Administrator\**" />
     <EmbeddedResource Remove="Pages\Contact\**" />
+    <EmbeddedResource Remove="wwwroot\css\scss\**" />
     <None Remove="Pages\Administrator\**" />
     <None Remove="Pages\Contact\**" />
+    <None Remove="wwwroot\css\scss\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,10 +50,6 @@
 
   <ItemGroup>
     <None Include="compilerconfig.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\css\scss\" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

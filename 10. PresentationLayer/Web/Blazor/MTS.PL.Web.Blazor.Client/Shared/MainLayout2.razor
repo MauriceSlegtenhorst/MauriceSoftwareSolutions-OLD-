@@ -35,8 +35,11 @@
                 <NotAuthorized>
                     <ul class="nav flex-row-reverse">
                         <li class="@_navItemCss">
-                            <NavLink class="nav-link" href="@BlazorConstants.Pages.Account.REGISTER" Match="NavLinkMatch.All">
-                                <span class="page-top-bar-open-icon oi oi-person" aria-hidden="true"></span> Register
+                            <NavLink class="nav-link" @onclick="() => ToggleRegister()">
+                                <span class="page-top-bar-open-icon oi oi-account-login" aria-hidden="true"></span> Register
+                                <div class="page-top-bar-nav-item-dropdown-content" style="@_registerDropDownContentStyle" @onclick="@(() => _clickWasInsideRegisterCard = true)">
+                                    <LoginRegisterComponent IsLogin="false" />
+                                </div>
                             </NavLink>
                         </li>
                         <li class="@_navItemCss">
@@ -74,10 +77,13 @@
     private string _navItemCss = "page-top-bar-nav-item";
 
     private string _loginDropDownContentStyle;
+    private string _registerDropDownContentStyle;
 
     private bool _isLoginVisible;
+    private bool _isRegisterVisible;
 
     private bool _clickWasInsideLoginCard;
+    private bool _clickWasInsideRegisterCard;
 
     private void ToggleLogin()
     {
@@ -90,6 +96,20 @@
         else
         {
             _clickWasInsideLoginCard = false;
+        }
+    }
+
+    private void ToggleRegister()
+    {
+        if (_clickWasInsideRegisterCard == false)
+        {
+            _isRegisterVisible = !_isRegisterVisible;
+
+            _registerDropDownContentStyle = (_isRegisterVisible ? "display: inline-block;" : null);
+        }
+        else
+        {
+            _clickWasInsideRegisterCard = false;
         }
     }
 
