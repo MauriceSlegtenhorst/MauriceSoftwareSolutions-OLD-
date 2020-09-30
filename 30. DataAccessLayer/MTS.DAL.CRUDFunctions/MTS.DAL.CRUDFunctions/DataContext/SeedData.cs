@@ -237,9 +237,8 @@ namespace MTS.DAL.DatabaseAccess.DataContext
                     Title = "<h4>Open Iconic</h4>",
                     SubTitle = "<h5>Provider of fonts and icons</h5>",
                     LinkToImage = "https://img.stackshare.io/service/3029/iconic.png",
-                    GotFrom ="Got from: Blazor WebAssembly project builder",
-                    GotFromWebsite = "<a href='https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor'>Blazor website here</a>",
-                    MadeByWebsite = "Made by: <a href='https://useiconic.com/open'>Open-Iconic website here</a>",
+                    GotFrom ="Got from: <a href='https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor'>Blazor WebAssembly project builder</a>",
+                    MadeBy = "Made by: <a href='https://useiconic.com/open'>Open-Iconic</a>",
                     Description = "<p>Most, if not all icons came from this provider. This font came with the project when it was created. I kept it for its ease of use.</p>",
                     CreditCategoryFK = creditCategories.First(creditCategory => creditCategory.Title == "<h4>Don't reinvent the wheel<h4>").CreditCategoryId
                 },
@@ -249,9 +248,8 @@ namespace MTS.DAL.DatabaseAccess.DataContext
                     Title = "<h4>Syncfusion</h4>",
                     SubTitle = "<h5>Easy to use premade Blazor components</h5>",
                     LinkToImage = "https://cdn.syncfusion.com/content/images/Logo/Logo_150dpi.png",
-                    GotFrom = "Got from: Syncfusion community license",
-                    GotFromWebsite = "<a href='https://www.syncfusion.com/products/communitylicense'>Syncfusion community license</a>",
-                    MadeByWebsite = "Made by: <a href='https://www.syncfusion.com/blazor-components'>Syncfusion website</a>",
+                    GotFrom = "Got from: <a href='https://www.syncfusion.com/products/communitylicense'>Syncfusion community license</a>",
+                    MadeBy = "Made by: <a href='https://www.syncfusion.com/blazor-components'>Syncfusion website</a>",
                     Description = "<p>Some tasks while creating an UI are repetative. Syncfusion helps by providing components for repetative use.</p>",
                     CreditCategoryFK = creditCategories.First(creditCategory => creditCategory.Title == "<h4>Don't reinvent the wheel<h4>").CreditCategoryId
                 },
@@ -259,12 +257,11 @@ namespace MTS.DAL.DatabaseAccess.DataContext
                 {
                     CreditId = Guid.NewGuid(),
                     Title = "<h4>Tim Corey</h4>",
-                    SubTitle = "<h5>Youtuber with the best C# how-to video's</h5>",
-                    LinkToImage = "",
-                    GotFrom = "Got from: searching for tutorial video's about C#",
-                    GotFromWebsite = "<a href='https://www.youtube.com'>Syncfusion community license</a>",
-                    MadeByWebsite = "Made by: <a href='https://www.youtube.com/timcorey'>Tim Corey's YouTube channel</a>",
-                    Description = "<p>Tim Corey provides many educational video's about programming in general but focused around C#. His goal is to make learning C# easier. Awesome guy.</p>",
+                    SubTitle = "<h5>Youtuber with the best C# tuturials</h5>",
+                    LinkToImage = "https://avatars3.githubusercontent.com/u/1839873?s=400&v=4",
+                    GotFrom = "Got from: searching for tutorial video's on <a href='https://www.youtube.com'>YouTube</a> about C#",
+                    MadeBy = "Made by: <a href='https://www.youtube.com/timcorey'>Tim Corey's YouTube channel</a>",
+                    Description = "<p>Tim Corey provides many educational video's and tutorials about programming. His content is focused on C# but he covers other languages too. His goal is to make learning C# easier. Awesome guy.</p>",
                     CreditCategoryFK = creditCategories.First(creditCategory => creditCategory.Title == "<h4>Food for the brain<h4>").CreditCategoryId
                 }
             };

@@ -51,9 +51,7 @@ namespace MTS.BL.API.Controllers
                                 SubTitle = blCredit.SubTitle,
                                 Description = blCredit.Description,
                                 GotFrom = blCredit.GotFrom,
-                                GotFromWebsite = blCredit.GotFromWebsite,
                                 MadeBy = blCredit.MadeBy,
-                                MadeByWebsite = blCredit.MadeByWebsite,
                                 LinkToImage = blCredit.LinkToImage,
                             }
                         );

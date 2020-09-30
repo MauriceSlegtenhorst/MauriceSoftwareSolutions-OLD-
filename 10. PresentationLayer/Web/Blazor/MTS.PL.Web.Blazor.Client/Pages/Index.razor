@@ -1,5 +1,7 @@
 ﻿@page "/"
+
 @implements IDisposable
+
 @inject NavigationManager _navigationManager
 @inject IHttpClientFactory _httpClientFactory
 @inject ISpinnerService _spinnerService
@@ -9,7 +11,7 @@
 <PageHeaderComponent PageName="Welcome to Maurice Software Solutions!" Subtitle="A site about software development and Maurice" PageIsEditable="true" />
 
 <div class="page-body page-body-scroll-area">
-    <div class="row padding-vertical-top page-body-normal-side-padding">
+    <div class="row padding-vertical-top padding-vertical-bottom page-body-normal-side-padding">
         <!--#region Card 1 MSS-->
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
             <div class="e-card reset-card-background-color">
@@ -351,11 +353,6 @@
 <style>
     #maurice-picture {
         max-width: 100%;
-    }
-
-    .theme {
-        background-color: #393e46 !important;
-        color: #eeeeee !important;
     }
 </style>
 
@@ -769,8 +766,6 @@
 
         if (_editPageService.GetEditMode() == false)
         {
-
-
             HttpResponseMessage response = await SavePageDataAsync();
 
             if (response.IsSuccessStatusCode)

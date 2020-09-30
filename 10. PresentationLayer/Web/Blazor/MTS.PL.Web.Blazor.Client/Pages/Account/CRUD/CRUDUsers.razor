@@ -1,20 +1,20 @@
 ﻿@page "/account/crud/crudusers"
+
 @attribute [Authorize(
 Roles =
 Constants.Security.ADMINISTRATOR + "," +
 Constants.Security.PRIVILEGED_EMPLOYEE)]
+
 @inject IHttpClientFactory  _httpClientFactory
 @inject IToastService _toastService
 @inject ISpinnerService _spinnerService
+
 @using GridActions = Syncfusion.Blazor.Grids.Action
 
 <PageHeaderComponent PageName="All accounts" Subtitle="Create, read, update and delete accounts" />
 
-<div class="row col-12 padding-vertical-top">
-    <div class="col-xl-1 col-lg-1 col-md-0 col-sm-0" />
-    <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12">
-
-        <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@messages" />
+<div class="page-body page-body-scroll-area">
+    <div class="row padding-vertical-top page-body-normal-side-padding">
 
         @if (_isInitialized == true)
         {
@@ -139,7 +139,6 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
         }
 
     </div>
-    <div class="col-xl-1 col-lg-1 col-md-0 col-sm-0" />
 </div>
 
 @code{

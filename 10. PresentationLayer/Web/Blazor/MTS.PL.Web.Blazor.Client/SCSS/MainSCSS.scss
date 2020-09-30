@@ -141,8 +141,7 @@ html, body {
         min-height: $PAGE_HEADER_HEIGHT;
         max-height: $PAGE_HEADER_HEIGHT;
         text-align: center;
-        padding-top: $PAGE_HEADER_HEIGHT / 5;
-        padding-bottom: $PAGE_HEADER_HEIGHT / 5;
+        padding-bottom: $PAGE_HEADER_HEIGHT / 8;
     }
 
     &-body {
@@ -183,22 +182,6 @@ html, body {
     }
 }
 
-@keyframes pop-in {
-    0% {
-        opacity: 0;
-        transform: scale(0.1);
-    }
-
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.popin {
-    animation: pop-in 0.4s ease;
-}
-
 .reset-card-jusification {
     justify-content: space-between !important;
 }
@@ -220,26 +203,52 @@ html, body {
     width: 50%;
 }
 
-.padding-side {
-    padding-left: $PADDING;
-    padding-right: $PADDING;
-    padding-bottom: $PADDING;
+.padding {
+    &-side {
+        padding-left: $PADDING;
+        padding-right: $PADDING;
+        padding-bottom: $PADDING;
+    }
+
+    &-horizontal-right {
+        padding-right: $PADDING / 2;
+    }
+
+    &-horizontal-left {
+        padding-left: $PADDING / 2;
+    }
+
+    &-vertical-top {
+        padding-top: $PADDING;
+    }
+
+    &-vertical-bottom {
+        padding-bottom: $PADDING;
+    }
 }
 
-.padding-horizontal-right {
-    padding-right: $PADDING / 2;
-}
+.margin {
+    &-side {
+        margin-left: $PADDING;
+        margin-right: $PADDING;
+        margin-bottom: $PADDING;
+    }
 
-.padding-horizontal-left {
-    padding-left: $PADDING / 2;
-}
+    &-horizontal-right {
+        margin-right: $PADDING / 2;
+    }
 
-.padding-vertical-top {
-    padding-top: $PADDING;
-}
+    &-horizontal-left {
+        margin-left: $PADDING / 2;
+    }
 
-.padding-vertical-bottom {
-    padding-bottom: $PADDING;
+    &-vertical-top {
+        margin-top: $PADDING;
+    }
+
+    &-vertical-bottom {
+        margin-bottom: $PADDING;
+    }
 }
 
 .fill-maxed {

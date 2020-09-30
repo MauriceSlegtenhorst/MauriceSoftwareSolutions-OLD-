@@ -61,9 +61,5 @@
     <ProjectReference Include="..\MTS.DAL.CRUDFunctions\MTS.DAL.CRUDFunctions\MTS.DAL.DatabaseAccess.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 
 </Project>

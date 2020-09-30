@@ -1,50 +1,43 @@
 ﻿@page "/credits"
+
+@implements IDisposable
+
+@inject IEditPageService _editPageService
 @inject IHttpClientFactory _httpClientFactory
 @inject ISpinnerService _spinnerService
 @inject IToastService _toastService
 
-<PageHeaderComponent PageName="Credits" Subtitle="Sites and people that helped me" />
+<PageHeaderComponent PageName="Credits" Subtitle="Sites and people that helped me" PageIsEditable="true" />
 
 <div class="page-body page-body-scroll-area">
-    <div class="row padding-vertical-top page-body-normal-side-padding">
+    <div class="padding-vertical-top padding-vertical-bottom page-body-normal-side-padding">
+
         @if (_creditCategories != null)
         {
             for (int i = 0; i < _creditCategories.Length; i++)
             {
-                <div class="d-block padding-vertical-bottom">
+                <div class="d-block margin-vertical-bottom margin-vertical-top">
                     @((MarkupString)_creditCategories[i].Title)
                     @((MarkupString)_creditCategories[i].SubTitle)
                     @((MarkupString)_creditCategories[i].Description)
                 </div>
 
-                bool rightSide = false;
-                int count = 0;
-                foreach (var item in _creditCategories[i].PLCredits)
-                {
-                    <div class="row w-100" style="margin-bottom: 40vh;">
-                        <!--TODO animeren wanneer in het document view -->
-                        @if (rightSide == true)
-                        {
-                            <Animate class="w-100" Animation="Animations.FadeUp" DurationMs="2000"
-                                     Easing="Easings.EaseInOutQuart" Once="false" Mirror="true">
-                                <div class="page-body-right-side">
-                                    <CreditComponent Credit="item" />
-                                </div>
-                            </Animate>
-                        }
-                        else
-                        {
-                            <Animate class="w-100" Animation="Animations.FadeUp" DurationMs="2000"
-                                     Easing="Easings.EaseInOutQuart" Once="false" Mirror="true">
-                                <div class="page-body-left-side">
-                                    <CreditComponent Credit="item" />
-                                </div>
-                            </Animate>
-                        }
-                    </div>
+                leftSide = false;
 
-                    count++;
-                    rightSide = !rightSide;
+                @foreach (var item in _creditCategories[i].PLCredits)
+                {
+                    leftSide = !leftSide;
+
+                    creditCss = $"row {(leftSide ? String.Empty : "justify-content-end")}";
+                    
+                    <div class="@creditCss">
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                            <Animate class="w-100" Animation="Animations.FadeUp" DurationMs="2000"
+                                     Easing="Easings.EaseInOutQuart" Once="false" Mirror="true">
+                                <CreditComponent Credit="item" />
+                            </Animate>
+                        </div>
+                    </div>
                 }
             }
         }
@@ -55,11 +48,45 @@
 @code {
     private PLCreditCategory[] _creditCategories;
 
+    private bool leftSide;
+    private string creditCss;
+
     protected override async Task OnInitializedAsync()
     {
         _creditCategories = await GetCreditCategories();
 
+        _editPageService.OnToggle += OnToggleEditMode;
+
         await base.OnInitializedAsync();
+    }
+
+
+    private async void OnToggleEditMode()
+    {
+        _spinnerService.ShowSpinner("Changing edit mode");
+
+        //if (_editPageService.GetEditMode() == false)
+        //{
+        //    HttpResponseMessage response = await SavePageDataAsync();
+
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        _toastService.ShowSuccessToast("Home page content save succesfull.");
+        //    }
+        //    else
+        //    {
+        //        _toastService.ShowExceptionToast(new Exception(await response.Content.ReadAsStringAsync()));
+        //    }
+        //}
+
+        StateHasChanged();
+
+        _spinnerService.HideSpinner();
+    }
+
+    void IDisposable.Dispose()
+    {
+        _editPageService.OnToggle -= OnToggleEditMode;
     }
 
     private async Task<PLCreditCategory[]> GetCreditCategories()
@@ -101,8 +128,17 @@
         return stringBuilder.ToString();
     }
 
-    private Dictionary<int, char> _intCharDictionairy = new Dictionary<int, char>
+    private async Task<HttpResponseMessage> SavePageDataAsync()
     {
+        HttpResponseMessage httpResponseMessage = null;
+
+
+
+        return httpResponseMessage;
+    }
+
+    private Dictionary<int, char> _intCharDictionairy = new Dictionary<int, char>
+{
         {0,'a' },
         {1,'b' },
         {2,'c' },
@@ -116,7 +152,7 @@
     };
 
     private Dictionary<char, int> _charIntDictionairy = new Dictionary<char, int>
-    {
+{
         { '0', 0 },
         { '1', 1 },
         { '2', 2 },
