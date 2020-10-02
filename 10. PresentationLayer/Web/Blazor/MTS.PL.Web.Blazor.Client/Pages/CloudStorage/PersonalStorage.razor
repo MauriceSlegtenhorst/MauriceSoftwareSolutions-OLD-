@@ -4,16 +4,19 @@
 
 <PageHeaderComponent PageName="Cloud storage" Subtitle="Your own personal cloud storage!" />
 
-<AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@messages" />
+<div class="page-body">
+    <div class="padding-vertical-top padding-vertical-bottom page-body-normal-side-padding">
+        <AlertComponent AlertType="@AlertComponent.AlertTypeEnum.Warning" Title="@BlazorConstants.UNDER_CONSTRUCTION_TITLE" ContentMessages="@messages" />
 
-<div class="fill-maxed">
-    <SfFileManager>
-        <FileManagerAjaxSettings Url="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/FileOperations"
-                                 UploadUrl="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/Upload"
-                                 DownloadUrl="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/Download"
-                                 GetImageUrl="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/GetImage">
-        </FileManagerAjaxSettings>
-    </SfFileManager>
+        <SfFileManager>
+            <FileManagerAjaxSettings Url="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/FileOperations"
+                                     UploadUrl="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/Upload"
+                                     DownloadUrl="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/Download"
+                                     GetImageUrl="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/GetImage">
+            </FileManagerAjaxSettings>
+        </SfFileManager>
+
+    </div>
 </div>
 
 @code {

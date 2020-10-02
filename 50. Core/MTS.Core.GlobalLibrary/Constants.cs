@@ -25,7 +25,6 @@ namespace MTS.Core.GlobalLibrary
         // Insiration for desighn https://xd.adobe.com/ideas/principles/web-design/11-website-layouts-that-made-content-shine-in-2019/
         public sealed class MSS
         {
-            //TODO Dit aanpasbaar maken voor admins op de pagina zelf. Content zou sws aanpasbaar moeten zijn en niet hardcoded! Voor nu even zo.
             public const string WHAT_IS_MSS =
                 "Maurice Software Solutions was created to showcase my programming skills and to have some fun. Aside from that there is handy and fun functionality to be found like a fully-fledged, " +
                 "unlimited personal cloud storage system and a chatroom. And those are just the things I am currently working on. " +

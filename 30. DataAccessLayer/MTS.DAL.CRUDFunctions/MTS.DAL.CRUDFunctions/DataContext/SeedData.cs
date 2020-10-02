@@ -1,6 +1,4 @@
-﻿using MTS.BL.Infra.Interfaces.Standard;
-using MTS.DAL.Interfaces.Standard;
-using System.Collections.Generic;
+﻿using MTS.DAL.Interfaces.Standard;
 using System.Linq;
 using System.Threading.Tasks;
 using MTS.DAL.Entities.Core;
@@ -10,7 +8,6 @@ using MTS.DAL.Entities.Core.EditPageContent;
 using MTS.Core.GlobalLibrary;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
-using System.Diagnostics;
 using MTS.DAL.Entities.Core.Credit;
 
 namespace MTS.DAL.DatabaseAccess.DataContext

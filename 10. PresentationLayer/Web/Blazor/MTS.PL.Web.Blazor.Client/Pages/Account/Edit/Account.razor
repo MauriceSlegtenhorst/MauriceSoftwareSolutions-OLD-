@@ -7,266 +7,268 @@
 
 <PageHeaderComponent PageName="Personal account" Subtitle="Edit your account." />
 
-<div class="center-content">
-    @if (IsInitialized == true && _plUserAccount != null)
-    {
-        <SfCard>
-            <CardHeader>
-                <h3>Account for @_accountName</h3>
-            </CardHeader>
-            <CardContent>
-                <EditForm EditContext="_formContext" OnValidSubmit="SubmitForm">
-                    <div class="content-wrapper">
-
-                        <DataAnnotationsValidator />
-
-                        <!--#region Firstname, affix and last name-->
-                        <div class="row">
-                            <div class="col-xs-5 col-sm-5 col-lg-5 col-md-5">
-                                <SfTextBox Placeholder="First name" CssClass="@_firstNameCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                           ShowClearButton="true" @bind-Value="@_plUserAccount.FirstName" Blur="OnBlur" />
-
-                                <ValidationMessage For="@(() => _plUserAccount.FirstName)" />
-                            </div>
-
-                            <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
-                                <SfTextBox Placeholder="Affix" CssClass="@_affixCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                           ShowClearButton="true" @bind-Value="@_plUserAccount.Affix" Blur="OnBlur" />
-
-                                <ValidationMessage For="@(() => _plUserAccount.Affix)" />
-                            </div>
-
-                            <div class="col-xs-5 col-sm-5 col-lg-5 col-md-5">
-                                <SfTextBox Placeholder="Last name" CssClass="@_lastNameCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                           ShowClearButton="true" @bind-Value="@_plUserAccount.LastName" Blur="OnBlur" />
-
-                                <ValidationMessage For="@(() => _plUserAccount.Password)" />
-                            </div>
-                        </div>
-                        <!--#endregion-->
-
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                                <SfTextBox Placeholder="Phone number" CssClass="@_phoneNumberCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                           ShowClearButton="true" @bind-Value="@_plUserAccount.PhoneNumber" Blur="OnBlur" />
-
-                                <ValidationMessage For="@(() => _plUserAccount.PhoneNumber)" />
-                            </div>
-                        </div>
-
-                        <!--#region Email and password-->
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                                <SfTextBox Type="InputType.Email" Placeholder="Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                           ShowClearButton="true" @bind-Value="@_plUserAccount.Email" Blur="OnBlur" />
-
-                                <ValidationMessage For="@(() => _plUserAccount.Email)" />
-
-                                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
-                            </div>
-
-                            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                                <SfTextBox Type="InputType.Password" Placeholder="Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
-                                           ShowClearButton="true" @bind-Value="@_plUserAccount.Password" Blur="OnBlur" />
-
-                                <ValidationMessage For="@(() => _plUserAccount.Password)" />
-                            </div>
-                        </div>
-                        <!--#endregion-->
-
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                                <SfButton Type="submit" CssClass="btn btn-primary" Content="Update" />
-                            </div>
-                        </div>
-
-                    </div>
-                </EditForm>
-            </CardContent>
-            <CardFooter>
-                <small>
-                    Only email and password are mandatory
-                </small>
-            </CardFooter>
-        </SfCard>
-    }
-    else
-    {
-        <p>Retreiving your account information...</p>
-    }
-</div>
-
-@code {
-    [CascadingParameter]
-    public Task<AuthenticationState> AuthStateTask { get; set; }
-
-    private AuthenticationState _authState;
-
-    private bool IsInitialized;
-
-    private EditContext _formContext;
-
-    private IPLUserAccount _plUserAccount;
-
-    private string _accountName;
-
-    private string _firstNameCssClass;
-
-    private string _affixCssClass;
-
-    private string _lastNameCssClass;
-
-    private string _phoneNumberCssClass;
-
-    private string _emailCssClass;
-
-    private string _passwordCssClass;
-    private Regex _passwordRegex;
-
-    protected override async Task OnInitializedAsync()
-    {
-        try
+<div class="page-body">
+    <div class="padding-vertical-top padding-vertical-bottom page-body-normal-side-padding">
+        @if (IsInitialized == true && _plUserAccount != null)
         {
-            _spinnerService.ShowSpinner();
-            _plUserAccount = await GetUserAccount();
-            _spinnerService.HideSpinner();
-        }
-        catch (Exception ex)
-        {
-            _toastService.ShowExceptionToast(ex);
-        }
+            <SfCard>
+                <CardHeader>
+                    <h3>Account for @_accountName</h3>
+                </CardHeader>
+                <CardContent>
+                    <EditForm EditContext="_formContext" OnValidSubmit="SubmitForm">
+                        <div class="content-wrapper">
 
-        _formContext = new EditContext(_plUserAccount);
+                            <DataAnnotationsValidator />
 
-        _passwordRegex = new Regex(Constants.VALID_PASSWORD_PATTERN);
+                            <!--#region Firstname, affix and last name-->
+                            <div class="row">
+                                <div class="col-xs-5 col-sm-5 col-lg-5 col-md-5">
+                                    <SfTextBox Placeholder="First name" CssClass="@_firstNameCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                               ShowClearButton="true" @bind-Value="@_plUserAccount.FirstName" Blur="OnBlur" />
 
-        _authState = await AuthStateTask;
+                                    <ValidationMessage For="@(() => _plUserAccount.FirstName)" />
+                                </div>
 
-        _accountName = _plUserAccount.FullName ?? _plUserAccount.Email;
+                                <div class="col-xs-2 col-sm-2 col-lg-2 col-md-2">
+                                    <SfTextBox Placeholder="Affix" CssClass="@_affixCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                               ShowClearButton="true" @bind-Value="@_plUserAccount.Affix" Blur="OnBlur" />
 
-        IsInitialized = true;
+                                    <ValidationMessage For="@(() => _plUserAccount.Affix)" />
+                                </div>
 
-        await base.OnInitializedAsync();
-    }
+                                <div class="col-xs-5 col-sm-5 col-lg-5 col-md-5">
+                                    <SfTextBox Placeholder="Last name" CssClass="@_lastNameCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                               ShowClearButton="true" @bind-Value="@_plUserAccount.LastName" Blur="OnBlur" />
 
-    private async Task<IPLUserAccount> GetUserAccount()
-    {
-        string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_BY_EMAIL}";
+                                    <ValidationMessage For="@(() => _plUserAccount.Password)" />
+                                </div>
+                            </div>
+                            <!--#endregion-->
 
-        var result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).GetAsync(url);
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                    <SfTextBox Placeholder="Phone number" CssClass="@_phoneNumberCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                               ShowClearButton="true" @bind-Value="@_plUserAccount.PhoneNumber" Blur="OnBlur" />
 
-        if (result.IsSuccessStatusCode == false)
-            _toastService.ShowExceptionToast(new Exception($"Something went wrong while calling the server. {result.StatusCode}: {result.ReasonPhrase}"));
+                                    <ValidationMessage For="@(() => _plUserAccount.PhoneNumber)" />
+                                </div>
+                            </div>
 
-        return JsonConvert.DeserializeObject<PLUserAccount>(await result.Content.ReadAsStringAsync());
-    }
+                            <!--#region Email and password-->
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                                    <SfTextBox Type="InputType.Email" Placeholder="Email" CssClass="@_emailCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                               ShowClearButton="true" @bind-Value="@_plUserAccount.Email" Blur="OnBlur" />
 
-    private async Task SubmitForm()
-    {
-        _spinnerService.ShowSpinner();
-        var result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PatchAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT}", new StringContent(JsonConvert.SerializeObject(_plUserAccount), Encoding.UTF8, Constants.MediaTypes.JSON));
-        _spinnerService.HideSpinner();
+                                    <ValidationMessage For="@(() => _plUserAccount.Email)" />
 
-        if (result.IsSuccessStatusCode == false)
-            _toastService.ShowExceptionToast(new Exception($"Something went wrong while calling the server. {result.StatusCode}: {result.ReasonPhrase}"));
+                                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. Ever.</small>
+                                </div>
 
-        _toastService.ShowSuccessToast("Your account has been updated. ", "Account update successfull");
-    }
+                                <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                                    <SfTextBox Type="InputType.Password" Placeholder="Password" CssClass="@_passwordCssClass" FloatLabelType="@FloatLabelType.Auto"
+                                               ShowClearButton="true" @bind-Value="@_plUserAccount.Password" Blur="OnBlur" />
 
-    private void OnBlur(FocusOutEventArgs args)
-    {
-        // TODO Check one field instead of whole form
-        CheckForm();
-    }
+                                    <ValidationMessage For="@(() => _plUserAccount.Password)" />
+                                </div>
+                            </div>
+                            <!--#endregion-->
 
-    private void CheckForm()
-    {
-        if (_formContext.Validate() == false)
-        {
-            _firstNameCssClass = ValidateName(_plUserAccount.FirstName) ? "e-success" : "e-error";
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                    <SfButton Type="submit" CssClass="btn btn-primary" Content="Update" />
+                                </div>
+                            </div>
 
-            _affixCssClass = ValidateName(_plUserAccount.Affix) ? "e-success" : "e-error";
-
-            _lastNameCssClass = ValidateName(_plUserAccount.LastName) ? "e-success" : "e-error";
-
-            _phoneNumberCssClass = ValidatePhoneNumber(_plUserAccount.PhoneNumber) ? "e-success" : "e-error";
-
-            _emailCssClass = ValidateEmail(_plUserAccount.Email) ? "e-success" : "e-error";
-
-            _passwordCssClass = ValidatePassword(_plUserAccount.Password) ? "e-success" : "e-error";
+                        </div>
+                    </EditForm>
+                </CardContent>
+                <CardFooter>
+                    <small>
+                        *Only email and password are mandatory
+                    </small>
+                </CardFooter>
+            </SfCard>
         }
         else
         {
-            _firstNameCssClass = "e-success";
-            _affixCssClass = "e-success";
-            _lastNameCssClass = "e-success";
-            _phoneNumberCssClass = "e-success";
-            _emailCssClass = "e-success";
-            _passwordCssClass = "e-success";
+            <p>Retreiving your account information...</p>
         }
+    </div>
+</div>
 
-        StateHasChanged();
-    }
+    @code {
+        [CascadingParameter]
+        public Task<AuthenticationState> AuthStateTask { get; set; }
 
-    private bool ValidateName(string firstName)
-    {
-        if (String.IsNullOrEmpty(firstName) == true)
-            return true;
+        private AuthenticationState _authState;
 
-        return firstName.Length > 1 && firstName.Length < 20;
-    }
+        private bool IsInitialized;
 
-    private bool ValidatePhoneNumber(string phoneNumber)
-    {
-        if (phoneNumber == null)
-            return true;
+        private EditContext _formContext;
 
-        PhoneAttribute phoneAttribute = new PhoneAttribute();
+        private IPLUserAccount _plUserAccount;
 
-        return phoneAttribute.IsValid(phoneNumber);
-    }
+        private string _accountName;
 
-    private bool ValidateEmail(string email)
-    {
-        if (String.IsNullOrEmpty(email))
-            return false;
+        private string _firstNameCssClass;
 
-        if (email.Length < 6)
-            return false;
+        private string _affixCssClass;
 
-        string domainAndTopLvlDomain;
-        string domain;
+        private string _lastNameCssClass;
 
-        try
+        private string _phoneNumberCssClass;
+
+        private string _emailCssClass;
+
+        private string _passwordCssClass;
+        private Regex _passwordRegex;
+
+        protected override async Task OnInitializedAsync()
         {
-            domainAndTopLvlDomain = email.Split('@')[1];
+            try
+            {
+                _spinnerService.ShowSpinner();
+                _plUserAccount = await GetUserAccount();
+                _spinnerService.HideSpinner();
+            }
+            catch (Exception ex)
+            {
+                _toastService.ShowExceptionToast(ex);
+            }
 
-            domain = domainAndTopLvlDomain.Split('.')[0];
+            _formContext = new EditContext(_plUserAccount);
+
+            _passwordRegex = new Regex(Constants.VALID_PASSWORD_PATTERN);
+
+            _authState = await AuthStateTask;
+
+            _accountName = _plUserAccount.FullName ?? _plUserAccount.Email;
+
+            IsInitialized = true;
+
+            await base.OnInitializedAsync();
         }
-        catch
+
+        private async Task<IPLUserAccount> GetUserAccount()
         {
-            return false;
+            string url = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.GET_BY_EMAIL}";
+
+            var result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).GetAsync(url);
+
+            if (result.IsSuccessStatusCode == false)
+                _toastService.ShowExceptionToast(new Exception($"Something went wrong while calling the server. {result.StatusCode}: {result.ReasonPhrase}"));
+
+            return JsonConvert.DeserializeObject<PLUserAccount>(await result.Content.ReadAsStringAsync());
         }
 
-        if (Constants.VALID_EMAIL_DOMAINS.Contains(domain) == false)
-            return false;
-
-        try
+        private async Task SubmitForm()
         {
-            var _email = new MailAddress(email.Normalize());
+            _spinnerService.ShowSpinner();
+            var result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PatchAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT}", new StringContent(JsonConvert.SerializeObject(_plUserAccount), Encoding.UTF8, Constants.MediaTypes.JSON));
+            _spinnerService.HideSpinner();
+
+            if (result.IsSuccessStatusCode == false)
+                _toastService.ShowExceptionToast(new Exception($"Something went wrong while calling the server. {result.StatusCode}: {result.ReasonPhrase}"));
+
+            _toastService.ShowSuccessToast("Your account has been updated. ", "Account update successfull");
         }
-        catch (FormatException)
+
+        private void OnBlur(FocusOutEventArgs args)
         {
-            return false;
+            // TODO Check one field instead of whole form
+            CheckForm();
         }
 
-        EmailAddressAttribute emailAddressAttribute = new EmailAddressAttribute();
+        private void CheckForm()
+        {
+            if (_formContext.Validate() == false)
+            {
+                _firstNameCssClass = ValidateName(_plUserAccount.FirstName) ? "e-success" : "e-error";
 
-        return emailAddressAttribute.IsValid(email);
+                _affixCssClass = ValidateName(_plUserAccount.Affix) ? "e-success" : "e-error";
+
+                _lastNameCssClass = ValidateName(_plUserAccount.LastName) ? "e-success" : "e-error";
+
+                _phoneNumberCssClass = ValidatePhoneNumber(_plUserAccount.PhoneNumber) ? "e-success" : "e-error";
+
+                _emailCssClass = ValidateEmail(_plUserAccount.Email) ? "e-success" : "e-error";
+
+                _passwordCssClass = ValidatePassword(_plUserAccount.Password) ? "e-success" : "e-error";
+            }
+            else
+            {
+                _firstNameCssClass = "e-success";
+                _affixCssClass = "e-success";
+                _lastNameCssClass = "e-success";
+                _phoneNumberCssClass = "e-success";
+                _emailCssClass = "e-success";
+                _passwordCssClass = "e-success";
+            }
+
+            StateHasChanged();
+        }
+
+        private bool ValidateName(string firstName)
+        {
+            if (String.IsNullOrEmpty(firstName) == true)
+                return true;
+
+            return firstName.Length > 1 && firstName.Length < 20;
+        }
+
+        private bool ValidatePhoneNumber(string phoneNumber)
+        {
+            if (phoneNumber == null)
+                return true;
+
+            PhoneAttribute phoneAttribute = new PhoneAttribute();
+
+            return phoneAttribute.IsValid(phoneNumber);
+        }
+
+        private bool ValidateEmail(string email)
+        {
+            if (String.IsNullOrEmpty(email))
+                return false;
+
+            if (email.Length < 6)
+                return false;
+
+            string domainAndTopLvlDomain;
+            string domain;
+
+            try
+            {
+                domainAndTopLvlDomain = email.Split('@')[1];
+
+                domain = domainAndTopLvlDomain.Split('.')[0];
+            }
+            catch
+            {
+                return false;
+            }
+
+            if (Constants.VALID_EMAIL_DOMAINS.Contains(domain) == false)
+                return false;
+
+            try
+            {
+                var _email = new MailAddress(email.Normalize());
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+
+            EmailAddressAttribute emailAddressAttribute = new EmailAddressAttribute();
+
+            return emailAddressAttribute.IsValid(email);
+        }
+
+        private bool ValidatePassword(string password)
+        {
+            return _passwordRegex.IsMatch(password);
+        }
     }
-
-    private bool ValidatePassword(string password)
-    {
-        return _passwordRegex.IsMatch(password);
-    }
-}

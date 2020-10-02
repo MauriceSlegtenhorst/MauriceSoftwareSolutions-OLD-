@@ -20,6 +20,22 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Credit
         }
 
         #region Create
+        public async Task<ICollection<IBLCredit>> CreateByCredit(IBLCredit credit)
+        {
+            if (credit == null)
+                throw new ArgumentNullException("Parameter credit cannot be null");
+
+            if (credit.CreditCategoryFK != Guid.Empty)
+                throw new ArgumentException("Credit category id must be empty. Please use a different endpoint");
+
+
+
+            DALCredit dalCredit = (DALCredit)credit;
+
+            DALCreditCategory category = await _dbContext.CreditCategories.FirstOrDefaultAsync();
+
+
+        }
         #endregion
 
         #region Read

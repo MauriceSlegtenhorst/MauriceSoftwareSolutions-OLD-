@@ -18,7 +18,16 @@
                     <Authorized>
                         <li class="@_navItemCss">
                             <NavLink class="nav-link" href="@BlazorConstants.Pages.Account.CRUD_ACCOUNT" Match="NavLinkMatch.All">
-                                <span class="page-top-bar-open-icon oi oi-person" aria-hidden="true"></span> CRUD Users
+                                <span class="page-top-bar-open-icon oi oi-people" aria-hidden="true"></span> CRUD Users
+                            </NavLink>
+                        </li>
+                    </Authorized>
+                </AuthorizeView>
+                <AuthorizeView>
+                    <Authorized>
+                        <li class="@_navItemCss">
+                            <NavLink class="nav-link" href="@BlazorConstants.Pages.CloudStorage.PERSONAL_CLOUD_STORAGE" Match="NavLinkMatch.All">
+                                <span class="page-top-bar-open-icon oi oi-cloud" aria-hidden="true"></span> Cloud storage
                             </NavLink>
                         </li>
                     </Authorized>
