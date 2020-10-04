@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MTS.DAL.DatabaseAccess.CRUD.Credit
 {
-    public sealed class CreditAdapter : ICreditAdapter
+    public sealed class CreditAdapter : CreditAdapterHelper, ICreditAdapter
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -20,21 +20,27 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Credit
         }
 
         #region Create
-        public async Task<ICollection<IBLCredit>> CreateByCredit(IBLCredit credit)
+        public async Task<ICollection<IBLCredit>> CreateWithExistingCategory(IBLCredit credit, string categoryTitle)
         {
             if (credit == null)
-                throw new ArgumentNullException("Parameter credit cannot be null");
+                throw new ArgumentNullException($"Parameter {nameof(credit)} cannot be null");
 
             if (credit.CreditCategoryFK != Guid.Empty)
-                throw new ArgumentException("Credit category id must be empty. Please use a different endpoint");
+                throw new ArgumentException("Credit category id must be an empty Guid");
+
+            if (String.IsNullOrEmpty(categoryTitle))
+                throw new ArgumentNullException($"Parameter {nameof(categoryTitle)} cannot be null or empty");
+
+            DALCreditCategory dalCategory = await _dbContext.CreditCategories.FirstOrDefaultAsync(category => category.Title == categoryTitle);
+
+            if (dalCategory == null)
+                throw new ArgumentException("No category was found with this title. Use a different endpoint to create a new category");
 
 
 
             DALCredit dalCredit = (DALCredit)credit;
 
-            DALCreditCategory category = await _dbContext.CreditCategories.FirstOrDefaultAsync();
-
-
+            dalCredit.CreditId = Guid.NewGuid();
         }
         #endregion
 
