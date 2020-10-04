@@ -15,11 +15,7 @@ namespace MTS.PL.Infra.Entities.Standard.Credit
 
         public string MadeBy { get; set; }
 
-        public string MadeByWebsite { get; set; }
-
         public string GotFrom { get; set; }
-
-        public string GotFromWebsite { get; set; }
 
         public string LinkToImage { get; set; }
     }

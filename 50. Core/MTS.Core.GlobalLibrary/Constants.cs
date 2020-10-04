@@ -82,6 +82,7 @@ namespace MTS.Core.GlobalLibrary
         public sealed class CreditControllerEndPoints
         {
             public const string READ_ALL_CREDIT_CATEGORY = "readallcreditcategory";
+            public const string CREATE_BY_EXISTING_CATEGORY = "createbyexistingcategory";
         }
 
         public sealed class AccountControllerEndpoints

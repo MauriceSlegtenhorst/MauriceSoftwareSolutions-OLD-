@@ -3,8 +3,10 @@ using MTS.BL.Infra.Interfaces.Standard.Credit;
 using MTS.BL.Infra.Interfaces.Standard.DatabaseAdapter;
 using MTS.Core.GlobalLibrary;
 using MTS.DAL.API.Utils.ExceptionHandler;
+using MTS.DAL.Entities.Core.Credit;
 using MTS.PL.Infra.Entities.Standard.Credit;
 using MTS.PL.Infra.Interfaces.Standard.Credit;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,7 +27,42 @@ namespace MTS.BL.API.Controllers
         }
 
         #region Create
+        [Route(Constants.CreditControllerEndPoints.CREATE_BY_EXISTING_CATEGORY)]
+        [HttpPut]
+        public async Task<IActionResult> CreateByExistingCategory(IPLCredit credit, string categoryTitle)
+        {
+            if(ModelState.IsValid == false)
+                return _exceptionHandler.HandleException(new Exception("ModelState was invalid"), isServerSideException: false);
 
+            IBLCredit blCredit = new DALCredit
+            {
+                Title = credit.Title,
+                SubTitle = credit.SubTitle,
+                Description = credit.Description,
+                GotFrom = credit.GotFrom,
+                MadeBy = credit.MadeBy,
+                LinkToImage = credit.LinkToImage
+            };
+
+            try
+            {
+                await _creditAdapter.CreateByExistingCategory(blCredit, categoryTitle);
+            }
+            catch (ArgumentException ex)
+            {
+                return _exceptionHandler.HandleException(ex, isServerSideException: false);
+            }
+            catch (Exception ex)
+            {
+                return _exceptionHandler.HandleException(ex, isServerSideException: true);
+            }
+
+            return new CreatedAtActionResult(
+                            actionName: Constants.CreditControllerEndPoints.CREATE_BY_EXISTING_CATEGORY,
+                            controllerName: Constants.APIControllers.CREDITS,
+                            routeValues: RouteData.Values,
+                            value: credit.Title);
+        }
         #endregion
 
         #region Read

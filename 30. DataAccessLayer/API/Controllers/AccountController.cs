@@ -133,7 +133,7 @@ namespace MTS.DAL.API.Controllers
         [HttpPut]
         public async Task<IActionResult> CreateByCredentials([FromBody] CredentialHolder credentialHolder)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid == false)
                 return _exceptionHandler.HandleException(new Exception("ModelState was invalid"), isServerSideException: false);
 
             try

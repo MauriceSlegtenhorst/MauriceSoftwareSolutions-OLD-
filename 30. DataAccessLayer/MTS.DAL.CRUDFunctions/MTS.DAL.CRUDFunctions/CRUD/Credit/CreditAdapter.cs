@@ -20,7 +20,8 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Credit
         }
 
         #region Create
-        public async Task<ICollection<IBLCredit>> CreateWithExistingCategory(IBLCredit credit, string categoryTitle)
+        // TODO Add cancellation tokens to all operations
+        public async Task CreateByExistingCategory(IBLCredit credit, string categoryTitle)
         {
             if (credit == null)
                 throw new ArgumentNullException($"Parameter {nameof(credit)} cannot be null");
@@ -36,11 +37,24 @@ namespace MTS.DAL.DatabaseAccess.CRUD.Credit
             if (dalCategory == null)
                 throw new ArgumentException("No category was found with this title. Use a different endpoint to create a new category");
 
+            DALCredit dalCredit = credit as DALCredit;
 
-
-            DALCredit dalCredit = (DALCredit)credit;
+            if(dalCredit == null)
+                throw new ArgumentException("Could not cast to database credit");
 
             dalCredit.CreditId = Guid.NewGuid();
+            dalCredit.CreditCategoryFK = dalCategory.CreditCategoryId;
+
+            await _dbContext.Credits.AddAsync(dalCredit);
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         #endregion
 

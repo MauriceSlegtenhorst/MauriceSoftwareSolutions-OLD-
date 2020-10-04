@@ -1,133 +1,145 @@
 ﻿ @inject IEditPageService _editPageService
     
-<div class="e-card e-card-horizontal reset-card-background-color">
-    <div class="e-card-header" style="padding: 16px">
-        <div class="e-card-header-caption">
-            <div class="e-card-header-title">
-                @if (_editPageService.GetEditMode() == true)
+<div class="custom-card custom-card-animated">
+    <div class="e-card-content">
+        <AuthorizeView Roles="@($"{Constants.Security.ADMINISTRATOR},{Constants.Security.PRIVILEGED_EMPLOYEE},{Constants.Security.EMPLOYEE}")">
+            <Authorized>
+                    <div class="row justify-content-end" style="padding-right:inherit; padding-bottom:inherit">
+                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="@(() => isInEditMode = !isInEditMode)"><span class="oi oi-pencil" /></SfButton>
+                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="CreditTitleHasChanged"><span class="oi oi-trash" /></SfButton>
+                    </div>
+            </Authorized>
+        </AuthorizeView>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                @if (isInEditMode == true)
                 {
                     <div class="p-3">
                         <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@Credit.LinkToImage" />
                     </div>
                 }
-                <img src="@(Credit.LinkToImage)" />
+
+                <img src="@(Credit.LinkToImage)" class="w-75" />
+            </div>
+
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                @if (isInEditMode == false)
+                {
+                    @((MarkupString)Credit.Title)
+                    @((MarkupString)Credit.SubTitle)
+                    <p>@((MarkupString)Credit.GotFrom)</p>
+                    <p>@((MarkupString)Credit.MadeBy)</p>
+                    <p>@((MarkupString)Credit.Description)</p>
+                }
+                else
+                {
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@Credit.Title" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @((MarkupString)Credit.Title)
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
+
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@Credit.SubTitle" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @((MarkupString)Credit.SubTitle)
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
+
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@Credit.GotFrom" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @((MarkupString)Credit.GotFrom)
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
+
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@Credit.MadeBy" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @((MarkupString)Credit.SubTitle)
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
+
+                    <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+                        <SplitterPanes>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@Credit.Description" />
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                            <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                                <ContentTemplate>
+                                    <div class="p-3">
+                                        @((MarkupString)Credit.Description)
+                                    </div>
+                                </ContentTemplate>
+                            </SplitterPane>
+                        </SplitterPanes>
+                    </SfSplitter>
+                }
             </div>
         </div>
-    </div>
-    <div class="e-card-content">
-        @if (_editPageService.GetEditMode() == false)
-        {
-            <div class="d-block">
-                @((MarkupString)Credit.Title)
-                @((MarkupString)Credit.SubTitle)
-                @((MarkupString)Credit.GotFrom)
-                @((MarkupString)Credit.MadeBy)
-                @((MarkupString)Credit.Description)
-            </div>
-        }
-        else
-        {
-            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
-                <SplitterPanes>
-                    <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                        <ContentTemplate>
-                            <div class="p-3">
-                                <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@Credit.Title" />
-                            </div>
-                        </ContentTemplate>
-                    </SplitterPane>
-                    <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                        <ContentTemplate>
-                            <div class="p-3">
-                                @((MarkupString)Credit.Title)
-                            </div>
-                        </ContentTemplate>
-                    </SplitterPane>
-                </SplitterPanes>
-            </SfSplitter>
+        
 
-            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
-                <SplitterPanes>
-                    <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                        <ContentTemplate>
-                            <div class="p-3">
-                                <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@Credit.SubTitle" />
-                            </div>
-                        </ContentTemplate>
-                    </SplitterPane>
-                    <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                        <ContentTemplate>
-                            <div class="p-3">
-                                @((MarkupString)Credit.SubTitle)
-                            </div>
-                        </ContentTemplate>
-                    </SplitterPane>
-                </SplitterPanes>
-            </SfSplitter>
-
-            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
-                <SplitterPanes>
-                    <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                        <ContentTemplate>
-                            <div class="p-3">
-                                <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@Credit.GotFrom" />
-                            </div>
-                        </ContentTemplate>
-                    </SplitterPane>
-                    <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                        <ContentTemplate>
-                            <div class="p-3">
-                                @((MarkupString)Credit.GotFrom)
-                            </div>
-                        </ContentTemplate>
-                    </SplitterPane>
-                </SplitterPanes>
-            </SfSplitter>
-
-            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
-                <SplitterPanes>
-                    <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                        <ContentTemplate>
-                            <div class="p-3">
-                                <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@Credit.MadeBy" />
-                            </div>
-                        </ContentTemplate>
-                    </SplitterPane>
-                    <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                        <ContentTemplate>
-                            <div class="p-3">
-                                @((MarkupString)Credit.SubTitle)
-                            </div>
-                        </ContentTemplate>
-                    </SplitterPane>
-                </SplitterPanes>
-            </SfSplitter>
-
-            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
-                <SplitterPanes>
-                    <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                        <ContentTemplate>
-                            <div class="p-3">
-                                <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@Credit.Description" />
-                            </div>
-                        </ContentTemplate>
-                    </SplitterPane>
-                    <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                        <ContentTemplate>
-                            <div class="p-3">
-                                @((MarkupString)Credit.Description)
-                            </div>
-                        </ContentTemplate>
-                    </SplitterPane>
-                </SplitterPanes>
-            </SfSplitter>
-        }
     </div>
 </div>
 
 @code {
     [Parameter]
     public PLCredit Credit { get; set; }
+
+    private bool isInEditMode;
 
     private const string splitterPaneCss = "theme";
 

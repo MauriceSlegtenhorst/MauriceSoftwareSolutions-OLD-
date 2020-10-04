@@ -6,6 +6,7 @@ namespace MTS.BL.Infra.Interfaces.Standard.DatabaseAdapter
 {
     public interface ICreditAdapter
     {
+        Task CreateByExistingCategory(IBLCredit credit, string categoryTitle);
         Task<ICollection<IBLCreditCategory>> ReadAllAsync();
         Task<IBLCreditCategory> ReadByCategoryIdAsync(string id);
         Task<IBLCredit> ReadByCreditIdAsync(string id);
