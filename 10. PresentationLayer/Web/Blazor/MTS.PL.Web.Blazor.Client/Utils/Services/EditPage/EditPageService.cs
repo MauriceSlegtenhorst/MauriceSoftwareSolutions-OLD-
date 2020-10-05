@@ -2,10 +2,10 @@
 using MTS.Core.GlobalLibrary;
 using System;
 
-namespace MTS.PL.Web.Blazor.Client.Utils.Services
+namespace MTS.PL.Web.Blazor.Client.Utils.Services.EditPage
 {
-    [Authorize(Roles = 
-        Constants.Security.ADMINISTRATOR +","+
+    [Authorize(Roles =
+        Constants.Security.ADMINISTRATOR + "," +
         Constants.Security.PRIVILEGED_EMPLOYEE + "," +
         Constants.Security.EMPLOYEE)]
     public sealed class EditPageService : IEditPageService
@@ -17,8 +17,6 @@ namespace MTS.PL.Web.Blazor.Client.Utils.Services
         {
             if (OnToggle == null)
                 return;
-
-
 
             IsInEditMode = !IsInEditMode;
             OnToggle.Invoke();

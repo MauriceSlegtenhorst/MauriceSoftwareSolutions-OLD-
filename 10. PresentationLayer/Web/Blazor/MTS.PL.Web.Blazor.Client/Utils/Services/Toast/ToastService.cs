@@ -3,7 +3,7 @@ using Syncfusion.Blazor.Notifications;
 using System;
 using System.Text;
 
-namespace MTS.PL.Web.Blazor.Client.Utils.Services
+namespace MTS.PL.Web.Blazor.Client.Utils.Services.Toast
 {
     public sealed class ToastService : IToastService
     {

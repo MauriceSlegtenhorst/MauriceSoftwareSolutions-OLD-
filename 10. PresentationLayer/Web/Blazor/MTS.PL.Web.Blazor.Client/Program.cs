@@ -7,7 +7,10 @@ using MTS.Core.GlobalLibrary;
 using MTS.PL.Infra.Interfaces.Standard;
 using MTS.PL.Web.Blazor.Client.Authentification;
 using MTS.PL.Web.Blazor.Client.Utils;
-using MTS.PL.Web.Blazor.Client.Utils.Services;
+using MTS.PL.Web.Blazor.Client.Utils.Services.Dialog;
+using MTS.PL.Web.Blazor.Client.Utils.Services.EditPage;
+using MTS.PL.Web.Blazor.Client.Utils.Services.Spinner;
+using MTS.PL.Web.Blazor.Client.Utils.Services.Toast;
 using Syncfusion.Blazor;
 using Syncfusion.Licensing;
 
@@ -26,6 +29,7 @@ namespace MTS.PL.Web.Blazor.Client
             #region Global UI
             builder.Services.AddSingleton<IToastService, ToastService>();
             builder.Services.AddSingleton<ISpinnerService, SpinnerService>();
+            builder.Services.AddSingleton<IDialogService, DialogService>();
             builder.Services.AddSingleton<IEditPageService, EditPageService>();
             #endregion
 

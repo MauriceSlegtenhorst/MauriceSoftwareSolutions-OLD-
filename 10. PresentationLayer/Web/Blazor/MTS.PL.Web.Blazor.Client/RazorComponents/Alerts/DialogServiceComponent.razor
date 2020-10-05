@@ -1,0 +1,80 @@
+﻿@inject IDialogService _dialogService
+@inherits ADisposibleBaseComponent
+
+<div class=" col-lg-8 control-section" id="target" style="height:350px;">
+    <div>
+        @if (this.ShowButton)
+        {
+            <button class="e-btn" @onclick="@OnBtnClick">Open</button>
+        }
+    </div>
+    <SfDialog Width="335px" Target="#target" IsModal="true" @bind-Visible="Visibility">
+        <DialogTemplates>
+            <Header> Software Update </Header>
+            <Content>
+                <p>Your current software version is up to date.</p>
+            </Content>
+        </DialogTemplates>
+        <DialogButtons>
+            <DialogButton Content="OK" IsPrimary="true" OnClick="@DlgButtonClick" />
+        </DialogButtons>
+        <DialogEvents OnOpen="@DialogOpen" Closed="@DialogClose" OnOverlayClick="@OverlayClick"></DialogEvents>
+        <DialogAnimationSettings Effect="@DialogEffect.None"></DialogAnimationSettings>
+    </SfDialog>
+</div>
+
+<style>
+    #target {
+        max-height: 800px;
+        height: 100%;
+    }
+</style>
+
+@code {
+    protected override void OnInitialized()
+    {
+        _dialogService.OnShow += ShowDialog;
+        _dialogService.OnHide += HideDialog;
+
+        base.OnInitialized();
+    }
+
+    private void ShowDialog(DialogModel dialogModel = null)
+    {
+        Visibility = true;
+    }
+
+    private void HideDialog()
+    {
+        Visibility = false;
+    }
+
+    private bool Visibility { get; set; } = true;
+    private bool ShowButton { get; set; } = false;
+    private void DialogOpen(Object args)
+    {
+        this.ShowButton = false;
+    }
+    private void DialogClose(Object args)
+    {
+        this.ShowButton = true;
+    }
+    private void OnBtnClick()
+    {
+        this.Visibility = true;
+    }
+    private void DlgButtonClick()
+    {
+        this.Visibility = false;
+    }
+    private void OverlayClick(Object args)
+    {
+        
+    }
+
+    public override void Dispose()
+    {
+        _dialogService.OnShow -= ShowDialog;
+        _dialogService.OnHide -= HideDialog;
+    }
+}

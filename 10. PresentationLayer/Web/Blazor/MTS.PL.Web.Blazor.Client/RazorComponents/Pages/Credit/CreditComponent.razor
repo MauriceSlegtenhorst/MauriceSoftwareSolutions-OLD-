@@ -1,9 +1,11 @@
-﻿<div class="@("custom-card" + (isInEditMode ? null : " custom-card-animated"))">
+﻿@inject IDialogService _dialogService
+
+<div class="custom-card custom-card-animated">
     <div class="e-card-content">
         <AuthorizeView Roles="@($"{Constants.Security.ADMINISTRATOR},{Constants.Security.PRIVILEGED_EMPLOYEE},{Constants.Security.EMPLOYEE}")">
             <Authorized>
                     <div class="row justify-content-end" style="padding-right:16px; padding-bottom:16px;">
-                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="@(() => isInEditMode = !isInEditMode)"><span class="@(isInEditMode ? "oi oi-check" : "oi oi-pencil")" /></SfButton>
+                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="ToggleIsInEditMode"><span class="@(isInEditMode ? "oi oi-check" : "oi oi-pencil")" /></SfButton>
                             <SfButton CssClass="e-btn e-outline e-primary" @onclick="CreditTitleHasChanged"><span class="@(isInEditMode ? "oi oi-x" : "oi oi-trash")" /></SfButton>
                     </div>
             </Authorized>
@@ -140,6 +142,14 @@
     private bool isInEditMode;
 
     private const string splitterPaneCss = "theme";
+
+    private void ToggleIsInEditMode()
+    {
+        isInEditMode = !isInEditMode;
+
+        if (isInEditMode == true)
+            _dialogService.ShowDialog(null);
+    }
 
     private void CreditTitleHasChanged()
     {
