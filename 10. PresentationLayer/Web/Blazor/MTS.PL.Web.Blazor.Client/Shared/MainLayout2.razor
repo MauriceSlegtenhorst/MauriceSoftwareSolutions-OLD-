@@ -1,86 +1,84 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager _navigationManager
 
-<div class="page">
-    <ToastServiceComponent />
-    <SpinnerServiceComponent />
-    <DialogServiceComponent />
+<ToastServiceComponent />
+<SpinnerServiceComponent />
+<DialogServiceComponent />
 
-    <div class="page-top-bar">
+<div class="page-top-bar">
+        <!--Left-->
+        <ul class="nav flex-row">
             <!--Left-->
-            <ul class="nav flex-row">
-                <!--Left-->
-                <li class="@_navItemCss">
-                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                        <span class="page-top-bar-open-icon oi oi-home" aria-hidden="true"></span> Home
-                    </NavLink>
-                </li>
-                <AuthorizeView Roles="@Constants.Security.ADMINISTRATOR">
-                    <Authorized>
-                        <li class="@_navItemCss">
-                            <NavLink class="nav-link" href="@BlazorConstants.Pages.Account.CRUD_ACCOUNT" Match="NavLinkMatch.All">
-                                <span class="page-top-bar-open-icon oi oi-people" aria-hidden="true"></span> CRUD Users
-                            </NavLink>
-                        </li>
-                    </Authorized>
-                </AuthorizeView>
-                <AuthorizeView>
-                    <Authorized>
-                        <li class="@_navItemCss">
-                            <NavLink class="nav-link" href="@BlazorConstants.Pages.CloudStorage.PERSONAL_CLOUD_STORAGE" Match="NavLinkMatch.All">
-                                <span class="page-top-bar-open-icon oi oi-cloud" aria-hidden="true"></span> Cloud storage
-                            </NavLink>
-                        </li>
-                    </Authorized>
-                </AuthorizeView>
-                <li class="@_navItemCss">
-                    <NavLink class="nav-link" href="@BlazorConstants.Pages.CREDITS" Match="NavLinkMatch.All">
-                        <span class="page-top-bar-open-icon oi oi-thumb-up" aria-hidden="true"></span> Credits
-                    </NavLink>
-                </li>
-            </ul>
-
-            <!--Right-->
-            <AuthorizeView>
-                <NotAuthorized>
-                    <ul class="nav flex-row-reverse">
-                        <li class="@_navItemCss">
-                            <NavLink class="nav-link" @onclick="() => ToggleRegister()">
-                                <span class="page-top-bar-open-icon oi oi-account-login" aria-hidden="true"></span> Register
-                                <div class="page-top-bar-nav-item-dropdown-content" style="@_registerDropDownContentStyle" @onclick="@(() => _clickWasInsideRegisterCard = true)">
-                                    <LoginRegisterComponent IsLogin="false" />
-                                </div>
-                            </NavLink>
-                        </li>
-                        <li class="@_navItemCss">
-                            <NavLink class="nav-link" @onclick="() => ToggleLogin()">
-                                <span class="page-top-bar-open-icon oi oi-account-login" aria-hidden="true"></span> Login
-                                <div class="page-top-bar-nav-item-dropdown-content" style="@_loginDropDownContentStyle" @onclick="@(() => _clickWasInsideLoginCard = true)">
-                                    <LoginRegisterComponent IsLogin="true" />
-                                </div>
-                            </NavLink>
-                        </li>
-                    </ul>
-                </NotAuthorized>
+            <li class="@_navItemCss">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="page-top-bar-open-icon oi oi-home" aria-hidden="true"></span> Home
+                </NavLink>
+            </li>
+            <AuthorizeView Roles="@Constants.Security.ADMINISTRATOR">
                 <Authorized>
-                    <ul class="nav flex-row-reverse">
-                        <li class="@_navItemCss">
-                            <NavLink class="nav-link" href="@BlazorConstants.Pages.Account.EDIT_ACCOUNT">
-                                <span class="page-top-bar-open-icon oi oi-person" aria-hidden="true"></span> Account
-                            </NavLink>
-                        </li>
-                        <li class="@_navItemCss">
-                            <NavLink class="nav-link" href="@BlazorConstants.Pages.Authentication.LOGOUT">
-                                <span class="page-top-bar-open-icon oi oi-account-logout" aria-hidden="true"></span> Logout
-                            </NavLink>
-                        </li>
-                    </ul>
+                    <li class="@_navItemCss">
+                        <NavLink class="nav-link" href="@BlazorConstants.Pages.Account.CRUD_ACCOUNT" Match="NavLinkMatch.All">
+                            <span class="page-top-bar-open-icon oi oi-people" aria-hidden="true"></span> CRUD Users
+                        </NavLink>
+                    </li>
                 </Authorized>
             </AuthorizeView>
-    </div>
+            <AuthorizeView>
+                <Authorized>
+                    <li class="@_navItemCss">
+                        <NavLink class="nav-link" href="@BlazorConstants.Pages.CloudStorage.PERSONAL_CLOUD_STORAGE" Match="NavLinkMatch.All">
+                            <span class="page-top-bar-open-icon oi oi-cloud" aria-hidden="true"></span> Cloud storage
+                        </NavLink>
+                    </li>
+                </Authorized>
+            </AuthorizeView>
+            <li class="@_navItemCss">
+                <NavLink class="nav-link" href="@BlazorConstants.Pages.CREDITS" Match="NavLinkMatch.All">
+                    <span class="page-top-bar-open-icon oi oi-thumb-up" aria-hidden="true"></span> Credits
+                </NavLink>
+            </li>
+        </ul>
 
-    @Body
+        <!--Right-->
+        <AuthorizeView>
+            <NotAuthorized>
+                <ul class="nav flex-row-reverse">
+                    <li class="@_navItemCss">
+                        <NavLink class="nav-link" @onclick="() => ToggleRegister()">
+                            <span class="page-top-bar-open-icon oi oi-account-login" aria-hidden="true"></span> Register
+                            <div class="page-top-bar-nav-item-dropdown-content" style="@_registerDropDownContentStyle" @onclick="@(() => _clickWasInsideRegisterCard = true)">
+                                <LoginRegisterComponent IsLogin="false" />
+                            </div>
+                        </NavLink>
+                    </li>
+                    <li class="@_navItemCss">
+                        <NavLink class="nav-link" @onclick="() => ToggleLogin()">
+                            <span class="page-top-bar-open-icon oi oi-account-login" aria-hidden="true"></span> Login
+                            <div class="page-top-bar-nav-item-dropdown-content" style="@_loginDropDownContentStyle" @onclick="@(() => _clickWasInsideLoginCard = true)">
+                                <LoginRegisterComponent IsLogin="true" />
+                            </div>
+                        </NavLink>
+                    </li>
+                </ul>
+            </NotAuthorized>
+            <Authorized>
+                <ul class="nav flex-row-reverse">
+                    <li class="@_navItemCss">
+                        <NavLink class="nav-link" href="@BlazorConstants.Pages.Account.EDIT_ACCOUNT">
+                            <span class="page-top-bar-open-icon oi oi-person" aria-hidden="true"></span> Account
+                        </NavLink>
+                    </li>
+                    <li class="@_navItemCss">
+                        <NavLink class="nav-link" href="@BlazorConstants.Pages.Authentication.LOGOUT">
+                            <span class="page-top-bar-open-icon oi oi-account-logout" aria-hidden="true"></span> Logout
+                        </NavLink>
+                    </li>
+                </ul>
+            </Authorized>
+        </AuthorizeView>
 </div>
+
+@Body
 
 @code
 {

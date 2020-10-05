@@ -9,7 +9,6 @@
 
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
 
-
     <link href="_content/Syncfusion.Blazor/styles/fabric-dark.css" rel="stylesheet" />
     <link href="css/syncfusion/compatibility/fabric-dark.css" rel="stylesheet" />
 
@@ -18,14 +17,22 @@
     <link href="css/MainSCSS.min.css" rel="stylesheet" />
 </head>
 
-<body>
-    <app>Loading...</app>
+<body id="body">
+    <div id="spinnerContainer" />
 
-    <div id="blazor-error-ui">
-        Somthing went wrong. Reloading the page might help. Probably not.
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
-    </div>
+    <app class="page">
+
+        <div class="e-spinner-pane e-spin-show e-spin-overlay" style="z-index: auto;" _bl_f3624bba-c792-4b8a-975e-120fa6fbf1bc="">
+            <div class="e-spinner-inner">
+                <svg class="e-spin-fabric" id="SVG-1b28274d-f554-45a1-9cf3-6f2c76c80dfe" viewBox="0 0 30 30" style="width: 30px; height: 30px; transform-origin: 15px 15px 15px;">
+                    <path class="e-path-circle" d="M 15 15 m -15 0 a 15 15 0 1 0 30 0 a 15 15 0 1 0 -30 0"></path>
+                    <path class="e-path-arc" d="M 25.606601717798213 4.3933982822017885 A 15 15 0 0 0 4.393398282201785 4.3933982822017885"></path>
+                </svg>
+            </div>
+        </div>
+
+    </app>
+
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/BlazorAnimate/blazorAnimateInterop.js"></script>
 </body>
