@@ -1,0 +1,162 @@
+﻿@inject IDialogService _dialogService
+
+@if (_showForm == true)
+{
+<div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+
+        <div class="p-3">
+            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@_credit.LinkToImage" />
+        </div>
+
+        <img src="@(_credit.LinkToImage)" class="w-75" />
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+            <SplitterPanes>
+                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                    <ContentTemplate>
+                        <div class="p-3">
+                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@_credit.Title" />
+                        </div>
+                    </ContentTemplate>
+                </SplitterPane>
+                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                    <ContentTemplate>
+                        <div class="p-3">
+                            @((MarkupString)_credit.Title)
+                        </div>
+                    </ContentTemplate>
+                </SplitterPane>
+            </SplitterPanes>
+        </SfSplitter>
+
+        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+            <SplitterPanes>
+                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                    <ContentTemplate>
+                        <div class="p-3">
+                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@_credit.SubTitle" />
+                        </div>
+                    </ContentTemplate>
+                </SplitterPane>
+                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                    <ContentTemplate>
+                        <div class="p-3">
+                            @((MarkupString)_credit.SubTitle)
+                        </div>
+                    </ContentTemplate>
+                </SplitterPane>
+            </SplitterPanes>
+        </SfSplitter>
+
+        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+            <SplitterPanes>
+                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                    <ContentTemplate>
+                        <div class="p-3">
+                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@_credit.GotFrom" />
+                        </div>
+                    </ContentTemplate>
+                </SplitterPane>
+                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                    <ContentTemplate>
+                        <div class="p-3">
+                            @((MarkupString)_credit.GotFrom)
+                        </div>
+                    </ContentTemplate>
+                </SplitterPane>
+            </SplitterPanes>
+        </SfSplitter>
+
+        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+            <SplitterPanes>
+                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                    <ContentTemplate>
+                        <div class="p-3">
+                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@_credit.MadeBy" />
+                        </div>
+                    </ContentTemplate>
+                </SplitterPane>
+                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                    <ContentTemplate>
+                        <div class="p-3">
+                            @((MarkupString)_credit.SubTitle)
+                        </div>
+                    </ContentTemplate>
+                </SplitterPane>
+            </SplitterPanes>
+        </SfSplitter>
+
+        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+            <SplitterPanes>
+                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                    <ContentTemplate>
+                        <div class="p-3">
+                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@_credit.Description" />
+                        </div>
+                    </ContentTemplate>
+                </SplitterPane>
+                <SplitterPane Size="50%" Min="30%" Collapsible="true">
+                    <ContentTemplate>
+                        <div class="p-3">
+                            @((MarkupString)_credit.Description)
+                        </div>
+                    </ContentTemplate>
+                </SplitterPane>
+            </SplitterPanes>
+        </SfSplitter>
+    </div>
+</div>
+<div class="row justify-content-end">
+    <SfButton CssClass="e-btn e-outline e-primary"> <span class="oi oi-check" /> </SfButton>
+    <SfButton CssClass="e-btn e-outline e-second" OnClick="Cancel"> <span class="oi oi-x" /> </SfButton>
+</div>
+}
+else
+{
+    <h1>_showForm = false - Finished yes yes?? test test</h1>
+}
+
+@code {
+    [CascadingParameter]
+    private DialogParameters _dialogParameters { get; set; }
+
+    [CascadingParameter]
+    private DialogServiceComponent _dialogServiceComponent { get; set; }
+
+    private string splitterPaneCss = "theme";
+    private bool _showForm { get; set; } = true;
+    private int _formId { get; set; }
+    private PLCredit _credit { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _formId = _dialogParameters.Get<int>("FormId");
+        _credit = _dialogParameters.Get<PLCredit>("Credit");
+        _dialogServiceComponent.SetTitle($"Edit credit");
+
+        base.OnInitialized();
+    }
+
+    private void SubmitForm()
+    {
+        _showForm = false;
+    }
+
+    private void Done()
+    {
+        _dialogService.Close(DialogResult.Ok("Form submitted!"));
+    }
+
+    private void Cancel()
+    {
+        _dialogService.Close(DialogResult.Cancel());
+    }
+
+    //TODO To be removed
+    private void CreditTitleHasChanged()
+    {
+
+    }
+}

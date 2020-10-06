@@ -16,9 +16,10 @@
         base.OnInitialized();
     }
 
-    private void ShowSpinner(string message)
+    private void ShowSpinner(string message = "Test test")
     {
         _message = message;
+
         Spinner.ShowSpinner(_spinnerTarget);
     }
 

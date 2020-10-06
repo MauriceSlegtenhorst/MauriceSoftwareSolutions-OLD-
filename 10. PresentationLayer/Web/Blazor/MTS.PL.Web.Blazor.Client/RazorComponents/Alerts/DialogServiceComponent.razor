@@ -1,67 +1,142 @@
 ﻿@inject IDialogService _dialogService
+@inject IToastService _toastService
+
 @inherits ADisposibleBaseComponent
 
 
-<SfDialog Width="335px" Target="#body" IsModal="true" @bind-Visible="Visibility">
+<SfDialog Width="80%" Target="#body" IsModal="true" @bind-Visible="ComponentIsVisible" ShowCloseIcon="ComponentHasCloseButton" CssClass="@ComponentStyle" Header="@ComponentTitle">
     <DialogTemplates>
-        <Header> Software Update </Header>
         <Content>
-            <p>Your current software version is up to date.</p>
+            <CascadingValue Value="this">
+                <CascadingValue Value="ComponentParameters">
+                    @ComponentContent
+                </CascadingValue>
+            </CascadingValue>
         </Content>
     </DialogTemplates>
-    <DialogButtons>
-        <DialogButton Content="OK" IsPrimary="true" OnClick="@DlgButtonClick" />
-    </DialogButtons>
-    <DialogEvents OnOpen="@DialogOpen" Closed="@DialogClose" OnOverlayClick="@OverlayClick"></DialogEvents>
+
+    <DialogEvents OnOpen="DialogOpen" Closed="DialogClose" OnOverlayClick="OverlayClick"></DialogEvents>
     <DialogAnimationSettings Effect="@DialogEffect.None"></DialogAnimationSettings>
 </SfDialog>
 
 
 @code {
+    [Parameter]
+    public string Position { get; set; } = "Center";
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public bool HasHeader { get; set; }
+
+    [Parameter]
+    public bool HasCloseButton { get; set; }
+
+    [Parameter]
+    public bool HasBackgroundCancel { get; set; }
+
+    private bool ComponentIsVisible { get; set; }
+    private string ComponentPosition { get; set; }
+    private string ComponentStyle { get; set; }
+    private bool ComponentHasBackgroundCancel { get; set; }
+    private bool ComponentHasHeader { get; set; }
+    private bool ComponentHasCloseButton { get; set; }
+    private string ComponentTitle { get; set; }
+    private RenderFragment ComponentContent { get; set; }
+    private DialogParameters ComponentParameters { get; set; }
+
+
     protected override void OnInitialized()
     {
-        _dialogService.OnShow += ShowDialog;
-        _dialogService.OnHide += HideDialog;
+        ((DialogService)_dialogService).OnShow += ShowDialog;
+        ((DialogService)_dialogService).CloseDialog += CloseDialog;
 
         base.OnInitialized();
     }
 
-    private void ShowDialog(DialogModel dialogModel = null)
+    public override void Dispose()
     {
-        Visibility = true;
+        ((DialogService)_dialogService).OnShow -= ShowDialog;
+        ((DialogService)_dialogService).CloseDialog -= CloseDialog;
     }
 
-    private void HideDialog()
+    private void ShowDialog(string title, RenderFragment content, DialogParameters parameters, DialogOptions options)
     {
-        Visibility = false;
+        ComponentTitle = title;
+        ComponentContent = content;
+        ComponentParameters = parameters;
+
+        ComponentIsVisible = true;
+
+        StateHasChanged();
     }
 
-    private bool Visibility { get; set; } = true;
-    private bool ShowButton { get; set; } = false;
+    private void CloseDialog()
+    {
+        ComponentTitle = null;
+        ComponentContent = null;
+        ComponentParameters = null;
+        ComponentStyle = null;
+
+        ComponentIsVisible = false;
+
+        StateHasChanged();
+    }
+
     private void DialogOpen(Object args)
     {
-        this.ShowButton = false;
+
     }
+
     private void DialogClose(Object args)
     {
-        this.ShowButton = true;
+
     }
+
     private void OnBtnClick()
     {
-        this.Visibility = true;
+        ComponentIsVisible = true;
     }
     private void DlgButtonClick()
     {
-        this.Visibility = false;
-    }
-    private void OverlayClick(Object args)
-    {
-        
+        ComponentIsVisible = false;
     }
 
-    public override void Dispose()
+    private void OverlayClick(Object args)
     {
-        _dialogService.OnShow -= ShowDialog;
-        _dialogService.OnHide -= HideDialog;
+        if (ComponentHasBackgroundCancel == false)
+            return;
+
+        _dialogService.Cancel();
+    }
+
+    private void SetDialogOptions(DialogOptions options)
+    {
+        //TODO Handle position
+        if (String.IsNullOrEmpty(options.Position) == false)
+            ComponentPosition = options.Position;
+
+        ComponentStyle = Style;
+        if (String.IsNullOrEmpty(options.Style) == false)
+            ComponentStyle = options.Style;
+
+        ComponentHasBackgroundCancel = HasBackgroundCancel;
+        if (options.HasBackgroundCancel.HasValue)
+            ComponentHasBackgroundCancel = options.HasBackgroundCancel.Value;
+
+        ComponentHasHeader = HasHeader;
+        if (options.HasHeader.HasValue)
+            ComponentHasHeader = options.HasHeader.Value;
+
+        ComponentHasCloseButton = HasCloseButton;
+        if (options.HasCloseButton.HasValue)
+            ComponentHasCloseButton = options.HasCloseButton.Value;
+    }
+
+    public void SetTitle(string title)
+    {
+        if(String.IsNullOrEmpty(title) == false)
+            ComponentTitle = title;
     }
 }

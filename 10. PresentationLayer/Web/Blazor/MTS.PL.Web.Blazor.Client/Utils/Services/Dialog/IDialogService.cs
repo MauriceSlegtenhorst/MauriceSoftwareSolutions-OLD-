@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 
 namespace MTS.PL.Web.Blazor.Client.Utils.Services.Dialog
 {
     public interface IDialogService
     {
-        event Action<DialogModel> OnShow;
-        event Action OnHide;
+        event Action<DialogResult> OnClose;
 
-        void ShowDialog(DialogModel dialogModel);
+        void Show<T>(string title, DialogParameters parameters) where T : ComponentBase;
 
-        void HideDialog();
+        void Show<T>(string title, DialogParameters parameters = null, DialogOptions options = null) where T : ComponentBase;
+
+        /// <exception cref="ArgumentException">Thrown if parameter "Type contentComponent" is not a Blazor component</exception>
+        void Show(string title, Type contentComponent, DialogParameters parameters, DialogOptions options);
+
+        void Close(DialogResult dialogResult);
+
+        void Cancel();
     }
 }

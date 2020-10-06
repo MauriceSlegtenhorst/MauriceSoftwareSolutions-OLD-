@@ -29,7 +29,7 @@ namespace MTS.PL.Web.Blazor.Client
             #region Global UI
             builder.Services.AddSingleton<IToastService, ToastService>();
             builder.Services.AddSingleton<ISpinnerService, SpinnerService>();
-            builder.Services.AddSingleton<IDialogService, DialogService>();
+            builder.Services.AddScoped<IDialogService, DialogService>();
             builder.Services.AddSingleton<IEditPageService, EditPageService>();
             #endregion
 
