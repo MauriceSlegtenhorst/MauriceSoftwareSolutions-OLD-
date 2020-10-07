@@ -1,121 +1,118 @@
 ﻿@inject IDialogService _dialogService
 
+<SfSpinner @ref="spinner" Target="#dialog-content" Label="@loadingMessage" Type="SpinnerType.Fabric" />
+
 @if (_showForm == true)
 {
-<div class="row">
-    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+    <div class="row">
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+            <div class="p-3">
+                <SfTextBox Type="InputType.Text" ShowClearButton="true" @bind-Value="@_credit.LinkToImage" Multiline="true" @onkeyup="StateHasChanged"
+                           Placeholder="@PropertyNameConverter.ConvertFromProperty(nameof(_credit.LinkToImage))" FloatLabelType="FloatLabelType.Always" />
+            </div>
 
-        <div class="p-3">
-            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@_credit.LinkToImage" />
+            <div class="d-flex justify-content-center">
+                <img src="@(_credit.LinkToImage)" />
+            </div>
         </div>
-
-        <img src="@(_credit.LinkToImage)" class="w-75" />
-    </div>
-    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
-            <SplitterPanes>
-                <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                    <ContentTemplate>
-                        <div class="p-3">
-                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@_credit.Title" />
-                        </div>
-                    </ContentTemplate>
-                </SplitterPane>
-                <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                    <ContentTemplate>
-                        <div class="p-3">
+        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12">
+            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+                <SplitterPanes>
+                    <SplitterPane Size="50%" Min="30%" Collapsible="true" CssClass="p-3">
+                        <ContentTemplate>
+                            <SfTextBox Type="InputType.Text" ShowClearButton="true" @bind-Value="@_credit.Title" Multiline="true" @onkeyup="StateHasChanged"
+                                       Placeholder="@PropertyNameConverter.ConvertFromProperty(nameof(_credit.Title))" FloatLabelType="FloatLabelType.Always" />
+                        </ContentTemplate>
+                    </SplitterPane>
+                    <SplitterPane Size="50%" Min="30%" Collapsible="true" CssClass="p-3">
+                        <ContentTemplate>
                             @((MarkupString)_credit.Title)
-                        </div>
-                    </ContentTemplate>
-                </SplitterPane>
-            </SplitterPanes>
-        </SfSplitter>
+                        </ContentTemplate>
+                    </SplitterPane>
+                </SplitterPanes>
+            </SfSplitter>
 
-        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
-            <SplitterPanes>
-                <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                    <ContentTemplate>
-                        <div class="p-3">
-                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@_credit.SubTitle" />
-                        </div>
-                    </ContentTemplate>
-                </SplitterPane>
-                <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                    <ContentTemplate>
-                        <div class="p-3">
+            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+                <SplitterPanes>
+                    <SplitterPane Size="50%" Min="30%" Collapsible="true" CssClass="p-3">
+                        <ContentTemplate>
+                            <SfTextBox Type="InputType.Text" ShowClearButton="true" @bind-Value="@_credit.SubTitle" Multiline="true" @onkeyup="StateHasChanged"
+                                       Placeholder="@PropertyNameConverter.ConvertFromProperty(nameof(_credit.SubTitle))" FloatLabelType="FloatLabelType.Always" />
+                        </ContentTemplate>
+                    </SplitterPane>
+                    <SplitterPane Size="50%" Min="30%" Collapsible="true" CssClass="p-3">
+                        <ContentTemplate>
                             @((MarkupString)_credit.SubTitle)
-                        </div>
-                    </ContentTemplate>
-                </SplitterPane>
-            </SplitterPanes>
-        </SfSplitter>
+                        </ContentTemplate>
+                    </SplitterPane>
+                </SplitterPanes>
+            </SfSplitter>
 
-        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
-            <SplitterPanes>
-                <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                    <ContentTemplate>
-                        <div class="p-3">
-                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@_credit.GotFrom" />
-                        </div>
-                    </ContentTemplate>
-                </SplitterPane>
-                <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                    <ContentTemplate>
-                        <div class="p-3">
+            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+                <SplitterPanes>
+                    <SplitterPane Size="50%" Min="30%" Collapsible="true" CssClass="p-3">
+                        <ContentTemplate>
+                            <SfTextBox Type="InputType.Text" ShowClearButton="true" @bind-Value="@_credit.GotFrom" Multiline="true" @onkeyup="StateHasChanged"
+                                       Placeholder="@PropertyNameConverter.ConvertFromProperty(nameof(_credit.GotFrom))" FloatLabelType="FloatLabelType.Always" />
+                        </ContentTemplate>
+                    </SplitterPane>
+                    <SplitterPane Size="50%" Min="30%" Collapsible="true" CssClass="p-3">
+                        <ContentTemplate>
                             @((MarkupString)_credit.GotFrom)
-                        </div>
-                    </ContentTemplate>
-                </SplitterPane>
-            </SplitterPanes>
-        </SfSplitter>
+                        </ContentTemplate>
+                    </SplitterPane>
+                </SplitterPanes>
+            </SfSplitter>
 
-        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
-            <SplitterPanes>
-                <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                    <ContentTemplate>
-                        <div class="p-3">
-                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@_credit.MadeBy" />
-                        </div>
-                    </ContentTemplate>
-                </SplitterPane>
-                <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                    <ContentTemplate>
-                        <div class="p-3">
-                            @((MarkupString)_credit.SubTitle)
-                        </div>
-                    </ContentTemplate>
-                </SplitterPane>
-            </SplitterPanes>
-        </SfSplitter>
+            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+                <SplitterPanes>
+                    <SplitterPane Size="50%" Min="30%" Collapsible="true" CssClass="p-3">
+                        <ContentTemplate>
+                            <SfTextBox Type="InputType.Text" ShowClearButton="true" @bind-Value="@_credit.MadeBy" Multiline="true" @onkeyup="StateHasChanged"
+                                       Placeholder="@PropertyNameConverter.ConvertFromProperty(nameof(_credit.MadeBy))" FloatLabelType="FloatLabelType.Always" />
+                        </ContentTemplate>
+                    </SplitterPane>
+                    <SplitterPane Size="50%" Min="30%" Collapsible="true" CssClass="p-3">
+                        <ContentTemplate>
+                            @((MarkupString)_credit.MadeBy)
+                        </ContentTemplate>
+                    </SplitterPane>
+                </SplitterPanes>
+            </SfSplitter>
 
-        <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
-            <SplitterPanes>
-                <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                    <ContentTemplate>
-                        <div class="p-3">
-                            <SfTextBox Type="InputType.Text" ShowClearButton="true" Input="@(() => CreditTitleHasChanged())" @bind-Value="@_credit.Description" />
-                        </div>
-                    </ContentTemplate>
-                </SplitterPane>
-                <SplitterPane Size="50%" Min="30%" Collapsible="true">
-                    <ContentTemplate>
-                        <div class="p-3">
+            <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
+                <SplitterPanes>
+                    <SplitterPane Size="50%" Min="30%" Collapsible="true" CssClass="p-3">
+                        <ContentTemplate>
+                            <SfTextBox Type="InputType.Text" ShowClearButton="true" @bind-Value="@_credit.Description" Multiline="true" @onkeyup="StateHasChanged"
+                                       Placeholder="@PropertyNameConverter.ConvertFromProperty(nameof(_credit.Description))" FloatLabelType="FloatLabelType.Always" />
+                        </ContentTemplate>
+                    </SplitterPane>
+                    <SplitterPane Size="50%" Min="30%" Collapsible="true" CssClass="p-3">
+                        <ContentTemplate>
                             @((MarkupString)_credit.Description)
-                        </div>
-                    </ContentTemplate>
-                </SplitterPane>
-            </SplitterPanes>
-        </SfSplitter>
+                        </ContentTemplate>
+                    </SplitterPane>
+                </SplitterPanes>
+            </SfSplitter>
+        </div>
     </div>
-</div>
-<div class="row justify-content-end">
-    <SfButton CssClass="e-btn e-outline e-primary"> <span class="oi oi-check" /> </SfButton>
-    <SfButton CssClass="e-btn e-outline e-second" OnClick="Cancel"> <span class="oi oi-x" /> </SfButton>
-</div>
+
+    <div class="row justify-content-end">
+        <SfButton CssClass="e-btn e-primary" OnClick="SubmitForm"> <span class="oi oi-check" /> </SfButton>
+        <SfButton CssClass="e-btn" OnClick="Cancel"> <span class="oi oi-x" /> </SfButton>
+    </div>
 }
 else
 {
-    <h1>_showForm = false - Finished yes yes?? test test</h1>
+    if (isLoading == true)
+    {
+
+        <div class="col-12">
+            content content fhdjksfnsk
+        </div>
+    }
+
 }
 
 @code {
@@ -125,6 +122,9 @@ else
     [CascadingParameter]
     private DialogServiceComponent _dialogServiceComponent { get; set; }
 
+    private SfSpinner spinner;
+    private string loadingMessage;
+    private bool isLoading = true;
     private string splitterPaneCss = "theme";
     private bool _showForm { get; set; } = true;
     private int _formId { get; set; }
@@ -142,6 +142,9 @@ else
     private void SubmitForm()
     {
         _showForm = false;
+
+        spinner.ShowSpinner("#dialog-content");
+        loadingMessage = "Test test test";
     }
 
     private void Done()
@@ -152,11 +155,5 @@ else
     private void Cancel()
     {
         _dialogService.Close(DialogResult.Cancel());
-    }
-
-    //TODO To be removed
-    private void CreditTitleHasChanged()
-    {
-
     }
 }

@@ -290,11 +290,11 @@ html, body {
     }
 }
 
-.multilineTextBox {
-    height: 100%;
-    height: -moz-available; /* WebKit-based browsers will ignore this. */
-    height: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
-    height: fill-available;   
+.textbox-multiline {
+    height: -webkit-fill-available !important; /* Mozilla-based browsers will ignore this. */
+    height: -moz-available !important; /* WebKit-based browsers will ignore this. */
+    height: fill-available !important;
+    height: 100% !important;
 }
 
 .alert-icon {
@@ -302,27 +302,6 @@ html, body {
     font-size: 1.5rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-}
-/*#endregion */
-
-/*#region BlazorCss*/
-#blazor-error-ui {
-    background: #000000;
-    bottom: 0;
-    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
-    display: none;
-    left: 0;
-    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
-}
-
-#blazor-error-ui .dismiss {
-    cursor: pointer;
-    position: absolute;
-    right: 0.75rem;
-    top: 0.5rem;
 }
 /*#endregion */
 

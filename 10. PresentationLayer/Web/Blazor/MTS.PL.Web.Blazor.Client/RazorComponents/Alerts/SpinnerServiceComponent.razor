@@ -1,12 +1,12 @@
 ﻿@inject ISpinnerService _spinnerService
 @inherits ADisposibleBaseComponent
 
-<SfSpinner @ref="Spinner" Target="#spinnerContainer" Label="@_message" CssClass="e-spin-overlay" Type="SpinnerType.Fabric" />
+<SfSpinner @ref="Spinner" Target="@_spinnerTarget" Label="@_message" CssClass="e-spin-overlay" Type="SpinnerType.Fabric" />
 
 @code {
     private SfSpinner Spinner { get; set; }
     private string _message;
-    private string _spinnerTarget = "#spinnerContainer";
+    private string _spinnerTarget = "#spinner-container";
 
     protected override void OnInitialized()
     {

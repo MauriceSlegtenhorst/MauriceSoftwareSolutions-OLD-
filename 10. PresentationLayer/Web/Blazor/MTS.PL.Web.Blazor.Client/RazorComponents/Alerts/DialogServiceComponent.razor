@@ -4,7 +4,7 @@
 @inherits ADisposibleBaseComponent
 
 
-<SfDialog Width="80%" Target="#body" IsModal="true" @bind-Visible="ComponentIsVisible" ShowCloseIcon="ComponentHasCloseButton" CssClass="@ComponentStyle" Header="@ComponentTitle">
+<SfDialog ID="dialog-content" Width="80%" Target="#body" IsModal="true" @bind-Visible="ComponentIsVisible" ShowCloseIcon="ComponentHasCloseButton" CssClass="@ComponentStyle" Header="@ComponentTitle">
     <DialogTemplates>
         <Content>
             <CascadingValue Value="this">

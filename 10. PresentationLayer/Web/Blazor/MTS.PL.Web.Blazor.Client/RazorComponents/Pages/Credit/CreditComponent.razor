@@ -6,14 +6,15 @@
         <AuthorizeView Roles="@($"{Constants.Security.ADMINISTRATOR},{Constants.Security.PRIVILEGED_EMPLOYEE},{Constants.Security.EMPLOYEE}")">
             <Authorized>
                     <div class="row justify-content-end" style="padding-right:16px; padding-bottom:16px;">
-                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="ToggleIsInEditMode"><span class="@(isInEditMode ? "oi oi-check" : "oi oi-pencil")" /></SfButton>
-                            <SfButton CssClass="e-btn e-outline e-primary" @onclick="CreditTitleHasChanged"><span class="@(isInEditMode ? "oi oi-x" : "oi oi-trash")" /></SfButton>
+                            <SfButton IsPrimary="true" @onclick="EditCredit"><span class="oi oi-pencil" /></SfButton>
+                            <SfButton @onclick="DeleteCredit"><span class="oi oi-trash" /></SfButton>
                     </div>
             </Authorized>
         </AuthorizeView>
         <div class="row">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                <img src="@(Credit.LinkToImage)" class="w-75" />
+
+                <img src="@(Credit.LinkToImage)" />
             </div>
 
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
@@ -35,7 +36,11 @@
 
     private const string splitterPaneCss = "theme";
 
-    private void ToggleIsInEditMode()
+    [Authorize(Roles =
+        Constants.Security.ADMINISTRATOR + "," +
+        Constants.Security.PRIVILEGED_EMPLOYEE + "," +
+        Constants.Security.EMPLOYEE)]
+    private void EditCredit()
     {
         isInEditMode = !isInEditMode;
 
@@ -64,7 +69,11 @@
         _dialogService.OnClose -= DialogClosed;
     }
 
-    private void CreditTitleHasChanged()
+    [Authorize(Roles =
+        Constants.Security.ADMINISTRATOR + "," +
+        Constants.Security.PRIVILEGED_EMPLOYEE + "," +
+        Constants.Security.EMPLOYEE)]
+    private void DeleteCredit()
     {
 
     }
