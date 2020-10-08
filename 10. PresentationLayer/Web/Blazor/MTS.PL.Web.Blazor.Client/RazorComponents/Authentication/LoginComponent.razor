@@ -1,0 +1,46 @@
+﻿<EditForm Model="inputModel" >
+    <ChildContent>
+        <div class="container-fluid bg-info p-2 mb-2">
+            <h5>Requirements</h5>
+
+            <ul>
+                @for (int i = 0; i < Constants.VALID_PASSWORD_REQUIREMENTS.Length; i++)
+                {
+                    <li>@Constants.VALID_PASSWORD_REQUIREMENTS[i]</li>
+                }
+            </ul>
+        </div>
+
+        <label>Email</label>
+        <div class="row mb-4">
+            <div class="col">
+                <SfTextBox @bind-Value="@inputModel.Email" Type="InputType.Email" CssClass="@emailCss" TabIndex="0" ShowClearButton="true" />
+            </div>
+        </div>
+
+        <label>Password</label>
+        <div class="row mb-4">
+            <div class="col">
+                <SfTextBox @bind-Value="@inputModel.Password" Type="passwordInputType" CssClass="@passwordCss" TabIndex="1" ShowClearButton="true" />
+            </div>
+            <div class="col-sm col-sm-auto">
+                <SfButton IsToggle="true" IsPrimary="true">Show</SfButton>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-auto">
+                <SfCheckBox @bind-Checked="inputModel.RememberMe" Label="Remember me" LabelPosition="LabelPosition.After" />
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-auto">
+                <SfButton IsPrimary="true" Disabled="@canSubmit">Submit</SfButton>
+            </div>
+            <div class="col-auto">
+                <SfButton>Cancel</SfButton>
+            </div>
+        </div>
+    </ChildContent>
+</EditForm>

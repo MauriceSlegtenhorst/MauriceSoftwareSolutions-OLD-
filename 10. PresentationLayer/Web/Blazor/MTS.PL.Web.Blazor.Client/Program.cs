@@ -26,6 +26,8 @@ namespace MTS.PL.Web.Blazor.Client
 
             builder.RootComponents.Add<App>("app");
 
+            builder.Services.AddSyncfusionBlazor();
+
             #region Global UI
             builder.Services.AddSingleton<IToastService, ToastService>();
             builder.Services.AddSingleton<ISpinnerService, SpinnerService>();
@@ -57,8 +59,6 @@ namespace MTS.PL.Web.Blazor.Client
             builder.Services.AddScoped<ILoginService, JWTAuthStateProvider>(
                 provider => provider.GetRequiredService<JWTAuthStateProvider>());
             #endregion
-
-            builder.Services.AddSyncfusionBlazor();
 
             await builder.Build().RunAsync();
         }

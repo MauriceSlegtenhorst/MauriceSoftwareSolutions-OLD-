@@ -3,8 +3,7 @@
 
 @inherits ADisposibleBaseComponent
 
-
-<SfDialog ID="dialog-content" Width="80%" Target="#body" IsModal="true" @bind-Visible="ComponentIsVisible" ShowCloseIcon="ComponentHasCloseButton" CssClass="@ComponentStyle" Header="@ComponentTitle">
+<SfDialog Width="@ComponentWidth" Target="#body" IsModal="true" @bind-Visible="ComponentIsVisible" ShowCloseIcon="ComponentHasCloseButton" CssClass="@ComponentStyle" Header="@ComponentTitle">
     <DialogTemplates>
         <Content>
             <CascadingValue Value="this">
@@ -17,15 +16,21 @@
 
     <DialogEvents OnOpen="DialogOpen" Closed="DialogClose" OnOverlayClick="OverlayClick"></DialogEvents>
     <DialogAnimationSettings Effect="@DialogEffect.None"></DialogAnimationSettings>
+    <DialogPositionData X="@ComponentXPosition" Y="@ComponentYPosition"></DialogPositionData>
 </SfDialog>
-
 
 @code {
     [Parameter]
-    public string Position { get; set; } = "Center";
+    public string XPosition { get; set; }
+
+    [Parameter]
+    public string YPosition { get; set; }
 
     [Parameter]
     public string Style { get; set; }
+
+    [Parameter]
+    public string Width { get; set; }
 
     [Parameter]
     public bool HasHeader { get; set; }
@@ -37,8 +42,10 @@
     public bool HasBackgroundCancel { get; set; }
 
     private bool ComponentIsVisible { get; set; }
-    private string ComponentPosition { get; set; }
+    private string ComponentXPosition { get; set; }
+    private string ComponentYPosition { get; set; }
     private string ComponentStyle { get; set; }
+    private string ComponentWidth { get; set; }
     private bool ComponentHasBackgroundCancel { get; set; }
     private bool ComponentHasHeader { get; set; }
     private bool ComponentHasCloseButton { get; set; }
@@ -63,7 +70,10 @@
 
     private void ShowDialog(string title, RenderFragment content, DialogParameters parameters, DialogOptions options)
     {
-        ComponentTitle = title;
+        SetDialogOptions(options);
+
+        SetTitle(title);
+
         ComponentContent = content;
         ComponentParameters = parameters;
 
@@ -98,6 +108,7 @@
     {
         ComponentIsVisible = true;
     }
+
     private void DlgButtonClick()
     {
         ComponentIsVisible = false;
@@ -113,13 +124,21 @@
 
     private void SetDialogOptions(DialogOptions options)
     {
-        //TODO Handle position
-        if (String.IsNullOrEmpty(options.Position) == false)
-            ComponentPosition = options.Position;
+        ComponentXPosition = XPosition;
+        if (String.IsNullOrEmpty(options.XPosition) == false)
+            ComponentXPosition = options.XPosition;
+
+        ComponentXPosition = YPosition;
+        if (String.IsNullOrEmpty(options.YPosition) == false)
+            ComponentXPosition = options.YPosition;
 
         ComponentStyle = Style;
         if (String.IsNullOrEmpty(options.Style) == false)
             ComponentStyle = options.Style;
+
+        ComponentWidth = Width;
+        if (String.IsNullOrEmpty(options.Width) == false)
+            ComponentWidth = options.Width;
 
         ComponentHasBackgroundCancel = HasBackgroundCancel;
         if (options.HasBackgroundCancel.HasValue)

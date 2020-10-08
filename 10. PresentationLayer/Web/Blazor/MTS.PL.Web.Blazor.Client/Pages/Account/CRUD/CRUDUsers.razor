@@ -168,7 +168,7 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
         if (_isInitialized == true)
             return;
 
-        _spinnerService.ShowSpinner();
+        await _spinnerService.ShowSpinner();
 
         _propertyInfos = typeof(PLUserAccount).GetProperties(
         BindingFlags.Public | BindingFlags.Instance)
@@ -219,21 +219,21 @@ Constants.Security.PRIVILEGED_EMPLOYEE)]
     }
 
     // Here because of limitations of SfGrid events
-    public void ShowSpinner()
+    public async Task ShowSpinner()
     {
-        _spinnerService.ShowSpinner();
+        await _spinnerService.ShowSpinner();
     }
 
-    public void HideSpinner()
+    public async Task HideSpinner()
     {
-        _spinnerService.HideSpinner();
+        await _spinnerService.HideSpinner();
     }
 
-    public void OnActionBegin(ActionEventArgs<PLUserAccount> args)
+    public async Task OnActionBegin(ActionEventArgs<PLUserAccount> args)
     {
         if (args.RequestType.HasFlag(GridActions.Filtering | GridActions.Sorting))
         {
-            _spinnerService.ShowSpinner();
+            await _spinnerService.ShowSpinner();
         }
     }
 }

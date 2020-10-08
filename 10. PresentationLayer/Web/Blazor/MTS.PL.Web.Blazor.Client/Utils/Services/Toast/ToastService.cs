@@ -67,8 +67,7 @@ namespace MTS.PL.Web.Blazor.Client.Utils.Services.Toast
                 Icon = "e-error toast-icons",
                 Title = "An Exception has occurred",
                 Content = markupString.Value,
-                ShowCloseButton = true,
-                TimeOut = 0
+                ShowCloseButton = true
             };
 #else
     toastModel = new ToastModel

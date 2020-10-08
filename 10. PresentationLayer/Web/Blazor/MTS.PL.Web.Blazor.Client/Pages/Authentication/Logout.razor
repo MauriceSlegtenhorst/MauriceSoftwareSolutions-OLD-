@@ -4,7 +4,7 @@
 @inject IHttpClientFactory _httpClientFactory
 @inject ILoginService  _loginService
 
-<PageHeaderComponent PageName="Logout" Subtitle="@message" />
+<PageHeaderComponent PageName="Logout" Subtitle="@message"/>
 
 <div class="page-body">
     <div class="padding-vertical-top padding-vertical-bottom page-body-normal-side-padding">
@@ -12,46 +12,50 @@
     </div>
 </div>
 
-        @code{
-            private string message;
+@code{
+    private string message;
 
-            protected async override void OnInitialized()
-            {
-                var url = $"{Constants.API_BASE_ADDRESS}/{Constants.APIControllers.IDENTITY}/{Constants.IdentityControllerEndpoints.LOG_OUT}";
+    protected async override void OnInitialized()
+    {
+        var url = $"{Constants.API_BASE_ADDRESS}/{Constants.APIControllers.IDENTITY}/{Constants.IdentityControllerEndpoints.LOG_OUT}";
 
-                var request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri(url),
-                    Method = HttpMethod.Head
-                };
+        var request = new HttpRequestMessage
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Head
+        };
 
-                HttpResponseMessage result = new HttpResponseMessage();
+        var result = new HttpResponseMessage();
 
-                try
-                {
-                    message = "Trying to logout";
-                    _spinnerService.ShowSpinner(message);
+        try
+        {
+            message = "Trying to logout";
+            await _spinnerService.ShowSpinner(message);
 
 
-                    result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).SendAsync(request);
+            result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).SendAsync(request);
 
-                    _spinnerService.HideSpinner();
-                }
-                catch (Exception ex)
-                {
-                    message = "Logout failed";
-                    _toastService.ShowExceptionToast(ex);
-                }
-
-                if (result.IsSuccessStatusCode)
-                {
-                    message = "Logout was succesfull";
-
-                    _toastService.ShowSuccessToast("You are now logged out", message);
-
-                    await _loginService.Logout();
-                }
-
-                base.OnInitialized();
-            }
+            await _spinnerService.HideSpinner();
         }
+        catch (Exception ex)
+        {
+            message = "Logout failed";
+            _toastService.ShowExceptionToast(ex);
+        }
+
+        if (result.IsSuccessStatusCode)
+        {
+            message = "Logout was succesfull";
+
+            _toastService.ShowSuccessToast("You are now logged out", message);
+
+            await _loginService.Logout();
+        }
+        else
+        {
+            message = "Logout failed";
+        }
+
+        base.OnInitialized();
+    }
+}

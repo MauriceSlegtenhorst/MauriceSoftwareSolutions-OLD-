@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using MTS.Core.GlobalLibrary;
 using System;
+using System.Threading.Tasks;
 
 namespace MTS.PL.Web.Blazor.Client.Utils.Services.EditPage
 {
@@ -10,16 +11,16 @@ namespace MTS.PL.Web.Blazor.Client.Utils.Services.EditPage
         Constants.Security.EMPLOYEE)]
     public sealed class EditPageService : IEditPageService
     {
-        public event Action OnToggle;
+        public event Func<Task> OnToggle;
         private bool IsInEditMode;
 
-        public void ToggleEditMode()
+        public async Task ToggleEditMode()
         {
             if (OnToggle == null)
                 return;
 
             IsInEditMode = !IsInEditMode;
-            OnToggle.Invoke();
+            await OnToggle.Invoke();
         }
 
         public bool GetEditMode() => IsInEditMode;

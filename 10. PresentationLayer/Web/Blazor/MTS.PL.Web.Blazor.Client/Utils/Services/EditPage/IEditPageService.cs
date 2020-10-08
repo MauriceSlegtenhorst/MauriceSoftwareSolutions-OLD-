@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace MTS.PL.Web.Blazor.Client.Utils.Services.EditPage
 {
     public interface IEditPageService
     {
-        event Action OnToggle;
+        event Func<Task> OnToggle;
 
-        void ToggleEditMode();
+        Task ToggleEditMode();
 
         bool GetEditMode();
     }

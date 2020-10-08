@@ -9,7 +9,7 @@ namespace Testing.CLI
     class Program
     {
         private static IEnumerable<MethodInfo> _methodNames;
-        private static DiscoveryDocumentResponse _discoveryDocumentResponse;
+        //private static DiscoveryDocumentResponse _discoveryDocumentResponse;
         private static TokenResponse _tokenResponse;
 
         static void Main(string[] args)

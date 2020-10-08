@@ -1,11 +1,10 @@
 ﻿@inject ISpinnerService _spinnerService
 @inherits ADisposibleBaseComponent
 
-<SfSpinner @ref="Spinner" Target="@_spinnerTarget" Label="@_message" CssClass="e-spin-overlay" Type="SpinnerType.Fabric" />
+<SfSpinner @ref="Spinner" Target="@_spinnerTarget" CssClass="e-spin-overlay" Type="SpinnerType.Fabric" ZIndex="3"/>
 
 @code {
     private SfSpinner Spinner { get; set; }
-    private string _message;
     private string _spinnerTarget = "#spinner-container";
 
     protected override void OnInitialized()
@@ -16,16 +15,22 @@
         base.OnInitialized();
     }
 
-    private void ShowSpinner(string message = "Test test")
+    private async Task ShowSpinner(string message = null)
     {
-        _message = message;
+        var dictionary = new Dictionary<string, object>();
 
-        Spinner.ShowSpinner(_spinnerTarget);
+        dictionary.Add(nameof(Spinner.Label), message);
+
+        var parameters = ParameterView.FromDictionary(dictionary);
+
+        await Spinner.SetParametersAsync(parameters);
+
+        await Spinner.Show();
     }
 
-    private void HideSpinner()
+    private async Task HideSpinner()
     {
-        Spinner.HideSpinner(_spinnerTarget);
+        await Spinner.Hide();
     }
 
 

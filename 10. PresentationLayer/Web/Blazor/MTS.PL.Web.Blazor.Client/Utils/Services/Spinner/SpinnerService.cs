@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace MTS.PL.Web.Blazor.Client.Utils.Services.Spinner
 {
     public sealed class SpinnerService : ISpinnerService
     {
-        public event Action<string> OnShow;
-        public event Action OnHide;
+        public event Func<string, Task> OnShow;
+        public event Func<Task> OnHide;
 
-        public void ShowSpinner(string message = "Loading...")
+        public async Task ShowSpinner(string message = "Loading...")
         {
-            OnShow?.Invoke(message);
+            await OnShow?.Invoke(message);
         }
 
-        public void HideSpinner()
+        public async Task HideSpinner()
         {
-            OnHide?.Invoke();
+            await OnHide?.Invoke();
         }
     }
 }

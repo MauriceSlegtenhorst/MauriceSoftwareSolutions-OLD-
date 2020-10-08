@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace MTS.PL.Web.Blazor.Client.Utils.Services.Spinner
 {
     public interface ISpinnerService
     {
-        event Action<string> OnShow;
-        event Action OnHide;
+        event Func<string, Task> OnShow;
+        event Func<Task> OnHide;
 
-        void HideSpinner();
-        void ShowSpinner(string message = "Loading...");
+        Task HideSpinner();
+        Task ShowSpinner(string message = "Loading...");
     }
 }

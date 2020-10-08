@@ -24,6 +24,9 @@
     [Parameter]
     public bool PageIsEditable { get; set; }
 
+    [Parameter]
+    public EventCallback<string> SubtitleChanged { get; set; }
+
     private string _editMode;
 
     private string _roles = $"{Constants.Security.ADMINISTRATOR},{Constants.Security.PRIVILEGED_EMPLOYEE},{Constants.Security.EMPLOYEE}";

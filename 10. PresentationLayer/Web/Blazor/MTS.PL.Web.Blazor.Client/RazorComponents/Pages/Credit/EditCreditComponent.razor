@@ -1,6 +1,6 @@
 ﻿@inject IDialogService _dialogService
 
-<SfSpinner @ref="spinner" Target="#dialog-content" Label="@loadingMessage" Type="SpinnerType.Fabric" />
+@*<SfSpinner @bind-Visible="isLoading" Label="@loadingMessage" Type="SpinnerType.Fabric" />*@
 
 @if (_showForm == true)
 {
@@ -109,7 +109,7 @@ else
     {
 
         <div class="col-12">
-            content content fhdjksfnsk
+            @loadingMessage
         </div>
     }
 
@@ -122,9 +122,8 @@ else
     [CascadingParameter]
     private DialogServiceComponent _dialogServiceComponent { get; set; }
 
-    private SfSpinner spinner;
     private string loadingMessage;
-    private bool isLoading = true;
+    private bool isLoading;
     private string splitterPaneCss = "theme";
     private bool _showForm { get; set; } = true;
     private int _formId { get; set; }
@@ -143,7 +142,7 @@ else
     {
         _showForm = false;
 
-        spinner.ShowSpinner("#dialog-content");
+        isLoading = true;
         loadingMessage = "Test test test";
     }
 

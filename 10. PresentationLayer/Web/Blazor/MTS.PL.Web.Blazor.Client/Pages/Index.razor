@@ -566,6 +566,11 @@
         await base.OnInitializedAsync();
     }
 
+    void IDisposable.Dispose()
+    {
+        _editPageService.OnToggle -= OnToggleEditMode;
+    }
+
     private async Task<string> GetPageDataAsync()
     {
         string requestUrl = $"{Constants.APIControllers.EDIT_PAGE}/{Constants.EditPageControllerEndpoints.GET_BY_PAGE_ROUTE}";
@@ -760,9 +765,9 @@
         _navigationManager.NavigateTo("https://www.linkedin.com/in/mauriceslegtenhorst/");
     }
 
-    private async void OnToggleEditMode()
+    private async Task OnToggleEditMode()
     {
-        _spinnerService.ShowSpinner("Changing edit mode");
+        await _spinnerService.ShowSpinner("Changing edit mode");
 
         if (_editPageService.GetEditMode() == false)
         {
@@ -778,14 +783,9 @@
             }
         }
 
-        _spinnerService.HideSpinner();
+        await _spinnerService.HideSpinner();
 
         StateHasChanged();
-    }
-
-    void IDisposable.Dispose()
-    {
-        _editPageService.OnToggle -= OnToggleEditMode;
     }
 
     private async Task<HttpResponseMessage> SavePageDataAsync()
