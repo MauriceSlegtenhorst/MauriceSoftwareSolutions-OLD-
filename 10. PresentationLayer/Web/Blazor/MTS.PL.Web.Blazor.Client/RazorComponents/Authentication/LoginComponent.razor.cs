@@ -1,8 +1,6 @@
 ﻿using MTS.Core.GlobalLibrary;
 using Syncfusion.Blazor.Inputs;
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
 {
@@ -11,7 +9,6 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
         private InputModel inputModel;
         private string emailCss = "";
         private string passwordCss = "";
-        private InputType passwordInputType = InputType.Password;
         private bool showPassword;
         private bool canSubmit;
 

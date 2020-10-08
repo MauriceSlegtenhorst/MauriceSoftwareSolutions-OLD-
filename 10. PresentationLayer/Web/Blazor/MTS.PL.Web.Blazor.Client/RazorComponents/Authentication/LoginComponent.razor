@@ -21,10 +21,10 @@
         <label>Password</label>
         <div class="row mb-4">
             <div class="col">
-                <SfTextBox @bind-Value="@inputModel.Password" Type="passwordInputType" CssClass="@passwordCss" TabIndex="1" ShowClearButton="true" />
+                <SfTextBox @bind-Value="@inputModel.Password" Type="(showPassword ? InputType.Text : InputType.Password)" CssClass="@passwordCss" TabIndex="1" ShowClearButton="true" />
             </div>
             <div class="col-sm col-sm-auto">
-                <SfButton IsToggle="true" IsPrimary="true">Show</SfButton>
+                <SfCheckBox Label="show" @bind-Checked="showPassword"/>
             </div>
         </div>
 

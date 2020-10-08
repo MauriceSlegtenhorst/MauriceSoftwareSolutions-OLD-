@@ -126,11 +126,11 @@
     {
         ComponentXPosition = XPosition;
         if (String.IsNullOrEmpty(options.XPosition) == false)
-            ComponentXPosition = options.XPosition;
+            ComponentXPosition = options.XPosition.ToLower();
 
-        ComponentXPosition = YPosition;
+        ComponentYPosition = YPosition;
         if (String.IsNullOrEmpty(options.YPosition) == false)
-            ComponentXPosition = options.YPosition;
+            ComponentYPosition = options.YPosition.ToLower();
 
         ComponentStyle = Style;
         if (String.IsNullOrEmpty(options.Style) == false)
