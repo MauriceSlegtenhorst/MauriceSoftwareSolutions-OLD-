@@ -45,19 +45,13 @@
         <NotAuthorized>
             <ul class="nav flex-row-reverse">
                 <li class="@_navItemCss">
-                    <NavLink class="nav-link" @onclick="() => ToggleRegister()">
-                        <span class="page-top-bar-open-icon oi oi-account-login" aria-hidden="true"></span> Register
-                        <div class="page-top-bar-nav-item-dropdown-content" style="@_registerDropDownContentStyle" @onclick="@(() => _clickWasInsideRegisterCard = true)">
-                            <LoginRegisterComponent IsLogin="false" />
-                        </div>
+                    <NavLink class="nav-link" @onclick="ShowRegisterForm">
+                        <span class="page-top-bar-open-icon oi oi-clipboard" aria-hidden="true"></span> Register
                     </NavLink>
                 </li>
                 <li class="@_navItemCss">
                     <NavLink class="nav-link" @onclick="ShowLoginForm">
                         <span class="page-top-bar-open-icon oi oi-account-login" aria-hidden="true"></span> Login
-                        @*<div class="page-top-bar-nav-item-dropdown-content" style="@_loginDropDownContentStyle" @onclick="@(() => _clickWasInsideLoginCard = true)">
-                            <LoginRegisterComponent IsLogin="true" />
-                        </div>*@
                     </NavLink>
                 </li>
             </ul>
@@ -69,6 +63,7 @@
                         <span class="page-top-bar-open-icon oi oi-person" aria-hidden="true"></span> Account
                     </NavLink>
                 </li>
+
                 <li class="@_navItemCss">
                     <NavLink class="nav-link" href="@BlazorConstants.Pages.Authentication.LOGOUT">
                         <span class="page-top-bar-open-icon oi oi-account-logout" aria-hidden="true"></span> Logout
@@ -127,13 +122,23 @@
         var dialogOptions = new DialogOptions
         {
             HasCloseButton = true,
-            XPosition = "right",
-            YPosition = "top",
             HasHeader = true,
             Width = "480px"
         };
 
         _dialogService.Show<LoginComponent>("Please enter your credentials", null, dialogOptions);
+    }
+
+    private void ShowRegisterForm()
+    {
+        var dialogOptions = new DialogOptions
+        {
+            HasCloseButton = true,
+            HasHeader = true,
+            Width = "480px"
+        };
+
+        _dialogService.Show<RegisterComponent>("Please enter your credentials", null, dialogOptions);
     }
 
     private class EmptyClass { }

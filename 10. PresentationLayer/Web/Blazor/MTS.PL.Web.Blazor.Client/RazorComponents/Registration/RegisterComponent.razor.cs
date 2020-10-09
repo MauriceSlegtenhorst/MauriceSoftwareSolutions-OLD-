@@ -10,9 +10,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
+namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
 {
-    public partial class LoginComponent : IDisposable
+    public partial class RegisterComponent : IDisposable
     {
         private const string INVISIBLE = "invisible";
 
@@ -27,8 +27,10 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
 
         private InputModel inputModel;
         private EditContext editContext;
+        private string respectableDomains;
         private string emailValidationCss = INVISIBLE;
-        private string passwordValidationCss = INVISIBLE;
+        private string passwordOneValidationCss = INVISIBLE;
+        private string passwordTwoValidationCss = INVISIBLE;
         private bool showPassword;
         private bool canSubmit;
 
@@ -36,30 +38,16 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
         {
             inputModel = new InputModel();
 
-#if DEBUG
-            //TODO Remove this on release
-            inputModel.Email = "mauricesoftwaresolution@outlook.com";
-            inputModel.Password = "MTS1991Password!";
-#endif
-
             editContext = new EditContext(inputModel);
 
             editContext.OnValidationStateChanged += OnValidationStateChanged;
 
-            editContext.OnFieldChanged += OnFieldChanged;
-
             base.OnInitialized();
-        }
-
-        private void OnFieldChanged(object sender, FieldChangedEventArgs e)
-        {
-            
         }
 
         public void Dispose()
         {
             editContext.OnValidationStateChanged -= OnValidationStateChanged;
-            editContext.OnFieldChanged -= OnFieldChanged;
         }
 
         private void OnValidationStateChanged(object sender, ValidationStateChangedEventArgs eventArgs)
@@ -68,7 +56,8 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
             {
                 canSubmit = true;
                 emailValidationCss = INVISIBLE;
-                passwordValidationCss = INVISIBLE;
+                passwordOneValidationCss = INVISIBLE;
+                passwordTwoValidationCss = INVISIBLE;
             }
             else
             {
@@ -78,9 +67,13 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
                 if (editContext.GetValidationMessages(emailField).Any())
                     emailValidationCss = null;
 
-                FieldIdentifier passwordField = editContext.Field(nameof(inputModel.Password));
-                if (editContext.GetValidationMessages(passwordField).Any())
-                    passwordValidationCss = null;
+                FieldIdentifier passwordOneField = editContext.Field(nameof(inputModel.PasswordOne));
+                if (editContext.GetValidationMessages(passwordOneField).Any())
+                    passwordOneValidationCss = null;
+
+                FieldIdentifier passwordTwoField = editContext.Field(nameof(inputModel.PasswordTwo));
+                if (editContext.GetValidationMessages(passwordTwoField).Any())
+                    passwordTwoValidationCss = null;
             }
         }
 
@@ -88,19 +81,14 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
         {
             await _spinnerService.ShowSpinner("Requesting authorization");
 
-            
-        }
 
-        private async Task LogInAsync()
-        {
-            
         }
 
         private sealed class InputModel
         {
             [Required(ErrorMessage = "Email is required")]
             [CustomValidation(
-                validatorType: typeof(EmailVerificationService), 
+                validatorType: typeof(EmailVerificationService),
                 method: nameof(EmailVerificationService.IsDomainNameValid))]
             [EmailAddress(ErrorMessage = "This email does not meet the requirements")]
             public string Email { get; set; }
@@ -110,7 +98,15 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
             [RegularExpression(
                 pattern: Constants.VALID_PASSWORD_PATTERN,
                 ErrorMessage = Constants.PASSWORD_ERROR_MESSAGE)]
-            public string Password { get; set; }
+            public string PasswordOne { get; set; }
+
+            [Required(ErrorMessage = "Password is required")]
+            [DataType(DataType.Password)]
+            [RegularExpression(
+                pattern: Constants.VALID_PASSWORD_PATTERN,
+                ErrorMessage = Constants.PASSWORD_ERROR_MESSAGE)]
+            [Compare(nameof(PasswordOne), ErrorMessage = "The two password fields must correspond")]
+            public string PasswordTwo { get; set; }
 
             public bool RememberMe { get; set; }
         }

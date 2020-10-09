@@ -154,14 +154,15 @@ namespace MTS.Core.GlobalLibrary
         /// At least one special character,             (?=.*?[#?!@$%^&*-])
         /// Minimum eight in length.{8,}                (with the anchors) 
         /// </summary>
-        public const string VALID_PASSWORD_PATTERN = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
+        public const string VALID_PASSWORD_PATTERN = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,54}$";
         public static string[] VALID_PASSWORD_REQUIREMENTS = new[]
         {
-            "Contain one upper case letter",
-            "Contain one lower case letter",
-            "Contain one diget",
-            "Contain one special character",
-            "Have a length of 8"
+            "Contain atleast one upper case letter",
+            "Contain atleast one lower case letter",
+            "Contain atleast one diget",
+            "Contain atleast one special character",
+            "Have a minimum length of 8",
+            "Have a maximum length of 54"
         };
         public const string PASSWORD_ERROR_MESSAGE = "This password does not meet the requirements";
 
