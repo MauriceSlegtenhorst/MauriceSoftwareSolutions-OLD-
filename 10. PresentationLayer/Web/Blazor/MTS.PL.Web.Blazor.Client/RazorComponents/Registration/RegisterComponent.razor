@@ -4,8 +4,8 @@
         <h5>Email requirements</h5>
 
         <ul>
-            <li>Be of a respectable domain: @String.Join(", ",Constants.VALID_EMAIL_DOMAINS)</li>
-            <li>Contain one @@</li>
+            <li>Be of a respectable domain such as: <i>@String.Join(", ", Constants.VALID_EMAIL_DOMAINS)</i></li>
+            <li>Contain one @@ symbol</li>
             <li>Contain atleast one dot (.)</li>
         </ul>
     </div>
@@ -24,7 +24,7 @@
     <label>Email</label>
     <div class="row mb-4">
         <div class="col">
-            <SfTextBox @bind-Value="@inputModel.Email" Type="InputType.Email" ShowClearButton="true" />
+            <SfTextBox Type="InputType.Email" />
             <div class="container bg-danger p-1 @emailValidationCss">
                 <ValidationMessage For="() => inputModel.Email" />
             </div>

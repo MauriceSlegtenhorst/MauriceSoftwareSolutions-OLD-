@@ -5,6 +5,7 @@ using MTS.PL.Infra.Interfaces.Standard;
 using MTS.PL.Web.Blazor.Client.Utils.Services.Dialog;
 using MTS.PL.Web.Blazor.Client.Utils.Services.Spinner;
 using MTS.PL.Web.Blazor.Client.Utils.Services.Verification;
+using Syncfusion.Blazor.Inputs;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -27,7 +28,6 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
 
         private InputModel inputModel;
         private EditContext editContext;
-        private string respectableDomains;
         private string emailValidationCss = INVISIBLE;
         private string passwordOneValidationCss = INVISIBLE;
         private string passwordTwoValidationCss = INVISIBLE;
@@ -41,8 +41,14 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
             editContext = new EditContext(inputModel);
 
             editContext.OnValidationStateChanged += OnValidationStateChanged;
+            editContext.OnFieldChanged += OnFieldChanged;
 
             base.OnInitialized();
+        }
+
+        private void OnFieldChanged(object sender, FieldChangedEventArgs e)
+        {
+            
         }
 
         public void Dispose()
@@ -79,12 +85,12 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
 
         private async Task SubmitAsync()
         {
-            await _spinnerService.ShowSpinner("Requesting authorization");
+            await _spinnerService.ShowSpinner("Requesting authorization...");
 
 
         }
 
-        private sealed class InputModel
+        public sealed class InputModel
         {
             [Required(ErrorMessage = "Email is required")]
             [CustomValidation(
