@@ -24,7 +24,7 @@
     <label>Email</label>
     <div class="row mb-4">
         <div class="col">
-            <SfTextBox Type="InputType.Email" />
+            <SfTextBox @bind-Value="@inputModel.Email" Type="InputType.Email" CssClass="@emailTextBoxWorkAroundCss" ShowClearButton="true" />
             <div class="container bg-danger p-1 @emailValidationCss">
                 <ValidationMessage For="() => inputModel.Email" />
             </div>
@@ -34,7 +34,7 @@
     <label>Password</label>
     <div class="row mb-2">
         <div class="col">
-            <SfTextBox @bind-Value="@inputModel.PasswordOne" Type="(showPassword ? InputType.Text : InputType.Password)" ShowClearButton="true" />
+            <SfTextBox @bind-Value="@inputModel.PasswordOne" Type="(showPassword ? InputType.Text : InputType.Password)" CssClass="@passwordOneTextBoxWorkAroundCss" ShowClearButton="true" />
             <div class="container bg-danger p-1 @passwordOneValidationCss">
                 <ValidationMessage For="() => inputModel.PasswordOne" />
             </div>
@@ -44,7 +44,7 @@
 
     <div class="row mb-4">
         <div class="col">
-            <SfTextBox @bind-Value="@inputModel.PasswordTwo" Type="(showPassword ? InputType.Text : InputType.Password)" ShowClearButton="true" />
+            <SfTextBox @bind-Value="@inputModel.PasswordTwo" Type="(showPassword ? InputType.Text : InputType.Password)" CssClass="@passwordTwoTextBoxWorkAroundCss" ShowClearButton="true" />
             <div class="container bg-danger p-1 @passwordTwoValidationCss">
                 <ValidationMessage For="() => inputModel.PasswordTwo" />
             </div>

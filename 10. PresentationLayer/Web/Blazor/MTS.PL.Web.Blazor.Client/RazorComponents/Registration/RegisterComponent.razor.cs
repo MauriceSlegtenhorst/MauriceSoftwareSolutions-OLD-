@@ -16,6 +16,7 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
     public partial class RegisterComponent : IDisposable
     {
         private const string INVISIBLE = "invisible";
+        private const string BORDER_PRIMARY = "border-primary";
 
         [Inject]
         private IDialogService _dialogService { get; set; }
@@ -28,9 +29,12 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
 
         private InputModel inputModel;
         private EditContext editContext;
-        private string emailValidationCss = INVISIBLE;
+        private string emailValidationCss = INVISIBLE;      
         private string passwordOneValidationCss = INVISIBLE;
         private string passwordTwoValidationCss = INVISIBLE;
+        private string emailTextBoxWorkAroundCss = BORDER_PRIMARY;
+        private string passwordOneTextBoxWorkAroundCss = BORDER_PRIMARY;
+        private string passwordTwoTextBoxWorkAroundCss = BORDER_PRIMARY;
         private bool showPassword;
         private bool canSubmit;
 
@@ -41,14 +45,8 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
             editContext = new EditContext(inputModel);
 
             editContext.OnValidationStateChanged += OnValidationStateChanged;
-            editContext.OnFieldChanged += OnFieldChanged;
 
             base.OnInitialized();
-        }
-
-        private void OnFieldChanged(object sender, FieldChangedEventArgs e)
-        {
-            
         }
 
         public void Dispose()
@@ -64,6 +62,9 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
                 emailValidationCss = INVISIBLE;
                 passwordOneValidationCss = INVISIBLE;
                 passwordTwoValidationCss = INVISIBLE;
+                emailTextBoxWorkAroundCss = BORDER_PRIMARY;
+                passwordOneTextBoxWorkAroundCss = BORDER_PRIMARY;
+                passwordTwoTextBoxWorkAroundCss = BORDER_PRIMARY;
             }
             else
             {
@@ -71,15 +72,24 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
 
                 FieldIdentifier emailField = editContext.Field(nameof(inputModel.Email));
                 if (editContext.GetValidationMessages(emailField).Any())
+                {
                     emailValidationCss = null;
+                    emailTextBoxWorkAroundCss = null;
+                }
 
                 FieldIdentifier passwordOneField = editContext.Field(nameof(inputModel.PasswordOne));
                 if (editContext.GetValidationMessages(passwordOneField).Any())
+                {
                     passwordOneValidationCss = null;
+                    passwordOneTextBoxWorkAroundCss = null;
+                }   
 
                 FieldIdentifier passwordTwoField = editContext.Field(nameof(inputModel.PasswordTwo));
                 if (editContext.GetValidationMessages(passwordTwoField).Any())
+                {
                     passwordTwoValidationCss = null;
+                    passwordTwoTextBoxWorkAroundCss = null;
+                }
             }
         }
 
