@@ -20,7 +20,7 @@ namespace MTS.PL.Web.Blazor.Client
     {
         public static async Task Main(string[] args)
         {
-            SyncfusionLicenseProvider.RegisterLicense("MzMwMTg3QDMxMzgyZTMzMmUzMElRdk1vMmZUSmc5dTVrUXVtR1ZLdEhiZVhTLy9VSno4dUFJTGgzQWk3R1E9");
+            SyncfusionLicenseProvider.RegisterLicense("##SyncfusionLicense##");
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
 

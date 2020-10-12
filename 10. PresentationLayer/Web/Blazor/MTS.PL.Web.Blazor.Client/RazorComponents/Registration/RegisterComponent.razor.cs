@@ -122,14 +122,22 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
             catch (Exception ex)
             {
                 await _spinnerService.HideSpinnerAsync();
+
                 _toastService.ShowExceptionToast(ex);
+                
                 return;
             }
 
+            await _spinnerService.SetSpinnerLabelAsync("Processing response...");
+
             if (responseMessage.IsSuccessStatusCode)
             {
-                _toastService.ShowSuccessToast($"Registration for {inputModel.Email} is now in process.");
+                _toastService.ShowSuccessToast($"Registration for {inputModel.Email} has been received.");
                 _navigationManager.NavigateTo("/account/accountsubmitted");
+            }
+            else
+            {
+                _toastService.ShowExceptionToast(new Exception(await responseMessage.Content.ReadAsStringAsync()));
             }
 
             await _spinnerService.HideSpinnerAsync();
