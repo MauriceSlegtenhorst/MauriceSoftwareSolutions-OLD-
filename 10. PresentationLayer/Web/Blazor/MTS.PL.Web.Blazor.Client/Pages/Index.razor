@@ -767,7 +767,7 @@
 
     private async Task OnToggleEditMode()
     {
-        await _spinnerService.ShowSpinner("Changing edit mode");
+        await _spinnerService.ShowSpinnerAsync("Changing edit mode");
 
         if (_editPageService.GetEditMode() == false)
         {
@@ -783,7 +783,7 @@
             }
         }
 
-        await _spinnerService.HideSpinner();
+        await _spinnerService.HideSpinnerAsync();
 
         StateHasChanged();
     }

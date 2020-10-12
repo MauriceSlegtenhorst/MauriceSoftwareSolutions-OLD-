@@ -6,16 +6,35 @@
 @code {
     private SfSpinner Spinner { get; set; }
     private string _spinnerTarget = "#spinner-container";
+    private bool isShowing;
 
     protected override void OnInitialized()
     {
-        _spinnerService.OnShow += ShowSpinner;
-        _spinnerService.OnHide += HideSpinner;
+        _spinnerService.OnShow += ShowSpinnerAsync;
+        _spinnerService.OnHide += HideSpinnerAsync;
+        _spinnerService.OnSetSpinnerLabel += SetSpinnerLabel;
 
         base.OnInitialized();
     }
 
-    private async Task ShowSpinner(string message = null)
+    private async Task ShowSpinnerAsync(string message = null)
+    {
+        if (String.IsNullOrEmpty(message) == false)
+            await SetSpinnerLabel(message);
+
+        await Spinner.Show();
+
+        isShowing = true;
+    }
+
+    private async Task HideSpinnerAsync()
+    {
+        await Spinner.Hide();
+
+        isShowing = false;
+    }
+
+    private async Task SetSpinnerLabel(string message)
     {
         var dictionary = new Dictionary<string, object>();
 
@@ -24,19 +43,12 @@
         var parameters = ParameterView.FromDictionary(dictionary);
 
         await Spinner.SetParametersAsync(parameters);
-
-        await Spinner.Show();
     }
-
-    private async Task HideSpinner()
-    {
-        await Spinner.Hide();
-    }
-
 
     public override void Dispose()
     {
-        _spinnerService.OnShow -= ShowSpinner;
-        _spinnerService.OnHide -= HideSpinner;
+        _spinnerService.OnShow -= ShowSpinnerAsync;
+        _spinnerService.OnHide -= HideSpinnerAsync;
+        _spinnerService.OnSetSpinnerLabel -= SetSpinnerLabel;
     }
 }

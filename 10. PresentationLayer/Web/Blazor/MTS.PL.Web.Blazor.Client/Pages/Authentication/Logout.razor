@@ -30,12 +30,12 @@
         try
         {
             message = "Trying to logout";
-            await _spinnerService.ShowSpinner(message);
+            await _spinnerService.ShowSpinnerAsync(message);
 
 
             result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).SendAsync(request);
 
-            await _spinnerService.HideSpinner();
+            await _spinnerService.HideSpinnerAsync();
         }
         catch (Exception ex)
         {

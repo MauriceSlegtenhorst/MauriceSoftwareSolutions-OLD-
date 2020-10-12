@@ -34,9 +34,9 @@
     <label>Password</label>
     <div class="row mb-2">
         <div class="col">
-            <SfTextBox @bind-Value="@inputModel.PasswordOne" Type="(showPassword ? InputType.Text : InputType.Password)" CssClass="@passwordOneTextBoxWorkAroundCss" ShowClearButton="true" />
+            <SfTextBox @bind-Value="@inputModel.Password" Type="(showPassword ? InputType.Text : InputType.Password)" CssClass="@passwordOneTextBoxWorkAroundCss" ShowClearButton="true" />
             <div class="container bg-danger p-1 @passwordOneValidationCss">
-                <ValidationMessage For="() => inputModel.PasswordOne" />
+                <ValidationMessage For="() => inputModel.Password" />
             </div>
         </div>
         <div class="col-sm col-sm-auto"/>
@@ -63,7 +63,7 @@
 
     <div class="row justify-content-end">
         <div class="col-auto">
-            <SfButton OnClick="async () => await SubmitAsync()" IsPrimary="true" Disabled="@(!canSubmit)">Submit</SfButton>
+            <SfButton OnClick="async () => await SubmitAsync()" IsPrimary="true" Disabled="@(canSubmit == false)">Submit</SfButton>
         </div>
 
         <div class="col-auto">

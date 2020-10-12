@@ -86,7 +86,7 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
 
         private async Task SubmitAsync()
         {
-            await _spinnerService.ShowSpinner("Requesting authorization");
+            await _spinnerService.ShowSpinnerAsync("Requesting authorization");
 
             
         }

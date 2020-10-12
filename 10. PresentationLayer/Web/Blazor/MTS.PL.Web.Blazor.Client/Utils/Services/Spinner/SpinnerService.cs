@@ -7,15 +7,21 @@ namespace MTS.PL.Web.Blazor.Client.Utils.Services.Spinner
     {
         public event Func<string, Task> OnShow;
         public event Func<Task> OnHide;
+        public event Func<string, Task> OnSetSpinnerLabel;
 
-        public async Task ShowSpinner(string message = "Loading...")
+        public async Task ShowSpinnerAsync(string message = "Loading...")
         {
             await OnShow?.Invoke(message);
         }
 
-        public async Task HideSpinner()
+        public async Task HideSpinnerAsync()
         {
             await OnHide?.Invoke();
+        }
+
+        public async Task SetSpinnerLabelAsync(string message)
+        {
+            await OnSetSpinnerLabel?.Invoke(message);
         }
     }
 }

@@ -2,13 +2,17 @@
 using Microsoft.AspNetCore.Components.Forms;
 using MTS.Core.GlobalLibrary;
 using MTS.PL.Infra.Interfaces.Standard;
+using MTS.PL.Web.Blazor.Client.Utils;
 using MTS.PL.Web.Blazor.Client.Utils.Services.Dialog;
 using MTS.PL.Web.Blazor.Client.Utils.Services.Spinner;
+using MTS.PL.Web.Blazor.Client.Utils.Services.Toast;
 using MTS.PL.Web.Blazor.Client.Utils.Services.Verification;
-using Syncfusion.Blazor.Inputs;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
@@ -21,11 +25,20 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
         [Inject]
         private IDialogService _dialogService { get; set; }
 
+        [Inject] 
+        private IToastService _toastService { get; set; }
+
         [Inject]
         private ILoginService _loginService { get; set; }
 
         [Inject]
         private ISpinnerService _spinnerService { get; set; }
+
+        [Inject] 
+        private IHttpClientFactory _httpClientFactory { get; set; }
+
+        [Inject]
+        private NavigationManager _navigationManager { get; set; }
 
         private InputModel inputModel;
         private EditContext editContext;
@@ -54,6 +67,7 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
             editContext.OnValidationStateChanged -= OnValidationStateChanged;
         }
 
+        // Because of a bug with the Syncfusions textbox component initiating with the e-success css I had to implement a temporary workaround. Could not find a better way than this at the moment. It's ugly I know.
         private void OnValidationStateChanged(object sender, ValidationStateChangedEventArgs eventArgs)
         {
             if (editContext.GetValidationMessages().Any() == false)
@@ -77,7 +91,7 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
                     emailTextBoxWorkAroundCss = null;
                 }
 
-                FieldIdentifier passwordOneField = editContext.Field(nameof(inputModel.PasswordOne));
+                FieldIdentifier passwordOneField = editContext.Field(nameof(inputModel.Password));
                 if (editContext.GetValidationMessages(passwordOneField).Any())
                 {
                     passwordOneValidationCss = null;
@@ -95,9 +109,30 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
 
         private async Task SubmitAsync()
         {
-            await _spinnerService.ShowSpinner("Requesting authorization...");
+            await _spinnerService.ShowSpinnerAsync("Requesting authorization...");
 
+            string requestUrl = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CREATE_BY_CREDENTIALS}";
 
+            HttpResponseMessage responseMessage;
+
+            try
+            {
+                responseMessage = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PutAsJsonAsync(requestUrl, inputModel);
+            }
+            catch (Exception ex)
+            {
+                await _spinnerService.HideSpinnerAsync();
+                _toastService.ShowExceptionToast(ex);
+                return;
+            }
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                _toastService.ShowSuccessToast($"Registration for {inputModel.Email} is now in process.");
+                _navigationManager.NavigateTo("/account/accountsubmitted");
+            }
+
+            await _spinnerService.HideSpinnerAsync();
         }
 
         public sealed class InputModel
@@ -114,14 +149,15 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
             [RegularExpression(
                 pattern: Constants.VALID_PASSWORD_PATTERN,
                 ErrorMessage = Constants.PASSWORD_ERROR_MESSAGE)]
-            public string PasswordOne { get; set; }
+            public string Password { get; set; }
 
+            [JsonIgnore]
             [Required(ErrorMessage = "Password is required")]
             [DataType(DataType.Password)]
             [RegularExpression(
                 pattern: Constants.VALID_PASSWORD_PATTERN,
                 ErrorMessage = Constants.PASSWORD_ERROR_MESSAGE)]
-            [Compare(nameof(PasswordOne), ErrorMessage = "The two password fields must correspond")]
+            [Compare(nameof(Password), ErrorMessage = "The two password fields must correspond")]
             public string PasswordTwo { get; set; }
 
             public bool RememberMe { get; set; }

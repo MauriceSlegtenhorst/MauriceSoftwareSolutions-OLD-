@@ -129,9 +129,9 @@
         {
             try
             {
-                await _spinnerService.ShowSpinner();
+                await _spinnerService.ShowSpinnerAsync();
                 _plUserAccount = await GetUserAccount();
-                await _spinnerService.HideSpinner();
+                await _spinnerService.HideSpinnerAsync();
             }
             catch (Exception ex)
             {
@@ -165,9 +165,9 @@
 
         private async Task SubmitForm()
         {
-            await _spinnerService.ShowSpinner();
+            await _spinnerService.ShowSpinnerAsync();
             var result = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PatchAsync($"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.UPDATE_BY_ACCOUNT}", new StringContent(JsonConvert.SerializeObject(_plUserAccount), Encoding.UTF8, Constants.MediaTypes.JSON));
-            await _spinnerService.HideSpinner();
+            await _spinnerService.HideSpinnerAsync();
 
             if (result.IsSuccessStatusCode == false)
                 _toastService.ShowExceptionToast(new Exception($"Something went wrong while calling the server. {result.StatusCode}: {result.ReasonPhrase}"));

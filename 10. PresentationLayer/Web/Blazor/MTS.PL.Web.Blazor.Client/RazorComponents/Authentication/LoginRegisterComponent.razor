@@ -181,7 +181,7 @@
 
             HttpResponseMessage result;
 
-            await _spinnerService.ShowSpinner();
+            await _spinnerService.ShowSpinnerAsync();
 
             try
             {
@@ -194,7 +194,7 @@
             }
             finally
             {
-                await _spinnerService.HideSpinner();
+                await _spinnerService.HideSpinnerAsync();
             }
 
             var resultContentAsString = await result.Content.ReadAsStringAsync();
