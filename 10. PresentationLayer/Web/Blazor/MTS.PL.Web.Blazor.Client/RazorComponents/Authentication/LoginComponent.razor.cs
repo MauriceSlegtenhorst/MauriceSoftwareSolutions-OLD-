@@ -2,12 +2,16 @@
 using Microsoft.AspNetCore.Components.Forms;
 using MTS.Core.GlobalLibrary;
 using MTS.PL.Infra.Interfaces.Standard;
+using MTS.PL.Web.Blazor.Client.Utils;
 using MTS.PL.Web.Blazor.Client.Utils.Services.Dialog;
 using MTS.PL.Web.Blazor.Client.Utils.Services.Spinner;
+using MTS.PL.Web.Blazor.Client.Utils.Services.Toast;
 using MTS.PL.Web.Blazor.Client.Utils.Services.Verification;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
@@ -17,13 +21,19 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
         private const string INVISIBLE = "invisible";
 
         [Inject]
-        private IDialogService _dialogService { get; set; }
+        private IDialogService DialogService { get; set; }
 
         [Inject]
-        private ILoginService _loginService { get; set; }
+        private ILoginService LoginService { get; set; }
 
         [Inject]
-        private ISpinnerService _spinnerService { get; set; }
+        private ISpinnerService SpinnerService { get; set; }
+
+        [Inject]
+        private IToastService ToastService { get; set; }
+
+        [Inject]
+        private IHttpClientFactory HttpClientFactory { get; set; }
 
         private InputModel inputModel;
         private EditContext editContext;
@@ -86,9 +96,33 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
 
         private async Task SubmitAsync()
         {
-            await _spinnerService.ShowSpinnerAsync("Requesting authorization");
+            await SpinnerService.ShowSpinnerAsync("Requesting authorization");
 
-            
+            string requestUrl = $"{Constants.APIControllers.IDENTITY}/{Constants.IdentityControllerEndpoints.LOG_IN}";
+
+            HttpResponseMessage response;
+
+            await SpinnerService.ShowSpinnerAsync();
+
+            try
+            {
+                response = await HttpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PutAsJsonAsync(requestUrl, inputModel);
+            }
+            catch (Exception ex)
+            {
+                ToastService.ShowExceptionToast(ex);
+                await SpinnerService.HideSpinnerAsync();
+                return;
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                await LoginService.Login(await response.Content.ReadAsStringAsync());
+            }
+            else
+            {
+                ToastService.ShowExceptionToast(new Exception("Something went wrong. Request was unsuccesfull"));
+            }
         }
 
         private async Task LogInAsync()

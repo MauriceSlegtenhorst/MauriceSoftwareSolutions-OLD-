@@ -45,14 +45,15 @@ namespace MTS.PL.Web.Blazor.Client.Pages.Account.Register
             if(String.IsNullOrEmpty(userId) || String.IsNullOrEmpty(code))
             {
                 subTitleContent = "Status: Requesting user email validation";
+                // Tell user to check email
             }
             else
             {
                 subTitleContent = "Status: Calling server to confirm your account";
 
+
+
                 await CallServerToConfirmEmail();
-
-
             }
 
            
