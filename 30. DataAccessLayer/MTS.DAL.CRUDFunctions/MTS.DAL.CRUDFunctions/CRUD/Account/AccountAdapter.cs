@@ -18,6 +18,7 @@ using MTS.BL.Infra.Interfaces.Standard;
 
 namespace MTS.DAL.DatabaseAccess.CRUD.Account
 {
+    //TODO change signature (without adapter) Example 
     public sealed class AccountAdapter : AccountAdapterHelper, IAccountAdapter
     {
         private readonly UserManager<DALUserAccount> _userManager;

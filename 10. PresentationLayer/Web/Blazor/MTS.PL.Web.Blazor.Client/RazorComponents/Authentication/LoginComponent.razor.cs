@@ -41,6 +41,8 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
         private string passwordValidationCss = INVISIBLE;
         private bool showPassword;
         private bool canSubmit;
+        private bool isSubmitting;
+        private string spinnerLabel;
 
         protected override void OnInitialized()
         {
@@ -50,26 +52,19 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
             //TODO Remove this on release
             inputModel.Email = "mauricesoftwaresolution@outlook.com";
             inputModel.Password = "MTS1991Password!";
+            canSubmit = true;
 #endif
 
             editContext = new EditContext(inputModel);
 
             editContext.OnValidationStateChanged += OnValidationStateChanged;
 
-            editContext.OnFieldChanged += OnFieldChanged;
-
             base.OnInitialized();
-        }
-
-        private void OnFieldChanged(object sender, FieldChangedEventArgs e)
-        {
-            
         }
 
         public void Dispose()
         {
             editContext.OnValidationStateChanged -= OnValidationStateChanged;
-            editContext.OnFieldChanged -= OnFieldChanged;
         }
 
         private void OnValidationStateChanged(object sender, ValidationStateChangedEventArgs eventArgs)
@@ -96,38 +91,40 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Authentication
 
         private async Task SubmitAsync()
         {
-            await SpinnerService.ShowSpinnerAsync("Requesting authorization");
+            isSubmitting = true;
 
             string requestUrl = $"{Constants.APIControllers.IDENTITY}/{Constants.IdentityControllerEndpoints.LOG_IN}";
 
-            HttpResponseMessage response;
+            HttpResponseMessage responseMessage;
 
-            await SpinnerService.ShowSpinnerAsync();
+            spinnerLabel = "Validating...";
 
             try
             {
-                response = await HttpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PutAsJsonAsync(requestUrl, inputModel);
+                responseMessage = await HttpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PutAsJsonAsync(requestUrl, inputModel);
             }
             catch (Exception ex)
             {
                 ToastService.ShowExceptionToast(ex);
-                await SpinnerService.HideSpinnerAsync();
+                isSubmitting = false;
+                spinnerLabel = null;
                 return;
             }
 
-            if (response.IsSuccessStatusCode)
+            string responseString = await responseMessage.Content.ReadAsStringAsync();
+
+            if (responseMessage.IsSuccessStatusCode)
             {
-                await LoginService.Login(await response.Content.ReadAsStringAsync());
+                DialogService.Close(DialogResult.Ok("Login was succesfull"));
+                await LoginService.Login(responseString);
             }
             else
             {
-                ToastService.ShowExceptionToast(new Exception("Something went wrong. Request was unsuccesfull"));
+                DialogService.Close(DialogResult.Ok(responseString));
+                ToastService.ShowExceptionToast(new Exception("Something went wrong. Validation was unsuccesfull"));
             }
-        }
 
-        private async Task LogInAsync()
-        {
-            
+            isSubmitting = false;
         }
 
         private sealed class InputModel

@@ -1,7 +1,7 @@
 ﻿@inject IDialogService _dialogService
 @inject IToastService _toastService
 
-<div class="custom-card custom-card-animated">
+<div class="custom-card custom-card-animated mb-5">
     <div class="e-card-content">
         <AuthorizeView Roles="@($"{Constants.Security.ADMINISTRATOR},{Constants.Security.PRIVILEGED_EMPLOYEE},{Constants.Security.EMPLOYEE}")">
             <Authorized>
@@ -11,6 +11,7 @@
                 </div>
             </Authorized>
         </AuthorizeView>
+        
         <div class="row">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                 <img src="@(Credit.LinkToImage)" />
@@ -19,13 +20,26 @@
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                 @((MarkupString)Credit.Title)
                 @((MarkupString)Credit.SubTitle)
+                <b>Got from:</b>
                 <p>@((MarkupString)Credit.GotFrom)</p>
+                <b>Made By:</b>
                 <p>@((MarkupString)Credit.MadeBy)</p>
+                <b>Description:</b>
                 <p>@((MarkupString)Credit.Description)</p>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    img {
+        margin-left: auto;
+        margin-right: auto;
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%)
+    }
+</style>
 
 @code {
     [Parameter]
@@ -46,21 +60,16 @@
         if (isInEditMode == true)
         {
             var parameters = new DialogParameters();
-            parameters.Add("FormId", 3);
             parameters.Add("Credit", Credit);
 
             _dialogService.OnClose += DialogClosed;
-            _dialogService.Show<EditCreditComponent>("Login jaja test", parameters, new DialogOptions { HasHeader = true, HasButtons = true, HasCloseButton = true, HasBackgroundCancel = false });
+            _dialogService.Show<EditCreditComponent>($"Edit {Credit.Title}" , parameters, new DialogOptions { HasHeader = true, HasButtons = true, HasCloseButton = true, HasBackgroundCancel = false, Width="75%" });
         }
     }
 
     private void DialogClosed(DialogResult dialogResult)
     {
-        if(dialogResult.Cancelled == true)
-        {
-            _toastService.ShowSuccessToast("Cancelled!");
-        }
-        else
+        if(dialogResult.Cancelled == false)
         {
             _toastService.ShowSuccessToast(dialogResult.Data.ToString());
         }

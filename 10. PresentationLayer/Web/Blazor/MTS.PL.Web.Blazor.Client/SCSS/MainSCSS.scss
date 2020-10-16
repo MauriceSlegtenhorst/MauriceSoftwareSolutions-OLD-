@@ -195,6 +195,22 @@ html, body {
 
         &-scroll-area {
             overflow-y: scroll;
+
+            &::-webkit-scrollbar {
+                display: initial;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: $BLUE;
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                border: 1px solid $BLUE_LIGHT;
+            }
+
+            &::-webkit-scrollbar-thumb:active {
+                border: 1px solid $BLUE_LIGHT;
+            }
         }
 
         &-normal-side-padding {

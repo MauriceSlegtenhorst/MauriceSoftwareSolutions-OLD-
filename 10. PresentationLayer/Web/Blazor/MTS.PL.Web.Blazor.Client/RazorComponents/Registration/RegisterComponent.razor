@@ -1,4 +1,5 @@
-﻿<EditForm EditContext="editContext">
+﻿<SfSpinner Type="SpinnerType.Fabric" @bind-Visible="isSubmitting" CssClass="e-spin-overlay" Label="@spinnerLabel" ZIndex="4" />
+<EditForm EditContext="editContext">
     <DataAnnotationsValidator />
     <div class="container-fluid bg-info p-2 mb-2">
         <h5>Email requirements</h5>
@@ -24,7 +25,7 @@
     <label>Email</label>
     <div class="row mb-4">
         <div class="col">
-            <SfTextBox @bind-Value="@inputModel.Email" Type="InputType.Email" CssClass="@emailTextBoxWorkAroundCss" ShowClearButton="true" />
+            <SfTextBox @bind-Value="@inputModel.Email" Type="InputType.Email" ShowClearButton="true" />
             <div class="container bg-danger p-1 @emailValidationCss">
                 <ValidationMessage For="() => inputModel.Email" />
             </div>
@@ -34,17 +35,16 @@
     <label>Password</label>
     <div class="row mb-2">
         <div class="col">
-            <SfTextBox @bind-Value="@inputModel.Password" Type="(showPassword ? InputType.Text : InputType.Password)" CssClass="@passwordOneTextBoxWorkAroundCss" ShowClearButton="true" />
+            <SfTextBox @bind-Value="@inputModel.Password" Type="(showPassword ? InputType.Text : InputType.Password)" ShowClearButton="true" />
             <div class="container bg-danger p-1 @passwordOneValidationCss">
                 <ValidationMessage For="() => inputModel.Password" />
             </div>
         </div>
-        <div class="col-sm col-sm-auto"/>
     </div>
 
     <div class="row mb-4">
         <div class="col">
-            <SfTextBox @bind-Value="@inputModel.PasswordTwo" Type="(showPassword ? InputType.Text : InputType.Password)" CssClass="@passwordTwoTextBoxWorkAroundCss" ShowClearButton="true" />
+            <SfTextBox @bind-Value="@inputModel.PasswordTwo" Type="(showPassword ? InputType.Text : InputType.Password)" ShowClearButton="true" />
             <div class="container bg-danger p-1 @passwordTwoValidationCss">
                 <ValidationMessage For="() => inputModel.PasswordTwo" />
             </div>
@@ -67,7 +67,7 @@
         </div>
 
         <div class="col-auto">
-            <SfButton OnClick="_dialogService.Cancel">Cancel</SfButton>
+            <SfButton OnClick="DialogService.Cancel">Cancel</SfButton>
         </div>
     </div>
 </EditForm>

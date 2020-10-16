@@ -1,9 +1,28 @@
 ﻿@page "/authentication/tokenexpired"
 
+@inject IDialogService _dialogService
+
 <PageHeaderComponent PageName="Session expired" Subtitle="Your session time has ended" />
 
-<h4>You can <striong><a href="@BlazorConstants.Pages.Authentication.LOGIN">login</a></striong> again to refresh your session</h4>
+<div class="page-body">
+    <div class="padding-vertical-top padding-vertical-bottom page-body-normal-side-padding container">
+        <div class="custom-card align-content-center">
+            <div class="e-card-content">
+                <p>
+                    <h5>
+                        Your session has expired. <a href="" @onclick="ShowLoginForm"><strong>Login</strong></a> to verify it's still you.
+                    </h5>
+                </p>
+                <p>
+                    Sessions are always 10 minutes long without exception.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
-@code {
-    
-}
+<style>
+    p {
+        text-align: center;
+    }
+</style>

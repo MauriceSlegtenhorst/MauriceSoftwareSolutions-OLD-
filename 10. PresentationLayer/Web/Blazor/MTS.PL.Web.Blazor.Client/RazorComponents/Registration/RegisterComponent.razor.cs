@@ -20,36 +20,34 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
     public partial class RegisterComponent : IDisposable
     {
         private const string INVISIBLE = "invisible";
-        private const string BORDER_PRIMARY = "border-primary";
 
         [Inject]
-        private IDialogService _dialogService { get; set; }
+        private IDialogService DialogService { get; set; }
 
         [Inject] 
-        private IToastService _toastService { get; set; }
+        private IToastService ToastService { get; set; }
 
         [Inject]
-        private ILoginService _loginService { get; set; }
+        private ILoginService LoginService { get; set; }
 
         [Inject]
-        private ISpinnerService _spinnerService { get; set; }
+        private ISpinnerService SpinnerService { get; set; }
 
         [Inject] 
-        private IHttpClientFactory _httpClientFactory { get; set; }
+        private IHttpClientFactory HttpClientFactory { get; set; }
 
         [Inject]
-        private NavigationManager _navigationManager { get; set; }
+        private NavigationManager NavigationManager { get; set; }
 
         private InputModel inputModel;
         private EditContext editContext;
         private string emailValidationCss = INVISIBLE;      
         private string passwordOneValidationCss = INVISIBLE;
         private string passwordTwoValidationCss = INVISIBLE;
-        private string emailTextBoxWorkAroundCss = BORDER_PRIMARY;
-        private string passwordOneTextBoxWorkAroundCss = BORDER_PRIMARY;
-        private string passwordTwoTextBoxWorkAroundCss = BORDER_PRIMARY;
         private bool showPassword;
         private bool canSubmit;
+        private bool isSubmitting;
+        private string spinnerLabel;
 
         protected override void OnInitialized()
         {
@@ -76,9 +74,6 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
                 emailValidationCss = INVISIBLE;
                 passwordOneValidationCss = INVISIBLE;
                 passwordTwoValidationCss = INVISIBLE;
-                emailTextBoxWorkAroundCss = BORDER_PRIMARY;
-                passwordOneTextBoxWorkAroundCss = BORDER_PRIMARY;
-                passwordTwoTextBoxWorkAroundCss = BORDER_PRIMARY;
             }
             else
             {
@@ -88,59 +83,61 @@ namespace MTS.PL.Web.Blazor.Client.RazorComponents.Registration
                 if (editContext.GetValidationMessages(emailField).Any())
                 {
                     emailValidationCss = null;
-                    emailTextBoxWorkAroundCss = null;
                 }
 
                 FieldIdentifier passwordOneField = editContext.Field(nameof(inputModel.Password));
                 if (editContext.GetValidationMessages(passwordOneField).Any())
                 {
                     passwordOneValidationCss = null;
-                    passwordOneTextBoxWorkAroundCss = null;
                 }   
 
                 FieldIdentifier passwordTwoField = editContext.Field(nameof(inputModel.PasswordTwo));
                 if (editContext.GetValidationMessages(passwordTwoField).Any())
                 {
                     passwordTwoValidationCss = null;
-                    passwordTwoTextBoxWorkAroundCss = null;
                 }
             }
         }
 
         private async Task SubmitAsync()
         {
-            await _spinnerService.ShowSpinnerAsync("Requesting authorization...");
+            isSubmitting = true;
 
             string requestUrl = $"{Constants.APIControllers.ACCOUNT}/{Constants.AccountControllerEndpoints.CREATE_BY_CREDENTIALS}";
 
             HttpResponseMessage responseMessage;
 
+            spinnerLabel = "Registering...";
+
             try
             {
-                responseMessage = await _httpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PutAsJsonAsync(requestUrl, inputModel);
+                responseMessage = await HttpClientFactory.CreateClient(BlazorConstants.HttpClients.API).PutAsJsonAsync(requestUrl, inputModel);
             }
             catch (Exception ex)
             {
-                await _spinnerService.HideSpinnerAsync();
-
-                _toastService.ShowExceptionToast(ex);
-                
+                ToastService.ShowExceptionToast(ex);
+                isSubmitting = false;
+                spinnerLabel = null;
                 return;
             }
 
-            await _spinnerService.SetSpinnerLabelAsync("Processing response...");
+            spinnerLabel = "Processing response...";
+
+            string responseString = await responseMessage.Content.ReadAsStringAsync();
 
             if (responseMessage.IsSuccessStatusCode)
             {
-                _toastService.ShowSuccessToast($"Registration for {inputModel.Email} has been received.");
-                _navigationManager.NavigateTo("/account/accountsubmitted");
+                DialogService.Close(DialogResult.Ok($"Registration for {inputModel.Email} has been received and is being processed."));
+                ToastService.ShowSuccessToast($"Registration for {inputModel.Email} has been received and is being processed.");
+                NavigationManager.NavigateTo("/account/register/accountverification");
             }
             else
             {
-                _toastService.ShowExceptionToast(new Exception(await responseMessage.Content.ReadAsStringAsync()));
+                DialogService.Close(DialogResult.Ok(responseString));
+                ToastService.ShowExceptionToast(new Exception(await responseMessage.Content.ReadAsStringAsync()));
             }
 
-            await _spinnerService.HideSpinnerAsync();
+            isSubmitting = false;
         }
 
         public sealed class InputModel

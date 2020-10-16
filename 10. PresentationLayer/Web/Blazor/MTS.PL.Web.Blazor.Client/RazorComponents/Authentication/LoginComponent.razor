@@ -1,41 +1,42 @@
-﻿<EditForm EditContext="editContext">
+﻿<SfSpinner Type="SpinnerType.Fabric" @bind-Visible="isSubmitting" CssClass="e-spin-overlay" Label="@spinnerLabel" ZIndex="4" />
+<EditForm EditContext="editContext">
     <DataAnnotationsValidator />
-        <label>Email</label>
-        <div class="row mb-4">
-            <div class="col">
-                <SfTextBox @bind-Value="@inputModel.Email" Type="InputType.Email" ShowClearButton="true" />
-                <div class="container bg-danger p-1 @emailValidationCss">
-                    <ValidationMessage For="() => inputModel.Email" />
-                </div>
+    <label>Email</label>
+    <div class="row mb-4">
+        <div class="col">
+            <SfTextBox @bind-Value="@inputModel.Email" Type="InputType.Email" ShowClearButton="true" />
+            <div class="container bg-danger p-1 @emailValidationCss">
+                <ValidationMessage For="() => inputModel.Email" />
             </div>
         </div>
+    </div>
 
-        <label>Password</label>
-        <div class="row mb-4">
-            <div class="col">
-                <SfTextBox @bind-Value="@inputModel.Password" Type="(showPassword ? InputType.Text : InputType.Password)" ShowClearButton="true" />
-                <div class="container bg-danger p-1 @passwordValidationCss">
-                    <ValidationMessage For="() => inputModel.Password" />
-                </div>
-            </div>
-            <div class="col-sm col-sm-auto">
-                <SfCheckBox @bind-Checked="showPassword" Label="Show" LabelPosition="LabelPosition.After" />
+    <label>Password</label>
+    <div class="row mb-4">
+        <div class="col">
+            <SfTextBox @bind-Value="@inputModel.Password" Type="(showPassword ? InputType.Text : InputType.Password)" ShowClearButton="true" />
+            <div class="container bg-danger p-1 @passwordValidationCss">
+                <ValidationMessage For="() => inputModel.Password" />
             </div>
         </div>
+        <div class="col-sm col-sm-auto">
+            <SfCheckBox @bind-Checked="showPassword" Label="Show" LabelPosition="LabelPosition.After" />
+        </div>
+    </div>
 
-        <div class="row mb-4">
-            <div class="col-auto">
-                <SfCheckBox @bind-Checked="inputModel.RememberMe" Label="Remember me" LabelPosition="LabelPosition.After" />
-            </div>
+    <div class="row mb-4">
+        <div class="col-auto">
+            <SfCheckBox @bind-Checked="inputModel.RememberMe" Label="Remember me" LabelPosition="LabelPosition.After" />
+        </div>
+    </div>
+
+    <div class="row justify-content-end">
+        <div class="col-auto">
+            <SfButton OnClick="async () => await SubmitAsync()" IsPrimary="true" Disabled="@(!canSubmit)">Submit</SfButton>
         </div>
 
-        <div class="row justify-content-end">
-            <div class="col-auto">
-                <SfButton OnClick="async () => await SubmitAsync()" IsPrimary="true" Disabled="@(!canSubmit)">Submit</SfButton>
-            </div>
-
-            <div class="col-auto">
-                <SfButton OnClick="DialogService.Cancel">Cancel</SfButton>
-            </div>
+        <div class="col-auto">
+            <SfButton OnClick="DialogService.Cancel">Cancel</SfButton>
         </div>
+    </div>
 </EditForm>

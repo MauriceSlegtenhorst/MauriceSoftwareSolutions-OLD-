@@ -6,7 +6,7 @@ namespace MTS.Core.GlobalLibrary
     {
         public class Colors
         {
-            public const string HEX_BLUE_LIGHT = "#5baab3";
+            public const string HEX_BLUE_LIGHT = "#5baab3"; 
             public const string RGB_BLUE_LIGHT = "(91,170,179)";
 
             public const string HEX_BLUE = "#0366d6";
