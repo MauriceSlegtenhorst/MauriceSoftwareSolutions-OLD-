@@ -3,17 +3,17 @@
 <SfSpinner @bind-Visible="isSubmitting" Label="Loading..." CssClass="e-spin-overlay" Type="SpinnerType.Fabric" ZIndex="99" />
 
 <div class="row mb-2">
-    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+    <div class="col-xl-4 col-lg-4 col-md-5 col-sm-12">
         <div class="p-3">
             <SfTextBox Type="InputType.Text" ShowClearButton="true" @bind-Value="@_credit.LinkToImage" Multiline="true" @onkeyup="StateHasChanged"
                         Placeholder="@PropertyNameConverter.ConvertFromProperty(nameof(_credit.LinkToImage))" FloatLabelType="FloatLabelType.Always" />
         </div>
 
-        <div class="d-flex justify-content-center">
-            <img src="@(_credit.LinkToImage)" />
+        <div style="display: flex; justify-content: center;">
+            <img src="@(_credit.LinkToImage)" style="max-width: 100%; object-fit: scale-down;"/>
         </div>
     </div>
-    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12">
+    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
         <SfSplitter Orientation="Syncfusion.Blazor.Layouts.Orientation.Horizontal" CssClass="@splitterPaneCss" Height="auto">
             <SplitterPanes>
                 <SplitterPane Size="50%" Min="30%" Collapsible="true" CssClass="p-3">
@@ -100,6 +100,12 @@
     <SfButton CssClass="e-btn e-primary" OnClick="SubmitForm"> <span class="oi oi-check" /> </SfButton>
     <SfButton CssClass="e-btn" OnClick="Cancel"> <span class="oi oi-x" /> </SfButton>
 </div>
+
+<style>
+    textarea{
+        min-height: -;
+    }
+</style>
 
 @code {
     [CascadingParameter]

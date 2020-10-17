@@ -198,6 +198,7 @@ html, body {
 
             &::-webkit-scrollbar {
                 display: initial;
+                width: 8px
             }
 
             &::-webkit-scrollbar-thumb {
@@ -205,11 +206,11 @@ html, body {
             }
 
             &::-webkit-scrollbar-thumb:hover {
-                border: 1px solid $BLUE_LIGHT;
+                
             }
 
             &::-webkit-scrollbar-thumb:active {
-                border: 1px solid $BLUE_LIGHT;
+                
             }
         }
 

@@ -13,26 +13,30 @@
         {
             for (int i = 0; i < _creditCategories.Length; i++)
             {
-                <div class="d-block margin-vertical-bottom margin-vertical-top">
-                    @((MarkupString)_creditCategories[i].Title)
-                    @((MarkupString)_creditCategories[i].SubTitle)
-                    @((MarkupString)_creditCategories[i].Description)
-                </div>
-
-                leftSide = false;
-
-                @foreach (var item in _creditCategories[i].PLCredits)
-                {
-                    leftSide = !leftSide;
-
-                    creditCss = $"row {(leftSide ? String.Empty : "justify-content-end")}";
-                    
-                    <div class="@creditCss">
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                            <CreditComponent Credit="item" />
-                        </div>
+                <div class="mb-5">
+                    <div class="d-block mb-2">
+                        @((MarkupString)_creditCategories[i].Title)
+                        @((MarkupString)_creditCategories[i].SubTitle)
+                        @((MarkupString)_creditCategories[i].Description)
                     </div>
-                }
+
+                    @{
+                        leftSide = false;
+
+                        foreach (var item in _creditCategories[i].PLCredits)
+                        {
+                            leftSide = !leftSide;
+
+                            creditCss = leftSide ? String.Empty : "justify-content-end";
+
+                            <div class="row @creditCss mb-4">
+                                <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
+                                    <CreditComponent Credit="item" />
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
             }
         }
 

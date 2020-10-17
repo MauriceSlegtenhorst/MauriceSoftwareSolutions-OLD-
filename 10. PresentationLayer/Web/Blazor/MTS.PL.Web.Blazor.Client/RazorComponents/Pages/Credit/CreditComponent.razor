@@ -13,8 +13,8 @@
         </AuthorizeView>
         
         <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                <img src="@(Credit.LinkToImage)" />
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12" style="display: flex; justify-content: center;">
+                <img src="@(Credit.LinkToImage)" style="max-width: 100%; object-fit: scale-down;"/>
             </div>
 
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
@@ -30,16 +30,6 @@
         </div>
     </div>
 </div>
-
-<style>
-    img {
-        margin-left: auto;
-        margin-right: auto;
-        position: absolute;
-        top: 50%;
-        transform: translate(0, -50%)
-    }
-</style>
 
 @code {
     [Parameter]
